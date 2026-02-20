@@ -1200,6 +1200,56 @@ body.week-view-active #techOverviewBtn {
     overflow-y: auto;
 }
 
+/* Print filter modal */
+.print-filter-hint {
+    margin: 0 0 1rem 0;
+    font-size: 0.9rem;
+    color: var(--text-muted, #94a3b8);
+}
+.print-filter-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+.print-filter-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    max-height: 40vh;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+.print-filter-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.5rem 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+.print-filter-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+.print-filter-item input[type="checkbox"] {
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+.print-filter-venue {
+    flex-shrink: 0;
+    font-weight: 500;
+    min-width: 4rem;
+}
+.print-filter-name {
+    flex: 1;
+    min-width: 0;
+}
+.print-filter-time {
+    flex-shrink: 0;
+    color: var(--text-muted, #94a3b8);
+    font-size: 0.85rem;
+}
+
 .modal-footer {
     padding: 1.5rem 2rem;
     border-top: 1px solid rgba(255, 255, 255, 0.1);

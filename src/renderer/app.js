@@ -25,7 +25,7 @@ const TRANSLATIONS = {
         resources: { ja: 'ja', nee: 'nee', nietBekend: 'niet ingevuld' },
         loading: 'Laden...',
         messages: { noEvents: 'Geen evenementen gevonden voor {venue} op {date}', noEventsDate: 'Geen evenementen gevonden op {date}', noEventsWeek: 'Geen evenementen in deze week voor {venue}.', selectDayVenueTijdschema: 'Selecteer 1 dag en 1 zaal om het tijdschema te zien.', noTijdschema: 'Geen tijdschema beschikbaar voor deze evenementen.', noPlanning: 'Geen planning beschikbaar voor deze dag', noVerkoop: 'Geen verkoopdata beschikbaar voor deze dag', noKlimaat: 'Geen klimaatdata beschikbaar', venueOrderReset: 'Zaalvolgorde gereset naar standaard', loadVenuesFirst: 'Laad eerst zalen in de Yesplan instellingen.', venuesLoaded: '{n} zalen geladen', configureBothOrgs: 'Configureer eerst beide organisaties voor "Beide"', fillBaseUrlApiKey: 'Vul eerst Base URL en API Key in voor organisatie {n}' },
-        techPrint: { title: 'Technisch overzicht', subtitle: 'Alle zalen – {date}', noEvents: 'Geen evenementen op deze dag.', venue: 'Zaal', time: 'Tijd', remarks: 'Opmerkingen techniek', documents: 'Technische lijst documenten' },
+        techPrint: { title: 'Technisch overzicht', subtitle: 'Alle zalen – {date}', noEvents: 'Geen evenementen op deze dag.', venue: 'Zaal', time: 'Tijd', remarks: 'Opmerkingen techniek', documents: 'Technische lijst documenten', filterTitle: 'Evenementen voor print', filterHint: 'Vink de evenementen aan die in het overzicht moeten komen.', selectAll: 'Alles selecteren', deselectAll: 'Alles deselecteren' },
         errors: { yesplanLoad: 'Kon Yesplan data niet laden', eventsLoad: 'Kon evenementen niet laden', weekLoad: 'Kon weekoverzicht niet laden', uurwerkLoad: 'Kon personeelsplanning niet laden', itixLoad: 'Kon Itix data niet laden', privaLoad: 'Kon Priva data niet laden', settingsSave: 'Kon instellingen niet opslaan' },
         test: { testing: 'Testen...', success: 'Succesvol', failed: 'Gefaald' }
     },
@@ -44,7 +44,7 @@ const TRANSLATIONS = {
         resources: { ja: 'yes', nee: 'no', nietBekend: 'not filled in' },
         loading: 'Loading...',
         messages: { noEvents: 'No events found for {venue} on {date}', noEventsDate: 'No events found on {date}', noEventsWeek: 'No events this week for {venue}.', selectDayVenueTijdschema: 'Select 1 day and 1 venue to see the schedule.', noTijdschema: 'No schedule available for these events.', noPlanning: 'No schedule available for this day', noVerkoop: 'No sales data available for this day', noKlimaat: 'No climate data available', venueOrderReset: 'Venue order reset to default', loadVenuesFirst: 'Load venues first in Yesplan settings.', venuesLoaded: '{n} venues loaded', configureBothOrgs: 'Configure both organisations first for "Both"', fillBaseUrlApiKey: 'Enter Base URL and API Key first for organisation {n}' },
-        techPrint: { title: 'Technical overview', subtitle: 'All venues – {date}', noEvents: 'No events on this day.', venue: 'Venue', time: 'Time', remarks: 'Technical remarks', documents: 'Technical list documents' },
+        techPrint: { title: 'Technical overview', subtitle: 'All venues – {date}', noEvents: 'No events on this day.', venue: 'Venue', time: 'Time', remarks: 'Technical remarks', documents: 'Technical list documents', filterTitle: 'Events for print', filterHint: 'Select which events to include in the overview.', selectAll: 'Select all', deselectAll: 'Deselect all' },
         errors: { yesplanLoad: 'Could not load Yesplan data', eventsLoad: 'Could not load events', weekLoad: 'Could not load week overview', uurwerkLoad: 'Could not load personnel planning', itixLoad: 'Could not load Itix data', privaLoad: 'Could not load Priva data', settingsSave: 'Could not save settings' },
         test: { testing: 'Testing...', success: 'Success', failed: 'Failed' }
     }
@@ -1048,7 +1048,7 @@ class TheaterDashboard {
         if (venueSelector) venueSelector.style.display = 'block';
 
         const techOverviewBtn = document.getElementById('techOverviewBtn');
-        if (techOverviewBtn) techOverviewBtn.style.display = (this.selectedVenues || []).length === 1 ? '' : 'none';
+        if (techOverviewBtn) techOverviewBtn.style.display = (this.selectedVenues || []).length === 0 ? '' : 'none';
         
         // Reset alleen naar vandaag en alle zalen als resetDate true is (bijvoorbeeld bij home knop klik)
         if (resetDate) {
@@ -1092,7 +1092,7 @@ class TheaterDashboard {
         this.updateDetailViewTitle(this.getVenueName(), null);
 
         const techOverviewBtn = document.getElementById('techOverviewBtn');
-        if (techOverviewBtn) techOverviewBtn.style.display = '';
+        if (techOverviewBtn) techOverviewBtn.style.display = 'none';
 
         document.getElementById('weekBtn')?.classList.remove('active');
         document.getElementById('homeBtn')?.classList.remove('active');
@@ -2975,98 +2975,162 @@ class TheaterDashboard {
             events.sort((a, b) => this.sortEventByDefault(a, b));
 
             const escape = (s) => this.escapeHtml(String(s || ''));
-
-            const byVenue = {};
-            events.forEach(ev => {
+            const listItems = events.map((ev, i) => {
                 const venueName = ev.venue || this.getVenueNameById(ev.venueIds?.[0]) || this.t('venue.unknownVenue');
-                if (!byVenue[venueName]) byVenue[venueName] = [];
-                byVenue[venueName].push(ev);
-            });
-            const venueOrder = Object.keys(byVenue).sort((a, b) => a.localeCompare(b));
+                const title = ev.name || ev.title || 'Onbekend';
+                const timeRange = ev.scheduleStartTime && ev.scheduleEndTime
+                    ? `${ev.scheduleStartTime} – ${ev.scheduleEndTime}`
+                    : (ev.startDate && ev.endDate ? `${this.formatTime(ev.startDate)} – ${this.formatTime(ev.endDate)}` : '–');
+                return `<label class="print-filter-item"><input type="checkbox" data-index="${i}" checked> <span class="print-filter-venue">${escape(venueName)}</span> · <span class="print-filter-name">${escape(title)}</span> <span class="print-filter-time">${escape(timeRange)}</span></label>`;
+            }).join('');
 
-            const eventBlock = (event) => {
-                const title = event.name || event.title || 'Onbekend';
-                const timeRange = event.scheduleStartTime && event.scheduleEndTime
-                    ? `${event.scheduleStartTime} – ${event.scheduleEndTime}`
-                    : (event.startDate && event.endDate ? `${this.formatTime(event.startDate)} – ${this.formatTime(event.endDate)}` : '–');
-                const eventVenueId = event._organizationId && event.venueIds?.[0] ? `${event._organizationId}:${event.venueIds[0]}` : event.venueIds?.[0];
-                const { showBalletvloer, showVleugel, showOrkestbak } = this.getBalletvloerVleugelDisplay(event.venue, eventVenueId);
-                const parts = [];
-                if (showBalletvloer) parts.push(`Balletvloer: ${event.balletvloerExplicit ? (event.hasBalletvloer ? this.t('resources.ja') : this.t('resources.nee')) : this.t('resources.nietBekend')}`);
-                if (showVleugel) parts.push(`Vleugel: ${event.vleugelExplicit ? (event.hasVleugel ? this.t('resources.ja') : this.t('resources.nee')) : this.t('resources.nietBekend')}`);
-                if (showOrkestbak) parts.push(`Orkestbak: ${(event.orkestbakExplicit || event.orkestbakValue) ? (event.orkestbakValue || (event.hasOrkestbak ? this.t('resources.ja') : this.t('resources.nee'))) : this.t('resources.nietBekend')}`);
-                const resourcesLine = parts.length ? parts.join(' · ') : '';
-                const materials = (event.technicalMaterialResources || []).map(m => escape(m)).join(', ');
-                const docs = (event.technicalListDocuments || []).map(doc => {
-                    const urlParts = (doc.url || '').split('/');
-                    const name = decodeURIComponent(urlParts[urlParts.length - 1] || doc.name || 'Document').replace(/%20/g, ' ');
-                    return name.endsWith('.pdf') ? name.replace('.pdf', '') : name;
-                }).join(', ');
-                const rider = event.riderAttachment && !(event.technicalListDocuments || []).length && event.riderAttachment.url
-                    ? decodeURIComponent((event.riderAttachment.url.split('/').pop() || '').replace(/%20/g, ' ')).replace(/\.pdf$/, '') : '';
-                const docList = docs || rider || '';
-                const remarks = (event.technicalRemarks || '').trim();
+            const modal = document.createElement('div');
+            modal.className = 'modal show';
+            modal.setAttribute('id', 'printFilterModal');
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 520px;">
+                    <div class="modal-header">
+                        <h2><i class="fas fa-filter"></i> ${escape(this.t('techPrint.filterTitle'))}</h2>
+                        <button class="modal-close" id="closePrintFilter" type="button"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="print-filter-hint">${escape(this.t('techPrint.filterHint'))}</p>
+                        <div class="print-filter-actions">
+                            <button type="button" class="btn btn-secondary btn-sm" id="printFilterSelectAll">${escape(this.t('techPrint.selectAll'))}</button>
+                            <button type="button" class="btn btn-secondary btn-sm" id="printFilterDeselectAll">${escape(this.t('techPrint.deselectAll'))}</button>
+                        </div>
+                        <div class="print-filter-list">${listItems}</div>
+                    </div>
+                    <div class="modal-footer" style="display: flex; gap: 8px; justify-content: flex-end;">
+                        <button type="button" class="btn btn-secondary" id="printFilterCancel">${escape(this.t('date.cancel'))}</button>
+                        <button type="button" class="btn btn-primary" id="printFilterPrint"><i class="fas fa-print"></i> ${this.locale === 'en' ? 'Print' : 'Printen'}</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
 
-                let html = `<div class="print-event">
-                    <div class="print-event-title">${escape(title)}</div>
-                    <div class="print-event-meta">${this.t('techPrint.time')}: ${timeRange}</div>
-                    ${resourcesLine ? `<div class="print-event-resources">${escape(resourcesLine)}</div>` : ''}
-                    ${materials ? `<div class="print-event-materials">${this.t('tech.materiaal')} ${materials}</div>` : ''}
-                    ${docList ? `<div class="print-event-docs">${this.t('techPrint.documents')}: ${escape(docList)}</div>` : ''}
-                    ${remarks ? `<div class="print-event-remarks">${this.t('techPrint.remarks')}: ${escape(remarks)}</div>` : ''}
-                </div>`;
-                return html;
+            const closeFilterModal = () => {
+                if (modal.parentNode) document.body.removeChild(modal);
             };
 
-            const bodyParts = venueOrder.map(venueName => {
-                const venueEvents = byVenue[venueName];
-                const eventsHtml = venueEvents.map(ev => eventBlock(ev)).join('');
-                return `<section class="print-venue"><h2 class="print-venue-title">${escape(venueName)}</h2>${eventsHtml}</section>`;
+            modal.querySelector('#closePrintFilter').addEventListener('click', closeFilterModal);
+            modal.querySelector('#printFilterCancel').addEventListener('click', closeFilterModal);
+            modal.addEventListener('click', (e) => { if (e.target === modal) closeFilterModal(); });
+
+            modal.querySelector('#printFilterSelectAll').addEventListener('click', () => {
+                modal.querySelectorAll('input[type="checkbox"][data-index]').forEach(cb => { cb.checked = true; });
+            });
+            modal.querySelector('#printFilterDeselectAll').addEventListener('click', () => {
+                modal.querySelectorAll('input[type="checkbox"][data-index]').forEach(cb => { cb.checked = false; });
             });
 
-            const printCss = `
-                @media print { body { background: #fff; color: #111; } .print-venue { page-break-inside: avoid; } }
-                body { font-family: 'Inter', sans-serif; background: #fff; color: #111; max-width: 800px; margin: 0 auto; padding: 24px; font-size: 14px; }
-                .print-header { margin-bottom: 24px; border-bottom: 2px solid #333; padding-bottom: 12px; }
-                .print-header h1 { margin: 0 0 4px 0; font-size: 22px; }
-                .print-header .subtitle { color: #444; font-size: 15px; }
-                .print-venue { margin-bottom: 24px; }
-                .print-venue-title { font-size: 16px; margin: 0 0 12px 0; color: #222; border-bottom: 1px solid #ccc; padding-bottom: 6px; }
-                .print-event { margin-bottom: 16px; padding: 12px; background: #f8f8f8; border-radius: 6px; border-left: 4px solid #6366f1; }
-                .print-event-title { font-weight: 600; margin-bottom: 6px; }
-                .print-event-meta, .print-event-resources, .print-event-materials, .print-event-docs, .print-event-remarks { font-size: 13px; margin-top: 4px; color: #333; }
-            `;
-
-            const printBtnLabel = this.locale === 'en' ? 'Print' : 'Printen';
-            const html = `<!DOCTYPE html><html lang="${this.locale}"><head><meta charset="UTF-8"><title>${escape(this.t('techPrint.title'))}</title><style>${printCss}
-                .print-actions { margin: 24px 0; padding: 12px 0; border-bottom: 1px solid #ddd; display: flex; gap: 12px; align-items: center; }
-                .print-actions .btn-print { padding: 10px 20px; background: #6366f1; color: #fff; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: 500; }
-                .print-actions .btn-print:hover { background: #4f46e5; }
-                .print-actions .btn-close { padding: 10px 20px; background: #6b7280; color: #fff; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; }
-                .print-actions .btn-close:hover { background: #4b5563; }
-                @media print { .print-actions { display: none !important; } }
-            </style></head><body>
-                <div class="print-header">
-                    <h1>${escape(this.t('techPrint.title'))}</h1>
-                    <div class="subtitle">${escape(this.t('techPrint.subtitle', { date: dateLabel }))}</div>
-                </div>
-                <div class="print-actions">
-                    <button type="button" class="btn-print" onclick="window.print();">${escape(printBtnLabel)}</button>
-                    <button type="button" class="btn-close" onclick="window.close();">${this.locale === 'en' ? 'Close' : 'Sluiten'}</button>
-                </div>
-                ${bodyParts.join('')}
-            </body></html>`;
-
-            const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
-            const blobUrl = URL.createObjectURL(blob);
-            const printWin = window.open(blobUrl, '_blank', 'noopener,noreferrer');
-            URL.revokeObjectURL(blobUrl);
-            if (!printWin) return;
-            printWin.focus();
+            modal.querySelector('#printFilterPrint').addEventListener('click', () => {
+                const checked = Array.from(modal.querySelectorAll('input[type="checkbox"][data-index]:checked'))
+                    .map(cb => parseInt(cb.getAttribute('data-index'), 10));
+                const selectedEvents = events.filter((_, i) => checked.includes(i));
+                closeFilterModal();
+                if (selectedEvents.length === 0) {
+                    this.showError('yesplan', this.t('techPrint.noEvents'));
+                    return;
+                }
+                this.openTechOverviewPrintWindow(selectedEvents);
+            });
         } catch (err) {
             console.error('Technisch overzicht printen:', err);
             this.showError('yesplan', this.t('errors.yesplanLoad'));
         }
+    }
+
+    /** Opent het printvenster met alleen de gegeven evenementen (na filter in modal). */
+    openTechOverviewPrintWindow(events) {
+        const date = this.selectedDate || new Date();
+        date.setHours(0, 0, 0, 0);
+        const dateLabel = date.toLocaleDateString(this.locale === 'en' ? 'en-GB' : 'nl-NL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        const escape = (s) => this.escapeHtml(String(s || ''));
+
+        const byVenue = {};
+        events.forEach(ev => {
+            const venueName = ev.venue || this.getVenueNameById(ev.venueIds?.[0]) || this.t('venue.unknownVenue');
+            if (!byVenue[venueName]) byVenue[venueName] = [];
+            byVenue[venueName].push(ev);
+        });
+        const venueOrder = Object.keys(byVenue).sort((a, b) => a.localeCompare(b));
+
+        const eventBlock = (event) => {
+            const title = event.name || event.title || 'Onbekend';
+            const timeRange = event.scheduleStartTime && event.scheduleEndTime
+                ? `${event.scheduleStartTime} – ${event.scheduleEndTime}`
+                : (event.startDate && event.endDate ? `${this.formatTime(event.startDate)} – ${this.formatTime(event.endDate)}` : '–');
+            const eventVenueId = event._organizationId && event.venueIds?.[0] ? `${event._organizationId}:${event.venueIds[0]}` : event.venueIds?.[0];
+            const { showBalletvloer, showVleugel, showOrkestbak } = this.getBalletvloerVleugelDisplay(event.venue, eventVenueId);
+            const parts = [];
+            if (showBalletvloer) parts.push(`Balletvloer: ${event.balletvloerExplicit ? (event.hasBalletvloer ? this.t('resources.ja') : this.t('resources.nee')) : this.t('resources.nietBekend')}`);
+            if (showVleugel) parts.push(`Vleugel: ${event.vleugelExplicit ? (event.hasVleugel ? this.t('resources.ja') : this.t('resources.nee')) : this.t('resources.nietBekend')}`);
+            if (showOrkestbak) parts.push(`Orkestbak: ${(event.orkestbakExplicit || event.orkestbakValue) ? (event.orkestbakValue || (event.hasOrkestbak ? this.t('resources.ja') : this.t('resources.nee'))) : this.t('resources.nietBekend')}`);
+            const resourcesLine = parts.length ? parts.join(' · ') : '';
+            const materials = (event.technicalMaterialResources || []).map(m => escape(m)).join(', ');
+            const docs = (event.technicalListDocuments || []).map(doc => {
+                const urlParts = (doc.url || '').split('/');
+                const name = decodeURIComponent(urlParts[urlParts.length - 1] || doc.name || 'Document').replace(/%20/g, ' ');
+                return name.endsWith('.pdf') ? name.replace('.pdf', '') : name;
+            }).join(', ');
+            const rider = event.riderAttachment && !(event.technicalListDocuments || []).length && event.riderAttachment.url
+                ? decodeURIComponent((event.riderAttachment.url.split('/').pop() || '').replace(/%20/g, ' ')).replace(/\.pdf$/, '') : '';
+            const docList = docs || rider || '';
+            const remarks = (event.technicalRemarks || '').trim();
+            return `<div class="print-event">
+                <div class="print-event-title">${escape(title)}</div>
+                <div class="print-event-meta">${this.t('techPrint.time')}: ${timeRange}</div>
+                ${resourcesLine ? `<div class="print-event-resources">${escape(resourcesLine)}</div>` : ''}
+                ${materials ? `<div class="print-event-materials">${this.t('tech.materiaal')} ${materials}</div>` : ''}
+                ${docList ? `<div class="print-event-docs">${this.t('techPrint.documents')}: ${escape(docList)}</div>` : ''}
+                ${remarks ? `<div class="print-event-remarks">${this.t('techPrint.remarks')}: ${escape(remarks)}</div>` : ''}
+            </div>`;
+        };
+
+        const bodyParts = venueOrder.map(venueName => {
+            const venueEvents = byVenue[venueName];
+            const eventsHtml = venueEvents.map(ev => eventBlock(ev)).join('');
+            return `<section class="print-venue"><h2 class="print-venue-title">${escape(venueName)}</h2>${eventsHtml}</section>`;
+        });
+
+        const printCss = `
+            @media print { body { background: #fff; color: #111; } .print-venue { page-break-inside: avoid; } }
+            body { font-family: 'Inter', sans-serif; background: #fff; color: #111; max-width: 800px; margin: 0 auto; padding: 24px; font-size: 14px; }
+            .print-header { margin-bottom: 24px; border-bottom: 2px solid #333; padding-bottom: 12px; }
+            .print-header h1 { margin: 0 0 4px 0; font-size: 22px; }
+            .print-header .subtitle { color: #444; font-size: 15px; }
+            .print-venue { margin-bottom: 24px; }
+            .print-venue-title { font-size: 16px; margin: 0 0 12px 0; color: #222; border-bottom: 1px solid #ccc; padding-bottom: 6px; }
+            .print-event { margin-bottom: 16px; padding: 12px; background: #f8f8f8; border-radius: 6px; border-left: 4px solid #6366f1; }
+            .print-event-title { font-weight: 600; margin-bottom: 6px; }
+            .print-event-meta, .print-event-resources, .print-event-materials, .print-event-docs, .print-event-remarks { font-size: 13px; margin-top: 4px; color: #333; }
+        `;
+        const printBtnLabel = this.locale === 'en' ? 'Print' : 'Printen';
+        const html = `<!DOCTYPE html><html lang="${this.locale}"><head><meta charset="UTF-8"><title>${escape(this.t('techPrint.title'))}</title><style>${printCss}
+            .print-actions { margin: 24px 0; padding: 12px 0; border-bottom: 1px solid #ddd; display: flex; gap: 12px; align-items: center; }
+            .print-actions .btn-print { padding: 10px 20px; background: #6366f1; color: #fff; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: 500; }
+            .print-actions .btn-print:hover { background: #4f46e5; }
+            .print-actions .btn-close { padding: 10px 20px; background: #6b7280; color: #fff; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; }
+            .print-actions .btn-close:hover { background: #4b5563; }
+            @media print { .print-actions { display: none !important; } }
+        </style></head><body>
+            <div class="print-header">
+                <h1>${escape(this.t('techPrint.title'))}</h1>
+                <div class="subtitle">${escape(this.t('techPrint.subtitle', { date: dateLabel }))}</div>
+            </div>
+            <div class="print-actions">
+                <button type="button" class="btn-print" onclick="window.print();">${escape(printBtnLabel)}</button>
+                <button type="button" class="btn-close" onclick="window.close();">${this.locale === 'en' ? 'Close' : 'Sluiten'}</button>
+            </div>
+            ${bodyParts.join('')}
+        </body></html>`;
+
+        const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+        const blobUrl = URL.createObjectURL(blob);
+        const printWin = window.open(blobUrl, '_blank', 'noopener,noreferrer');
+        URL.revokeObjectURL(blobUrl);
+        if (printWin) printWin.focus();
     }
 
     updateUurwerkDisplay(data) {
