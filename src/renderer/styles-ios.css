@@ -1,0 +1,548 @@
+/**
+ * Shift Happens – iOS / Xcode look
+ * Alleen actief als body.ios-app wordt gezet (iPhone/Capacitor).
+ * Gebruikt SF Pro (system font), safe areas, iOS-achtige navbar, grouped cards, sheet modal.
+ */
+
+/* ---- Basis: safe area, font, max breedte iPhone ---- */
+body.ios-app {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', sans-serif;
+    background: #000;
+    -webkit-font-smoothing: antialiased;
+    padding: 0;
+    padding-top: env(safe-area-inset-top);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
+    min-height: 100vh;
+    min-height: 100dvh;
+    max-width: 100vw;
+    overflow-x: hidden;
+}
+
+body.ios-app #app {
+    min-height: 100%;
+    padding-bottom: env(safe-area-inset-bottom);
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* ---- Header = twee regels op iPhone (past binnen smalle breedte) ---- */
+body.ios-app .header {
+    background: rgba(28, 28, 30, 0.72);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.15);
+    padding: 0.5rem 0.75rem;
+    padding-top: calc(0.5rem + env(safe-area-inset-top));
+    box-shadow: none;
+    max-width: 100%;
+}
+
+body.ios-app .header-content {
+    max-width: 100%;
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+}
+
+/* Regel 1: alleen titel + datum/tijd (compact) */
+body.ios-app .header-title {
+    font-size: 1rem;
+    font-weight: 600;
+    flex-shrink: 0;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+body.ios-app .header-title-text {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.35rem;
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+}
+
+body.ios-app .header-title-text span:first-child {
+    flex-shrink: 0;
+}
+
+body.ios-app .header-datetime {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.65);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 50%;
+}
+
+body.ios-app .header-title i {
+    font-size: 1.1rem;
+    height: auto;
+    line-height: 1.2;
+    flex-shrink: 0;
+}
+
+body.ios-app .header-logo {
+    max-height: 32px;
+    max-width: min(120px, 28vw);
+    object-fit: contain;
+}
+
+/* ---- iOS: alleen dagen in één rij, daarna alleen zaal + instellingen ---- */
+body.ios-app .header-actions {
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    width: 100%;
+}
+
+/* Eerste rij: alleen dag-navigatie (prev | datum | next) */
+body.ios-app .header-actions .date-selector {
+    order: -1;
+    flex: 0 0 100%;
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+body.ios-app .date-selector .custom-select-wrapper {
+    flex: 1;
+    min-width: 0;
+    max-width: 100%;
+}
+
+body.ios-app .date-selector .custom-select-trigger {
+    width: 100%;
+    max-width: 100%;
+    justify-content: center;
+}
+
+body.ios-app #dateText,
+body.ios-app .date-selector .custom-select-value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: none;
+}
+
+/* Tweede rij: alleen terug, zaal, instellingen */
+body.ios-app .header-actions .btn-back span {
+    display: none;
+}
+
+body.ios-app .header-actions .btn-back {
+    min-width: 44px;
+    padding: 0 0.5rem;
+    order: 0;
+}
+
+body.ios-app .header-actions .venue-selector {
+    flex: 1;
+    min-width: 0;
+    order: 0;
+}
+
+body.ios-app .header-actions .venue-selector .custom-select-trigger {
+    max-width: 100%;
+}
+
+body.ios-app .header-actions .venue-selector .custom-select-trigger .custom-select-value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+body.ios-app .header-actions #settingsBtn {
+    order: 0;
+}
+
+/* Verberg op iOS: home, week, filter, refresh (meer past niet) */
+body.ios-app .header-actions #homeBtn,
+body.ios-app .header-actions #weekBtn,
+body.ios-app .header-actions #filterCancelledBtn,
+body.ios-app .header-actions #refreshBtn,
+body.ios-app .header-actions .header-filter-wrap {
+    display: none !important;
+}
+
+/* ---- Buttons: iOS-style (capsule, tint) ---- */
+body.ios-app .btn {
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body.ios-app .btn-primary {
+    background: #0a84ff;
+    color: #fff;
+}
+
+body.ios-app .btn-primary:hover,
+body.ios-app .btn-primary:active {
+    background: #409cff;
+    transform: none;
+}
+
+body.ios-app .btn-secondary {
+    background: rgba(255, 255, 255, 0.12);
+    color: #0a84ff;
+}
+
+body.ios-app .btn-secondary:hover,
+body.ios-app .btn-secondary:active {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+body.ios-app .btn-icon-only {
+    min-width: 44px;
+    height: 44px;
+    border-radius: 10px;
+}
+
+body.ios-app .btn-back {
+    min-height: 36px;
+    min-width: 80px;
+    font-size: 0.9375rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #0a84ff;
+}
+
+body.ios-app .btn-back:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* ---- Custom select = iOS picker/segmented look ---- */
+body.ios-app .custom-select-trigger {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 10px;
+    height: 44px;
+    padding: 0 1rem;
+    font-size: 0.9375rem;
+}
+
+body.ios-app .custom-select-trigger:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+body.ios-app .custom-select.open .custom-select-trigger {
+    border-color: transparent;
+    box-shadow: none;
+    background: rgba(255, 255, 255, 0.18);
+}
+
+body.ios-app .custom-select-options {
+    background: rgba(44, 44, 46, 0.98);
+    border: none;
+    border-radius: 14px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+}
+
+body.ios-app .custom-select-option {
+    padding: 0.75rem 1rem;
+    border-radius: 0;
+}
+
+body.ios-app .custom-select-options--grid .custom-select-option {
+    border-radius: 10px;
+    border: none;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+body.ios-app .custom-select-options--grid .custom-select-option.selected {
+    background: rgba(10, 132, 255, 0.35);
+    color: #fff;
+}
+
+body.ios-app .custom-select-option.selected {
+    background: rgba(10, 132, 255, 0.2);
+    color: #0a84ff;
+}
+
+body.ios-app .custom-select-option:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* ---- Main content: scroll, spacing, max breedte ---- */
+body.ios-app .main-content {
+    padding: 1rem 0.75rem;
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    background: #000;
+    max-width: 100%;
+}
+
+/* ---- Cards = iOS grouped list style (max breedte) ---- */
+body.ios-app .card {
+    background: rgba(44, 44, 46, 0.95);
+    border-radius: 14px;
+    border: none;
+    box-shadow: none;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    max-width: 100%;
+    min-width: 0;
+}
+
+body.ios-app .card:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+body.ios-app .card-header {
+    padding-bottom: 0.75rem;
+    margin-bottom: 0.75rem;
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
+}
+
+body.ios-app .card-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+body.ios-app .card-header h3 i {
+    color: #0a84ff;
+}
+
+body.ios-app .card-content {
+    min-height: 120px;
+}
+
+body.ios-app .card-status.status-online {
+    color: #30d158;
+}
+
+body.ios-app .card-status.status-offline {
+    color: #ff453a;
+}
+
+body.ios-app .status-indicator.online {
+    background: #30d158;
+}
+
+body.ios-app .status-indicator.offline {
+    background: #ff453a;
+}
+
+/* ---- Dashboard grid: één kolom op iPhone, geen overflow ---- */
+body.ios-app .dashboard-grid,
+body.ios-app .dashboard-grid.detail-view,
+body.ios-app .dashboard-grid.home-view {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    max-width: 100%;
+    min-width: 0;
+}
+
+body.ios-app .dashboard-view-container,
+body.ios-app .week-view-wrapper,
+body.ios-app .detail-view-wrapper {
+    max-width: 100%;
+    min-width: 0;
+}
+
+/* ---- Modal = iOS sheet (vanonder, afgerond) ---- */
+body.ios-app .modal {
+    padding: 0;
+    align-items: flex-end;
+}
+
+body.ios-app .modal-content {
+    max-width: 100vw;
+    width: 100%;
+    max-height: 90vh;
+    border-radius: 14px 14px 0 0;
+    border: none;
+    border-top: 0.5px solid rgba(255, 255, 255, 0.1);
+    background: rgba(28, 28, 30, 0.98);
+    margin-bottom: env(safe-area-inset-bottom);
+}
+
+body.ios-app .modal-header {
+    padding: 1rem 1.25rem;
+    padding-top: calc(1rem + env(safe-area-inset-top));
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
+}
+
+body.ios-app .modal-header h2 {
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+body.ios-app .modal-close {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0a84ff;
+    border-radius: 10px;
+}
+
+body.ios-app .modal-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #0a84ff;
+}
+
+body.ios-app .modal-body {
+    padding: 1.25rem;
+    max-height: 60vh;
+}
+
+body.ios-app .modal-footer {
+    padding: 1rem 1.25rem;
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+    border-top: 0.5px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ---- Form: iOS list style ---- */
+body.ios-app .settings-section {
+    background: rgba(44, 44, 46, 0.6);
+    border-radius: 14px;
+    border: none;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+body.ios-app .settings-section h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+body.ios-app .settings-section h3 i {
+    color: #0a84ff;
+}
+
+body.ios-app .form-group input,
+body.ios-app .form-select {
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+}
+
+body.ios-app .form-group input:focus,
+body.ios-app .form-select:focus {
+    border: none;
+    box-shadow: 0 0 0 2px #0a84ff;
+}
+
+body.ios-app .btn-test {
+    background: rgba(10, 132, 255, 0.2);
+    color: #0a84ff;
+    border: none;
+    border-radius: 10px;
+}
+
+body.ios-app .btn-test:hover {
+    background: rgba(10, 132, 255, 0.3);
+}
+
+/* ---- Footer ---- */
+body.ios-app .footer {
+    padding: 0.75rem 1rem;
+    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
+    background: transparent;
+    border: none;
+}
+
+/* ---- Filter popover ---- */
+body.ios-app .filter-popup {
+    border-radius: 14px;
+    border: none;
+    background: rgba(44, 44, 46, 0.98);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    max-width: min(320px, calc(100vw - 2rem));
+}
+
+body.ios-app .status-popover {
+    border-radius: 14px;
+    border: none;
+    background: rgba(44, 44, 46, 0.98);
+}
+
+/* ---- Date selector compact ---- */
+body.ios-app .date-selector .custom-select {
+    width: 160px;
+}
+
+body.ios-app .date-selector button {
+    min-width: 44px;
+    height: 44px;
+}
+
+/* ---- Week view / detail view cards ---- */
+body.ios-app .week-view-card,
+body.ios-app .detail-view-card {
+    border-radius: 14px;
+}
+
+body.ios-app .week-view-sort-btn.active,
+body.ios-app .week-view-sort-btn:active {
+    background: rgba(10, 132, 255, 0.3);
+    color: #0a84ff;
+}
+
+/* Touch targets minimaal 44px */
+body.ios-app .filter-checkbox {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0;
+}
+
+body.ios-app .venue-order-list .venue-order-item,
+body.ios-app .custom-select-option {
+    min-height: 44px;
+}
+
+/* Data items (event cards, lijsten) */
+body.ios-app .data-item {
+    border-radius: 12px;
+    border: none;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+body.ios-app .data-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+body.ios-app .data-item.clickable {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body.ios-app .loading-overlay {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+body.ios-app .loading-overlay .loading-spinner {
+    background: rgba(44, 44, 46, 0.95);
+    border-radius: 14px;
+    padding: 1.5rem;
+}
+
+body.ios-app .info-message {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9375rem;
+}

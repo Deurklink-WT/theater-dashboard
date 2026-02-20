@@ -1,0 +1,11 @@
+{
+  "appId": "com.huistechneut.shifthappens",
+  "appName": "Shift Happens",
+  "webDir": "src/renderer",
+  "server": {
+    "cleartext": true
+  },
+  "ios": {
+    "contentInset": "automatic"
+  }
+}

@@ -1,0 +1,81 @@
+/* iOS-specific styles voor Shift Happens */
+/* Fix voor dag-selector en tijd afkorting probleem */
+
+/* Maak de dag selector breder */
+.day-selector,
+.date-picker,
+.date-selector,
+[class*="day-button"],
+[class*="date-button"] {
+    min-width: 220px !important;
+    max-width: none !important;
+    flex: 1 1 auto !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+}
+
+/* Header tijd display breder maken */
+.header-time,
+.time-display,
+.shift-time,
+[class*="header"] [class*="time"] {
+    min-width: 80px !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+}
+
+/* Header container optimaliseren voor meer ruimte */
+.calendar-header,
+.shift-header,
+.header-container,
+[class*="calendar-header"],
+[class*="shift-header"] {
+    display: flex !important;
+    gap: 6px !important;
+    padding: 8px 10px !important;
+    align-items: center !important;
+}
+
+/* Navigatie knoppen iets compacter maken */
+.nav-button,
+.navigation-button,
+button[class*="nav"],
+button[class*="navigation"] {
+    min-width: 44px !important;
+    padding: 8px 10px !important;
+    flex-shrink: 0 !important;
+}
+
+/* Terug/vooruit knoppen */
+.back-button,
+.forward-button,
+button[class*="back"],
+button[class*="forward"] {
+    min-width: 44px !important;
+    width: 44px !important;
+    padding: 8px !important;
+    flex-shrink: 0 !important;
+}
+
+/* Algemene iOS optimalisaties */
+.ios-app {
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+}
+
+/* Zorg dat tekst niet wordt afgekort met ellipsis */
+.ios-app button,
+.ios-app .button,
+.ios-app [class*="button"] {
+    white-space: nowrap;
+    overflow: visible;
+}
+
+/* Extra ruimte voor dag namen */
+[class*="day-name"],
+[class*="date-text"] {
+    display: inline-block;
+    min-width: auto;
+}

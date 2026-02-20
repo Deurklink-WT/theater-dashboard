@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Shift Happens
+Comment=Theater Dashboard
+Exec=/usr/bin/theater-dashboard --kiosk
+Icon=theater-dashboard
+Terminal=false
+Categories=Utility;
+X-GNOME-Autostart-enabled=true

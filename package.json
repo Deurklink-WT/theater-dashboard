@@ -1,0 +1,138 @@
+{
+  "name": "theater-dashboard",
+  "version": "1.4.1",
+  "description": "Theater dashboard voor Huistechneut - integratie van Yesplan, Uurwerk, Itix en Priva systemen",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder",
+    "build:mac": "electron-builder --mac && node scripts/remove-quarantine.js && node scripts/fix-dmg-quarantine.js",
+    "build:win": "electron-builder --win",
+    "build:pi": "electron-builder --linux --arm64",
+    "build:all": "npm run build:win && npm run build:mac && npm run build:pi",
+    "build:testflight": "electron-builder --mac --config.mac.target=zip",
+    "upload:testflight": "node scripts/upload-testflight.js",
+    "test": "jest",
+    "postbuild": "node scripts/remove-quarantine.js",
+    "server": "node src/server/api-server.js",
+    "cap:ios": "npx cap sync ios && npx cap open ios",
+    "cap:sync": "npx cap sync"
+  },
+  "keywords": ["theater", "dashboard", "electron", "api", "yesplan", "uurwerk", "itix", "priva"],
+  "author": {
+    "name": "PdV",
+    "email": "info@huistechneut.nl"
+  },
+  "homepage": "https://huistechneut.nl",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@capacitor/cli": "^6.0.0",
+    "@capacitor/core": "^6.0.0",
+    "@capacitor/ios": "^6.0.0",
+    "electron": "^28.0.0",
+    "electron-builder": "^24.6.4",
+    "jest": "^29.7.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "chart.js": "^4.4.0",
+    "cors": "^2.8.5",
+    "date-fns": "^2.30.0",
+    "electron-store": "^8.1.0",
+    "express": "^4.18.2",
+    "node-cron": "^3.0.3"
+  },
+  "build": {
+    "appId": "com.huistechneut.shift-happens",
+    "productName": "Shift Happens",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "src/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "icon": "build/icon.icns",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        },
+        {
+          "target": "zip",
+          "arch": ["x64", "arm64"]
+        }
+      ],
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist",
+      "identity": null
+    },
+    "dmg": {
+      "title": "${productName} ${version}",
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ],
+      "window": {
+        "width": 540,
+        "height": 400
+      }
+    },
+    "win": {
+      "icon": "build/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ],
+      "executableName": "Shift Happens.exe"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Shift Happens"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["arm64"]
+        }
+      ],
+      "category": "Utility",
+      "icon": "build/icon.png",
+      "maintainer": "PdV <info@huistechneut.nl>"
+    },
+    "deb": {
+      "depends": [
+        "libgtk-3-0t64",
+        "libnotify4",
+        "libnss3",
+        "libxss1",
+        "libxtst6",
+        "libatspi2.0-0t64",
+        "libuuid1",
+        "libsecret-1-0"
+      ]
+    }
+  }
+}
+

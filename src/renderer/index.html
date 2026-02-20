@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Shift Happens</title>
+    <meta name="theme-color" content="#1c1c1e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="header-title">
+                    <img src="logowm.png" alt="Logo" class="header-logo" id="headerLogo" style="display: none;" />
+                    <i class="fas fa-theater-masks" id="headerIcon"></i>
+                    <div class="header-title-text">
+                        <span>Shift Happens</span>
+                        <span class="header-datetime" id="currentDateTime"></span>
+                    </div>
+                </h1>
+                <div class="header-actions">
+                    <button id="backBtn" class="btn btn-back" title="Terug naar vorig scherm">
+                        <i class="fas fa-arrow-left"></i>
+                        <span data-i18n="nav.back">Terug</span>
+                    </button>
+                    <div class="date-selector" style="display: flex; align-items: center; margin-right: 1rem;">
+                        <button id="prevDayBtn" class="btn btn-icon-only" title="Vorige dag">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <div class="custom-select-wrapper">
+                            <div class="custom-select" id="dateSelectCustom">
+                                <div class="custom-select-trigger">
+                                    <i class="fas fa-calendar-day"></i>
+                                    <span class="custom-select-value" id="dateText" data-i18n="date.today">Vandaag</span>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="custom-select-options" id="dateSelectOptions">
+                                    <!-- Wordt dynamisch gevuld -->
+                                </div>
+                            </div>
+                        </div>
+                        <button id="nextDayBtn" class="btn btn-icon-only" title="Volgende dag">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="venue-selector">
+                        <div class="custom-select-wrapper">
+                            <div class="custom-select" id="venueSelectCustom">
+                                <div class="custom-select-trigger">
+                                    <span class="custom-select-value" id="venueSelectValue" data-i18n="venue.allVenues">Alle zalen</span>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="custom-select-options custom-select-options--grid" id="venueSelectOptions">
+                                    <div class="custom-select-option" data-value="" data-i18n="venue.allVenues">Alle zalen</div>
+                                </div>
+                            </div>
+                            <!-- Hidden native select voor backwards compatibility -->
+                            <select id="venueSelect" class="venue-select-hidden" style="display: none;">
+                                <option value="" data-i18n="venue.allVenues">Alle zalen</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button id="homeBtn" class="btn btn-secondary btn-icon-only" title="Home">
+                        <i class="fas fa-home"></i>
+                    </button>
+                    <button id="weekBtn" class="btn btn-secondary btn-icon-only" title="Weekoverzicht">
+                        <i class="fas fa-calendar-week"></i>
+                    </button>
+                    <div class="header-filter-wrap" style="position: relative;">
+                        <button id="filterCancelledBtn" class="btn btn-secondary btn-icon-only" title="Filters">
+                            <i class="fas fa-filter"></i>
+                        </button>
+                        <div id="filterPopup" class="filter-popup" style="display: none;">
+                            <div class="filter-popup-header">
+                                <h4><i class="fas fa-filter"></i> <span data-i18n="filters.title">Filters</span></h4>
+                            </div>
+                            <div class="filter-popup-content">
+                                <label class="filter-checkbox">
+                                    <input type="checkbox" id="hideCancelledCheckbox">
+                                    <span data-i18n="filters.hideCancelled">Verberg geannuleerde voorstellingen</span>
+                                </label>
+                                <label class="filter-checkbox">
+                                    <input type="checkbox" id="filterTechnischPersoneelCheckbox">
+                                    <span data-i18n="filters.technischPersoneel">Alleen evenementen met technisch personeel</span>
+                                </label>
+                                <label class="filter-checkbox">
+                                    <input type="checkbox" id="filterTechnischeResourcesCheckbox">
+                                    <span data-i18n="filters.technischeResources">Alleen evenementen met technische resources</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="refreshBtn" class="btn btn-secondary btn-icon-only" title="Vernieuwen">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                    <button id="settingsBtn" class="btn btn-secondary btn-icon-only" title="Instellingen">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Weekoverzicht (alleen evenement + technische planning) -->
+            <div id="weekViewWrapper" class="week-view-wrapper" style="display: none;">
+                <div class="card week-view-card">
+                    <div class="card-header card-header--week">
+                        <div class="card-header-title-row">
+                            <h3><i class="fas fa-calendar-week"></i> <span data-i18n="weekView.title">Weekoverzicht</span></h3>
+                            <div class="week-view-sort" id="weekViewSort">
+                                <button type="button" class="week-view-sort-btn active" data-sort="venue" data-i18n-title="weekView.sortByVenueTitle" data-i18n="weekView.sortByVenue">Op zaal</button>
+                                <button type="button" class="week-view-sort-btn" data-sort="time" data-i18n-title="weekView.sortByTimeTitle" data-i18n="weekView.sortByTime">Op tijd</button>
+                            </div>
+                        </div>
+                        <div class="card-status card-status--clickable" id="weekViewStatus" title="Klik voor systeemstatus">
+                            <span class="status-indicator offline"></span>
+                            <span class="status-text">Offline</span>
+                        </div>
+                    </div>
+                    <div class="card-content" id="weekViewContent">
+                        <div class="loading" data-i18n="loading">Laden...</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Home view: grid zonder wrapper -->
+            <div id="homeViewContainer" class="dashboard-view-container">
+                <div class="dashboard-grid" id="dashboardGrid">
+                <!-- Yesplan Events -->
+                <div class="card card-draggable" data-card-id="yesplan">
+                    <div class="card-header">
+                        <h3><i class="fas fa-calendar-alt"></i> Yesplan</h3>
+                        <div class="card-header-actions">
+                            <button id="techOverviewBtn" class="btn btn-secondary btn-icon-only btn-sm" title="Technisch overzicht printen">
+                                <i class="fas fa-file-pdf"></i>
+                            </button>
+                            <div class="card-status card-status--clickable" id="homeViewStatus" title="Klik voor systeemstatus" style="display: none;">
+                                <span class="status-indicator offline"></span>
+                                <span class="status-text">Offline</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-content" id="yesplanContent">
+                        <div class="loading" data-i18n="loading">Laden...</div>
+                    </div>
+                </div>
+
+                <!-- Uurwerk Planning -->
+                <div class="card card-draggable" data-card-id="uurwerk">
+                    <div class="card-header">
+                        <h3><i class="fas fa-users"></i> Personeel</h3>
+                    </div>
+                    <div class="card-content" id="uurwerkContent">
+                        <div class="loading" data-i18n="loading">Laden...</div>
+                    </div>
+                </div>
+
+                <!-- Itix Verkoop -->
+                <div class="card card-draggable" data-card-id="itix">
+                    <div class="card-header">
+                        <h3><i class="fas fa-ticket-alt"></i> Itix - Kaartverkoop</h3>
+                    </div>
+                    <div class="card-content" id="itixContent">
+                        <div class="loading" data-i18n="loading">Laden...</div>
+                    </div>
+                </div>
+
+                <!-- Priva Klimaat -->
+                <div class="card card-draggable" id="privaCard" data-card-id="priva">
+                    <div class="card-header">
+                        <h3><i class="fas fa-thermometer-half"></i> Priva - Klimaat</h3>
+                    </div>
+                    <div class="card-content" id="privaContent">
+                        <div class="loading" data-i18n="loading">Laden...</div>
+                    </div>
+                </div>
+
+                <!-- Tijdschema (alleen bij 1 dag + 1 zaal) -->
+                <div class="card card-draggable" id="tijdschemaCard" data-card-id="tijdschema" style="display: none;">
+                    <div class="card-header">
+                        <h3><i class="fas fa-clock"></i> Tijdschema</h3>
+                    </div>
+                    <div class="card-content" id="tijdschemaContent">
+                        <div class="info-message" data-i18n="messages.selectDayVenueTijdschema">Selecteer 1 dag en 1 zaal om het tijdschema te zien.</div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <!-- Detail view: grote card met zaalnaam (alleen bij 1 dag + 1 zaal) -->
+            <div id="detailViewWrapper" class="detail-view-wrapper" style="display: none;">
+                <div class="card detail-view-card">
+                    <div class="card-header card-header--detail">
+                        <h3><i class="fas fa-map-marker-alt"></i> <span id="detailViewVenueName" data-i18n="venue.venue">Zaal</span></h3>
+                        <div class="card-status card-status--clickable" id="detailViewStatus" title="Klik voor systeemstatus">
+                            <span class="status-indicator offline"></span>
+                            <span class="status-text">Offline</span>
+                        </div>
+                    </div>
+                    <div class="card-content detail-view-card-content" id="detailViewGridContainer">
+                        <!-- Dashboard grid wordt hier naartoe verplaatst -->
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Status popover (systeemstatus bij klik) -->
+        <div id="statusPopover" class="status-popover" style="display: none;">
+            <div class="status-popover-header">
+                <h4><i class="fas fa-signal"></i> <span data-i18n="status.systemStatus">Systeemstatus</span></h4>
+            </div>
+            <div class="status-popover-content" id="statusPopoverContent">
+                <!-- Dynamisch gevuld -->
+            </div>
+        </div>
+
+        <!-- Settings Modal -->
+        <div id="settingsModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fas fa-cog"></i> <span data-i18n="settings.title">Instellingen</span></h2>
+                    <div class="modal-header-version">v1.4.1</div>
+                    <button class="modal-close" id="closeSettings">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="settingsForm">
+                        <!-- API-server (alleen zichtbaar op iPhone/web, niet in Electron) -->
+                        <div class="settings-section settings-section--mobile-only" id="apiServerSection" style="display: none;">
+                            <h3><i class="fas fa-server"></i> API-server (iPhone)</h3>
+                            <p style="color: #a0aec0; font-size: 0.875rem; margin-bottom: 1rem;">
+                                Vul hier het adres in van de Shift Happens API-server, bijvoorbeeld <code>https://jouw-server.nl:3847</code>. Alleen nodig voor de iPhone-app.
+                            </p>
+                            <div class="form-group">
+                                <label for="apiServerURL">Server-URL</label>
+                                <input type="url" id="apiServerURL" placeholder="https://..." class="form-input" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <!-- Thema Settings -->
+                        <div class="settings-section">
+                            <h3><i class="fas fa-palette"></i> <span data-i18n="settings.theme">Thema</span></h3>
+                            <div class="form-row">
+                                <div class="form-group form-group--half">
+                                    <label for="themeSelect" data-i18n="settings.colorMode">Kleurmodus</label>
+                                    <select id="themeSelect" class="form-select">
+                                        <option value="default">Blauw</option>
+                                        <option value="pink">Roze</option>
+                                        <option value="green">Groen</option>
+                                        <option value="amber">Amber</option>
+                                        <option value="slate">Grijs</option>
+                                        <option value="purple">Paars</option>
+                                    </select>
+                                </div>
+                                <div class="form-group form-group--half">
+                                    <label for="languageSelect" data-i18n="settings.language">Taal</label>
+                                    <select id="languageSelect" class="form-select">
+                                        <option value="nl">Nederlands</option>
+                                        <option value="en">English</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row" style="margin-top: 1rem;">
+                                <div class="form-group">
+                                    <label class="settings-checkbox-label">
+                                        <input type="checkbox" id="touchscreenModeCheckbox">
+                                        <span data-i18n="settings.touchscreenMode">Touchscreen-modus</span>
+                                    </label>
+                                    <p style="color: #a0aec0; font-size: 0.8rem; margin-top: 0.35rem;" data-i18n="settings.touchscreenModeHint">Grotere scrollbalk en grotere tikgebieden voor gebruik op aanraakschermen (bijv. Raspberry Pi-kiosk).</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Zaalvolgorde Settings -->
+                        <div class="settings-section">
+                            <h3><i class="fas fa-sort"></i> <span data-i18n="settings.venueOrder">Zaalvolgorde</span></h3>
+                            <p style="color: #a0aec0; font-size: 0.875rem; margin-bottom: 1rem;" data-i18n="settings.venueOrderHint">
+                                Sleep de zalen om de volgorde aan te passen. Klik op het oog om een zaal te verbergen in de zaal-dropdown.
+                            </p>
+                            <div id="venueOrderList" class="venue-order-list">
+                                <!-- Wordt dynamisch gevuld -->
+                            </div>
+                            <button type="button" class="btn btn-secondary" id="resetVenueOrder" style="margin-top: 1rem;">
+                                <i class="fas fa-undo"></i> <span data-i18n="settings.resetVenueOrder">Reset naar standaard</span>
+                            </button>
+                        </div>
+
+                        <!-- Technische opties per zaal -->
+                        <div class="settings-section">
+                            <h3><i class="fas fa-filter"></i> <span data-i18n="settings.techOptions">Technische opties per zaal</span></h3>
+                            <p style="color: #a0aec0; font-size: 0.875rem; margin-bottom: 1rem;" data-i18n="settings.techOptionsHint">
+                                Kies per zaal welke opties (balletvloer, vleugel, orkestbak) getoond worden. Stel dit in op basis van wat je in Yesplan per zaal ziet.
+                            </p>
+                            <div id="venueResourceOptionsList" class="venue-resource-options-list">
+                                <!-- Wordt dynamisch gevuld -->
+                            </div>
+                        </div>
+
+                        <!-- Yesplan Settings -->
+                        <div class="settings-section">
+                            <h3><i class="fas fa-calendar-alt"></i> <span data-i18n="settings.yesplan">Yesplan</span></h3>
+                            <div class="form-group">
+                                <label for="activeYesplanOrg" data-i18n="settings.activeOrg">Actieve organisatie</label>
+                                <select id="activeYesplanOrg" class="form-select">
+                                    <!-- Wordt dynamisch gevuld met ingevoerde namen -->
+                                </select>
+                                <small style="color: #718096; font-size: 0.8rem; margin-top: 0.25rem; display: block;" data-i18n="settings.activeOrgHint">
+                                    Bepaal welke Yesplan-organisatie het dashboard gebruikt
+                                </small>
+                            </div>
+                            <div class="yesplan-org-block" data-org="1">
+                                <h4 style="color: #cbd5e0; font-size: 0.95rem; margin: 1rem 0 0.5rem 0;" data-i18n="settings.org1">Organisatie 1</h4>
+                                <div class="form-group">
+                                    <label for="yesplanOrgName" data-i18n="settings.name">Naam</label>
+                                    <input type="text" id="yesplanOrgName" placeholder="bv. Theater A" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="yesplanBaseURL" data-i18n="settings.baseURL">Base URL</label>
+                                    <input type="url" id="yesplanBaseURL" placeholder="https://org1.yesplan.nl">
+                                </div>
+                                <div class="form-group">
+                                    <label for="yesplanApiKey" data-i18n="settings.apiKey">API Key</label>
+                                    <div style="position: relative;">
+                                        <input type="password" id="yesplanApiKey" placeholder="Jouw Yesplan API key" autocomplete="off" style="padding-right: 2.5rem;">
+                                        <button type="button" class="toggle-password" data-target="yesplanApiKey" style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #718096; padding: 0.25rem;">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-secondary loadVenuesBtn" data-org="1" style="white-space: nowrap;">
+                                        <i class="fas fa-sync-alt"></i> <span data-i18n="settings.loadVenues">Laad Zalen</span>
+                                    </button>
+                                    <small style="color: #718096; font-size: 0.8rem; margin-top: 0.25rem; display: block;" data-i18n="settings.loadVenuesHint">Haalt zalen op voor zaalvolgorde en header</small>
+                                </div>
+                                <button type="button" class="btn btn-test" data-system="yesplan" data-org="1">
+                                    <i class="fas fa-plug"></i> <span data-i18n="settings.testConnection">Test Verbinding</span>
+                                </button>
+                            </div>
+                            <div class="yesplan-org-block" data-org="2" style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                                <h4 style="color: #cbd5e0; font-size: 0.95rem; margin: 0 0 0.5rem 0;" data-i18n="settings.org2">Organisatie 2</h4>
+                                <div class="form-group">
+                                    <label for="yesplanOrgName2" data-i18n="settings.name">Naam</label>
+                                    <input type="text" id="yesplanOrgName2" placeholder="bv. Theater B" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="yesplanBaseURL2" data-i18n="settings.baseURL">Base URL</label>
+                                    <input type="url" id="yesplanBaseURL2" placeholder="https://org2.yesplan.nl">
+                                </div>
+                                <div class="form-group">
+                                    <label for="yesplanApiKey2" data-i18n="settings.apiKey">API Key</label>
+                                    <div style="position: relative;">
+                                        <input type="password" id="yesplanApiKey2" placeholder="Jouw Yesplan API key (organisatie 2)" autocomplete="off" style="padding-right: 2.5rem;">
+                                        <button type="button" class="toggle-password" data-target="yesplanApiKey2" style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #718096; padding: 0.25rem;">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-secondary loadVenuesBtn" data-org="2" style="white-space: nowrap;">
+                                        <i class="fas fa-sync-alt"></i> <span data-i18n="settings.loadVenues">Laad Zalen</span>
+                                    </button>
+                                    <small style="color: #718096; font-size: 0.8rem; margin-top: 0.25rem; display: block;" data-i18n="settings.loadVenuesHint">Haalt zalen op voor zaalvolgorde en header</small>
+                                </div>
+                                <button type="button" class="btn btn-test" data-system="yesplan" data-org="2">
+                                    <i class="fas fa-plug"></i> <span data-i18n="settings.testConnection">Test Verbinding</span>
+                                </button>
+                            </div>
+                            <small style="color: #718096; font-size: 0.8rem; margin-top: 1rem; display: block;" data-i18n="settings.loadVenuesFullHint">
+                                Vul per organisatie Base URL en API Key in, klik op "Laad Zalen"
+                            </small>
+                        </div>
+
+                        <!-- Priva Settings - Verborgen voor nu, mogelijk later te implementeren -->
+                        <div class="settings-section" style="display: none;">
+                            <h3><i class="fas fa-thermometer-half"></i> Priva</h3>
+                            <div class="form-group">
+                                <label for="privaBaseURL">Base URL</label>
+                                <input type="url" id="privaBaseURL" placeholder="https://api.priva.nl">
+                            </div>
+                            <div class="form-group">
+                                <label for="privaApiKey">API Key</label>
+                                <div style="position: relative;">
+                                    <input type="password" id="privaApiKey" placeholder="Jouw Priva API key" autocomplete="off" style="padding-right: 2.5rem;">
+                                    <button type="button" class="toggle-password" data-target="privaApiKey" style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #718096; padding: 0.25rem;">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="privaSystemId">Systeem ID</label>
+                                <input type="text" id="privaSystemId" placeholder="Systeem ID">
+                            </div>
+                            <button type="button" class="btn btn-test" data-system="priva">
+                                <i class="fas fa-plug"></i> Test Verbinding
+                            </button>
+                        </div>
+
+                        <!-- About Section -->
+                        <div class="settings-section">
+                            <h3><i class="fas fa-info-circle"></i> Over deze app</h3>
+                            <div style="color: #a0aec0; font-size: 0.9rem; line-height: 1.6;">
+                                <p style="margin-bottom: 0.75rem;">
+                                    <strong style="color: #cbd5e0;">Shift Happens</strong><br>
+                                    <span style="color: #a0aec0;">Theater Dashboard v1.4.1</span>
+                                </p>
+                                <p style="margin-bottom: 0.75rem;">
+                                    <strong style="color: #cbd5e0;">Ontwikkeld door:</strong> PdV<br>
+                                    <strong style="color: #cbd5e0;">Copyright:</strong> © 2026 PdV. Alle rechten voorbehouden.
+                                </p>
+                                <p style="margin-bottom: 0.75rem;">
+                                    <strong style="color: #cbd5e0;">Licentie:</strong> Proprietary (Niet gelicenseerd voor herdistributie)
+                                </p>
+                                <p style="margin-bottom: 1rem;">
+                                    Een cross-platform desktop applicatie voor het monitoren van theater systemen, 
+                                    met integratie van Yesplan, Uurwerk, Itix en Priva systemen.
+                                </p>
+                                
+                                <!-- Release Notes -->
+                                <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                                    <h4 style="color: #cbd5e0; font-size: 1rem; margin-bottom: 0.75rem; font-weight: 600;">
+                                        <i class="fas fa-list-alt"></i> Release Notes
+                                    </h4>
+                                    
+                                    <!-- Version 1.4.1 -->
+                                    <div style="margin-bottom: 1rem;">
+                                        <h5 style="color: #cbd5e0; font-size: 0.95rem; margin-bottom: 0.5rem; font-weight: 600;">
+                                            v1.4.1 (07-02-2026)
+                                        </h5>
+                                        <ul style="margin-left: 1.25rem; margin-bottom: 0; padding-left: 0.5rem;">
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Om middernacht automatisch naar het home-scherm van de nieuwe dag (controle 1x per uur)
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <!-- Version 1.4.0 -->
+                                    <div style="margin-bottom: 1rem;">
+                                        <h5 style="color: #cbd5e0; font-size: 0.95rem; margin-bottom: 0.5rem; font-weight: 600;">
+                                            v1.4.0 (07-02-2026)
+                                        </h5>
+                                        <ul style="margin-left: 1.25rem; margin-bottom: 0; padding-left: 0.5rem;">
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Twee Yesplan-organisaties – configureer twee API-codes en wissel of combineer ("Beide organisaties")
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Organisatienamen – geef elk Yesplan-account een eigen naam
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Filters – alleen evenementen met technisch personeel, alleen met technische resources
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Extra thema's – Roze, Groen, Amber, Grijs, Paars
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Verbeterd:</strong> Weekoverzicht titel verkort; zaal-selectie uit Yesplan-instellingen verwijderd
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Verbeterd:</strong> Geen zaalplattegrond – melding in het vak; Instellingen – Opslaan sluit niet meer
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Orkestbak – naast balletvloer en vleugel; toont waarde uit Yesplan (bv. grote bak, kleine bak)
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Technische opties per zaal – stel per zaal in welke opties getoond worden (balletvloer, vleugel, orkestbak)
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Beveiliging:</strong> API-keys versleuteld opgeslagen; URL-validatie bij externe links
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Taalinstelling – Nederlands of Engels; volledige vertaling van de interface
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Kleurmodus en Taal naast elkaar in Thema-instellingen
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Verbeterd:</strong> Systeemstatus alleen Yesplan (Personeel en Itix komen uit Yesplan; Priva volgt later indien mogelijk)
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Verbeterd:</strong> Balletvloer/vleugel/orkestbak – "niet ingevuld" als geen info in Yesplan; "nee" alleen bij expliciete waarde; betere detectie van Yesplan-dropdownwaarden
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <!-- Version 1.3.0 -->
+                                    <div style="margin-bottom: 1rem;">
+                                        <h5 style="color: #cbd5e0; font-size: 0.95rem; margin-bottom: 0.5rem; font-weight: 600;">
+                                            v1.3.0 (31-01-2026)
+                                        </h5>
+                                        <ul style="margin-left: 1.25rem; margin-bottom: 0; padding-left: 0.5rem;">
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Master card in detail view – grote card met zaalnaam bij 1 dag + 1 zaal
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Klikbare systeemstatus – klik op Online voor per-systeem overzicht (Yesplan, Personeel, Itix, Priva)
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Drie statusniveaus: Online, Deels bereikbaar, Offline
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Status naast Yesplan-titel (zelfde lijn als week/detail)
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Verbeterd:</strong> Minder dubbele info – zaal en evenementnaam 1x in mastertitel
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Verbeterd:</strong> Yesplan card heet nu "Yesplan", Zaalplattegrond als losse titel boven knop
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Verbeterd:</strong> Status alleen in master cards; update tijd naast Online verwijderd
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Terug-knop – altijd zichtbaar, ga terug naar vorig scherm
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Verbeterd:</strong> Thuisknop actief; Mac: groene plus-knop doet beeldvullend fullscreen
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Verbeterd:</strong> Zaalvolgorde: oog-icoon per zaal om te verbergen; Organisatie ID verwijderd
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Verbeterd:</strong> Personeel: koppen "Techniek", "Horeca", "Front Office"
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <!-- Version 1.2.0 -->
+                                    <div style="margin-bottom: 1rem;">
+                                        <h5 style="color: #cbd5e0; font-size: 0.95rem; margin-bottom: 0.5rem; font-weight: 600;">
+                                            v1.2.0 (31-01-2026)
+                                        </h5>
+                                        <ul style="margin-left: 1.25rem; margin-bottom: 0; padding-left: 0.5rem;">
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Weekoverzicht – knop naast home, alleen evenementen en technische planning voor alle actieve zalen
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Tijdschema – kaart met dagprogramma bij 1 dag + 1 zaal (op verzoek van Jennigje). Standaard als 2e kolom.
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Verplaatsbare cards – sleep de kaarten om de volgorde aan te passen (op verzoek van Eelco)
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Yesplan-cache (3 min) – minder serverbelasting bij navigatie; vernieuwen haalt altijd verse data op
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Verbeterd:</strong> Geen race meer bij datumwissel – alleen de laatste request wordt getoond; vorige/volgende uit tijdens laden
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Verbeterd:</strong> "Geen evenementen"-melding toont de geselecteerde datum
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <!-- Version 1.1.0 -->
+                                    <div style="margin-bottom: 1rem;">
+                                        <h5 style="color: #cbd5e0; font-size: 0.95rem; margin-bottom: 0.5rem; font-weight: 600;">
+                                            v1.1.0
+                                        </h5>
+                                        <ul style="margin-left: 1.25rem; margin-bottom: 0; padding-left: 0.5rem;">
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Multi-select voor zalen - selecteer meerdere zalen tegelijk
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Zalen dropdown als selectieknoppen in 3-kolommen grid
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Technisch materiaal weergave in event cards
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Verbeterde datum picker met automatische kalender en handmatige invoer
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Uitgebreid:</strong> Datum navigatie tot 1 jaar vooruit en 1 week terug
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Verbeterd:</strong> Vaste breedte datum weergave, terug knop wordt rood bij max achteruit
+                                            </li>
+                                        </ul>
+                                        <p style="margin-top: 0.75rem; margin-bottom: 0; font-style: italic; color: #9ca3af; font-size: 0.85rem;">
+                                            Multi-select en technisch materiaal op verzoek van R. Bijker
+                                        </p>
+                                    </div>
+                                    
+                                    <!-- Version 1.0.0 -->
+                                    <div style="margin-bottom: 1rem;">
+                                        <h5 style="color: #cbd5e0; font-size: 0.95rem; margin-bottom: 0.5rem; font-weight: 600;">
+                                            v1.0.0
+                                        </h5>
+                                        <ul style="margin-left: 1.25rem; margin-bottom: 0; padding-left: 0.5rem;">
+                                            <li style="margin-bottom: 0.25rem;">
+                                                Eerste stabiele release
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                Integratie met Yesplan, Uurwerk en Itix systemen
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                Home en detail views voor evenementen
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                Zaalvolgorde configuratie
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="saveSettings">
+                        <i class="fas fa-save"></i> <span data-i18n="settings.save">Opslaan</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="loading-overlay">
+            <div class="loading-spinner">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p data-i18n="loading">Laden...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <span>v1.3 © 2026 PdV</span>
+        </div>
+    </footer>
+
+    <script src="api-mobile.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+
