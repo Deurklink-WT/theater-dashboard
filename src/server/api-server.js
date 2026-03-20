@@ -12,7 +12,6 @@ const path = require('path');
 const store = require('./store');
 
 const YesplanAPI = require('../api/yesplan');
-const ItixAPI = require('../api/itix');
 const PrivaAPI = require('../api/priva');
 
 const SENSITIVE_KEYS = ['apiKey'];
@@ -43,14 +42,17 @@ function getActiveYesplanOrg() {
   return v === 'both' ? 'both' : (v === 2 ? 2 : 1);
 }
 
-const YESPLAN_CACHE_TTL_MS = 3 * 60 * 1000;
+// Cache TTL zodat we niet te vaak dezelfde Yesplan responses opnieuw ophalen.
+// Standaard ruim: 6 uur. Overschrijfbaar via env var.
+const YESPLAN_CACHE_TTL_MS = Number(process.env.YESPLAN_CACHE_TTL_MS || (6 * 60 * 60 * 1000));
 const YESPLAN_CACHE_MAX = 100;
 const yesplanCache = new Map();
 
 function yesplanCacheKey(params) {
-  const { startDate, endDate, venueId } = params;
+  const { startDate, endDate, venueId, includeEventDetailsForWeekFilters } = params;
   const org = getActiveYesplanOrg();
-  return `yesplan:org${org}:${startDate || ''}:${endDate || ''}:${venueId ?? 'all'}`;
+  const detailsKey = includeEventDetailsForWeekFilters ? 'fullWeekFilters' : 'liteWeekFilters';
+  return `yesplan:org${org}:${startDate || ''}:${endDate || ''}:${venueId ?? 'all'}:${detailsKey}`;
 }
 function yesplanCacheGet(key) {
   const ent = yesplanCache.get(key);
@@ -83,7 +85,7 @@ async function getYesplanData(params) {
     singleOrg = orgPart === '2' ? 2 : 1;
     venueId = idPart || undefined;
   }
-  const apiParams = { startDate: params.startDate, endDate: params.endDate, venueId, limit: params.limit };
+  const apiParams = { startDate: params.startDate, endDate: params.endDate, venueId, limit: params.limit, includeEventDetailsForWeekFilters: !!params.includeEventDetailsForWeekFilters };
   const key = yesplanCacheKey(apiParams);
   if (!skipCache) {
     const cached = yesplanCacheGet(key);
@@ -195,7 +197,7 @@ app.get('/api/health', (req, res) => {
 app.get('/api/config/:system', (req, res) => {
   const system = req.params.system;
   const raw = store.get(system, {});
-  const out = ['yesplan', 'yesplan2', 'itix', 'priva'].includes(system)
+  const out = ['yesplan', 'yesplan2', 'priva'].includes(system)
     ? secureConfigFromStorage(raw)
     : raw;
   res.json(out);
@@ -204,7 +206,7 @@ app.get('/api/config/:system', (req, res) => {
 app.post('/api/config', (req, res) => {
   const { system, config } = req.body;
   if (!system) return res.status(400).json({ success: false, error: 'system required' });
-  const toStore = ['yesplan', 'yesplan2', 'itix', 'priva'].includes(system)
+  const toStore = ['yesplan', 'yesplan2', 'priva'].includes(system)
     ? secureConfigForStorage(config)
     : config;
   store.set(system, toStore);
@@ -250,18 +252,6 @@ app.post('/api/yesplan/schedule', async (req, res) => {
     res.json(result);
   } catch (e) {
     console.error('Yesplan schedule error:', e);
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
-
-// Itix
-app.post('/api/itix/data', async (req, res) => {
-  try {
-    const itix = new ItixAPI(secureConfigFromStorage(store.get('itix', {})));
-    const result = await itix.getEvents(req.body || {});
-    res.json(result);
-  } catch (e) {
-    console.error('Itix error:', e);
     res.status(500).json({ success: false, error: e.message });
   }
 });

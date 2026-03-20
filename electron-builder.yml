@@ -1,0 +1,70 @@
+# Electron Builder configuratie (zie https://www.electron.build/configuration/configuration)
+appId: com.huistechneut.shift-happens
+productName: Shift Happens
+directories:
+  output: dist
+  buildResources: build
+files:
+  - src/**/*
+  - node_modules/**/*
+  - package.json
+
+mac:
+  category: public.app-category.productivity
+  icon: build/icon.icns
+  target:
+    - target: dmg
+      arch: [x64, arm64]
+    - target: zip
+      arch: [x64, arm64]
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  entitlements: build/entitlements.mac.plist
+  entitlementsInherit: build/entitlements.mac.plist
+  identity: null
+
+dmg:
+  title: "${productName} ${version}"
+  contents:
+    - x: 130
+      y: 220
+    - x: 410
+      y: 220
+      type: link
+      path: /Applications
+  window:
+    width: 540
+    height: 400
+
+win:
+  icon: build/icon.ico
+  target:
+    - target: nsis
+      arch: [x64]
+  executableName: Shift Happens.exe
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: Shift Happens
+
+linux:
+  target:
+    - target: AppImage
+      arch: [arm64]
+  category: Utility
+  icon: build/icon.png
+  maintainer: PdV <info@huistechneut.nl>
+
+deb:
+  depends:
+    - libgtk-3-0t64
+    - libnotify4
+    - libnss3
+    - libxss1
+    - libxtst6
+    - libatspi2.0-0t64
+    - libuuid1
+    - libsecret-1-0

@@ -2,6 +2,59 @@
 
 Alle belangrijke wijzigingen in dit project worden gedocumenteerd in dit bestand.
 
+## [1.5.6] - 2026-03-20
+
+### Gewijzigd / Verbeterd
+- Detailweergave dagnavigatie ververst Yesplan-data betrouwbaarder (minder kans op oude context).
+- Zaalfiltering in detailweergave is strikter gemaakt zodat geen data van meerdere zalen wordt gemengd.
+- Personeelsdata volgt nu correct de gekozen organisatie/zaalcombinatie bij multi-org gebruik.
+- Personeelskaart toont bij lege dag alleen de hoofdmelding zonder extra hintmelding.
+
+## [1.5.5] - 2026-03-19
+
+### Gewijzigd / Verbeterd
+- **Weekoverzicht:** loopt van **vandaag t/m vandaag + 6 dagen** (7 dagen totaal), in plaats van ISO-maandag t/m zondag.
+- **Weekfilters:** techniekpersoneel en technische resources werken weer correct in het weekoverzicht (en “opmerkingen techniek” worden niet als techniekregels getoond).
+- **API-belasting:** langere caching en request-deduplicatie + begrensde week-customdata-calls om `429/overload` te verminderen.
+- **Itix statistieken:** aantallen worden niet meer opgeteld over meerdere voorstellingen (totaalkaart blijft logisch gescheiden).
+- **Zalen laden:** “Laad Zalen” detecteert nieuwe/late locaties (zoals WTPH) correct door locaties robuuster uit events te parsen.
+- **Terug-knop:** browser-achtige stap-voor-stap navigatie met betrouwbare restore van vorige view-toestand.
+- **Zaalplattegrond per zaal:** in instellingen is nu per zaal een aan/uit-optie toegevoegd voor weergave in het evenementenscherm.
+- **Datakwaliteit:** niet-technische resources (zoals ticketing/financieel/website-vermeldingen) worden beter uit "Technisch materiaal" gefilterd.
+- **Personeelskaart:** echte Uurwerk-planning blijft zichtbaar; opmerkingsteksten worden niet meer als personeel getoond.
+
+## [1.5.4] - 2026-03-14
+
+### Gepland / release notes kandidaat
+- Zoekfunctie Yesplan verder versnellen en betrouwbaarder maken (minder trage/no-result gevallen).
+- Verdere code-opschoning zonder functionele regressies.
+- Security hardening en performance-optimalisaties op basis van brede code-audit.
+- Inline `onclick`-paden vervangen door veilige event-handlers met `data-*` links.
+- Striktere config-IPC validatie (`save-config` / `get-config` allowlist op toegestane systems).
+- Main-process reuse van YesplanAPI-instances voor betere cache-hit en minder duplicaatwerk.
+- Opschoning van dode bestanden/modules (`src/lib/*`, `renderer/translations.js`) en documentatie-correcties.
+
+## [1.5.1] - 2026-03-13
+
+### Gewijzigd
+- **Technisch materiaal opgeschoond**: Zaalcodes en ruis worden niet meer als materiaal-tag getoond.
+- **Technische lijst documenten**: Draaiboeken en bijlagen worden robuuster opgehaald en als klikbare links getoond.
+- **Opmerkingen techniek**: Extractie is robuuster gemaakt voor verschoven Yesplan-paden per evenement.
+
+## [1.5.0] - 2026-03-13
+
+### Toegevoegd
+- **Zoek-overlay touchscreen toetsenbord**: In touchscreen-modus verschijnt een groot on-screen toetsenbord (iPad-stijl) in het zoekvenster.
+- **Zoek-stabiliteit**: "Latest request wins" voor zoekresultaten zodat oudere responses nieuwe resultaten niet meer overschrijven.
+
+### Gewijzigd
+- **Yesplan zoekfunctie**: Compactere queryset met betere fallback-logica wanneer query-endpoints niets teruggeven.
+- **Rate-limit gedrag**: 429-afhandeling verbeterd met backoff en minder request-bursts.
+- **Yesplan-zalen cache**: Persistente cache toegevoegd (12 uur), inclusief fallback op recente cachedata bij tijdelijke API-problemen.
+
+### Onderhoud
+- **Opschoning runtime logging**: Debug-logs staan standaard uit en zijn alleen actief in debug/CLI-context.
+
 ## [1.4.0] - 2026
 
 ### Toegevoegd

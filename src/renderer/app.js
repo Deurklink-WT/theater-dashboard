@@ -11,39 +11,41 @@
 // Vertalingen (i18n)
 const TRANSLATIONS = {
     nl: {
-        settings: { colorMode: 'Kleurmodus', language: 'Taal', title: 'Instellingen', save: 'Opslaan', saved: 'Instellingen opgeslagen!', theme: 'Thema', touchscreenMode: 'Touchscreen-modus', touchscreenModeHint: 'Grotere scrollbalk en grotere tikgebieden voor gebruik op aanraakschermen (bijv. Raspberry Pi-kiosk).', venueOrder: 'Zaalvolgorde', venueOrderHint: 'Sleep de zalen om de volgorde aan te passen. Klik op het oog om een zaal te verbergen in de zaal-dropdown.', resetVenueOrder: 'Reset naar standaard', techOptions: 'Technische opties per zaal', techOptionsHint: 'Kies per zaal welke opties (balletvloer, vleugel, orkestbak) getoond worden.', yesplan: 'Yesplan', activeOrg: 'Actieve organisatie', activeOrgHint: 'Bepaal welke Yesplan-organisatie het dashboard gebruikt', org1: 'Organisatie 1', org2: 'Organisatie 2', orgN: 'Organisatie {n}', bothOrgs: 'Beide organisaties', name: 'Naam', baseURL: 'Base URL', apiKey: 'API Key', loadVenues: 'Laad Zalen', loadVenuesHint: 'Haalt zalen op voor zaalvolgorde en header', loadVenuesFullHint: 'Vul per organisatie Base URL en API Key in, klik op "Laad Zalen"', testConnection: 'Test Verbinding', about: 'Over deze app', showVenue: 'Zaal tonen', hideVenue: 'Zaal verbergen', balletvloer: 'Balletvloer', vleugel: 'Vleugel', orkestbak: 'Orkestbak' },
+        settings: { colorMode: 'Kleurmodus', language: 'Taal', title: 'Instellingen', save: 'Opslaan', saved: 'Instellingen opgeslagen!', theme: 'Thema', touchscreenMode: 'Touchscreen-modus', touchscreenModeHint: 'Grotere scrollbalk en grotere tikgebieden voor gebruik op aanraakschermen (bijv. Raspberry Pi-kiosk).', venueOrder: 'Zaalvolgorde', venueOrderHint: 'Sleep de zalen om de volgorde aan te passen. Klik op het oog om een zaal te verbergen in de zaal-dropdown.', resetVenueOrder: 'Reset naar standaard', techOptions: 'Technische opties per zaal', techOptionsHint: 'Kies per zaal welke opties (balletvloer, vleugel, orkestbak, zaalplattegrond) getoond worden.', yesplan: 'Yesplan', activeOrg: 'Actieve organisatie', activeOrgHint: 'Bepaal welke Yesplan-organisatie het dashboard gebruikt', org1: 'Organisatie 1', org2: 'Organisatie 2', orgN: 'Organisatie {n}', bothOrgs: 'Beide organisaties', name: 'Naam', baseURL: 'Base URL', apiKey: 'API Key', loadVenues: 'Laad Zalen', loadVenuesHint: 'Haalt zalen op voor zaalvolgorde en header', loadVenuesFullHint: 'Vul per organisatie Base URL en API Key in, klik op "Laad Zalen"', testConnection: 'Test Verbinding', about: 'Over deze app', showVenue: 'Zaal tonen', hideVenue: 'Zaal verbergen', balletvloer: 'Balletvloer', vleugel: 'Vleugel', orkestbak: 'Orkestbak' },
         status: { online: 'Online', offline: 'Offline', deels: 'Deels bereikbaar', warning: 'Waarschuwing', systemStatus: 'Systeemstatus', clickForStatus: 'Klik voor systeemstatus' },
-        nav: { back: 'Terug', backTitle: 'Terug naar vorig scherm', home: 'Home', weekView: 'Weekoverzicht', techOverview: 'Technisch overzicht', techOverviewTitle: 'Print technisch overzicht voor deze dag (alle zalen)', prevDay: 'Vorige dag', nextDay: 'Volgende dag', refresh: 'Vernieuwen' },
+        nav: { back: 'Terug', backTitle: 'Terug naar vorig scherm', home: 'Home', weekView: 'Weekoverzicht', techOverview: 'Technisch overzicht', techOverviewTitle: 'Print technisch overzicht voor deze dag (alle zalen)', prevDay: 'Vorige dag', nextDay: 'Volgende dag', refresh: 'Vernieuwen', searchEvent: 'Zoek evenement', searchEventTitle: 'Zoek op evenementnaam (* en ? als wildcard)' },
+        search: { placeholder: 'Evenementnaam… (* = alles, ? = één teken)', wildcardHint: 'Gebruik * voor een reeks tekens en ? voor één teken.' },
         date: { today: 'Vandaag', chooseDate: 'Kies eigen datum', selectDate: 'Selecteer datum:', manualDate: 'Of voer handmatig in (dd-mm-jjjj):', datePlaceholder: 'dd-mm-jjjj', confirm: 'Bevestigen', cancel: 'Annuleren' },
         venue: { allVenues: 'Alle zalen', venue: 'Zaal', unknownVenue: 'Onbekende zaal', venueCount: '{n} zalen', venueId: 'Zaal {id}' },
         filters: { title: 'Filters', hideCancelled: 'Verberg geannuleerde voorstellingen', technischPersoneel: 'Alleen evenementen met technisch personeel', technischeResources: 'Alleen evenementen met technische resources' },
-        weekView: { title: 'Weekoverzicht', sortByVenue: 'Op zaal', sortByVenueTitle: 'Sorteren op zaal (instellingen volgorde)', sortByTime: 'Op tijd', sortByTimeTitle: 'Sorteren op tijd' },
-        cards: { yesplan: 'Yesplan', personnel: 'Personeel', itix: 'Itix - Kaartverkoop', priva: 'Priva - Klimaat', tijdschema: 'Tijdschema' },
+        weekView: { title: 'Weekoverzicht', sortByVenue: 'Op zaal', sortByVenueTitle: 'Sorteren op zaal (instellingen volgorde)', sortByTime: 'Op tijd', sortByTimeTitle: 'Sorteren op tijd', eventsSingle: '{n} evenement', eventsPlural: '{n} evenementen', filtersPrefix: 'Filters', filterNone: 'geen actief', filterHideCancelled: 'geannuleerd verborgen', filterTechnischPersoneel: 'technisch personeel', filterTechnischeResources: 'technische resources' },
+        cards: { yesplan: 'Yesplan', personnel: 'Personeel', itix: 'Verkoop', priva: 'Priva - Klimaat', tijdschema: 'Tijdschema' },
         personnel: { techniek: 'Techniek', horeca: 'Horeca', frontOffice: 'Front Office' },
         dataStats: { capaciteit: 'Capaciteit', verkocht: 'Verkocht', gereserveerd: 'Gereserveerd', beschikbaar: 'Beschikbaar', omzet: 'Omzet', gasten: 'Gasten', totaal: 'Totaal', transacties: 'Transacties', omzetEur: 'Omzet (€)', temp: 'Temperatuur', luchtvochtigheid: 'Luchtvochtigheid', luchtkwaliteit: 'Luchtkwaliteit', co2: 'CO₂' },
         tech: { materiaal: 'Technisch materiaal:', lijst: 'Technische lijst:', lijstBijlage: 'Technische lijst bijlage:' },
         resources: { ja: 'ja', nee: 'nee', nietBekend: 'niet ingevuld' },
         loading: 'Laden...',
-        messages: { noEvents: 'Geen evenementen gevonden voor {venue} op {date}', noEventsDate: 'Geen evenementen gevonden op {date}', noEventsWeek: 'Geen evenementen in deze week voor {venue}.', selectDayVenueTijdschema: 'Selecteer 1 dag en 1 zaal om het tijdschema te zien.', noTijdschema: 'Geen tijdschema beschikbaar voor deze evenementen.', noPlanning: 'Geen planning beschikbaar voor deze dag', noVerkoop: 'Geen verkoopdata beschikbaar voor deze dag', noKlimaat: 'Geen klimaatdata beschikbaar', venueOrderReset: 'Zaalvolgorde gereset naar standaard', loadVenuesFirst: 'Laad eerst zalen in de Yesplan instellingen.', venuesLoaded: '{n} zalen geladen', configureBothOrgs: 'Configureer eerst beide organisaties voor "Beide"', fillBaseUrlApiKey: 'Vul eerst Base URL en API Key in voor organisatie {n}' },
+        messages: { noEvents: 'Geen evenementen gevonden voor {venue} op {date}', noEventsDate: 'Geen evenementen gevonden op {date}', noEventsWeek: 'Geen evenementen in deze week voor {venue}.', selectDayVenueTijdschema: 'Selecteer 1 dag en 1 zaal om het tijdschema te zien.', noTijdschema: 'Geen tijdschema beschikbaar voor deze evenementen.', noPlanning: 'Geen planning beschikbaar voor deze dag', noVerkoop: 'Geen verkoopdata beschikbaar voor deze dag', noKlimaat: 'Geen klimaatdata beschikbaar', venueOrderReset: 'Zaalvolgorde gereset naar standaard', loadVenuesFirst: 'Laad eerst zalen in de Yesplan instellingen.', venuesLoaded: '{n} zalen geladen', configureBothOrgs: 'Configureer eerst beide organisaties voor "Beide"', fillBaseUrlApiKey: 'Vul eerst Base URL en API Key in voor organisatie {n}', secureStorageUnavailable: 'Veilige opslag voor API-keys is niet beschikbaar op dit systeem. Stel eerst een keychain/secret-service in.' },
         techPrint: { title: 'Technisch overzicht', subtitle: 'Alle zalen – {date}', noEvents: 'Geen evenementen op deze dag.', venue: 'Zaal', time: 'Tijd', remarks: 'Opmerkingen techniek', documents: 'Technische lijst documenten', filterTitle: 'Evenementen voor print', filterHint: 'Vink de evenementen aan die in het overzicht moeten komen.', selectAll: 'Alles selecteren', deselectAll: 'Alles deselecteren' },
         errors: { yesplanLoad: 'Kon Yesplan data niet laden', eventsLoad: 'Kon evenementen niet laden', weekLoad: 'Kon weekoverzicht niet laden', uurwerkLoad: 'Kon personeelsplanning niet laden', itixLoad: 'Kon Itix data niet laden', privaLoad: 'Kon Priva data niet laden', settingsSave: 'Kon instellingen niet opslaan' },
         test: { testing: 'Testen...', success: 'Succesvol', failed: 'Gefaald' }
     },
     en: {
-        settings: { colorMode: 'Color mode', language: 'Language', title: 'Settings', save: 'Save', saved: 'Settings saved!', theme: 'Theme', touchscreenMode: 'Touchscreen mode', touchscreenModeHint: 'Larger scrollbar and tap targets for use on touchscreens (e.g. Raspberry Pi kiosk).', venueOrder: 'Venue order', venueOrderHint: 'Drag venues to change the order. Click the eye to hide a venue in the venue dropdown.', resetVenueOrder: 'Reset to default', techOptions: 'Technical options per venue', techOptionsHint: 'Choose per venue which options (dance floor, grand piano, orchestra pit) are shown.', yesplan: 'Yesplan', activeOrg: 'Active organisation', activeOrgHint: 'Determine which Yesplan organisation the dashboard uses', org1: 'Organisation 1', org2: 'Organisation 2', orgN: 'Organisation {n}', bothOrgs: 'Both organisations', name: 'Name', baseURL: 'Base URL', apiKey: 'API Key', loadVenues: 'Load Venues', loadVenuesHint: 'Fetches venues for order and header', loadVenuesFullHint: 'Enter Base URL and API Key per organisation, click "Load Venues"', testConnection: 'Test Connection', about: 'About this app', showVenue: 'Show venue', hideVenue: 'Hide venue', balletvloer: 'Dance floor', vleugel: 'Grand piano', orkestbak: 'Orchestra pit' },
+        settings: { colorMode: 'Color mode', language: 'Language', title: 'Settings', save: 'Save', saved: 'Settings saved!', theme: 'Theme', touchscreenMode: 'Touchscreen mode', touchscreenModeHint: 'Larger scrollbar and tap targets for use on touchscreens (e.g. Raspberry Pi kiosk).', venueOrder: 'Venue order', venueOrderHint: 'Drag venues to change the order. Click the eye to hide a venue in the venue dropdown.', resetVenueOrder: 'Reset to default', techOptions: 'Technical options per venue', techOptionsHint: 'Choose per venue which options (dance floor, grand piano, orchestra pit, seating plan) are shown.', yesplan: 'Yesplan', activeOrg: 'Active organisation', activeOrgHint: 'Determine which Yesplan organisation the dashboard uses', org1: 'Organisation 1', org2: 'Organisation 2', orgN: 'Organisation {n}', bothOrgs: 'Both organisations', name: 'Name', baseURL: 'Base URL', apiKey: 'API Key', loadVenues: 'Load Venues', loadVenuesHint: 'Fetches venues for order and header', loadVenuesFullHint: 'Enter Base URL and API Key per organisation, click "Load Venues"', testConnection: 'Test Connection', about: 'About this app', showVenue: 'Show venue', hideVenue: 'Hide venue', balletvloer: 'Dance floor', vleugel: 'Grand piano', orkestbak: 'Orchestra pit' },
         status: { online: 'Online', offline: 'Offline', deels: 'Partially available', warning: 'Warning', systemStatus: 'System status', clickForStatus: 'Click for system status' },
-        nav: { back: 'Back', backTitle: 'Back to previous screen', home: 'Home', weekView: 'Week overview', techOverview: 'Technical overview', techOverviewTitle: 'Print technical overview for this day (all venues)', prevDay: 'Previous day', nextDay: 'Next day', refresh: 'Refresh' },
+        nav: { back: 'Back', backTitle: 'Back to previous screen', home: 'Home', weekView: 'Week overview', techOverview: 'Technical overview', techOverviewTitle: 'Print technical overview for this day (all venues)', prevDay: 'Previous day', nextDay: 'Next day', refresh: 'Refresh', searchEvent: 'Search event', searchEventTitle: 'Search by event name (* and ? as wildcards)' },
+        search: { placeholder: 'Event name… (* = any, ? = one character)', wildcardHint: 'Use * for any characters and ? for one character.' },
         date: { today: 'Today', chooseDate: 'Choose date', selectDate: 'Select date:', manualDate: 'Or enter manually (dd-mm-yyyy):', datePlaceholder: 'dd-mm-yyyy', confirm: 'Confirm', cancel: 'Cancel' },
         venue: { allVenues: 'All venues', venue: 'Venue', unknownVenue: 'Unknown venue', venueCount: '{n} venues', venueId: 'Venue {id}' },
         filters: { title: 'Filters', hideCancelled: 'Hide cancelled performances', technischPersoneel: 'Only events with technical staff', technischeResources: 'Only events with technical resources' },
-        weekView: { title: 'Week overview', sortByVenue: 'By venue', sortByVenueTitle: 'Sort by venue (settings order)', sortByTime: 'By time', sortByTimeTitle: 'Sort by time' },
-        cards: { yesplan: 'Yesplan', personnel: 'Personnel', itix: 'Itix - Box office', priva: 'Priva - Climate', tijdschema: 'Schedule' },
+        weekView: { title: 'Week overview', sortByVenue: 'By venue', sortByVenueTitle: 'Sort by venue (settings order)', sortByTime: 'By time', sortByTimeTitle: 'Sort by time', eventsSingle: '{n} event', eventsPlural: '{n} events', filtersPrefix: 'Filters', filterNone: 'none active', filterHideCancelled: 'cancelled hidden', filterTechnischPersoneel: 'technical staff', filterTechnischeResources: 'technical resources' },
+        cards: { yesplan: 'Yesplan', personnel: 'Personnel', itix: 'Sales', priva: 'Priva - Climate', tijdschema: 'Schedule' },
         personnel: { techniek: 'Technical', horeca: 'Catering', frontOffice: 'Front Office' },
         dataStats: { capaciteit: 'Capacity', verkocht: 'Sold', gereserveerd: 'Reserved', beschikbaar: 'Available', omzet: 'Revenue', gasten: 'Guests', totaal: 'Total', transacties: 'Transactions', omzetEur: 'Revenue (€)', temp: 'Temperature', luchtvochtigheid: 'Humidity', luchtkwaliteit: 'Air quality', co2: 'CO₂' },
         tech: { materiaal: 'Technical equipment:', lijst: 'Technical list:', lijstBijlage: 'Technical list attachment:' },
         resources: { ja: 'yes', nee: 'no', nietBekend: 'not filled in' },
         loading: 'Loading...',
-        messages: { noEvents: 'No events found for {venue} on {date}', noEventsDate: 'No events found on {date}', noEventsWeek: 'No events this week for {venue}.', selectDayVenueTijdschema: 'Select 1 day and 1 venue to see the schedule.', noTijdschema: 'No schedule available for these events.', noPlanning: 'No schedule available for this day', noVerkoop: 'No sales data available for this day', noKlimaat: 'No climate data available', venueOrderReset: 'Venue order reset to default', loadVenuesFirst: 'Load venues first in Yesplan settings.', venuesLoaded: '{n} venues loaded', configureBothOrgs: 'Configure both organisations first for "Both"', fillBaseUrlApiKey: 'Enter Base URL and API Key first for organisation {n}' },
+        messages: { noEvents: 'No events found for {venue} on {date}', noEventsDate: 'No events found on {date}', noEventsWeek: 'No events this week for {venue}.', selectDayVenueTijdschema: 'Select 1 day and 1 venue to see the schedule.', noTijdschema: 'No schedule available for these events.', noPlanning: 'No schedule available for this day', noVerkoop: 'No sales data available for this day', noKlimaat: 'No climate data available', venueOrderReset: 'Venue order reset to default', loadVenuesFirst: 'Load venues first in Yesplan settings.', venuesLoaded: '{n} venues loaded', configureBothOrgs: 'Configure both organisations first for "Both"', fillBaseUrlApiKey: 'Enter Base URL and API Key first for organisation {n}', secureStorageUnavailable: 'Secure API-key storage is unavailable on this system. Configure a keychain/secret service first.' },
         techPrint: { title: 'Technical overview', subtitle: 'All venues – {date}', noEvents: 'No events on this day.', venue: 'Venue', time: 'Time', remarks: 'Technical remarks', documents: 'Technical list documents', filterTitle: 'Events for print', filterHint: 'Select which events to include in the overview.', selectAll: 'Select all', deselectAll: 'Deselect all' },
         errors: { yesplanLoad: 'Could not load Yesplan data', eventsLoad: 'Could not load events', weekLoad: 'Could not load week overview', uurwerkLoad: 'Could not load personnel planning', itixLoad: 'Could not load Itix data', privaLoad: 'Could not load Priva data', settingsSave: 'Could not save settings' },
         test: { testing: 'Testing...', success: 'Success', failed: 'Failed' }
@@ -57,7 +59,6 @@ class TheaterDashboard {
         this.data = {
             yesplan: null,
             uurwerk: null,
-            itix: null,
             priva: null
         };
         this.selectedVenues = []; // Geselecteerde zalen voor alle plugins
@@ -67,6 +68,9 @@ class TheaterDashboard {
         this.maxDateOffsetBackward = 7; // Maximaal 1 week terug
         this.currentView = 'home'; // 'home', 'detail' of 'week'
         this.previousView = null; // Voor terug-navigatie
+        this.viewHistory = []; // Stapel met eerder geopende view-snapshots voor terug-knop
+        this._isNavigatingBack = false; // Voorkomt history-vervuiling tijdens terug-navigatie
+        this._pendingHistorySnapshot = null; // Snapshot van staat vóór mutatie/navigatie
         this.isOnline = navigator.onLine; // Internetverbinding status
         this.statusBySystem = { yesplan: null }; // Alleen Yesplan; Priva-koppeling volgt later indien mogelijk
         this.hideCancelledEvents = false; // Filter voor geannuleerde events
@@ -75,6 +79,12 @@ class TheaterDashboard {
         this.loadHomeRequestId = 0;  // Latest-request-wins bij datumwissel
         this.loadWeekRequestId = 0;
         this.weekSortMode = 'venue';  // 'venue' = zaalvolgorde instellingen, 'time' = alleen op tijd
+        this.searchQuery = '';  // Zoekterm voor evenementnaam (* en ? als wildcard)
+        this.yesplanDataIsSearchResults = false;  // true = data komt van zoek-API (hele Yesplan)
+        this.searchDebounceTimer = null;
+        this.searchRequestSeq = 0; // voorkomt dat oudere zoekresponses nieuwe resultaten overschrijven
+        this.searchKeyboardShift = false;
+        this.weekEventCount = 0;
         this.locale = 'nl';  // 'nl' of 'en'
         this._lastDayString = null;  // Voor middernacht-check: ga automatisch naar home van nieuwe dag
         this.detailContext = null;   // { productionId, productionName, eventName } wanneer je via een event naar detail gaat: alleen die productie tonen
@@ -96,6 +106,7 @@ class TheaterDashboard {
         await this.showHomeView(true);
         this.setupCardDragAndDrop();
         this.setupStatusPopover();
+        this.setupSearchEventListeners();
         this.setupAutoRefresh();
     }
     
@@ -284,25 +295,6 @@ class TheaterDashboard {
             this.showSuccess(this.t('messages.venueOrderReset'));
         });
 
-        // Toggle password visibility
-        document.querySelectorAll('.toggle-password').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const targetId = e.target.closest('.toggle-password').dataset.target;
-                const input = document.getElementById(targetId);
-                const icon = e.target.closest('.toggle-password').querySelector('i');
-                
-                if (input.type === 'password') {
-                    input.type = 'text';
-                    icon.classList.remove('fa-eye');
-                    icon.classList.add('fa-eye-slash');
-                } else {
-                    input.type = 'password';
-                    icon.classList.remove('fa-eye-slash');
-                    icon.classList.add('fa-eye');
-                }
-            });
-        });
-
         // Zorg dat plakken werkt in alle input velden
         const enablePaste = (input) => {
             // Paste event
@@ -327,9 +319,35 @@ class TheaterDashboard {
                 }
             }, true);
         };
+
+        const enableSensitiveInputProtection = (input) => {
+            if (!input?.matches?.('input[data-sensitive="true"]')) return;
+
+            // Voorkom kopieren/knippen van gevoelige waarden (ook via contextmenu).
+            input.addEventListener('copy', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            }, true);
+
+            input.addEventListener('cut', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            }, true);
+
+            input.addEventListener('keydown', (e) => {
+                const key = String(e.key || '').toLowerCase();
+                const isCopy = (e.metaKey || e.ctrlKey) && key === 'c';
+                const isCut = (e.metaKey || e.ctrlKey) && key === 'x';
+                if (isCopy || isCut) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            }, true);
+        };
         
         // Voeg toe aan alle bestaande input velden
         document.querySelectorAll('input[type="password"], input[type="text"], input[type="url"]').forEach(enablePaste);
+        document.querySelectorAll('input[data-sensitive="true"]').forEach(enableSensitiveInputProtection);
         
         // Voeg ook toe aan dynamisch geladen input velden (via MutationObserver)
         const observer = new MutationObserver((mutations) => {
@@ -338,9 +356,11 @@ class TheaterDashboard {
                     if (node.nodeType === 1) { // Element node
                         if (node.tagName === 'INPUT') {
                             enablePaste(node);
+                            enableSensitiveInputProtection(node);
                         }
                         // Check ook voor input velden binnen toegevoegde nodes
                         node.querySelectorAll?.('input[type="password"], input[type="text"], input[type="url"]').forEach(enablePaste);
+                        node.querySelectorAll?.('input[data-sensitive="true"]').forEach(enableSensitiveInputProtection);
                     }
                 });
             });
@@ -386,10 +406,9 @@ class TheaterDashboard {
         if (!window.electronAPI) return;
 
         try {
-            const [yesplan, yesplan2, itix, priva, app] = await Promise.all([
+            const [yesplan, yesplan2, priva, app] = await Promise.all([
                 window.electronAPI.getConfig('yesplan'),
                 window.electronAPI.getConfig('yesplan2'),
-                window.electronAPI.getConfig('itix'),
                 window.electronAPI.getConfig('priva'),
                 window.electronAPI.getConfig('app')
             ]);
@@ -397,7 +416,6 @@ class TheaterDashboard {
             this.config = {
                 yesplan: yesplan || {},
                 yesplan2: yesplan2 || {},
-                itix: itix || {},
                 priva: priva || {},
                 app: app || {}
             };
@@ -439,7 +457,6 @@ class TheaterDashboard {
             this.config = {
                 yesplan: {},
                 yesplan2: {},
-                itix: {},
                 priva: {},
                 app: {}
             };
@@ -552,6 +569,9 @@ class TheaterDashboard {
     }
 
     async setSelectedVenues(venueIds) {
+        if (!this._isNavigatingBack && !this._pendingHistorySnapshot) {
+            this._pendingHistorySnapshot = this.createViewSnapshot();
+        }
         const uniqueIds = [...new Set((venueIds || []).map(id => String(id)).filter(Boolean))];
         this.selectedVenues = uniqueIds;
         
@@ -807,6 +827,353 @@ class TheaterDashboard {
         }
     }
 
+    setupSearchEventListeners() {
+        const searchBtn = document.getElementById('searchEventBtn');
+        const searchBackdrop = document.getElementById('searchBackdrop');
+        const searchBar = document.getElementById('searchBar');
+        const searchInput = document.getElementById('searchEventInput');
+        const searchBarClose = document.getElementById('searchBarClose');
+        const searchKeyboard = document.getElementById('searchKeyboard');
+        const searchKeyboardKeys = document.getElementById('searchKeyboardKeys');
+        if (!searchBtn || !searchBackdrop || !searchBar || !searchInput) return;
+        searchInput.setAttribute('inputmode', 'search');
+        searchInput.setAttribute('autocapitalize', 'off');
+        searchInput.setAttribute('autocorrect', 'off');
+
+        const isTouchscreenMode = () => document.body.classList.contains('touchscreen-mode');
+        const keyboardRows = [
+            ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
+            ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+            ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+            ['Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'Backspace'],
+            ['Close', 'Space', 'Enter']
+        ];
+
+        const insertAtCursor = (input, text) => {
+            const start = input.selectionStart ?? input.value.length;
+            const end = input.selectionEnd ?? start;
+            const before = input.value.slice(0, start);
+            const after = input.value.slice(end);
+            input.value = `${before}${text}${after}`;
+            const pos = start + text.length;
+            input.setSelectionRange(pos, pos);
+        };
+
+        const renderKeyboard = () => {
+            if (!searchKeyboardKeys) return;
+            searchKeyboardKeys.innerHTML = '';
+            keyboardRows.forEach((row) => {
+                const rowEl = document.createElement('div');
+                rowEl.className = 'search-keyboard-row';
+                row.forEach((key) => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'search-key';
+                    if (key === 'Space') btn.classList.add('search-key-wide');
+                    if (key === 'Backspace' || key === 'Shift' || key === 'Enter' || key === 'Close') btn.classList.add('search-key-special');
+                    if (key === 'Shift' && this.searchKeyboardShift) btn.classList.add('active');
+                    btn.dataset.key = key;
+                    const isLetter = /^[a-z]$/.test(key);
+                    btn.textContent = isLetter ? (this.searchKeyboardShift ? key.toUpperCase() : key) : (key === 'Space' ? 'spatie' : key);
+                    rowEl.appendChild(btn);
+                });
+                searchKeyboardKeys.appendChild(rowEl);
+            });
+        };
+
+        const showKeyboard = () => {
+            if (!searchKeyboard || !isTouchscreenMode()) return;
+            renderKeyboard();
+            searchKeyboard.style.display = 'block';
+        };
+
+        const hideKeyboard = () => {
+            if (!searchKeyboard) return;
+            searchKeyboard.style.display = 'none';
+            this.searchKeyboardShift = false;
+        };
+
+        if (searchKeyboardKeys) {
+            searchKeyboardKeys.addEventListener('click', (e) => {
+                const btn = e.target.closest('.search-key');
+                if (!btn) return;
+                const key = btn.dataset.key;
+                if (!key) return;
+                searchInput.focus();
+                if (key === 'Shift') {
+                    this.searchKeyboardShift = !this.searchKeyboardShift;
+                    renderKeyboard();
+                    return;
+                }
+                if (key === 'Backspace') {
+                    const start = searchInput.selectionStart ?? searchInput.value.length;
+                    const end = searchInput.selectionEnd ?? start;
+                    if (start !== end) {
+                        insertAtCursor(searchInput, '');
+                    } else if (start > 0) {
+                        searchInput.setSelectionRange(start - 1, start);
+                        insertAtCursor(searchInput, '');
+                    }
+                    searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+                    return;
+                }
+                if (key === 'Enter') {
+                    searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+                    return;
+                }
+                if (key === 'Close') {
+                    hideKeyboard();
+                    return;
+                }
+                if (key === 'Space') {
+                    insertAtCursor(searchInput, ' ');
+                } else {
+                    const out = this.searchKeyboardShift ? key.toUpperCase() : key;
+                    insertAtCursor(searchInput, out);
+                    if (this.searchKeyboardShift && /^[a-z]$/i.test(key)) {
+                        this.searchKeyboardShift = false;
+                        renderKeyboard();
+                    }
+                }
+                searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+            });
+        }
+
+        const isMac = typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.platform);
+        searchBtn.title = this.t('nav.searchEventTitle') + (isMac ? ' (⌘+Spatie)' : ' (Ctrl+Spatie)');
+        searchInput.placeholder = this.t('nav.searchEvent');
+        const showBar = () => {
+            searchBackdrop.style.display = 'flex';
+            searchInput.focus();
+            showKeyboard();
+        };
+        const hideBar = () => {
+            searchBackdrop.style.display = 'none';
+            hideKeyboard();
+        };
+        const applySearch = () => {
+            this.searchQuery = (searchInput.value || '').trim();
+            const requestSeq = ++this.searchRequestSeq;
+            searchBtn.classList.toggle('active', this.searchQuery.length >= 2);
+            if (this.searchQuery.length >= 2) {
+                searchBtn.style.background = '#667eea';
+                searchBtn.style.color = 'white';
+            } else {
+                searchBtn.style.background = '';
+                searchBtn.style.color = '';
+            }
+            if (this.searchQuery.length >= 2) {
+                if (this.searchDebounceTimer) clearTimeout(this.searchDebounceTimer);
+                // Toon direct laadspinner
+                this.updateSearchResultsList([], { loading: true });
+                this.searchDebounceTimer = setTimeout(async () => {
+                    this.searchDebounceTimer = null;
+                    const currentQuery = this.searchQuery;
+                    if (requestSeq !== this.searchRequestSeq) return;
+                    try {
+                        const result = await window.electronAPI.getYesplanSearch(currentQuery);
+                        if (requestSeq !== this.searchRequestSeq) return;
+                        // Zoekresultaten blijven in de overlay; achtergrondcards niet vervangen.
+                        this.yesplanDataIsSearchResults = false;
+                        if (result && result.success === false && result.error) {
+                            this.updateSearchResultsList([], { query: `${currentQuery} (${result.error})` });
+                            return;
+                        }
+                        this.updateSearchResultsList(result.data || [], { query: currentQuery });
+                    } catch (e) {
+                        if (requestSeq !== this.searchRequestSeq) return;
+                        console.error('Zoekfout:', e);
+                        this.yesplanDataIsSearchResults = false;
+                        this.updateSearchResultsList([], { query: currentQuery });
+                    }
+                }, 350);
+            } else {
+                // Invalideer eventuele lopende zoekresponses
+                this.searchRequestSeq += 1;
+                this.yesplanDataIsSearchResults = false;
+                this.updateSearchResultsList([]);
+                // Alleen resetten naar normale lijst als het veld echt leeg is.
+                // Bij 1 teken geen achtergrond-refresh, zodat de overlay "spotlight"-achtig rustig blijft.
+                if (this.searchQuery.length === 0 && this.currentView === 'home') {
+                    this.loadHomeData();
+                } else if (this.searchQuery.length === 0 && this.currentView === 'week' && this.data.weekYesplan) {
+                    this.updateWeekDisplay(this.data.weekYesplan);
+                }
+            }
+        };
+        searchBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isVisible = searchBackdrop.style.display === 'flex';
+            if (isVisible) hideBar();
+            else showBar();
+        });
+        searchBackdrop.addEventListener('click', (e) => {
+            if (e.target === searchBackdrop) {
+                searchInput.value = '';
+                this.searchQuery = '';
+                this.searchRequestSeq += 1;
+                this.yesplanDataIsSearchResults = false;
+                this.updateSearchResultsList([]);
+                if (this.currentView === 'home') this.loadHomeData();
+                hideBar();
+            }
+        });
+        searchBar.addEventListener('click', (e) => e.stopPropagation());
+        document.getElementById('searchResults')?.addEventListener('click', (e) => e.stopPropagation());
+        searchInput.addEventListener('focus', () => {
+            if (searchBackdrop.style.display === 'flex') showKeyboard();
+        });
+        if (searchBarClose) {
+            searchBarClose.addEventListener('click', () => {
+                searchInput.value = '';
+                this.searchQuery = '';
+                this.searchRequestSeq += 1;
+                applySearch();
+                hideBar();
+            });
+        }
+        searchInput.addEventListener('input', applySearch);
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                searchInput.value = '';
+                this.searchQuery = '';
+                this.searchRequestSeq += 1;
+                applySearch();
+                hideBar();
+            }
+        });
+        document.addEventListener('keydown', (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === ' ') {
+                e.preventDefault();
+                const isVisible = searchBackdrop.style.display === 'flex';
+                if (isVisible) hideBar();
+                else showBar();
+            }
+        });
+    }
+
+    updateSearchResultsList(events, { loading = false, query = '' } = {}) {
+        const container = document.getElementById('searchResults');
+        const metaEl = document.getElementById('searchMeta');
+        const spinner = document.getElementById('searchSpinner');
+        if (!container) return;
+
+        if (spinner) spinner.style.display = loading ? 'inline-flex' : 'none';
+
+        container.innerHTML = '';
+        if (metaEl) metaEl.style.display = 'none';
+
+        if (loading) return;
+
+        if (!Array.isArray(events) || events.length === 0) {
+            if (query && query.length >= 2) {
+                container.innerHTML = `<div class="search-no-results"><i class="fas fa-search"></i> Geen resultaten voor <strong>${query.replace(/</g,'&lt;')}</strong></div>`;
+            }
+            return;
+        }
+
+        // Toon aantal resultaten
+        if (metaEl) {
+            metaEl.style.display = 'block';
+            metaEl.textContent = `${events.length} resultaat${events.length !== 1 ? 'en' : ''}`;
+        }
+
+        const escapeHtml = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+        const statusClass = (statusStr) => {
+            const s = String(statusStr || '').toLowerCase();
+            if (['geannuleerd', 'cancelled', 'canceled'].some(x => s.includes(x))) return 'status-cancelled';
+            if (['bevestigd', 'confirmed'].some(x => s.includes(x))) return 'status-confirmed';
+            if (['optie', 'option'].some(x => s.includes(x))) return 'status-option';
+            return '';
+        };
+        const statusLabel = (statusStr) => {
+            const s = String(statusStr || '').toLowerCase();
+            if (['geannuleerd', 'cancelled', 'canceled'].some(x => s.includes(x))) return 'Geannuleerd';
+            if (['bevestigd', 'confirmed'].some(x => s.includes(x))) return 'Bevestigd';
+            if (['optie', 'option'].some(x => s.includes(x))) return 'Optie';
+            return statusStr || '';
+        };
+
+        events.forEach((event) => {
+            const venueId = event._organizationId && event.venueIds?.[0]
+                ? `${event._organizationId}:${event.venueIds[0]}`
+                : (event.venueIds?.[0] || '');
+            // Gebruik _requestedDate indien aanwezig, anders afleiden uit startDate string (tijdzone-veilig)
+            let eventDate = event._requestedDate || '';
+            if (!eventDate && event.startDate) {
+                eventDate = String(event.startDate).substring(0, 10);
+            }
+
+            const title = event.title || event.name || 'Onbekend';
+            const venueName = typeof event.venue === 'string' ? event.venue : '';
+            const performer = event.performer || '';
+            const rawStatus = typeof event.status === 'object' ? (event.status?.name || '') : (event.status || '');
+            const sCls = statusClass(rawStatus);
+            const sLabel = statusLabel(rawStatus);
+
+            // Datum + tijd
+            const dt = event.startDate ? new Date(event.startDate) : null;
+            const dateLabel = dt
+                ? dt.toLocaleDateString(this.locale === 'en' ? 'en-GB' : 'nl-NL', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
+                : eventDate;
+            const timeLabel = event.scheduleStartTime
+                ? event.scheduleStartTime
+                : (dt ? dt.toLocaleTimeString(this.locale === 'en' ? 'en-GB' : 'nl-NL', { hour: '2-digit', minute: '2-digit' }) : '');
+
+            const metaParts = [dateLabel, timeLabel, venueName, performer].filter(Boolean);
+
+            const row = document.createElement('div');
+            row.className = 'search-result-item';
+            row.setAttribute('data-venue-id', venueId);
+            row.setAttribute('data-event-date', eventDate);
+
+            const badgeHtml = sCls
+                ? `<span class="search-status-badge ${sCls}">${escapeHtml(sLabel)}</span>`
+                : '';
+
+            row.innerHTML = `
+                <div class="search-result-body">
+                    <span class="search-result-title">${escapeHtml(title)}${badgeHtml}</span>
+                    <span class="search-result-meta">${escapeHtml(metaParts.join(' · '))}</span>
+                </div>
+                <i class="fas fa-chevron-right search-result-arrow"></i>`;
+
+            row.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const vid = row.getAttribute('data-venue-id');
+                const ed = row.getAttribute('data-event-date');
+                const fallbackDate = this.getDateRange().start;
+                const targetDate = ed || fallbackDate;
+                this.detailContext = { eventName: title };
+                if (vid) {
+                    this._pendingHistorySnapshot = this.createViewSnapshot();
+                    await this.selectVenueAndDate(vid, targetDate);
+                    await this.showDetailView();
+                } else {
+                    // Geen venue-id: navigeer naar die dag in home view
+                    this._pendingHistorySnapshot = this.createViewSnapshot();
+                    await this.selectVenueAndDate('', targetDate);
+                    await this.showHomeView();
+                }
+                document.getElementById('searchBackdrop').style.display = 'none';
+            });
+            container.appendChild(row);
+        });
+    }
+
+    matchSearchQuery(title, query) {
+        if (!query || query.length < 2) return true;
+        try {
+            const escaped = query.replace(/[.+^${}()|[\]\\]/g, '\\$&');
+            const pattern = escaped.replace(/\*/g, '.*').replace(/\?/g, '.');
+            const re = new RegExp(pattern, 'i');
+            return re.test(String(title || ''));
+        } catch (_) {
+            return String(title || '').toLowerCase().includes(query.toLowerCase());
+        }
+    }
+
     async loadAllData(opts = {}) {
         const forceRefresh = !!opts.forceRefresh;
         if (this.currentView === 'home') {
@@ -827,9 +1194,7 @@ class TheaterDashboard {
             await this.loadUurwerkData();
             
             // Laad andere data parallel
-            const promises = [
-                this.loadItixData()
-            ];
+            const promises = [this.loadSalesData()];
             
             // Laad Priva alleen als API is geconfigureerd
             if (this.config.priva && this.config.priva.baseURL && this.config.priva.apiKey) {
@@ -867,67 +1232,70 @@ class TheaterDashboard {
             const dateRange = this.getDateRange();
             let venueId = this.getPrimarySelectedVenueId();
             if (!venueId) venueId = undefined;
-            
-            const result = await window.electronAPI.getYesplanData({
+            const skipCache = !!forceRefresh || (this.currentView === 'detail');
+
+            let result = await window.electronAPI.getYesplanData({
                 startDate: dateRange.start,
                 endDate: dateRange.end,
                 venueId,
-                skipCache: !!forceRefresh
+                skipCache
             });
+
+            // Fallback: bij 0 events met zaal geselecteerd opnieuw ophalen zonder zaal-filter, daarna client-side op zaal filteren.
+            // Belangrijk: als filtering niets oplevert, GEEN unfiltered retry-resultaat tonen (anders mix van zalen).
+            if (venueId && result?.success && (!result.data || result.data.length === 0)) {
+                const retry = await window.electronAPI.getYesplanData({
+                    startDate: dateRange.start,
+                    endDate: dateRange.end,
+                    venueId: undefined,
+                    skipCache: true
+                });
+                if (retry?.success && retry.data && retry.data.length > 0) {
+                    const vidRaw = String(venueId).toUpperCase().trim();
+                    const vid = vidRaw.includes(':') ? vidRaw.split(':').pop() : vidRaw;
+                    const filtered = retry.data.filter((e) => {
+                        const ids = (e.venueIds || []).map((x) => String(x).toUpperCase().trim());
+                        const venueStr = (e.venue || '').toUpperCase();
+                        const locNames = (e.locations || []).map((l) => String(l?.name || '').toUpperCase().trim());
+                        return ids.includes(vid) || ids.includes(vidRaw) || locNames.includes(vid) || venueStr.includes(vid) || venueStr.includes(vidRaw);
+                    });
+                    result = { ...retry, data: filtered };
+                }
+            }
 
             this.data.yesplan = result;
             this.updateYesplanDisplay(result);
             this.updateStatus('yesplan', result.success ? 'online' : 'offline', result.timestamp || new Date());
-            // Update Itix card met Yesplan verkoopdata en reserveringen
-            if (this.data.itix || this.data.reservations) {
-                this.updateItixDisplay(this.data.itix || { success: false, data: [] }, this.data.reservations);
-            }
+            // Verkoopkaart werkt volledig op Yesplan-data en reserveringen.
+            this.updateItixDisplay({ success: true, data: [] }, this.data.reservations);
         } catch (error) {
             console.error('Yesplan data fout:', error);
+            this.data.yesplan = { success: false, data: [], timestamp: null };
+            this.updateYesplanDisplay(this.data.yesplan);
             this.updateStatus('yesplan', 'offline', null);
             this.showError('yesplan', this.t('errors.yesplanLoad'));
         }
     }
 
+    /**
+     * Personeel: altijd ophalen via getYesplanPersonnelForDate (zelfde pad als CLI --personnel-wtpy),
+     * zodat de kaart niet afhangt van event.urenInfo uit de eventlijst.
+     */
     async loadUurwerkData() {
         try {
-            // Haal ureninfo op uit Yesplan events (niet uit Uurwerk API)
-            // De data komt uit Yesplan customdata
-            const yesplanData = this.data.yesplan;
-            const yesplanEvents = (yesplanData && yesplanData.success && yesplanData.data) ? yesplanData.data : [];
-            
-            // Verzamel alle ureninfo uit events
-            const allUrenInfo = {
-                techniek: [],
-                horeca: [],
-                frontOffice: [],
-                nostradamus: []
-            };
-            
-            yesplanEvents.forEach(event => {
-                if (event.urenInfo) {
-                    if (event.urenInfo.techniek && event.urenInfo.techniek.length > 0) {
-                        allUrenInfo.techniek = allUrenInfo.techniek.concat(event.urenInfo.techniek);
-                    }
-                    if (event.urenInfo.horeca && event.urenInfo.horeca.length > 0) {
-                        allUrenInfo.horeca = allUrenInfo.horeca.concat(event.urenInfo.horeca);
-                    }
-                    if (event.urenInfo.frontOffice && event.urenInfo.frontOffice.length > 0) {
-                        allUrenInfo.frontOffice = allUrenInfo.frontOffice.concat(event.urenInfo.frontOffice);
-                    }
-                    if (event.urenInfo.nostradamus && event.urenInfo.nostradamus.length > 0) {
-                        allUrenInfo.nostradamus = allUrenInfo.nostradamus.concat(event.urenInfo.nostradamus);
-                    }
-                }
+            const dateRange = this.getDateRange();
+            const venueId = this.getPrimarySelectedVenueId() || undefined;
+            const res = await window.electronAPI.getYesplanPersonnelForDate({
+                startDate: dateRange.start,
+                endDate: dateRange.end,
+                venueId
             });
-
-            // Format als Uurwerk data structuur voor compatibiliteit
+            const allUrenInfo = res?.success && res.data ? res.data : { techniek: [], horeca: [], frontOffice: [], nostradamus: [] };
             const result = {
-                success: allUrenInfo.techniek.length > 0 || allUrenInfo.horeca.length > 0 || allUrenInfo.frontOffice.length > 0 || allUrenInfo.nostradamus.length > 0,
+                success: (allUrenInfo.techniek?.length || 0) + (allUrenInfo.horeca?.length || 0) + (allUrenInfo.frontOffice?.length || 0) > 0,
                 data: allUrenInfo,
                 timestamp: new Date().toISOString()
             };
-
             this.data.uurwerk = result;
             this.updateUurwerkDisplay(result);
         } catch (error) {
@@ -936,38 +1304,25 @@ class TheaterDashboard {
         }
     }
 
-    async loadItixData() {
+    async loadSalesData() {
         try {
             // Gebruik geselecteerde zaal als beschikbaar
             const venueId = this.getPrimarySelectedVenueId();
             const dateRange = this.getDateRange();
             
-            // Haal zowel Itix data als Yesplan reserveringen op
-            const [itixResult, reservationsResult] = await Promise.allSettled([
-                window.electronAPI.getItixData({
-                    startDate: dateRange.start,
-                    endDate: dateRange.end,
-                    venueId: venueId
-                }),
-                window.electronAPI.getYesplanReservations({
-                    startDate: dateRange.start,
-                    endDate: dateRange.end,
-                    venueId: venueId
-                })
-            ]);
-
-            const itixData = itixResult.status === 'fulfilled' ? itixResult.value : { success: false, data: [] };
-            const reservationsData = reservationsResult.status === 'fulfilled' ? reservationsResult.value : { success: false, data: [] };
-
-            this.data.itix = itixData;
+            const reservationsData = await window.electronAPI.getYesplanReservations({
+                startDate: dateRange.start,
+                endDate: dateRange.end,
+                venueId: venueId
+            });
             this.data.reservations = reservationsData;
             
-            // Update display met zowel verkoop als reserveringen
-            this.updateItixDisplay(itixData, reservationsData);
-            const itixTimestamp = itixData?.timestamp || reservationsData?.timestamp || new Date();
+            // Update display met Yesplan verkoopdata en reserveringen
+            this.updateItixDisplay({ success: true, data: [] }, reservationsData);
         } catch (error) {
-            console.error('Itix data fout:', error);
-            this.showError('itix', this.t('errors.itixLoad'));
+            console.error('Verkoopdata (Yesplan) fout:', error);
+            this.data.reservations = { success: false, data: [] };
+            this.updateItixDisplay({ success: true, data: [] }, this.data.reservations);
         }
     }
 
@@ -997,7 +1352,32 @@ class TheaterDashboard {
         }
     }
 
+    createViewSnapshot() {
+        return {
+            view: this.currentView,
+            selectedVenues: Array.isArray(this.selectedVenues) ? [...this.selectedVenues] : [],
+            selectedDate: this.selectedDate instanceof Date ? this.selectedDate.toISOString() : null,
+            detailContext: this.detailContext ? { ...this.detailContext } : null
+        };
+    }
+
+    pushHistorySnapshotIfNeeded(targetView) {
+        if (this._isNavigatingBack) {
+            this._pendingHistorySnapshot = null;
+            return;
+        }
+        if (this.currentView === targetView) {
+            this._pendingHistorySnapshot = null;
+            return;
+        }
+        const snapshot = this._pendingHistorySnapshot || this.createViewSnapshot();
+        this._pendingHistorySnapshot = null;
+        this.viewHistory.push(snapshot);
+        if (this.viewHistory.length > 50) this.viewHistory.shift();
+    }
+
     async showHomeView(resetDate = false) {
+        this.pushHistorySnapshotIfNeeded('home');
         this.previousView = this.currentView;
         this.currentView = 'home';
         this.detailContext = null;
@@ -1069,9 +1449,12 @@ class TheaterDashboard {
         this.updateBackButtonVisibility();
     }
     
-    async showDetailView() {
+    async showDetailView(clearDetailContext = false, forceRefresh = false) {
+        this.pushHistorySnapshotIfNeeded('detail');
         this.previousView = this.currentView;
         this.currentView = 'detail';
+        // Bij dag-navigatie in detailview willen we niet vast blijven zitten op 1 aangeklikt event.
+        if (clearDetailContext) this.detailContext = null;
         
         const weekWrapper = document.getElementById('weekViewWrapper');
         const homeContainer = document.getElementById('homeViewContainer');
@@ -1136,12 +1519,13 @@ class TheaterDashboard {
             venueSelector.style.visibility = 'visible';
         }
         
-        await this.loadAllData();
+        await this.loadAllData({ forceRefresh: !!forceRefresh });
         this.applyCardOrder();
         this.updateBackButtonVisibility();
     }
 
     async showWeekView() {
+        this.pushHistorySnapshotIfNeeded('week');
         this.previousView = this.currentView;
         this.currentView = 'week';
         this.detailContext = null;
@@ -1162,7 +1546,7 @@ class TheaterDashboard {
 
         const dateSelector = document.querySelector('.date-selector');
         const venueSelector = document.querySelector('.venue-selector');
-        if (dateSelector) dateSelector.style.display = 'flex';
+        if (dateSelector) dateSelector.style.display = 'none';
         if (venueSelector) venueSelector.style.display = 'block';
 
         document.getElementById('weekBtn')?.classList.add('active');
@@ -1175,7 +1559,6 @@ class TheaterDashboard {
             });
         }
 
-        this.updateDateDisplay();
         this.updateVenueSelectorDisplay();
         await this.loadWeekData();
         this.updateBackButtonVisibility();
@@ -1184,24 +1567,75 @@ class TheaterDashboard {
     updateBackButtonVisibility() {
         const backBtn = document.getElementById('backBtn');
         if (!backBtn) return;
-        const canGoBack = this.currentView === 'detail' || this.currentView === 'week';
+        const lastEntry = this.viewHistory.length > 0 ? this.viewHistory[this.viewHistory.length - 1] : null;
+        const canGoBack = this.canNavigateToHistoryEntry(lastEntry);
         backBtn.disabled = !canGoBack;
         backBtn.classList.toggle('btn-back--disabled', !canGoBack);
     }
 
-    showPreviousView() {
-        if (this.currentView === 'home') return; // Geen actie op thuisscherm
-        const target = this.previousView || 'home';
-        if (target === 'home') {
-            this.showHomeView(false);
-        } else if (target === 'detail') {
-            this.showDetailView();
-        } else if (target === 'week') {
-            this.showWeekView();
+    canNavigateToView(viewName) {
+        if (!viewName || viewName === this.currentView) return false;
+        if (viewName === 'home' || viewName === 'week') return true;
+        if (viewName === 'detail') {
+            // Detail is alleen zinvol met exact 1 geselecteerde zaal.
+            return Array.isArray(this.selectedVenues) && this.selectedVenues.length === 1;
+        }
+        return false;
+    }
+
+    canNavigateToHistoryEntry(entry) {
+        if (!entry) return false;
+        if (typeof entry === 'string') return this.canNavigateToView(entry);
+
+        const viewName = entry.view;
+        if (!viewName || viewName === this.currentView) return false;
+        if (viewName === 'home' || viewName === 'week') return true;
+        if (viewName === 'detail') {
+            return Array.isArray(entry.selectedVenues) && entry.selectedVenues.length === 1;
+        }
+        return false;
+    }
+
+    async showPreviousView() {
+        this._pendingHistorySnapshot = null;
+        const candidate = this.viewHistory.length > 0 ? this.viewHistory.pop() : null;
+        const targetEntry = this.canNavigateToHistoryEntry(candidate)
+            ? (typeof candidate === 'string' ? { view: candidate } : candidate)
+            : null;
+        if (!targetEntry) {
+            this.updateBackButtonVisibility();
+            return;
+        }
+
+        this._isNavigatingBack = true;
+        try {
+            if (Array.isArray(targetEntry.selectedVenues)) {
+                this.selectedVenues = [...targetEntry.selectedVenues];
+            }
+            if (targetEntry.selectedDate) {
+                const restoredDate = new Date(targetEntry.selectedDate);
+                if (!Number.isNaN(restoredDate.getTime())) {
+                    restoredDate.setHours(0, 0, 0, 0);
+                    this.selectedDate = restoredDate;
+                }
+            }
+            this.detailContext = targetEntry.detailContext || null;
+
+            if (targetEntry.view === 'home') {
+                await this.showHomeView(false);
+            } else if (targetEntry.view === 'detail') {
+                await this.showDetailView();
+            } else if (targetEntry.view === 'week') {
+                await this.showWeekView();
+            }
+        } finally {
+            this._isNavigatingBack = false;
+            this.updateBackButtonVisibility();
         }
     }
     
     async loadHomeData(forceRefresh = false) {
+        this.yesplanDataIsSearchResults = false;
         const id = ++this.loadHomeRequestId;
         this.showLoading(true);
         this.setDateNavDisabled(true);
@@ -1217,21 +1651,43 @@ class TheaterDashboard {
             let venueId = this.getPrimarySelectedVenueId();
             if (!venueId) venueId = undefined;
             
-            const result = await window.electronAPI.getYesplanData({
+            let result = await window.electronAPI.getYesplanData({
                 startDate: dateStr,
                 endDate: dateStr,
                 venueId,
                 skipCache: !!forceRefresh
             });
-            
             if (id !== this.loadHomeRequestId) return;
-            
+            // Bij 0 events met zaal geselecteerd: opnieuw zonder zaal ophalen en client-side filteren (zodat urenInfo binnenkomt)
+            if (venueId && result?.success && (!result.data || result.data.length === 0)) {
+                const retry = await window.electronAPI.getYesplanData({
+                    startDate: dateStr,
+                    endDate: dateStr,
+                    venueId: undefined,
+                    skipCache: true
+                });
+                if (id !== this.loadHomeRequestId) return;
+                if (retry?.success && retry.data && retry.data.length > 0) {
+                    const vidRaw = String(venueId).toUpperCase().trim();
+                    const vid = vidRaw.includes(':') ? vidRaw.split(':').pop() : vidRaw;
+                    const filtered = retry.data.filter((e) => {
+                        const ids = (e.venueIds || []).map((x) => String(x).toUpperCase().trim());
+                        const venueStr = (e.venue || '').toUpperCase();
+                        const locNames = (e.locations || []).map((l) => String(l?.name || '').toUpperCase().trim());
+                        return ids.includes(vid) || ids.includes(vidRaw) || locNames.includes(vid) || venueStr.includes(vid) || venueStr.includes(vidRaw);
+                    });
+                    result = filtered.length > 0 ? { ...retry, data: filtered } : retry;
+                }
+            }
             this.data.yesplan = result;
             this.updateYesplanDisplay(result);
             this.updateStatus('yesplan', result.success ? 'online' : 'offline', result.timestamp || new Date());
+            if (id === this.loadHomeRequestId) await this.loadUurwerkData();
         } catch (error) {
             if (id !== this.loadHomeRequestId) return;
             console.error('Home data laden fout:', error);
+            this.data.yesplan = { success: false, data: [], timestamp: null };
+            this.updateYesplanDisplay(this.data.yesplan);
             this.updateStatus('yesplan', 'offline', null);
             this.showError('yesplan', this.t('errors.eventsLoad'));
         } finally {
@@ -1252,17 +1708,62 @@ class TheaterDashboard {
 
         try {
             const { start, end } = this.getWeekDateRange();
-            let venueId = this.getPrimarySelectedVenueId();
-            if (!venueId) venueId = undefined;
+            // Weekview: altijd zonder server-side venue filter laden.
+            // Venue-filtering gebeurt client-side in updateWeekDisplay; dit voorkomt lege resultaten
+            // bij venue-id/prefix verschillen tussen systemen of organisatie-modus.
+            // Gebruik main-process cache waar mogelijk om minder API-calls/429's te krijgen.
+            // Als personeel/technische resources-filters aan staan, hebben we event-details nodig
+            // (urenInfo/resources) anders kan updateWeekDisplay niet filteren.
+            // In weekoverzicht moeten urenInfo/techniek en technische materialen
+            // altijd beschikbaar zijn, ook als de weekfilters uit staan.
+            const venueId = undefined;
 
-            const result = await window.electronAPI.getYesplanData({
+            const WEEK_LOAD_TIMEOUT_MS = 35000;
+            const loadPromise = window.electronAPI.getYesplanData({
                 startDate: start,
                 endDate: end,
                 venueId,
-                skipCache: !!forceRefresh
+                limit: 500,
+                skipCache: !!forceRefresh,
+                includeEventDetailsForWeekFilters: true
             });
+            const timeoutPromise = new Promise((_, reject) =>
+                setTimeout(() => reject(new Error('TIMEOUT')), WEEK_LOAD_TIMEOUT_MS)
+            );
+            let result = await Promise.race([loadPromise, timeoutPromise]);
+
+            if (result?.success && (!result.data || result.data.length === 0)) {
+                const retryPromise = window.electronAPI.getYesplanData({
+                    startDate: start,
+                    endDate: end,
+                    venueId: undefined,
+                    limit: 500,
+                    skipCache: !!forceRefresh,
+                    includeEventDetailsForWeekFilters: true
+                });
+                const retry = await Promise.race([retryPromise, timeoutPromise]);
+                if (retry?.success && retry.data && retry.data.length > 0) result = retry;
+            } else if (!result?.success && result !== undefined) {
+                const retryPromise = window.electronAPI.getYesplanData({
+                    startDate: start,
+                    endDate: end,
+                    venueId: undefined,
+                    limit: 500,
+                    skipCache: !!forceRefresh,
+                    includeEventDetailsForWeekFilters: true
+                });
+                const retry = await Promise.race([retryPromise, timeoutPromise]);
+                if (retry?.success && retry.data && retry.data.length > 0) result = retry;
+            }
 
             if (id !== this.loadWeekRequestId) return;
+
+            // Debug: uitgeschakeld in productie; zet DEV_WEEK_DEBUG=true in console om aan te zetten
+            if (typeof window !== 'undefined' && window.DEV_WEEK_DEBUG) {
+                const cnt = result?.data?.length ?? 0;
+                const samples = (result?.data ?? []).slice(0, 3).map((e) => e._requestedDate || '(geen)');
+                console.log('[Week] start=', start, 'end=', end, 'events=', cnt, 'samples=', samples);
+            }
 
             this.data.weekYesplan = result;
             this.updateWeekDisplay(result);
@@ -1274,7 +1775,10 @@ class TheaterDashboard {
             console.error('Week data laden fout:', e);
             this.statusBySystem.yesplan = 'offline';
             this.updateMasterStatus();
-            this.showError('yesplan', this.t('errors.weekLoad'));
+            const msg = e?.message === 'TIMEOUT'
+                ? (this.locale === 'en' ? 'Week load took too long. Try again or refresh.' : 'Week laden duurde te lang. Probeer opnieuw of ververs.')
+                : this.t('errors.weekLoad');
+            this.showError('yesplan', msg);
         } finally {
             if (id === this.loadWeekRequestId) {
                 this.showLoading(false);
@@ -1288,33 +1792,92 @@ class TheaterDashboard {
         if (!container) return;
 
         const selectedVenueIds = this.getSelectedVenueIds();
+        const availableVenueIds = (this.availableVenues || []).map((v) => String(v.id));
+        const isKnownSelectedVenueId = (sid) => {
+            const s = String(sid || '');
+            if (!s) return false;
+            return availableVenueIds.some((aid) => aid === s || aid.endsWith(`:${s}`) || s.endsWith(`:${aid}`));
+        };
+        const effectiveSelectedVenueIds = selectedVenueIds.filter(isKnownSelectedVenueId);
+        const venueFilterIds = (selectedVenueIds.length > 0 && effectiveSelectedVenueIds.length === 0)
+            ? []
+            : effectiveSelectedVenueIds;
         const dayNames = ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'];
         const { startDate, endDate } = this.getWeekDateRange();
 
         if (!data?.success || !data?.data?.length) {
+            this.updateWeekHeaderSummary(0);
             const venueLabel = this.getVenueName() || 'alle zalen';
-            container.innerHTML = `<div class="info-message">${this.t('messages.noEventsWeek', { venue: venueLabel })}</div>`;
+            const rangeStart = startDate.toLocaleDateString(this.locale === 'en' ? 'en-GB' : 'nl-NL', { day: 'numeric', month: 'short' });
+            const rangeEnd = endDate.toLocaleDateString(this.locale === 'en' ? 'en-GB' : 'nl-NL', { day: 'numeric', month: 'short', year: 'numeric' });
+            const rangeText = `${rangeStart} – ${rangeEnd}`;
+            container.innerHTML = `
+                <div class="info-message">
+                    <p>${this.t('messages.noEventsWeek', { venue: venueLabel })}</p>
+                    <p class="week-empty-range">${rangeText}</p>
+                </div>`;
             return;
         }
 
         let events = [...data.data];
-        if (selectedVenueIds.length > 0) {
+        if (venueFilterIds.length > 0) {
+            const beforeVenueFilter = events;
             events = events.filter((e) => {
-                const locs = e.rawEvent?.locations;
                 const eventOrg = e._organizationId;
-                if (!Array.isArray(locs)) return false;
-                return locs.some((l) => {
-                    const rawId = String(l.id);
-                    return selectedVenueIds.some((sid) => {
-                        const s = String(sid);
-                        if (s.includes(':')) {
-                            const [o, id] = s.split(':');
-                            return String(eventOrg) === o && rawId === id;
-                        }
-                        return rawId === s;
-                    });
+                const venueIds = Array.isArray(e.venueIds) ? e.venueIds.map((id) => String(id)) : [];
+                const locIds = Array.isArray(e.rawEvent?.locations)
+                    ? e.rawEvent.locations.map((l) => String(l?.id || '')).filter(Boolean)
+                    : [];
+                const allEventVenueIds = new Set([...venueIds, ...locIds]);
+                if (allEventVenueIds.size === 0) return false;
+
+                return venueFilterIds.some((sid) => {
+                    const s = String(sid);
+                    if (s.includes(':')) {
+                        const [o, id] = s.split(':');
+                        if (eventOrg && String(eventOrg) !== o) return false;
+                        return allEventVenueIds.has(String(id));
+                    }
+                    return allEventVenueIds.has(s);
                 });
             });
+
+            // Fallback 1: match op zaalnaam wanneer ID's in API payload veranderd zijn.
+            if (events.length === 0) {
+                const selectedVenueNames = (this.availableVenues || [])
+                    .filter((v) => venueFilterIds.some((sid) => {
+                        const s = String(sid || '');
+                        const id = String(v.id || '');
+                        return s === id || s.endsWith(`:${id}`) || id.endsWith(`:${s}`);
+                    }))
+                    .map((v) => String(v.name || '').trim().toUpperCase())
+                    .filter(Boolean);
+
+                if (selectedVenueNames.length > 0) {
+                    events = beforeVenueFilter.filter((e) => {
+                        const eventVenue = String(e.venue || '').toUpperCase();
+                        const locNames = Array.isArray(e.rawEvent?.locations)
+                            ? e.rawEvent.locations.map((l) => String(l?.name || '').toUpperCase())
+                            : [];
+                        return selectedVenueNames.some((name) =>
+                            eventVenue.includes(name) || locNames.some((ln) => ln.includes(name))
+                        );
+                    });
+                }
+            }
+
+            // Fallback 2: toon in elk geval weekevents i.p.v. "geen resultaten" door een filter-mismatch.
+            if (events.length === 0) {
+                events = beforeVenueFilter;
+            }
+        }
+        if (this.searchQuery && this.searchQuery.length >= 2) {
+            const beforeSearchFilter = events;
+            events = events.filter((e) => this.matchSearchQuery(e.title || e.name, this.searchQuery));
+            // Voorkom "lege week" door een achtergebleven zoekterm.
+            if (events.length === 0) {
+                events = beforeSearchFilter;
+            }
         }
         if (this.hideCancelledEvents) {
             events = events.filter((e) => {
@@ -1335,10 +1898,12 @@ class TheaterDashboard {
         }
 
         if (events.length === 0) {
+            this.updateWeekHeaderSummary(0);
             const venueLabel = this.getVenueName() || 'alle zalen';
             container.innerHTML = `<div class="info-message">${this.t('messages.noEventsWeek', { venue: venueLabel })}</div>`;
             return;
         }
+        this.updateWeekHeaderSummary(events.length);
 
         const byDay = {};
         const pad = (n) => String(n).padStart(2, '0');
@@ -1347,9 +1912,13 @@ class TheaterDashboard {
             byDay[key] = [];
         }
         events.forEach((e) => {
-            const dt = e.startDate ? new Date(e.startDate) : null;
-            if (!dt) return;
-            const key = `${dt.getFullYear()}-${pad(dt.getMonth() + 1)}-${pad(dt.getDate())}`;
+            // Gebruik _requestedDate (de kalenderdag van het API-verzoek) om timezone-fouten te vermijden
+            let key = e._requestedDate || null;
+            if (!key) {
+                const dt = e.startDate ? new Date(e.startDate) : null;
+                if (!dt) return;
+                key = `${dt.getFullYear()}-${pad(dt.getMonth() + 1)}-${pad(dt.getDate())}`;
+            }
             if (byDay[key]) byDay[key].push(e);
         });
 
@@ -1376,7 +1945,7 @@ class TheaterDashboard {
                 const ob = event.orkestbakExplicit || event.orkestbakValue
                     ? (event.orkestbakValue || (event.hasOrkestbak ? this.t('resources.ja') : this.t('resources.nee')))
                     : this.t('resources.nietBekend');
-                if (showBalletvloer) parts.push(`<i class="fas fa-dance"></i> Balletvloer: <strong>${bv}</strong>`);
+                if (showBalletvloer) parts.push(`Balletvloer: <strong>${bv}</strong>`);
                 if (showVleugel) parts.push(`Vleugel: <strong>${vl}</strong>`);
                 if (showOrkestbak) parts.push(`Orkestbak: <strong>${ob}</strong>`);
                 resources = `<div class="week-event-resources">${parts.join(' · ')}</div>`;
@@ -1389,15 +1958,29 @@ class TheaterDashboard {
             });
             const looksLikeDateOrTime = (t) => {
                 const s = String(t).trim();
-                return /^\d{1,2}\s+(jan|feb|mrt|maart|apr|mei|jun|jul|aug|sep|okt|oktober|nov|dec)[a-z]*\s*[\d:\-\s]*$/i.test(s) || /^\d{1,2}:\d{2}(-\d{1,2}:\d{2})?$/.test(s);
+                return /^\d{1,2}\s+(jan|feb|maa|mrt|maart|apr|mei|jun|jul|aug|sep|okt|oktober|nov|dec)[a-z]*\s*[\d:\-\s]*$/i.test(s) || /^\d{1,2}:\d{2}(-\d{1,2}:\d{2})?$/.test(s);
             };
-            const dateOnlyLine = (t) => /^\d{1,2}\s+(jan|feb|mrt|maart|apr|mei|jun|jul|aug|sep|okt|oktober|nov|dec)[a-z]*\s*[\d:\-\s]*$/i.test(String(t).trim()) || /^\d{1,2}:\d{2}(-\d{1,2}:\d{2})?$/.test(String(t).trim());
+            const dateOnlyLine = (t) => /^\d{1,2}\s+(jan|feb|maa|mrt|maart|apr|mei|jun|jul|aug|sep|okt|oktober|nov|dec)[a-z]*\s*[\d:\-\s]*$/i.test(String(t).trim()) || /^\d{1,2}:\d{2}(-\d{1,2}:\d{2})?$/.test(String(t).trim());
             const looksLikeVenueRole = (t) => {
                 const u = String(t).trim().toUpperCase();
                 return /\d+\s*man\b/.test(u) || /^(mcgz|wtpy|dkw|mckz|wtso|mkvk)\b/.test(u) || /^techniek\s+algemeen$/i.test(u) || /^techniek$/i.test(u) || u.length < 3;
             };
             const looksLikeName = (p) => !looksLikeDateOrTime(p) && !looksLikeVenueRole(p) && /^[a-zA-Z\u00C0-\u024F\s\-']+$/.test(p) && p.length > 2;
-            const timeOnly = (t) => String(t || '').replace(/^\d{1,2}\s+(jan|feb|mrt|maart|apr|mei|jun|jul|aug|sep|okt|oktober|nov|dec)[a-z]*\s+/i, '').trim() || t;
+            const timeOnly = (t) => String(t || '').replace(/^\d{1,2}\s+(jan|feb|maa|mrt|maart|apr|mei|jun|jul|aug|sep|okt|oktober|nov|dec)[a-z]*\s+/i, '').trim() || t;
+            const cleanRawPersonnelEntry = (entry) => {
+                const parts = String(entry || '').split(/\s+[-–—]\s+/).map(p => p.trim()).filter(Boolean);
+                if (!parts.length) return '';
+                const isNoise = (p) => {
+                    const s = p.toLowerCase();
+                    return /^\d+\./.test(s) ||
+                        /(wtpy|mcgz|dkw|mckz|wtso|mkvk)/.test(s) ||
+                        /(techniek algemeen|hoofd publieksservice|receptie\/kassa|receptie|kassa)/.test(s) ||
+                        /\d+\s*man\b/.test(s) ||
+                        /<\s*\d+/.test(s);
+                };
+                const filtered = parts.filter(p => !isNoise(p));
+                return (filtered.length ? filtered : parts).join(' - ').trim();
+            };
             const extractNameAndTime = (e) => {
                 const s = String(e).trim();
                 const parts = s.split(/\s+[-–—]\s+/).map((p) => p.trim()).filter(Boolean);
@@ -1424,7 +2007,12 @@ class TheaterDashboard {
             };
             const nameTimePairs = techniekRaw
                 .filter(e => !isVenueRoleOnly(e))
-                .map(e => extractNameAndTime(e) || fallbackParse(e))
+                .map((e) => {
+                    const parsed = extractNameAndTime(e) || fallbackParse(e);
+                    if (parsed) return parsed;
+                    const raw = cleanRawPersonnelEntry(e);
+                    return raw ? { name: raw, time: '' } : null;
+                })
                 .filter(Boolean);
             const uniqPairs = [];
             const seen = new Set();
@@ -1512,11 +2100,28 @@ class TheaterDashboard {
                 const venueId = card.getAttribute('data-venue-id');
                 const eventDate = card.getAttribute('data-event-date');
                 if (!venueId || !eventDate) return;
-                this.currentView = 'detail';
+                this._pendingHistorySnapshot = this.createViewSnapshot();
                 await this.selectVenueAndDate(venueId, eventDate);
                 await this.showDetailView();
             });
         });
+    }
+
+    updateWeekHeaderSummary(eventCount = 0) {
+        this.weekEventCount = Number(eventCount) || 0;
+        const summaryEl = document.getElementById('weekViewSummary');
+        if (!summaryEl) return;
+
+        const filters = [];
+        if (this.hideCancelledEvents) filters.push(this.t('weekView.filterHideCancelled'));
+        if (this.filterOnlyWithTechnischPersoneel) filters.push(this.t('weekView.filterTechnischPersoneel'));
+        if (this.filterOnlyWithTechnischeResources) filters.push(this.t('weekView.filterTechnischeResources'));
+
+        const countText = this.weekEventCount === 1
+            ? this.t('weekView.eventsSingle', { n: this.weekEventCount })
+            : this.t('weekView.eventsPlural', { n: this.weekEventCount });
+        const filterText = filters.length > 0 ? filters.join(', ') : this.t('weekView.filterNone');
+        summaryEl.textContent = `${countText} · ${this.t('weekView.filtersPrefix')}: ${filterText}`;
     }
 
     getDateRange() {
@@ -1546,12 +2151,12 @@ class TheaterDashboard {
         return { today, minDate, maxDate };
     }
 
+    // Week = vandaag t/m vandaag + 6 dagen (7 dagen vanaf vandaag).
     getWeekDateRange() {
-        const base = new Date(this.selectedDate || new Date());
-        base.setHours(0, 0, 0, 0);
-        const start = new Date(base);
-        const end = new Date(base);
-        end.setDate(end.getDate() + 6);
+        const start = new Date();
+        start.setHours(0, 0, 0, 0);
+        const end = new Date(start);
+        end.setDate(start.getDate() + 6);
         const fmt = (d) => {
             const y = d.getFullYear();
             const m = String(d.getMonth() + 1).padStart(2, '0');
@@ -1610,7 +2215,7 @@ class TheaterDashboard {
             });
         });
     }
-    
+
     populateDateSelector() {
         const optionsContainer = document.getElementById('dateSelectOptions');
         if (!optionsContainer) return;
@@ -1679,7 +2284,8 @@ class TheaterDashboard {
             if (this.currentView === 'week') {
                 await this.loadWeekData();
             } else if (this.selectedVenues.length === 1) {
-                await this.showDetailView();
+                this.detailContext = null;
+                await this.showDetailView(true, true);
             } else {
                 await this.showHomeView();
             }
@@ -1876,12 +2482,14 @@ class TheaterDashboard {
             this.updateDateDisplay();
             this.saveSelectedDate();
             
+            // Weekweergave: één dag opschuiven = hele week (7 dagen vanaf selectedDate) meeschuiven
             if (this.currentView === 'week') {
                 await this.loadWeekData();
                 return;
             }
             if (this.selectedVenues.length === 1) {
-                await this.showDetailView();
+                this.detailContext = null;
+                await this.showDetailView(true, true);
             } else {
                 await this.showHomeView();
             }
@@ -1900,12 +2508,14 @@ class TheaterDashboard {
             this.updateDateDisplay();
             this.saveSelectedDate();
             
+            // Weekweergave: één dag terug = hele week meeschuiven
             if (this.currentView === 'week') {
                 await this.loadWeekData();
                 return;
             }
             if (this.selectedVenues.length === 1) {
-                await this.showDetailView();
+                this.detailContext = null;
+                await this.showDetailView(true, true);
             } else {
                 await this.showHomeView();
             }
@@ -2001,22 +2611,25 @@ class TheaterDashboard {
         // Filter op geselecteerde zalen (multi-select)
         if (selectedVenueIds.length > 0) {
             events = events.filter(event => {
-                const locations = event.rawEvent?.locations;
-                const eventOrg = event._organizationId;
-                if (Array.isArray(locations)) {
-                    return locations.some(loc => {
-                        const rawId = String(loc.id);
-                        return selectedVenueIds.some(sid => {
-                            const s = String(sid);
-                            if (s.includes(':')) {
-                                const [o, id] = s.split(':');
-                                return String(eventOrg) === o && rawId === id;
-                            }
-                            return rawId === s;
-                        });
-                    });
-                }
-                return true;
+                const locations = Array.isArray(event.rawEvent?.locations) ? event.rawEvent.locations : [];
+                const locationIds = locations
+                    .map(loc => String(loc?.id || '').trim())
+                    .filter(Boolean);
+                const eventVenueIds = Array.isArray(event.venueIds)
+                    ? event.venueIds.map(id => String(id).trim()).filter(Boolean)
+                    : [];
+                const eventOrg = String(event._organizationId || '').trim();
+
+                return selectedVenueIds.some((sid) => {
+                    const s = String(sid || '').trim();
+                    if (!s) return false;
+                    if (s.includes(':')) {
+                        const [org, id] = s.split(':');
+                        if (String(org) !== eventOrg) return false;
+                        return locationIds.includes(String(id)) || eventVenueIds.includes(String(id));
+                    }
+                    return locationIds.includes(s) || eventVenueIds.includes(s);
+                });
             });
         }
         
@@ -2043,6 +2656,10 @@ class TheaterDashboard {
                 const hasTechMaterial = Array.isArray(event.technicalMaterialResources) && event.technicalMaterialResources.length > 0;
                 return hasResources || hasTechMaterial;
             });
+        }
+
+        if (this.searchQuery && this.searchQuery.length >= 2 && !this.yesplanDataIsSearchResults) {
+            events = events.filter((e) => this.matchSearchQuery(e.title || e.name, this.searchQuery));
         }
 
         // In detail view: alleen evenementen van hetzelfde hoofdevenement (zelfde productie ofzelfde eventgroep)
@@ -2162,25 +2779,31 @@ class TheaterDashboard {
                     const { showBalletvloer, showVleugel, showOrkestbak } = this.getBalletvloerVleugelDisplay(event.venue, eventVenueId);
                     let resourcesInfo = '';
                     if (showBalletvloer || showVleugel || showOrkestbak) {
-                        const parts = [];
+                        const topLineParts = [];
+                        let orkestbakLine = '';
                         if (showBalletvloer) {
                             const balletvloerStatus = event.balletvloerExplicit ? (event.hasBalletvloer ? this.t('resources.ja') : this.t('resources.nee')) : this.t('resources.nietBekend');
-                            const balletvloerColor = event.hasBalletvloer ? '#667eea' : (event.balletvloerExplicit ? '#a0aec0' : '#718096');
-                            parts.push(`<i class="fas fa-dance" style="color: ${balletvloerColor};"></i> Balletvloer: <strong>${balletvloerStatus}</strong>`);
+                            topLineParts.push(`Balletvloer: <strong>${balletvloerStatus}</strong>`);
                         }
                         if (showVleugel) {
                             const vleugelStatus = event.vleugelExplicit ? (event.hasVleugel ? this.t('resources.ja') : this.t('resources.nee')) : this.t('resources.nietBekend');
-                            const vleugelColor = event.hasVleugel ? '#667eea' : (event.vleugelExplicit ? '#a0aec0' : '#718096');
-                            parts.push(`Vleugel: <strong>${vleugelStatus}</strong>`);
+                            topLineParts.push(`Vleugel: <strong>${vleugelStatus}</strong>`);
                         }
                         if (showOrkestbak) {
                             const orkestbakStatus = (event.orkestbakExplicit || event.orkestbakValue)
                                 ? (event.orkestbakValue || (event.hasOrkestbak ? this.t('resources.ja') : this.t('resources.nee')))
                                 : this.t('resources.nietBekend');
-                            const orkestbakColor = event.hasOrkestbak ? '#667eea' : ((event.orkestbakExplicit || event.orkestbakValue) ? '#a0aec0' : '#718096');
-                            parts.push(`Orkestbak: <strong>${orkestbakStatus}</strong>`);
+                            orkestbakLine = `Orkestbak: <strong>${orkestbakStatus}</strong>`;
                         }
-                        resourcesInfo = `<div style="margin-top: 0.5rem; padding: 0.5rem; background: #374151; border-radius: 6px; font-size: 0.85rem; color: #a0aec0;">${parts.join(' &nbsp; &nbsp; ')}</div>`;
+                        const topLineHtml = topLineParts
+                            .map((part) => `<span style="white-space: nowrap;">${part}</span>`)
+                            .join('');
+                        resourcesInfo = `
+                            <div style="margin-top: 0.5rem; padding: 0.5rem; background: #374151; border-radius: 6px; font-size: 0.85rem; color: #a0aec0;">
+                                ${topLineHtml ? `<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.75rem 1rem;">${topLineHtml}</div>` : ''}
+                                ${orkestbakLine ? `<div style="margin-top: 0.2rem;">${orkestbakLine}</div>` : ''}
+                            </div>
+                        `;
                     }
                     
                     // Technisch materiaal uit /resources/Technisch materiaal
@@ -2210,8 +2833,15 @@ class TheaterDashboard {
                     // Technische opmerkingen
                     let technicalRemarksInfo = '';
                     if (event.technicalRemarks) {
+                        const rawRemarks = String(event.technicalRemarks || '').trim();
+                        const lowerRemarks = rawRemarks.toLowerCase();
+                        const isPlaceholderRemarks =
+                            lowerRemarks === 'opmerkingen techniek' ||
+                            lowerRemarks === 'opmerkingentechniek' ||
+                            lowerRemarks.includes('productie_technischelijst_opmerkingentechniek');
+                        const remarksText = isPlaceholderRemarks ? '-' : rawRemarks;
                         // Escape HTML om XSS te voorkomen
-                        const escapedRemarks = event.technicalRemarks
+                        const escapedRemarks = remarksText
                             .replace(/&/g, '&amp;')
                             .replace(/</g, '&lt;')
                             .replace(/>/g, '&gt;')
@@ -2372,8 +3002,8 @@ class TheaterDashboard {
                         <p><i class="fas fa-clock"></i> <strong>${timeRange}</strong></p>
                         ${extraTimeInfo}
                         ${resourcesInfo}
-                        ${technicalRemarksInfo}
                         ${technicalListInfo}
+                        ${technicalRemarksInfo}
                         ${technicalMaterialInfo}
                         ${riderInfo}
                         ${venueStatusInfo}
@@ -2427,10 +3057,11 @@ class TheaterDashboard {
                                 const groupId = item.getAttribute('data-group-id') || '';
                                 const groupName = item.getAttribute('data-group-name') || '';
                                 const eventName = item.getAttribute('data-event-name') || '';
-                                this.detailContext = (productionId || productionName || groupId || groupName || eventName)
-                                    ? { productionId, productionName, groupId, groupName, eventName }
+                                const eventId = item.getAttribute('data-event-id') || '';
+                                this.detailContext = (productionId || productionName || groupId || groupName || eventName || eventId)
+                                    ? { productionId, productionName, groupId, groupName, eventName, eventId }
                                     : null;
-                                this.currentView = 'detail';
+                                this._pendingHistorySnapshot = this.createViewSnapshot();
                                 await this.selectVenueAndDate(venueId, eventDate);
                                 await this.showDetailView();
                             } else {
@@ -3135,20 +3766,25 @@ class TheaterDashboard {
 
     updateUurwerkDisplay(data) {
         const container = document.getElementById('uurwerkContent');
-        
-        if (!data.success || !data.data) {
-            container.innerHTML = `<div class="info-message">${this.t('messages.noPlanning')}</div>`;
+        const noPlanningMsg = `<div class="info-message">${this.t('messages.noPlanning')}</div>`;
+        if (!container) return;
+        if (!data || !data.data) {
+            container.innerHTML = noPlanningMsg;
             return;
         }
-
         const urenInfo = data.data;
+        const hasAny = (urenInfo.techniek?.length || 0) + (urenInfo.horeca?.length || 0) + (urenInfo.frontOffice?.length || 0) > 0;
+        if (!hasAny) {
+            container.innerHTML = noPlanningMsg;
+            return;
+        }
 
         const extractNameAndTime = (entry) => {
             const s = String(entry || '').trim();
             if (!s) return null;
             const parts = s.split(/\s+[-–—]\s+/).map(p => p.trim()).filter(Boolean);
             if (parts.length < 2) return null;
-            const looksLikeDate = (t) => /^\d{1,2}\s+(jan|feb|mrt|maart|apr|mei|jun|jul|aug|sep|okt|nov|dec)[a-z]*\s*[\d:\-\s]*$/i.test(String(t).trim()) || /^\d{1,2}:\d{2}/.test(String(t).trim());
+            const looksLikeDate = (t) => /^\d{1,2}\s+(jan|feb|maa|mrt|maart|apr|mei|jun|jul|aug|sep|okt|nov|dec)[a-z]*\s*[\d:\-\s]*$/i.test(String(t).trim()) || /^\d{1,2}:\d{2}/.test(String(t).trim());
             const looksLikeVenueRole = (t) => {
                 const u = String(t).trim().toUpperCase();
                 return /\d+\s*man\b/.test(u) || /^(mcgz|wtpy|dkw|mckz|wtso|mkvk)\b/.test(u) || /^techniek\s+algemeen$/i.test(u) || /^techniek$/i.test(u) || u.length < 3;
@@ -3166,7 +3802,7 @@ class TheaterDashboard {
             return /\d+\s*man\b/i.test(s) && /techniek\s+algemeen/i.test(s) && !/[A-Za-z\u00C0-\u024F]{2,}\s+[A-Za-z\u00C0-\u024F]{2,}/.test(s);
         };
 
-        const timeOnly = (t) => String(t || '').replace(/^\d{1,2}\s+(jan|feb|mrt|maart|apr|mei|jun|jul|aug|sep|okt|oktober|nov|dec)[a-z]*\s+/i, '').trim() || t;
+        const timeOnly = (t) => String(t || '').replace(/^\d{1,2}\s+(jan|feb|maa|mrt|maart|apr|mei|jun|jul|aug|sep|okt|oktober|nov|dec)[a-z]*\s+/i, '').trim() || t;
 
         const fallbackParse = (entry) => {
             const s = String(entry).trim();
@@ -3174,15 +3810,75 @@ class TheaterDashboard {
             if (parts.length >= 4) {
                 const timePart = parts[parts.length - 1];
                 const namePart = parts[parts.length - 2];
-                if (/\d{1,2}\s+(jan|feb|mrt|maart|apr|mei|jun|jul|aug|sep|okt|nov|dec)/i.test(timePart) && namePart.length > 2) {
+                if (/\d{1,2}\s+(jan|feb|maa|mrt|maart|apr|mei|jun|jul|aug|sep|okt|nov|dec)/i.test(timePart) && namePart.length > 2) {
                     return { name: namePart, time: timeOnly(timePart) };
                 }
             }
             return null;
         };
 
+        const cleanRawPersonnelEntry = (entry) => {
+            const parts = String(entry || '').split(/\s+[-–—]\s+/).map(p => p.trim()).filter(Boolean);
+            if (!parts.length) return '';
+            const isNoise = (p) => {
+                const s = p.toLowerCase();
+                return /^\d+\./.test(s) ||
+                    /(wtpy|mcgz|dkw|mckz|wtso|mkvk)/.test(s) ||
+                    /(techniek algemeen|hoofd publieksservice|receptie\/kassa|receptie|kassa)/.test(s) ||
+                    /\d+\s*man\b/.test(s) ||
+                    /<\s*\d+/.test(s);
+            };
+            const filtered = parts.filter(p => !isNoise(p));
+            return (filtered.length ? filtered : parts).join(' - ').trim();
+        };
+
+        const isClearlyNonPersonnelText = (entry) => {
+            const s = String(entry || '').trim();
+            if (!s) return true;
+            const lower = s.toLowerCase();
+            const hasTime = /\b\d{1,2}:\d{2}\b/.test(s);
+            const blockedPhrases = [
+                'opmerkingen techniek',
+                'verder hebben we nodig',
+                'we nemen zelf',
+                'er komt geen technicus',
+                'graag',
+                'nodig',
+                'gemaild',
+                'microfoon',
+                'headset',
+                'drumstel',
+                'viool',
+                'trompet',
+                'stoel',
+                'poef'
+            ];
+            if (blockedPhrases.some(p => lower.includes(p))) return true;
+            // Genummerde lijst zonder tijd is meestal opmerkingstekst.
+            // Echte personeelsregels kunnen ook met "1." starten, maar bevatten dan doorgaans een tijd.
+            if (/^\d+\./.test(lower) && !hasTime) return true;
+            if (/:/.test(s) && !hasTime) return true; // zinnen met labels, geen planningstijd
+            if (s.split(/\s+/).length > 6 && !hasTime) return true; // lange zinnen zijn vrijwel nooit personeelsregels
+            return false;
+        };
+
+        const isLikelySimplePersonnelRaw = (raw) => {
+            const s = String(raw || '').trim();
+            if (!s) return false;
+            if (isClearlyNonPersonnelText(s)) return false;
+            // Eenvoudige personeelsregel: 1-4 woorden, letters/spaties/koppeltekens/apostrof.
+            return /^[A-Za-z\u00C0-\u024F][A-Za-z\u00C0-\u024F'\- ]{1,60}$/.test(s) && s.split(/\s+/).length <= 4;
+        };
+
         const toDisplayNameTimePairs = (entries) => {
-            const pairs = entries.map(e => extractNameAndTime(e) || fallbackParse(e)).filter(Boolean);
+            const pairs = entries.map((e) => {
+                if (isClearlyNonPersonnelText(e)) return null;
+                const parsed = extractNameAndTime(e) || fallbackParse(e);
+                if (parsed) return parsed;
+                const raw = cleanRawPersonnelEntry(e);
+                // Laat alleen korte, naam-achtige ruwe regels zien als parser niet matcht.
+                return isLikelySimplePersonnelRaw(raw) ? { name: raw, time: '' } : null;
+            }).filter(Boolean);
             if (pairs.length === 0) return [];
             const seen = new Set();
             const uniq = [];
@@ -3193,9 +3889,24 @@ class TheaterDashboard {
             return uniq;
         };
 
-        // Filter vrijwilligers eruit
+        // Filter vrijwilligers + technische-opmerking-regels eruit.
+        // Die opmerking-velden zitten soms in dezelfde urenInfo.techniek lijst en anders worden ze als "techniek" zichtbaar.
+        const isTechnicalRemarksLine = (entry) => {
+            const s = String(entry || '').trim();
+            if (!s) return false;
+            const lower = s.toLowerCase();
+            return (
+                lower === 'opmerkingen techniek' ||
+                lower === 'opmerkingentechniek' ||
+                lower.includes('opmerkingen techniek') ||
+                lower.includes('opmerkingentechniek') ||
+                lower.includes('productie_technischelijst_opmerkingentechniek')
+            );
+        };
+
         const techniek = (urenInfo.techniek || []).filter(entry => {
-            const entryUpper = String(entry).toUpperCase();
+            const entryUpper = String(entry || '').toUpperCase();
+            if (isTechnicalRemarksLine(entry)) return false;
             return !entryUpper.includes('VRIJWILLIGER') && !entryUpper.includes('VOLUNTEER');
         });
         const techniekDisplay = toDisplayNameTimePairs(techniek);
@@ -3207,21 +3918,15 @@ class TheaterDashboard {
             const entryUpper = String(entry).toUpperCase();
             return !entryUpper.includes('VRIJWILLIGER') && !entryUpper.includes('VOLUNTEER');
         });
-        // Haal Nostradamus planning op (als beschikbaar)
-        const nostradamus = (urenInfo.nostradamus || []).filter(entry => {
-            const entryUpper = String(entry).toUpperCase();
-            return !entryUpper.includes('VRIJWILLIGER') && !entryUpper.includes('VOLUNTEER');
-        });
         const horecaDisplay = toDisplayNameTimePairs(horeca);
         const frontOfficeDisplay = toDisplayNameTimePairs(frontOffice);
-        const nostradamusDisplay = toDisplayNameTimePairs(nostradamus);
 
         // Tel totaal aantal entries (op basis van unieke namen)
-        const totalEntries = techniekDisplay.length + horecaDisplay.length + frontOfficeDisplay.length + nostradamusDisplay.length;
+        const totalEntries = techniekDisplay.length + horecaDisplay.length + frontOfficeDisplay.length;
 
         container.innerHTML = `
             <div class="shifts-list">
-                ${techniekDisplay.length > 0 || horecaDisplay.length > 0 || frontOfficeDisplay.length > 0 || nostradamusDisplay.length > 0 ? `
+                ${techniekDisplay.length > 0 || horecaDisplay.length > 0 || frontOfficeDisplay.length > 0 ? `
                     ${techniekDisplay.length > 0 ? `
                         <div class="data-item" style="margin-bottom: 1.5rem;">
                             <h4 style="margin-bottom: 0.75rem; color: #e2e8f0; font-size: 1rem; font-weight: 600;">
@@ -3261,19 +3966,6 @@ class TheaterDashboard {
                             </div>
                         </div>
                     ` : ''}
-                    ${nostradamusDisplay.length > 0 ? `
-                        <div class="data-item" style="margin-bottom: 1.5rem;">
-                            <h4 style="margin-bottom: 0.75rem; color: #e2e8f0; font-size: 1rem; font-weight: 600;">
-                                Nostradamus Planning
-                            </h4>
-                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                                ${nostradamusDisplay.map(p => {
-                                    const text = p.time ? `${p.name} – ${p.time}` : p.name;
-                                    return `<div style="padding: 0.5rem; background: #1a202c; border-radius: 4px; font-size: 0.85rem; color: #a0aec0;">${String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>`;
-                                }).join('')}
-                            </div>
-                        </div>
-                    ` : ''}
                 ` : `
                     <div class="info-message">Geen planning beschikbaar voor deze dag</div>
                 `}
@@ -3289,9 +3981,6 @@ class TheaterDashboard {
             return;
         }
         
-        // Haal Itix events data op (bevat verkoop en reserveringen)
-        const itixEvents = (data && data.success && data.data) ? data.data : [];
-        
         // Haal verkoopdata uit Yesplan als beschikbaar
         const yesplanData = this.data.yesplan;
         const yesplanEvents = (yesplanData && yesplanData.success && yesplanData.data) ? yesplanData.data : [];
@@ -3302,131 +3991,38 @@ class TheaterDashboard {
             : (this.data.reservations && this.data.reservations.success && this.data.reservations.data) 
                 ? this.data.reservations.data 
                 : [];
+        const escapeInline = (value) => String(value || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
         
-        // Als er Itix events data is, toon die (prioriteit)
-        if (itixEvents.length > 0) {
-            // Bereken totaal verkocht, gereserveerd en omzet
-            let totalSold = 0;
-            let totalReserved = 0;
-            let totalRevenue = 0;
-            let totalCapacity = 0;
-            let totalAvailable = 0;
-            
-            itixEvents.forEach(event => {
-                totalSold += event.ticketsSold || 0;
-                totalReserved += event.ticketsReserved || 0;
-                totalRevenue += event.revenue || 0;
-                totalCapacity += event.capacity || 0;
-                totalAvailable += event.ticketsAvailable || 0;
-            });
-            
-            container.innerHTML = `
-                <div class="events-list" style="margin-bottom: 1rem;">
-                    ${itixEvents.map(event => {
-                        const sold = event.ticketsSold || 0;
-                        const reserved = event.ticketsReserved || 0;
-                        const capacity = event.capacity || 0;
-                        const available = event.ticketsAvailable || 0;
-                        
-                        // Verkoopstanden worden nu direct in de return template getoond
-                        
-                        // Reserveringen - apart en prominent tonen
-                        let reservationsInfo = '';
-                        if (reserved > 0) {
-                            reservationsInfo = `<div style="margin-top: 0.75rem; padding: 0.75rem; background: #fff5e6; border: 2px solid #ed8936; border-radius: 6px; font-size: 0.9rem;">
-                                <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
-                                    <i class="fas fa-bookmark" style="color: #ed8936; font-size: 1.2rem; margin-right: 0.5rem;"></i>
-                                    <strong style="color: #c05621; font-size: 1rem;">Gereserveerd: ${reserved} tickets</strong>
-                                </div>
-                                <div style="font-size: 0.85rem; color: #744210;">
-                                    Dit zijn tickets die gereserveerd zijn maar nog niet verkocht. Deze moeten apart worden geteld!
-                                </div>
-                            </div>`;
-                        }
-                        
-                        // Zaalplattegrond toevoegen
-                        const ticketingId = event.ticketingId || null;
-                        let seatingPlanHtml;
-                        if (ticketingId) {
-                            const normalizedTicketingId = String(ticketingId).trim().replace(/\s+/g, '');
-                            const seatingPlanUrl = `https://tickets.wilminktheater.nl/beheer/zaalplattegrond/uitvoeringinfo/${normalizedTicketingId}`;
-                            seatingPlanHtml = `
-                                <a href="#" 
-                                   onclick="event.preventDefault(); event.stopPropagation(); window.electronAPI.openExternal('${seatingPlanUrl}'); return false;"
-                                   style="color: #818cf8; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(129, 140, 248, 0.1); border-radius: 4px; transition: all 0.2s; cursor: pointer;"
-                                   onmouseover="this.style.background='rgba(129, 140, 248, 0.2)'"
-                                   onmouseout="this.style.background='rgba(129, 140, 248, 0.1)'">
-                                    <i class="fas fa-external-link-alt"></i>
-                                    <span>Open zaalplattegrond</span>
-                                </a>
-                            `;
-                        } else {
-                            seatingPlanHtml = `<p style="color: #718096; font-size: 0.9rem; margin: 0;">Geen zaalplattegrond beschikbaar</p>`;
-                        }
-                        
-                        return `
-                            <div class="data-item">
-                                <h4>${event.name || 'Onbekend evenement'}</h4>
-                                ${event.formattedDate ? `<p><i class="fas fa-calendar"></i> ${event.formattedDate}</p>` : ''}
-                                ${reservationsInfo}
-                                <div>
-                                    <h4 style="margin-bottom: 0.5rem; margin-top: 0; color: #e2e8f0; font-size: 1rem; font-weight: 600;">
-                                        Zaalplattegrond
-                                    </h4>
-                                    ${seatingPlanHtml}
-                                </div>
-                            </div>
-                        `;
-                    }).join('')}
-                </div>
-                <div class="data-grid" style="margin-top: 1rem; display: flex; gap: 1rem; flex-wrap: nowrap;">
-                    <div class="data-stat" style="flex: 1; min-width: 0;">
-                        <div class="data-stat-value">${totalCapacity > 0 ? totalCapacity : '--'}</div>
-                        <div class="data-stat-label">${this.t('dataStats.capaciteit')}</div>
-                    </div>
-                    <div class="data-stat" style="flex: 1; min-width: 0;">
-                        <div class="data-stat-value">${totalSold}</div>
-                        <div class="data-stat-label">${this.t('dataStats.verkocht')}</div>
-                    </div>
-                    <div class="data-stat" style="flex: 1; min-width: 0;">
-                        <div class="data-stat-value">${totalReserved}</div>
-                        <div class="data-stat-label">${this.t('dataStats.gereserveerd')}</div>
-                    </div>
-                    <div class="data-stat" style="flex: 1; min-width: 0;">
-                        <div class="data-stat-value">${totalAvailable}</div>
-                        <div class="data-stat-label">${this.t('dataStats.beschikbaar')}</div>
-                    </div>
-                    ${totalRevenue > 0 ? `
-                    <div class="data-stat" style="flex: 1; min-width: 0;">
-                        <div class="data-stat-value">€${totalRevenue.toFixed(2)}</div>
-                        <div class="data-stat-label">${this.t('dataStats.omzet')}</div>
-                    </div>
-                    ` : ''}
-                </div>
-            `;
-            return;
-        }
-        
-        // Als er Yesplan verkoopdata is, toon die (met reserveringen van Itix)
+        // Als er Yesplan verkoopdata is, toon die (met reserveringen uit Yesplan).
         if (yesplanEvents.length > 0) {
-            // Bereken totaal verkocht, gereserveerd en omzet
+            // Toon "totaal" onderaan alleen bij precies 1 event; bij meerdere events moeten waarden per
+            // voorstelling gescheiden blijven (dus NIET optellen over kaarten heen).
+            const showOverallStats = yesplanEvents.length === 1;
+
+            // Bereken (alleen) totaal voor het geval dat er precies 1 event is.
             let totalSold = 0;
             let totalReserved = 0;
             let totalRevenue = 0;
             let totalCapacity = 0;
             let totalGasten = 0;
-            
-            yesplanEvents.forEach(event => {
-                totalSold += event.soldTickets || 0;
-                totalReserved += event.ticketsReserved || 0;
-                totalRevenue += event.revenue || 0;
-                totalCapacity += event.capacity || 0;
-                totalGasten += event.aantalGasten || 0;
-            });
-            
-            // Tel ook reserveringen uit reservations data
-            const totalReservationsFromData = reservations.reduce((sum, r) => sum + (r.tickets || 1), 0);
-            totalReserved = totalReserved || totalReservationsFromData;
+            if (showOverallStats) {
+                yesplanEvents.forEach(event => {
+                    totalSold += event.soldTickets || 0;
+                    totalReserved += event.ticketsReserved || 0;
+                    totalRevenue += event.revenue || 0;
+                    totalCapacity += event.capacity || 0;
+                    totalGasten += event.aantalGasten || 0;
+                });
+
+                // Tel ook reserveringen uit reservations data (fallback) bij 1 event.
+                const totalReservationsFromData = reservations.reduce((sum, r) => sum + (r.tickets || 1), 0);
+                totalReserved = totalReserved || totalReservationsFromData;
+            }
             
             const isDetailSingleEvent = this.currentView === 'detail' && yesplanEvents.length === 1;
 
@@ -3451,53 +4047,89 @@ class TheaterDashboard {
                             }
                         }
                         
-                        // Verkoopstanden
+                        // Verkoopstanden (per voorstelling/event).
                         const sold = event.soldTickets || 0;
                         const capacity = event.capacity || 0;
-                        const available = event.availableTickets || (capacity > 0 ? capacity - sold : 0);
                         const reserved = event.ticketsReserved || 0;
                         
-                        // Haal reserveringen voor dit evenement op (van Itix naar Yesplan)
+                        // Haal reserveringen voor dit evenement op
                         const eventReservations = reservations.filter(r => r.eventId === event.id);
                         const reservedCount = reserved || eventReservations.reduce((sum, r) => sum + (r.tickets || 1), 0);
+                        const gasten = event.aantalGasten || 0;
+                        const totaal = sold + reservedCount + gasten;
                         
-                        // Zaalplattegrond – alleen voor WTPY/MCGZ met ticketingId
-                        const venueName = event.venue?.name || event.venue || '';
-                        const isWTPY = venueName.toUpperCase().includes('WTPY') || venueName.toUpperCase().includes('WILMINK');
-                        const isMCGZ = venueName.toUpperCase().includes('MCGZ') || venueName.toUpperCase().includes('MUZIEKCENTRUM');
-                        const ticketingId = event.ticketingId || event.ticketing?.id || event.ticketingData?.id || event.rawEvent?.ticketing?.id || null;
+                        // Zaaloverzicht-snelkoppeling op basis van event-id.
+                        const eventId = event.id || event.eventId || null;
                         
-                        let seatingPlanHtml;
-                        if ((isWTPY || isMCGZ) && ticketingId) {
-                            const seatingPlanUrl = `https://tickets.wilminktheater.nl/beheer/zaalplattegrond/uitvoeringinfo/${ticketingId}`;
-                            seatingPlanHtml = `
-                                <a href="#" 
-                                   onclick="event.preventDefault(); event.stopPropagation(); window.electronAPI.openExternal('${seatingPlanUrl}'); return false;"
-                                   style="color: #818cf8; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(129, 140, 248, 0.1); border-radius: 4px; transition: all 0.2s; cursor: pointer;"
-                                   onmouseover="this.style.background='rgba(129, 140, 248, 0.2)'"
-                                   onmouseout="this.style.background='rgba(129, 140, 248, 0.1)'">
-                                    <i class="fas fa-external-link-alt"></i>
-                                    <span>Open zaalplattegrond</span>
-                                </a>
-                            `;
-                        } else {
-                            seatingPlanHtml = `<p style="color: #718096; font-size: 0.9rem; margin: 0;">Geen zaalplattegrond beschikbaar</p>`;
-                        }
-                        
-                        return `
-                            <div class="data-item">
-                                ${!isDetailSingleEvent ? `<h4>${title}</h4>
-                                <p><i class="fas fa-clock"></i> <strong>${timeRange}</strong></p>` : ''}
+                        const primaryVenueId = Array.isArray(event.venueIds) && event.venueIds.length > 0 ? event.venueIds[0] : null;
+                        const displayOptions = this.getBalletvloerVleugelDisplay(event.venue, primaryVenueId);
+                        const showSeatingPlan = displayOptions?.showZaalplattegrond !== false;
+                        let seatingPlanBlock = '';
+                        if (showSeatingPlan) {
+                            let seatingPlanHtml;
+                            if (eventId) {
+                                const seatingPlanUrl = `https://tickets.wilminktheater.nl/beheer/zaalplattegrond/uitvoeringinfo/${encodeURIComponent(String(eventId))}`;
+                                const escapedPlanUrl = escapeInline(seatingPlanUrl);
+                                seatingPlanHtml = `
+                                    <a href="#" class="rider-link"
+                                       data-rider-url="${escapedPlanUrl}"
+                                       style="color: #818cf8; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(129, 140, 248, 0.1); border-radius: 4px; transition: all 0.2s; cursor: pointer;">
+                                        <i class="fas fa-external-link-alt"></i>
+                                        <span>Open zaalplattegrond</span>
+                                    </a>
+                                `;
+                            } else {
+                                seatingPlanHtml = `<p style="color: #718096; font-size: 0.9rem; margin: 0;">Geen zaalplattegrond beschikbaar</p>`;
+                            }
+                            seatingPlanBlock = `
                                 <div>
                                     <h4 style="margin-bottom: 0.5rem; margin-top: 0; color: #e2e8f0; font-size: 1rem; font-weight: 600;">
                                         Zaalplattegrond
                                     </h4>
                                     ${seatingPlanHtml}
                                 </div>
+                            `;
+                        }
+                        
+                        return `
+                            <div class="data-item">
+                                ${!isDetailSingleEvent ? `<h4>${escapeInline(title)}</h4>
+                                <p><i class="fas fa-clock"></i> <strong>${timeRange}</strong></p>` : ''}
+
+                                <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: ${!isDetailSingleEvent ? '0.25rem' : '0.5rem'};">
+                                    <div style="display: flex; gap: 1rem; flex-wrap: nowrap;">
+                                        <div class="data-stat" style="flex: 1; min-width: 0;">
+                                            <div class="data-stat-value">${sold}</div>
+                                            <div class="data-stat-label">${this.t('dataStats.verkocht')}</div>
+                                        </div>
+                                        <div class="data-stat" style="flex: 1; min-width: 0;">
+                                            <div class="data-stat-value">${reservedCount}</div>
+                                            <div class="data-stat-label">${this.t('dataStats.gereserveerd')}</div>
+                                        </div>
+                                        <div class="data-stat" style="flex: 1; min-width: 0;">
+                                            <div class="data-stat-value">${gasten > 0 ? gasten : '--'}</div>
+                                            <div class="data-stat-label">${this.t('dataStats.gasten')}</div>
+                                        </div>
+                                    </div>
+
+                                    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: nowrap;">
+                                        <div class="data-stat" style="flex: 0 0 auto; min-width: 200px;">
+                                            <div class="data-stat-value">${capacity > 0 ? capacity : '--'}</div>
+                                            <div class="data-stat-label">${this.t('dataStats.capaciteit')}</div>
+                                        </div>
+                                        <div class="data-stat" style="flex: 0 0 auto; min-width: 200px;">
+                                            <div class="data-stat-value">${totaal}</div>
+                                            <div class="data-stat-label">${this.t('dataStats.totaal')}</div>
+                                        </div>
+                                    </div>
+
+                                    ${seatingPlanBlock}
+                                </div>
                             </div>
                         `;
                     }))}
                 </div>
+                ${showOverallStats ? `
                 <div class="data-grid" style="margin-top: 1rem; display: flex; flex-direction: column; gap: 1rem;">
                     <div style="display: flex; gap: 1rem; flex-wrap: nowrap;">
                         <div class="data-stat" style="flex: 1; min-width: 0;">
@@ -3524,6 +4156,7 @@ class TheaterDashboard {
                         </div>
                     </div>
                 </div>
+                ` : ''}
                 ${reservations.length > 0 && !yesplanEvents.some(e => reservations.some(r => r.eventId === e.id)) ? `
                 <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 2px solid #e2e8f0;">
                     <h4 style="margin-bottom: 0.75rem; color: #e2e8f0;"><i class="fas fa-bookmark"></i> Reserveringen</h4>
@@ -3543,37 +4176,8 @@ class TheaterDashboard {
             `;
             return;
         }
-        
-        // Fallback naar Itix data als Yesplan data niet beschikbaar is
-        if (!data.success || !data.data || data.data.length === 0) {
-            container.innerHTML = `<div class="info-message">${this.t('messages.noVerkoop')}</div>`;
-            return;
-        }
 
-        const sales = data.data.slice(0, 5); // Toon max 5 sales
-        
-        container.innerHTML = `
-            <div class="data-grid">
-                <div class="data-stat">
-                    <div class="data-stat-value">${data.data.length}</div>
-                    <div class="data-stat-label">${this.t('dataStats.transacties')}</div>
-                </div>
-                <div class="data-stat">
-                    <div class="data-stat-value">${this.calculateTotalRevenue(data.data)}</div>
-                    <div class="data-stat-label">${this.t('dataStats.omzetEur')}</div>
-                </div>
-            </div>
-            <div class="sales-list">
-                ${sales.map(sale => `
-                    <div class="data-item">
-                        <h4>${sale.eventName}</h4>
-                        <p><i class="fas fa-calendar"></i> ${sale.formattedDate}</p>
-                        <p><i class="fas fa-ticket-alt"></i> ${sale.ticketsSold} tickets</p>
-                        <p><i class="fas fa-euro-sign"></i> €${sale.revenue}</p>
-                    </div>
-                `).join('')}
-            </div>
-        `;
+        container.innerHTML = `<div class="info-message">${this.t('messages.noVerkoop')}</div>`;
     }
 
     updatePrivaDisplay(data) {
@@ -3681,6 +4285,7 @@ class TheaterDashboard {
         const popover = document.getElementById('statusPopover');
         const content = document.getElementById('statusPopoverContent');
         if (!popover || !content) return;
+        if (this._closeStatusPopover) this._closeStatusPopover();
 
         const systems = [
             { id: 'yesplan', label: 'Yesplan' }
@@ -3695,18 +4300,63 @@ class TheaterDashboard {
         }
         content.innerHTML = html;
 
-        const rect = anchorEl.getBoundingClientRect();
-        popover.style.left = `${rect.left}px`;
-        popover.style.top = `${rect.bottom + 8}px`;
+        const placePopover = () => {
+            const margin = 12;
+            const gap = 8;
+            const rect = anchorEl.getBoundingClientRect();
+
+            // Gebruik client size i.p.v. inner* voor robuustheid bij fullscreen/visualViewport.
+            const viewportW = window.visualViewport?.width || document.documentElement.clientWidth || window.innerWidth;
+            const viewportH = window.visualViewport?.height || document.documentElement.clientHeight || window.innerHeight;
+
+            let popRect = popover.getBoundingClientRect();
+            // Soms kan width/height 0 zijn wanneer fonts nog net niet klaar zijn; re-meet.
+            if (!popRect.width || !popRect.height) {
+                const prevVis = popover.style.visibility;
+                popover.style.visibility = 'visible';
+                popRect = popover.getBoundingClientRect();
+                popover.style.visibility = prevVis;
+            }
+
+            // X: clampen binnen viewport.
+            let left = rect.left;
+            const maxLeft = viewportW - popRect.width - margin;
+            left = Math.min(Math.max(left, margin), maxLeft);
+
+            // Y: onder anker, anders boven anker.
+            let top = rect.bottom + gap;
+            const maxTop = viewportH - popRect.height - margin;
+            if (top > maxTop) top = rect.top - popRect.height - gap;
+            top = Math.min(Math.max(top, margin), maxTop);
+
+            popover.style.left = `${Math.round(left)}px`;
+            popover.style.top = `${Math.round(top)}px`;
+        };
+
         popover.style.display = 'block';
+        popover.style.visibility = 'hidden';
+        placePopover();
+        popover.style.visibility = 'visible';
 
         const close = () => {
             popover.style.display = 'none';
+            popover.style.visibility = '';
             document.removeEventListener('click', closeOutside);
+            document.removeEventListener('keydown', closeOnEsc);
+            window.removeEventListener('resize', placePopover);
+            window.removeEventListener('scroll', placePopover, true);
+            this._closeStatusPopover = null;
         };
         const closeOutside = (e) => {
             if (!popover.contains(e.target) && !anchorEl.contains(e.target)) close();
         };
+        const closeOnEsc = (e) => {
+            if (e.key === 'Escape') close();
+        };
+        this._closeStatusPopover = close;
+        window.addEventListener('resize', placePopover);
+        window.addEventListener('scroll', placePopover, true);
+        document.addEventListener('keydown', closeOnEsc);
         setTimeout(() => document.addEventListener('click', closeOutside), 0);
     }
 
@@ -3729,30 +4379,6 @@ class TheaterDashboard {
     openSettings() {
         this.populateSettingsForm();
         document.getElementById('settingsModal').classList.add('show');
-        
-        // Setup toggle password buttons (opnieuw instellen voor dynamisch geladen content)
-        document.querySelectorAll('.toggle-password').forEach(btn => {
-            // Verwijder oude listeners
-            const newBtn = btn.cloneNode(true);
-            btn.parentNode.replaceChild(newBtn, btn);
-            
-            // Voeg nieuwe listener toe
-            newBtn.addEventListener('click', (e) => {
-                const targetId = e.target.closest('.toggle-password').dataset.target;
-                const input = document.getElementById(targetId);
-                const icon = e.target.closest('.toggle-password').querySelector('i');
-                
-                if (input && input.type === 'password') {
-                    input.type = 'text';
-                    icon.classList.remove('fa-eye');
-                    icon.classList.add('fa-eye-slash');
-                } else if (input) {
-                    input.type = 'password';
-                    icon.classList.remove('fa-eye-slash');
-                    icon.classList.add('fa-eye');
-                }
-            });
-        });
     }
 
     closeSettings() {
@@ -3980,7 +4606,8 @@ class TheaterDashboard {
                 v = {
                     balletvloer: fallback.showBalletvloer,
                     vleugel: fallback.showVleugel,
-                    orkestbak: fallback.showOrkestbak
+                    orkestbak: fallback.showOrkestbak,
+                    zaalplattegrond: fallback.showZaalplattegrond
                 };
             }
             const item = document.createElement('div');
@@ -3991,6 +4618,7 @@ class TheaterDashboard {
                     <label><input type="checkbox" data-venue-id="${this.escapeHtml(id)}" data-option="balletvloer" ${v.balletvloer ? 'checked' : ''}> ${this.t('settings.balletvloer')}</label>
                     <label><input type="checkbox" data-venue-id="${this.escapeHtml(id)}" data-option="vleugel" ${v.vleugel ? 'checked' : ''}> ${this.t('settings.vleugel')}</label>
                     <label><input type="checkbox" data-venue-id="${this.escapeHtml(id)}" data-option="orkestbak" ${v.orkestbak ? 'checked' : ''}> ${this.t('settings.orkestbak')}</label>
+                    <label><input type="checkbox" data-venue-id="${this.escapeHtml(id)}" data-option="zaalplattegrond" ${v.zaalplattegrond !== false ? 'checked' : ''}> Zaalplattegrond</label>
                 </div>
             `;
             container.appendChild(item);
@@ -4115,9 +4743,18 @@ class TheaterDashboard {
             // Opslaan van configuraties
             for (const [system, config] of Object.entries(configs)) {
                 if (system === 'app') continue; // app apart behandeld
-                await window.electronAPI.saveConfig(system, config);
+                const result = await window.electronAPI.saveConfig(system, config);
+                if (!result?.success) {
+                    const msg = result?.error === 'SECURE_STORAGE_UNAVAILABLE'
+                        ? this.t('messages.secureStorageUnavailable')
+                        : this.t('errors.settingsSave');
+                    throw new Error(msg);
+                }
             }
-            await window.electronAPI.saveConfig('app', configs.app);
+            const appSaveResult = await window.electronAPI.saveConfig('app', configs.app);
+            if (!appSaveResult?.success) {
+                throw new Error(this.t('errors.settingsSave'));
+            }
 
             // API-server URL opslaan (iPhone/web)
             if (window.__SHIFT_HAPPENS_MOBILE__) {
@@ -4154,7 +4791,7 @@ class TheaterDashboard {
             this.showSuccess(this.t('settings.saved'));
         } catch (error) {
             console.error('Instellingen opslaan fout:', error);
-            this.showError('settings', this.t('errors.settingsSave'));
+            this.showError('settings', error?.message || this.t('errors.settingsSave'));
         }
     }
 
@@ -4167,6 +4804,8 @@ class TheaterDashboard {
 
     applyTouchscreenMode(enabled) {
         document.body.classList.toggle('touchscreen-mode', !!enabled);
+        const searchKeyboard = document.getElementById('searchKeyboard');
+        if (searchKeyboard && !enabled) searchKeyboard.style.display = 'none';
     }
 
     t(key, params = {}) {
@@ -4230,6 +4869,7 @@ class TheaterDashboard {
         if (homeStatus) homeStatus.title = this.t('status.clickForStatus');
         const detailStatus = document.getElementById('detailViewStatus');
         if (detailStatus) detailStatus.title = this.t('status.clickForStatus');
+        this.updateWeekHeaderSummary(this.weekEventCount || 0);
         this.updateDateDisplay();
         this.updateDateTimeDisplay();
     }
@@ -4290,9 +4930,18 @@ class TheaterDashboard {
             const current = this.config[configKey] || {};
             const nameId = orgNum === 2 ? 'yesplanOrgName2' : 'yesplanOrgName';
             const name = document.getElementById(nameId)?.value?.trim() || current.name;
-            await window.electronAPI.saveConfig(configKey, { ...current, name, baseURL, apiKey });
+            const saveResult = await window.electronAPI.saveConfig(configKey, { ...current, name, baseURL, apiKey });
+            if (!saveResult?.success) {
+                const msg = saveResult?.error === 'SECURE_STORAGE_UNAVAILABLE'
+                    ? this.t('messages.secureStorageUnavailable')
+                    : this.t('errors.settingsSave');
+                this.showError('settings', msg);
+                return;
+            }
         } catch (error) {
             console.error('Config opslaan fout:', error);
+            this.showError('settings', this.t('errors.settingsSave'));
+            return;
         }
 
         if (showLoading) {
@@ -4302,7 +4951,11 @@ class TheaterDashboard {
 
         const activeOrg = this.config?.app?.activeYesplanOrg;
         const loadBoth = activeOrg === 'both';
-        const fetchParams = loadBoth ? { org: 'both' } : (orgNum === 2 ? { org: 2 } : { org: 1 });
+        // Bij handmatig "Laad Zalen" willen we altijd de huidige zaal-lijst.
+        // Daarom bypassen we de main-process cache.
+        const fetchParams = loadBoth
+            ? { org: 'both', skipCache: true }
+            : (orgNum === 2 ? { org: 2, skipCache: true } : { org: 1, skipCache: true });
         if (loadBoth) {
             const otherConfig = orgNum === 1 ? this.config.yesplan2 : this.config.yesplan;
             if (!otherConfig?.baseURL || !otherConfig?.apiKey) {
@@ -4367,16 +5020,16 @@ class TheaterDashboard {
         // Geen extra setInterval nodig om dubbele refreshes te voorkomen
     }
 
-    /** Bepaal of balletvloer/vleugel/orkestbak getoond moeten worden.
+    /** Bepaal of balletvloer/vleugel/orkestbak/zaalplattegrond getoond moeten worden.
      *  Gebruikt app.venueResourceOptions per zaal (configuratie in instellingen).
      *  Fallback: oude zaalnaam-pattern (WTPY, MCGZ, DKW, MCKZ) voor backwards compatibility. */
     getBalletvloerVleugelDisplay(venueName, venueId) {
         const opts = this.getVenueResourceOptions(venueId, venueName);
         if (opts) return opts;
         const v = String(venueName || '').toUpperCase();
-        if (/WTPY|MCGZ|DKW/.test(v)) return { showBalletvloer: true, showVleugel: true, showOrkestbak: true };
-        if (/MCKZ/.test(v)) return { showBalletvloer: false, showVleugel: true, showOrkestbak: true };
-        return { showBalletvloer: false, showVleugel: false, showOrkestbak: false };
+        if (/WTPY|MCGZ|DKW/.test(v)) return { showBalletvloer: true, showVleugel: true, showOrkestbak: true, showZaalplattegrond: true };
+        if (/MCKZ/.test(v)) return { showBalletvloer: false, showVleugel: true, showOrkestbak: true, showZaalplattegrond: true };
+        return { showBalletvloer: false, showVleugel: false, showOrkestbak: false, showZaalplattegrond: true };
     }
 
     getVenueResourceOptions(venueId, venueName) {
@@ -4386,7 +5039,8 @@ class TheaterDashboard {
         const toOpts = (opts) => opts && typeof opts === 'object' ? {
             showBalletvloer: !!opts.balletvloer,
             showVleugel: !!opts.vleugel,
-            showOrkestbak: !!opts.orkestbak
+            showOrkestbak: !!opts.orkestbak,
+            showZaalplattegrond: opts.zaalplattegrond !== false
         } : null;
 
         if (venueId) {

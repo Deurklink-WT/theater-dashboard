@@ -56,8 +56,20 @@
     onOpenSettings: function (cb) { window._onOpenSettings = cb; },
     removeAllListeners: function () { window._onAutoRefresh = window._onRefreshData = window._onOpenSettings = null; },
     openExternal: function (url) {
-      if (url) window.open(url, '_blank', 'noopener');
-      return Promise.resolve({ success: true });
+      if (!url || typeof url !== 'string') return Promise.resolve({ success: false, error: 'URL required' });
+      var trimmed = url.trim();
+      if (!trimmed.startsWith('https://')) return Promise.resolve({ success: false, error: 'URL not allowed' });
+      try {
+        var u = new URL(trimmed);
+        var host = u.hostname.toLowerCase();
+        var allowed = ['yesplan.nl', 'yesplan.com', 'wilminktheater.nl', 'tickets.wilminktheater.nl', 'huistechneut.nl', 'itix.nl', 'priva.nl'];
+        var ok = allowed.some(function (a) { return host === a || host.endsWith('.' + a); });
+        if (!ok) return Promise.resolve({ success: false, error: 'URL not allowed' });
+        window.open(trimmed, '_blank', 'noopener');
+        return Promise.resolve({ success: true });
+      } catch (e) {
+        return Promise.resolve({ success: false, error: e.message });
+      }
     }
   };
 })();

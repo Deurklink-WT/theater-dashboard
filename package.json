@@ -1,20 +1,20 @@
 {
   "name": "theater-dashboard",
-  "version": "1.4.1",
+  "version": "1.5.6",
   "description": "Theater dashboard voor Huistechneut - integratie van Yesplan, Uurwerk, Itix en Priva systemen",
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
     "dev": "electron . --dev",
     "build": "electron-builder",
-    "build:mac": "electron-builder --mac && node scripts/remove-quarantine.js && node scripts/fix-dmg-quarantine.js",
+    "build:mac": "electron-builder --mac",
     "build:win": "electron-builder --win",
     "build:pi": "electron-builder --linux --arm64",
     "build:all": "npm run build:win && npm run build:mac && npm run build:pi",
     "build:testflight": "electron-builder --mac --config.mac.target=zip",
     "upload:testflight": "node scripts/upload-testflight.js",
     "test": "jest",
-    "postbuild": "node scripts/remove-quarantine.js",
+    "postbuild": "echo \"postbuild: no-op\"",
     "server": "node src/server/api-server.js",
     "cap:ios": "npx cap sync ios && npx cap open ios",
     "cap:sync": "npx cap sync"
@@ -61,11 +61,11 @@
       "target": [
         {
           "target": "dmg",
-          "arch": ["x64", "arm64"]
+          "arch": ["arm64"]
         },
         {
           "target": "zip",
-          "arch": ["x64", "arm64"]
+          "arch": ["arm64"]
         }
       ],
       "hardenedRuntime": true,

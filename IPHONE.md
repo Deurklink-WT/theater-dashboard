@@ -83,6 +83,8 @@ npx cap sync ios
 
 Daarna in Xcode opnieuw bouwen/draaien.
 
+**Wijzigingen door andere agent of devs:** zie [docs/IPHONE-WIJZIGINGEN.md](docs/IPHONE-WIJZIGINGEN.md) voor hoe je de iPhone-app in sync houdt (gedeelde renderer, sync-stap, API-contract).
+
 ## 5. Beveiliging (productie)
 
 - Gebruik **HTTPS** voor de API-server zodra die vanaf internet bereikbaar is.

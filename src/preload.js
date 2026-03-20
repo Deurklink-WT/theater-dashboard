@@ -5,6 +5,9 @@ contextBridge.exposeInMainWorld('__IS_ELECTRON__', true);
 contextBridge.exposeInMainWorld('electronAPI', {
   // Yesplan API
   getYesplanData: (params) => ipcRenderer.invoke('get-yesplan-data', params),
+  getYesplanEventPersonnel: (eventId) => ipcRenderer.invoke('get-yesplan-event-personnel', { eventId }),
+  getYesplanPersonnelForDate: (params) => ipcRenderer.invoke('get-yesplan-personnel-for-date', params),
+  getYesplanSearch: (query) => ipcRenderer.invoke('get-yesplan-search', { query }),
   getYesplanVenues: (params) => ipcRenderer.invoke('get-yesplan-venues', params || {}),
   getYesplanReservations: (params) => ipcRenderer.invoke('get-yesplan-reservations', params),
   getYesplanSchedule: (eventId, org) => ipcRenderer.invoke('get-yesplan-schedule', eventId, org),
