@@ -2026,10 +2026,11 @@ class YesplanAPI {
         if (!obj || typeof obj !== 'object') return;
         const kw = (obj.keyword || '').toLowerCase();
         const name = (obj.name || '').toLowerCase();
+        const label = (obj.label || '').toLowerCase();
         const str = toValueString(obj.value);
         if (!str) { getTraverseTargets(obj).forEach(traverse); return; }
         for (const { key, test } of patterns) {
-          if (test(kw) || test(name)) {
+          if (test(kw) || test(name) || test(label)) {
             if (!results[key]) results[key] = str;
             break;
           }
@@ -2043,11 +2044,43 @@ class YesplanAPI {
     const urenKeywords = ['urenuurwerktechniek', 'urenuurwerkhoreca', 'urenuurwerkfrontoffice'];
     const nostradamusKeywords = ['nostradamus_uren_dienst', 'nostradamus_uren_afdeling', 'nostradamus_uren_team'];
 
+    // Fallback op keyword/naam/label: géén puur "opmerkingen …" velden (bijv. Opmerkingen techniek),
+    // die matchen anders op 'techniek' maar horen niet bij Uurwerk-personeel.
+    const isPureRemarkFieldName = (s) => {
+      const t = String(s || '').toLowerCase();
+      return (
+        t.includes('opmerking') ||
+        t.includes('remark') ||
+        t.includes('remarks') ||
+        t.includes('notes') ||
+        t.includes('bijzonderheden')
+      );
+    };
+    const looksLikeUrenUurwerkFieldName = (s) => {
+      const t = String(s || '').toLowerCase();
+      return (
+        t.includes('urenuurwerk') ||
+        t.includes('uren uurwerk') ||
+        /\buurwerk\b/.test(t)
+      );
+    };
+    const uurwerkFallbackMatch = (s, deptHint) => {
+      const t = String(s || '').toLowerCase();
+      if (!t) return false;
+      let matchesDept = false;
+      if (deptHint === 'horeca') matchesDept = t.includes('horeca');
+      else if (deptHint === 'frontOffice') matchesDept = t.includes('frontoffice') || t.includes('front office');
+      else if (deptHint === 'techniek') matchesDept = t.includes('techniek') || t.includes('uurwerk');
+      if (!matchesDept) return false;
+      if (isPureRemarkFieldName(t) && !looksLikeUrenUurwerkFieldName(t)) return false;
+      return true;
+    };
+
     // Volgorde: horeca/frontoffice eerst (specifiek), daarna techniek (ook losse 'uurwerk')
     const urenPatterns = [
-      { key: 'horeca', test: s => s.includes('horeca') },
-      { key: 'frontOffice', test: s => s.includes('frontoffice') || s.includes('front office') },
-      { key: 'techniek', test: s => s.includes('techniek') || s.includes('uurwerk') }
+      { key: 'horeca', test: (s) => uurwerkFallbackMatch(s, 'horeca') },
+      { key: 'frontOffice', test: (s) => uurwerkFallbackMatch(s, 'frontOffice') },
+      { key: 'techniek', test: (s) => uurwerkFallbackMatch(s, 'techniek') }
     ];
     const nostradamusPatterns = [{ key: 'nostradamus', test: s => s.includes('nostradamus') }];
 
@@ -2067,6 +2100,21 @@ class YesplanAPI {
     if (techniek.length === 0 && fallback['techniek']) techniek = parseUrenText(fallback['techniek']);
     if (horeca.length === 0 && fallback['horeca']) horeca = parseUrenText(fallback['horeca']);
     if (frontOffice.length === 0 && fallback['frontOffice']) frontOffice = parseUrenText(fallback['frontOffice']);
+
+    // Verwijder losse tekstregels zonder diensttijd / typische Yesplan-structuur (bijv. opmerkingen die
+    // per ongeluk in het uurwerkveld staan, of die via API toch binnenkomen).
+    const isPlausibleUurwerkPlanningLine = (line) => {
+      const s = String(line || '').trim();
+      if (!s) return false;
+      if (/\b\d{1,2}:\d{2}\b/.test(s)) return true;
+      const segments = s.split(/\s+[-–—]\s+/).map((x) => x.trim()).filter(Boolean);
+      if (segments.length >= 3) return true;
+      if (/\d{1,2}\s+(jan|feb|maa|mrt|maart|apr|mei|jun|jul|aug|sep|okt|oktober|nov|dec)/i.test(s)) {
+        return true;
+      }
+      return false;
+    };
+    techniek = techniek.filter(isPlausibleUurwerkPlanningLine);
 
     // Nostradamus: exact + fallback op naam
     const nostradamusFound = findByKeywordRecursive(eventCustomData, nostradamusKeywords);
