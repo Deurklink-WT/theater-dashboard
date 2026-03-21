@@ -4060,7 +4060,9 @@ class TheaterDashboard {
         
         // Haal verkoopdata uit Yesplan als beschikbaar
         const yesplanData = this.data.yesplan;
-        const yesplanEvents = (yesplanData && yesplanData.success && yesplanData.data) ? yesplanData.data : [];
+        const yesplanEventsRaw = (yesplanData && yesplanData.success && yesplanData.data) ? yesplanData.data : [];
+        // Zelfde volgorde als Yesplan-kaart: zaalvolgorde (instellingen), binnen zaal op starttijd — geen willekeurige API-volgorde.
+        const yesplanEvents = [...yesplanEventsRaw].sort((a, b) => this.sortEventByDefault(a, b));
         
         // Haal reserveringen op
         const reservations = (reservationsData && reservationsData.success && reservationsData.data) 
