@@ -170,6 +170,22 @@ async function checkForUpdatesNow() {
   }
 }
 
+/** Start download expliciet (banner-klik). autoDownload kan soms niet starten of vastlopen. */
+async function downloadUpdateNow() {
+  if (!app.isPackaged) {
+    return { ok: false, reason: 'development' };
+  }
+  if (process.env.SKIP_AUTO_UPDATE === '1') {
+    return { ok: false, reason: 'disabled' };
+  }
+  try {
+    await autoUpdater.downloadUpdate();
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e?.message || String(e) };
+  }
+}
+
 function quitAndInstallUpdate() {
   if (!app.isPackaged) {
     return { ok: false, reason: 'development' };
@@ -185,4 +201,4 @@ function quitAndInstallUpdate() {
   }
 }
 
-module.exports = { setupAutoUpdater, checkForUpdatesNow, quitAndInstallUpdate };
+module.exports = { setupAutoUpdater, checkForUpdatesNow, downloadUpdateNow, quitAndInstallUpdate };

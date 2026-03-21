@@ -78,7 +78,7 @@ function secureConfigFromStorage(config) {
 // API services
 const YesplanAPI = require('./api/yesplan');
 const PrivaAPI = require('./api/priva');
-const { setupAutoUpdater, checkForUpdatesNow, quitAndInstallUpdate } = require('./updater');
+const { setupAutoUpdater, checkForUpdatesNow, downloadUpdateNow, quitAndInstallUpdate } = require('./updater');
 
 // Yesplan response cache (vermindert serverbelasting bij navigatie)
 // Standaard ruim: 6 uur. Overschrijfbaar via env var.
@@ -736,6 +736,8 @@ ipcMain.handle('open-external', async (event, url) => {
 });
 
 ipcMain.handle('check-for-updates', async () => checkForUpdatesNow());
+
+ipcMain.handle('download-update', async () => downloadUpdateNow());
 
 ipcMain.handle('quit-and-install-update', async () => quitAndInstallUpdate());
 

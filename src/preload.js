@@ -35,6 +35,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
   // Updates (alleen geïnstalleerde app)
   checkForUpdates: () => ipcRenderer.invoke('check-for-updates'),
+  downloadUpdate: () => ipcRenderer.invoke('download-update'),
   quitAndInstallUpdate: () => ipcRenderer.invoke('quit-and-install-update'),
   onUpdateStatus: (callback) => {
     const handler = (_event, payload) => callback(payload);

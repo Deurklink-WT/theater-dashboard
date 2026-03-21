@@ -42,7 +42,7 @@ const TRANSLATIONS = {
         },
         updatesBanner: {
             checking: 'Zoeken naar updates…',
-            available: 'Update {v} — downloaden…',
+            available: 'Update {v} — tik om te downloaden',
             downloading: 'Downloaden {n}%',
             restart: 'Klaar — tik om te herstarten en te installeren',
             uptodate: 'Je hebt de nieuwste versie.',
@@ -81,7 +81,7 @@ const TRANSLATIONS = {
         },
         updatesBanner: {
             checking: 'Checking for updates…',
-            available: 'Update {v} — downloading…',
+            available: 'Update {v} — tap to download',
             downloading: 'Downloading {n}%',
             restart: 'Ready — click to restart and install',
             uptodate: 'You are on the latest version.',
@@ -5106,9 +5106,36 @@ class TheaterDashboard {
 
         const banner = document.getElementById('updateBanner');
         if (banner) {
-            banner.addEventListener('click', () => {
-                if (banner.dataset.phase === 'downloaded' && window.electronAPI.quitAndInstallUpdate) {
-                    window.electronAPI.quitAndInstallUpdate();
+            banner.addEventListener('click', async () => {
+                const phase = banner.dataset.phase;
+                if (phase === 'downloaded' && window.electronAPI.quitAndInstallUpdate) {
+                    try {
+                        const r = await window.electronAPI.quitAndInstallUpdate();
+                        if (r && !r.ok) {
+                            this._handleUpdateStatus({
+                                phase: 'error',
+                                error: r.error || r.reason || 'Herstart/installatie mislukt'
+                            });
+                        }
+                    } catch (e) {
+                        this._handleUpdateStatus({ phase: 'error', error: e?.message || String(e) });
+                    }
+                    return;
+                }
+                if (phase === 'available' && typeof window.electronAPI?.downloadUpdate === 'function') {
+                    banner.classList.add('update-banner--disabled');
+                    banner.textContent = this.t('updatesBanner.checking');
+                    try {
+                        const r = await window.electronAPI.downloadUpdate();
+                        if (!r?.ok) {
+                            this._handleUpdateStatus({
+                                phase: 'error',
+                                error: r?.error || r?.reason || 'Download mislukt'
+                            });
+                        }
+                    } catch (e) {
+                        this._handleUpdateStatus({ phase: 'error', error: e?.message || String(e) });
+                    }
                 }
             });
         }
