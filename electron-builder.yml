@@ -56,7 +56,7 @@ linux:
       arch: [arm64]
   category: Utility
   icon: build/icon.png
-  maintainer: PdV <info@huistechneut.nl>
+  maintainer: PdV <support@example.com>
 
 deb:
   depends:

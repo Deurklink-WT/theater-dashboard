@@ -1,0 +1,11 @@
+version: 1.5.6
+files:
+  - url: Shift-Happens-1.5.6-arm64-mac.zip
+    sha512: cI3RPpGWqDWb+GQRN/kumk1S38XNfKBO8vSdoyQwX2YqRrB+Dg7X3srpr7CxZhLJejoTJ3Or8SWKjFJqUbQv9Q==
+    size: 95948988
+  - url: Shift-Happens-1.5.6-arm64.dmg
+    sha512: NtMGJnUnW4mN43Ehylfz2cKLDCjWVP6WqFFJCgRLWi3jHiTMBKCUliEDtVFHkiqtLza++Rj9fHHPvmaeC0+JuA==
+    size: 101040464
+path: Shift-Happens-1.5.6-arm64-mac.zip
+sha512: cI3RPpGWqDWb+GQRN/kumk1S38XNfKBO8vSdoyQwX2YqRrB+Dg7X3srpr7CxZhLJejoTJ3Or8SWKjFJqUbQv9Q==
+releaseDate: '2026-03-20T21:17:25.586Z'
