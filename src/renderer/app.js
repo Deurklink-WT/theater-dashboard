@@ -4077,30 +4077,11 @@ class TheaterDashboard {
         
         // Als er Yesplan verkoopdata is, toon die (met reserveringen uit Yesplan).
         if (yesplanEvents.length > 0) {
-            // Toon "totaal" onderaan alleen bij precies 1 event; bij meerdere events moeten waarden per
-            // voorstelling gescheiden blijven (dus NIET optellen over kaarten heen).
-            const showOverallStats = yesplanEvents.length === 1;
+            // Verkoop: per Yesplan-event één blok (eigen verkocht / gereserveerd / capaciteit / totaal).
+            // Bij 2+ voorstellingen op dezelfde dag (zelfde zaal of niet) zie je bewust verschillende
+            // aantallen per event — data komt per event uit Yesplan + reserveringen gefilterd op eventId.
+            // Geen apart "overall"-blok onderaan: bij 1 event was dat een dubbele weergave van dezelfde cijfers.
 
-            // Bereken (alleen) totaal voor het geval dat er precies 1 event is.
-            let totalSold = 0;
-            let totalReserved = 0;
-            let totalRevenue = 0;
-            let totalCapacity = 0;
-            let totalGasten = 0;
-            if (showOverallStats) {
-                yesplanEvents.forEach(event => {
-                    totalSold += event.soldTickets || 0;
-                    totalReserved += event.ticketsReserved || 0;
-                    totalRevenue += event.revenue || 0;
-                    totalCapacity += event.capacity || 0;
-                    totalGasten += event.aantalGasten || 0;
-                });
-
-                // Tel ook reserveringen uit reservations data (fallback) bij 1 event.
-                const totalReservationsFromData = reservations.reduce((sum, r) => sum + (r.tickets || 1), 0);
-                totalReserved = totalReserved || totalReservationsFromData;
-            }
-            
             const isDetailSingleEvent = this.currentView === 'detail' && yesplanEvents.length === 1;
 
             container.innerHTML = `
@@ -4216,34 +4197,6 @@ class TheaterDashboard {
                         `;
                     }))}
                 </div>
-                ${showOverallStats ? `
-                <div class="data-grid" style="margin-top: 1rem; display: flex; flex-direction: column; gap: 1rem;">
-                    <div style="display: flex; gap: 1rem; flex-wrap: nowrap;">
-                        <div class="data-stat" style="flex: 1; min-width: 0;">
-                            <div class="data-stat-value">${totalSold}</div>
-                            <div class="data-stat-label">${this.t('dataStats.verkocht')}</div>
-                        </div>
-                        <div class="data-stat" style="flex: 1; min-width: 0;">
-                            <div class="data-stat-value">${totalReserved}</div>
-                            <div class="data-stat-label">${this.t('dataStats.gereserveerd')}</div>
-                        </div>
-                        <div class="data-stat" style="flex: 1; min-width: 0;">
-                            <div class="data-stat-value">${totalGasten > 0 ? totalGasten : '--'}</div>
-                            <div class="data-stat-label">${this.t('dataStats.gasten')}</div>
-                        </div>
-                    </div>
-                    <div style="display: flex; gap: 1rem; justify-content: center;">
-                        <div class="data-stat" style="flex: 0 0 auto; min-width: 200px;">
-                            <div class="data-stat-value">${totalCapacity > 0 ? totalCapacity : '--'}</div>
-                            <div class="data-stat-label">${this.t('dataStats.capaciteit')}</div>
-                        </div>
-                        <div class="data-stat" style="flex: 0 0 auto; min-width: 200px;">
-                            <div class="data-stat-value">${totalSold + totalReserved + totalGasten}</div>
-                            <div class="data-stat-label">${this.t('dataStats.totaal')}</div>
-                        </div>
-                    </div>
-                </div>
-                ` : ''}
                 ${reservations.length > 0 && !yesplanEvents.some(e => reservations.some(r => r.eventId === e.id)) ? `
                 <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 2px solid #e2e8f0;">
                     <h4 style="margin-bottom: 0.75rem; color: #e2e8f0;"><i class="fas fa-bookmark"></i> Reserveringen</h4>
