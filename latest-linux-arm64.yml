@@ -1,0 +1,9 @@
+version: 1.5.6
+files:
+  - url: Shift-Happens-1.5.6-arm64.AppImage
+    sha512: pBdZNBJM6ZpjtZ0Bu6lSYiP6JLr/NN24HqpY//cDTH9qNqCUTm9vMeifjhWxR+MyZpY4Lg+5pkYbO16P/rS2kw==
+    size: 108509057
+    blockMapSize: 115405
+path: Shift-Happens-1.5.6-arm64.AppImage
+sha512: pBdZNBJM6ZpjtZ0Bu6lSYiP6JLr/NN24HqpY//cDTH9qNqCUTm9vMeifjhWxR+MyZpY4Lg+5pkYbO16P/rS2kw==
+releaseDate: '2026-03-20T21:17:31.757Z'

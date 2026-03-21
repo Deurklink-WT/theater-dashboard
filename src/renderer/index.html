@@ -102,6 +102,7 @@
                     <button id="refreshBtn" class="btn btn-secondary btn-icon-only" title="Vernieuwen">
                         <i class="fas fa-sync-alt"></i>
                     </button>
+                    <button type="button" id="updateBanner" class="update-banner" style="display: none;" aria-live="polite" title=""></button>
                     <button id="settingsBtn" class="btn btn-secondary btn-icon-only" title="Instellingen">
                         <i class="fas fa-cog"></i>
                     </button>
@@ -260,7 +261,7 @@
                         <div class="settings-section settings-section--mobile-only" id="apiServerSection" style="display: none;">
                             <h3><i class="fas fa-server"></i> API-server (iPhone)</h3>
                             <p style="color: #a0aec0; font-size: 0.875rem; margin-bottom: 1rem;">
-                                Vul hier het adres in van de Shift Happens API-server, bijvoorbeeld <code>https://jouw-server.nl:3847</code>. Alleen nodig voor de iPhone-app.
+                                Vul hier het adres in van de <strong>Shift Happens</strong> API-server (meestal poort <code>3847</code>), bijvoorbeeld <code>http://192.168.1.10:3847</code> — niet de Yesplan- of ticket-URL; die staan onder Yesplan/Itix. Leeg laten bij opslaan behoudt de huidige server-URL. Alleen nodig voor de iPhone-app.
                             </p>
                             <div class="form-group">
                                 <label for="apiServerURL">Server-URL</label>
@@ -392,6 +393,18 @@
                             </small>
                         </div>
 
+                        <!-- Itix: basis-URL voor zaalplattegrond (tickets/beheer) -->
+                        <div class="settings-section">
+                            <h3><i class="fas fa-ticket-alt"></i> <span data-i18n="settings.itix">Itix</span></h3>
+                            <p style="color: #a0aec0; font-size: 0.875rem; margin-bottom: 1rem;" data-i18n="settings.itixBaseURLHint">
+                                Voer het voorvoegsel van de beheer-URL voor de zaalplattegrond in, eindigend vóór het uitvoerings-id (Yesplan-event-id). Voorbeeld: https://tickets.jouworganisatie.nl/beheer/zaalplattegrond/uitvoeringinfo
+                            </p>
+                            <div class="form-group">
+                                <label for="itixBaseURL" data-i18n="settings.itixBaseURL">Basis-URL zaalplattegrond</label>
+                                <input type="url" id="itixBaseURL" class="form-input" placeholder="https://tickets.jouworganisatie.nl/beheer/zaalplattegrond/uitvoeringinfo" autocomplete="off">
+                            </div>
+                        </div>
+
                         <!-- Priva Settings - Verborgen voor nu, mogelijk later te implementeren -->
                         <div class="settings-section" style="display: none;">
                             <h3><i class="fas fa-thermometer-half"></i> Priva</h3>
@@ -410,6 +423,18 @@
                             <button type="button" class="btn btn-test" data-system="priva">
                                 <i class="fas fa-plug"></i> Test Verbinding
                             </button>
+                        </div>
+
+                        <!-- Updates (alleen Electron-desktop; verborgen op web/iPhone) -->
+                        <div class="settings-section" id="desktopUpdateSection" style="display: none;">
+                            <h3><i class="fas fa-cloud-download-alt"></i> <span data-i18n="updates.sectionTitle">Updates (desktop)</span></h3>
+                            <p style="color: #a0aec0; font-size: 0.875rem; margin-bottom: 1rem;" data-i18n="updates.hint">
+                                Alleen actief in de geïnstalleerde app. Met npm start (ontwikkeling) is er geen automatische update.
+                            </p>
+                            <button type="button" class="btn btn-secondary" id="checkUpdatesBtn">
+                                <i class="fas fa-sync-alt"></i> <span data-i18n="updates.checkNow">Nu controleren op updates</span>
+                            </button>
+                            <p id="updateCheckResult" style="color: #94a3b8; font-size: 0.85rem; margin-top: 0.75rem; min-height: 1.25rem;" aria-live="polite"></p>
                         </div>
 
                         <!-- About Section -->
@@ -728,6 +753,7 @@
     </footer>
 
     <script src="api-mobile.js"></script>
+    <script src="itix-seating-url.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

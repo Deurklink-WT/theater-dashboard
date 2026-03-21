@@ -6,25 +6,35 @@
   "scripts": {
     "start": "electron .",
     "dev": "electron . --dev",
-    "build": "electron-builder",
-    "build:mac": "electron-builder --mac",
-    "build:win": "electron-builder --win",
-    "build:pi": "electron-builder --linux --arm64",
-    "build:all": "npm run build:win && npm run build:mac && npm run build:pi",
-    "build:testflight": "electron-builder --mac --config.mac.target=zip",
+    "build": "npm run inject-update-token && electron-builder",
+    "build:mac": "npm run inject-update-token && electron-builder --mac",
+    "build:win": "npm run inject-update-token && electron-builder --win",
+    "build:pi": "npm run inject-update-token && electron-builder --linux --arm64",
+    "build:all": "npm run inject-update-token && npm run build:win && npm run build:mac && npm run build:pi",
+    "build:testflight": "npm run inject-update-token && electron-builder --mac --config.mac.target=zip",
     "upload:testflight": "node scripts/upload-testflight.js",
     "test": "jest",
     "postbuild": "echo \"postbuild: no-op\"",
     "server": "node src/server/api-server.js",
     "cap:ios": "npx cap sync ios && npx cap open ios",
-    "cap:sync": "npx cap sync"
+    "cap:sync": "npx cap sync",
+    "inject-update-token": "node scripts/inject-update-token.js"
   },
-  "keywords": ["theater", "dashboard", "electron", "api", "yesplan", "uurwerk", "itix", "priva"],
+  "keywords": [
+    "theater",
+    "dashboard",
+    "electron",
+    "api",
+    "yesplan",
+    "uurwerk",
+    "itix",
+    "priva"
+  ],
   "author": {
     "name": "PdV",
-    "email": "info@huistechneut.nl"
+    "email": "support@example.com"
   },
-  "homepage": "https://huistechneut.nl",
+  "homepage": "https://example.com",
   "license": "UNLICENSED",
   "devDependencies": {
     "@capacitor/cli": "^6.0.0",
@@ -40,6 +50,7 @@
     "cors": "^2.8.5",
     "date-fns": "^2.30.0",
     "electron-store": "^8.1.0",
+    "electron-updater": "^6.8.3",
     "express": "^4.18.2",
     "node-cron": "^3.0.3"
   },
@@ -61,11 +72,15 @@
       "target": [
         {
           "target": "dmg",
-          "arch": ["arm64"]
+          "arch": [
+            "arm64"
+          ]
         },
         {
           "target": "zip",
-          "arch": ["arm64"]
+          "arch": [
+            "arm64"
+          ]
         }
       ],
       "hardenedRuntime": true,
@@ -98,7 +113,9 @@
       "target": [
         {
           "target": "nsis",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         }
       ],
       "executableName": "Shift Happens.exe"
@@ -114,12 +131,14 @@
       "target": [
         {
           "target": "AppImage",
-          "arch": ["arm64"]
+          "arch": [
+            "arm64"
+          ]
         }
       ],
       "category": "Utility",
       "icon": "build/icon.png",
-      "maintainer": "PdV <info@huistechneut.nl>"
+      "maintainer": "PdV <support@example.com>"
     },
     "deb": {
       "depends": [
@@ -132,7 +151,13 @@
         "libuuid1",
         "libsecret-1-0"
       ]
-    }
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "Deurklink-WT",
+        "repo": "theater-dashboard"
+      }
+    ]
   }
 }
-

@@ -4,6 +4,9 @@ Alle belangrijke wijzigingen in dit project worden gedocumenteerd in dit bestand
 
 ## [1.5.6] - 2026-03-20
 
+### Toegevoegd
+- **Automatische updates:** geïnstalleerde apps controleren op nieuwere versies via **GitHub Releases** (configureerbaar in `package.json` → `build.publish`). Updates worden op de achtergrond gedownload; installatie volgt bij afsluiten van de app. Zie `docs/UPDATES.md`. Bij een **private** GitHub-repo: gebruik optioneel `UPDATE_BASE_URL` (eigen HTTPS met `latest.yml`) of `SKIP_AUTO_UPDATE=1`.
+
 ### Gewijzigd / Verbeterd
 - Detailweergave dagnavigatie ververst Yesplan-data betrouwbaarder (minder kans op oude context).
 - Zaalfiltering in detailweergave is strikter gemaakt zodat geen data van meerdere zalen wordt gemengd.

@@ -25,9 +25,15 @@ build/dmg-background.png
 *.jks
 
 # Environment variabelen met credentials
+
+# Build-time gegenereerd (kan GitHub-token bevatten — nooit committen)
+src/generated/update-token.js
 .env
 .env.local
 .env.*.local
 
 # API-server configuratie (lokaal)
 data/
+
+# Claude / tooling worktrees (voorkomt Jest "Haste module naming collision")
+.claude/

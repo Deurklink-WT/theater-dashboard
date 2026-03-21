@@ -10,13 +10,38 @@
 (function () {
   if (window.__IS_ELECTRON__ || typeof window.electronAPI !== 'undefined') return;
 
+  /**
+   * Normaliseert en valideert de opgeslagen API-server-URL.
+   * Voorkomt per ongeluk Yesplan- of Itix-zaalplattegrond-URL in dit veld (regressie na v1.5.5).
+   */
   function getBase() {
-    return window.SHIFT_HAPPENS_API_BASE || localStorage.getItem('SHIFT_HAPPENS_API_BASE') || '';
+    const raw = window.SHIFT_HAPPENS_API_BASE || localStorage.getItem('SHIFT_HAPPENS_API_BASE') || '';
+    let t = String(raw || '').trim();
+    if (!t) return '';
+    if (!/^https?:\/\//i.test(t)) t = 'http://' + t;
+    try {
+      var u = new URL(t);
+      var host = u.hostname.toLowerCase();
+      if (host.indexOf('yesplan') !== -1) return '';
+      var p = (u.pathname || '').toLowerCase();
+      if (p.indexOf('zaalplattegrond') !== -1 || p.indexOf('uitvoeringinfo') !== -1) return '';
+      var pathPart = u.pathname === '/' ? '' : u.pathname.replace(/\/$/, '');
+      return u.origin + pathPart;
+    } catch (e) {
+      return '';
+    }
+  }
+
+  function apiBaseMissingError() {
+    return new Error(
+      'Shift Happens API-server niet ingesteld. Open Instellingen → sectie API-server (iPhone) en vul het adres in van jouw server (bijv. http://192.168.1.10:3847), niet de Yesplan- of ticket-URL.'
+    );
   }
 
   function post(path, body) {
     const base = getBase();
-    const url = base ? (base.replace(/\/$/, '') + path) : path;
+    if (!base) return Promise.reject(apiBaseMissingError());
+    const url = base.replace(/\/$/, '') + path;
     return fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -29,7 +54,8 @@
 
   function get(path) {
     const base = getBase();
-    const url = base ? (base.replace(/\/$/, '') + path) : path;
+    if (!base) return Promise.reject(apiBaseMissingError());
+    const url = base.replace(/\/$/, '') + path;
     return fetch(url).then(function (r) {
       if (!r.ok) throw new Error(r.statusText || 'Request failed');
       return r.json();

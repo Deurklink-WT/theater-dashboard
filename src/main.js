@@ -78,6 +78,7 @@ function secureConfigFromStorage(config) {
 // API services
 const YesplanAPI = require('./api/yesplan');
 const PrivaAPI = require('./api/priva');
+const { setupAutoUpdater, checkForUpdatesNow, quitAndInstallUpdate } = require('./updater');
 
 // Yesplan response cache (vermindert serverbelasting bij navigatie)
 // Standaard ruim: 6 uur. Overschrijfbaar via env var.
@@ -644,7 +645,7 @@ ipcMain.handle('get-priva-data', async (event, params) => {
 
 ipcMain.handle('save-config', async (event, system, config) => {
   try {
-    const allowedSystems = new Set(['yesplan', 'yesplan2', 'priva', 'app']);
+    const allowedSystems = new Set(['yesplan', 'yesplan2', 'priva', 'itix', 'app']);
     if (!allowedSystems.has(system)) {
       return { success: false, error: 'Invalid config system' };
     }
@@ -669,7 +670,7 @@ ipcMain.handle('save-config', async (event, system, config) => {
 });
 
 ipcMain.handle('get-config', async (event, system) => {
-  const allowedSystems = new Set(['yesplan', 'yesplan2', 'priva', 'app']);
+  const allowedSystems = new Set(['yesplan', 'yesplan2', 'priva', 'itix', 'app']);
   if (!allowedSystems.has(system)) return {};
   const raw = store.get(system, {});
   if (!['yesplan', 'yesplan2', 'priva'].includes(system)) return raw;
@@ -688,12 +689,11 @@ ipcMain.handle('get-config', async (event, system) => {
 // Toegestane domeinen voor externe links (voorkomt open-redirect)
 const ALLOWED_EXTERNAL_HOSTS = [
   'yesplan.nl', 'yesplan.com',
-  'wilminktheater.nl', 'tickets.wilminktheater.nl',
-  'huistechneut.nl', 'priva.nl'
+  'priva.nl'
 ];
 function getConfiguredExternalHosts() {
   const hosts = [];
-  const systems = ['yesplan', 'yesplan2', 'priva'];
+  const systems = ['yesplan', 'yesplan2', 'priva', 'itix'];
   systems.forEach((system) => {
     const cfg = secureConfigFromStorage(store.get(system, {}));
     const url = String(cfg?.baseURL || '').trim();
@@ -734,6 +734,11 @@ ipcMain.handle('open-external', async (event, url) => {
     return { success: false, error: error.message };
   }
 });
+
+ipcMain.handle('check-for-updates', async () => checkForUpdatesNow());
+
+ipcMain.handle('quit-and-install-update', async () => quitAndInstallUpdate());
+
 
 // Automatische data vernieuwing elke 4 uur
 cron.schedule('0 */4 * * *', () => {
@@ -851,6 +856,7 @@ app.whenReady().then(() => {
   if (PERSONNEL_CLI) return runPersonnelCli();
   if (SEARCH_CLI) return runYesplanSearchCli();
   createWindow();
+  setupAutoUpdater(mainWindow);
 });
 
 app.on('window-all-closed', () => {

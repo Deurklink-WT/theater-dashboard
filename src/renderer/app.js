@@ -11,7 +11,7 @@
 // Vertalingen (i18n)
 const TRANSLATIONS = {
     nl: {
-        settings: { colorMode: 'Kleurmodus', language: 'Taal', title: 'Instellingen', save: 'Opslaan', saved: 'Instellingen opgeslagen!', theme: 'Thema', touchscreenMode: 'Touchscreen-modus', touchscreenModeHint: 'Grotere scrollbalk en grotere tikgebieden voor gebruik op aanraakschermen (bijv. Raspberry Pi-kiosk).', venueOrder: 'Zaalvolgorde', venueOrderHint: 'Sleep de zalen om de volgorde aan te passen. Klik op het oog om een zaal te verbergen in de zaal-dropdown.', resetVenueOrder: 'Reset naar standaard', techOptions: 'Technische opties per zaal', techOptionsHint: 'Kies per zaal welke opties (balletvloer, vleugel, orkestbak, zaalplattegrond) getoond worden.', yesplan: 'Yesplan', activeOrg: 'Actieve organisatie', activeOrgHint: 'Bepaal welke Yesplan-organisatie het dashboard gebruikt', org1: 'Organisatie 1', org2: 'Organisatie 2', orgN: 'Organisatie {n}', bothOrgs: 'Beide organisaties', name: 'Naam', baseURL: 'Base URL', apiKey: 'API Key', loadVenues: 'Laad Zalen', loadVenuesHint: 'Haalt zalen op voor zaalvolgorde en header', loadVenuesFullHint: 'Vul per organisatie Base URL en API Key in, klik op "Laad Zalen"', testConnection: 'Test Verbinding', about: 'Over deze app', showVenue: 'Zaal tonen', hideVenue: 'Zaal verbergen', balletvloer: 'Balletvloer', vleugel: 'Vleugel', orkestbak: 'Orkestbak' },
+        settings: { colorMode: 'Kleurmodus', language: 'Taal', title: 'Instellingen', save: 'Opslaan', saved: 'Instellingen opgeslagen!', theme: 'Thema', touchscreenMode: 'Touchscreen-modus', touchscreenModeHint: 'Grotere scrollbalk en grotere tikgebieden voor gebruik op aanraakschermen (bijv. Raspberry Pi-kiosk).', venueOrder: 'Zaalvolgorde', venueOrderHint: 'Sleep de zalen om de volgorde aan te passen. Klik op het oog om een zaal te verbergen in de zaal-dropdown.', resetVenueOrder: 'Reset naar standaard', techOptions: 'Technische opties per zaal', techOptionsHint: 'Kies per zaal welke opties (balletvloer, vleugel, orkestbak, zaalplattegrond) getoond worden.', yesplan: 'Yesplan', activeOrg: 'Actieve organisatie', activeOrgHint: 'Bepaal welke Yesplan-organisatie het dashboard gebruikt', org1: 'Organisatie 1', org2: 'Organisatie 2', orgN: 'Organisatie {n}', bothOrgs: 'Beide organisaties', name: 'Naam', baseURL: 'Base URL', apiKey: 'API Key', loadVenues: 'Laad Zalen', loadVenuesHint: 'Haalt zalen op voor zaalvolgorde en header', loadVenuesFullHint: 'Vul per organisatie Base URL en API Key in, klik op "Laad Zalen"', testConnection: 'Test Verbinding', about: 'Over deze app', showVenue: 'Zaal tonen', hideVenue: 'Zaal verbergen', balletvloer: 'Balletvloer', vleugel: 'Vleugel', orkestbak: 'Orkestbak', itix: 'Itix', itixBaseURL: 'Basis-URL zaalplattegrond', itixBaseURLHint: 'Voer het voorvoegsel van de beheer-URL voor de zaalplattegrond in, eindigend vóór het uitvoerings-id (Yesplan-event-id). Voorbeeld: https://tickets.jouworganisatie.nl/beheer/zaalplattegrond/uitvoeringinfo' },
         status: { online: 'Online', offline: 'Offline', deels: 'Deels bereikbaar', warning: 'Waarschuwing', systemStatus: 'Systeemstatus', clickForStatus: 'Klik voor systeemstatus' },
         nav: { back: 'Terug', backTitle: 'Terug naar vorig scherm', home: 'Home', weekView: 'Weekoverzicht', techOverview: 'Technisch overzicht', techOverviewTitle: 'Print technisch overzicht voor deze dag (alle zalen)', prevDay: 'Vorige dag', nextDay: 'Volgende dag', refresh: 'Vernieuwen', searchEvent: 'Zoek evenement', searchEventTitle: 'Zoek op evenementnaam (* en ? als wildcard)' },
         search: { placeholder: 'Evenementnaam… (* = alles, ? = één teken)', wildcardHint: 'Gebruik * voor een reeks tekens en ? voor één teken.' },
@@ -19,19 +19,38 @@ const TRANSLATIONS = {
         venue: { allVenues: 'Alle zalen', venue: 'Zaal', unknownVenue: 'Onbekende zaal', venueCount: '{n} zalen', venueId: 'Zaal {id}' },
         filters: { title: 'Filters', hideCancelled: 'Verberg geannuleerde voorstellingen', technischPersoneel: 'Alleen evenementen met technisch personeel', technischeResources: 'Alleen evenementen met technische resources' },
         weekView: { title: 'Weekoverzicht', sortByVenue: 'Op zaal', sortByVenueTitle: 'Sorteren op zaal (instellingen volgorde)', sortByTime: 'Op tijd', sortByTimeTitle: 'Sorteren op tijd', eventsSingle: '{n} evenement', eventsPlural: '{n} evenementen', filtersPrefix: 'Filters', filterNone: 'geen actief', filterHideCancelled: 'geannuleerd verborgen', filterTechnischPersoneel: 'technisch personeel', filterTechnischeResources: 'technische resources' },
-        cards: { yesplan: 'Yesplan', personnel: 'Personeel', itix: 'Verkoop', priva: 'Priva - Klimaat', tijdschema: 'Tijdschema' },
+        cards: { yesplan: 'Yesplan', personnel: 'Personeel', itix: 'Verkoop', priva: 'Priva - Klimaat', tijdschema: 'Tijdschema', seatingPlan: 'Zaalplattegrond', openSeatingPlan: 'Open zaalplattegrond' },
         personnel: { techniek: 'Techniek', horeca: 'Horeca', frontOffice: 'Front Office' },
         dataStats: { capaciteit: 'Capaciteit', verkocht: 'Verkocht', gereserveerd: 'Gereserveerd', beschikbaar: 'Beschikbaar', omzet: 'Omzet', gasten: 'Gasten', totaal: 'Totaal', transacties: 'Transacties', omzetEur: 'Omzet (€)', temp: 'Temperatuur', luchtvochtigheid: 'Luchtvochtigheid', luchtkwaliteit: 'Luchtkwaliteit', co2: 'CO₂' },
         tech: { materiaal: 'Technisch materiaal:', lijst: 'Technische lijst:', lijstBijlage: 'Technische lijst bijlage:' },
         resources: { ja: 'ja', nee: 'nee', nietBekend: 'niet ingevuld' },
         loading: 'Laden...',
-        messages: { noEvents: 'Geen evenementen gevonden voor {venue} op {date}', noEventsDate: 'Geen evenementen gevonden op {date}', noEventsWeek: 'Geen evenementen in deze week voor {venue}.', selectDayVenueTijdschema: 'Selecteer 1 dag en 1 zaal om het tijdschema te zien.', noTijdschema: 'Geen tijdschema beschikbaar voor deze evenementen.', noPlanning: 'Geen planning beschikbaar voor deze dag', noVerkoop: 'Geen verkoopdata beschikbaar voor deze dag', noKlimaat: 'Geen klimaatdata beschikbaar', venueOrderReset: 'Zaalvolgorde gereset naar standaard', loadVenuesFirst: 'Laad eerst zalen in de Yesplan instellingen.', venuesLoaded: '{n} zalen geladen', configureBothOrgs: 'Configureer eerst beide organisaties voor "Beide"', fillBaseUrlApiKey: 'Vul eerst Base URL en API Key in voor organisatie {n}', secureStorageUnavailable: 'Veilige opslag voor API-keys is niet beschikbaar op dit systeem. Stel eerst een keychain/secret-service in.' },
+        messages: { noEvents: 'Geen evenementen gevonden voor {venue} op {date}', noEventsDate: 'Geen evenementen gevonden op {date}', noEventsWeek: 'Geen evenementen in deze week voor {venue}.', selectDayVenueTijdschema: 'Selecteer 1 dag en 1 zaal om het tijdschema te zien.', noTijdschema: 'Geen tijdschema beschikbaar voor deze evenementen.', noPlanning: 'Geen planning beschikbaar voor deze dag', noVerkoop: 'Geen verkoopdata beschikbaar voor deze dag', noKlimaat: 'Geen klimaatdata beschikbaar', venueOrderReset: 'Zaalvolgorde gereset naar standaard', loadVenuesFirst: 'Laad eerst zalen in de Yesplan instellingen.', venuesLoaded: '{n} zalen geladen', configureBothOrgs: 'Configureer eerst beide organisaties voor "Beide"', fillBaseUrlApiKey: 'Vul eerst Base URL en API Key in voor organisatie {n}', secureStorageUnavailable: 'Veilige opslag voor API-keys is niet beschikbaar op dit systeem. Stel eerst een keychain/secret-service in.', seatingPlanUnavailable: 'Geen zaalplattegrond beschikbaar', seatingPlanNoBase: 'Stel onder Instellingen → Itix de basis-URL voor de zaalplattegrond in.' },
         techPrint: { title: 'Technisch overzicht', subtitle: 'Alle zalen – {date}', noEvents: 'Geen evenementen op deze dag.', venue: 'Zaal', time: 'Tijd', remarks: 'Opmerkingen techniek', documents: 'Technische lijst documenten', filterTitle: 'Evenementen voor print', filterHint: 'Vink de evenementen aan die in het overzicht moeten komen.', selectAll: 'Alles selecteren', deselectAll: 'Alles deselecteren' },
-        errors: { yesplanLoad: 'Kon Yesplan data niet laden', eventsLoad: 'Kon evenementen niet laden', weekLoad: 'Kon weekoverzicht niet laden', uurwerkLoad: 'Kon personeelsplanning niet laden', itixLoad: 'Kon Itix data niet laden', privaLoad: 'Kon Priva data niet laden', settingsSave: 'Kon instellingen niet opslaan' },
-        test: { testing: 'Testen...', success: 'Succesvol', failed: 'Gefaald' }
+        errors: { yesplanLoad: 'Kon Yesplan data niet laden', eventsLoad: 'Kon evenementen niet laden', weekLoad: 'Kon weekoverzicht niet laden', uurwerkLoad: 'Kon personeelsplanning niet laden', itixLoad: 'Kon Itix data niet laden', privaLoad: 'Kon Priva data niet laden', settingsSave: 'Kon instellingen niet opslaan', apiServerInvalid: 'Ongeldige API-server-URL. Gebruik bijvoorbeeld http://192.168.1.10:3847', apiServerWrongKind: 'Server-URL is voor de Shift Happens API (poort 3847), niet voor Yesplan of de Itix-zaalplattegrond. Vul Yesplan/Itix verderop in dit formulier in.' },
+        test: { testing: 'Testen...', success: 'Succesvol', failed: 'Gefaald' },
+        updates: {
+            sectionTitle: 'Updates (desktop)',
+            hint: 'Alleen actief in de geïnstalleerde app. Met npm start (ontwikkeling) is er geen automatische update.',
+            checkNow: 'Nu controleren op updates',
+            devNoop: 'Ontwikkelingsmodus: geen update-check (test met de geïnstalleerde app).',
+            disabled: 'Updates uit (SKIP_AUTO_UPDATE).',
+            okAvailable: 'Update beschikbaar: {v}',
+            okUptodate: 'Je hebt de nieuwste versie.',
+            checkFailed: 'Controleren mislukt: {msg}',
+            checking: 'Bezig met controleren…'
+        },
+        updatesBanner: {
+            checking: 'Zoeken naar updates…',
+            available: 'Update {v} — downloaden…',
+            downloading: 'Downloaden {n}%',
+            restart: 'Klaar — tik om te herstarten en te installeren',
+            uptodate: 'Je hebt de nieuwste versie.',
+            privateRepo: 'Updates niet bereikbaar (private repo? Token of UPDATE_BASE_URL nodig — zie docs/UPDATES.md).'
+        }
     },
     en: {
-        settings: { colorMode: 'Color mode', language: 'Language', title: 'Settings', save: 'Save', saved: 'Settings saved!', theme: 'Theme', touchscreenMode: 'Touchscreen mode', touchscreenModeHint: 'Larger scrollbar and tap targets for use on touchscreens (e.g. Raspberry Pi kiosk).', venueOrder: 'Venue order', venueOrderHint: 'Drag venues to change the order. Click the eye to hide a venue in the venue dropdown.', resetVenueOrder: 'Reset to default', techOptions: 'Technical options per venue', techOptionsHint: 'Choose per venue which options (dance floor, grand piano, orchestra pit, seating plan) are shown.', yesplan: 'Yesplan', activeOrg: 'Active organisation', activeOrgHint: 'Determine which Yesplan organisation the dashboard uses', org1: 'Organisation 1', org2: 'Organisation 2', orgN: 'Organisation {n}', bothOrgs: 'Both organisations', name: 'Name', baseURL: 'Base URL', apiKey: 'API Key', loadVenues: 'Load Venues', loadVenuesHint: 'Fetches venues for order and header', loadVenuesFullHint: 'Enter Base URL and API Key per organisation, click "Load Venues"', testConnection: 'Test Connection', about: 'About this app', showVenue: 'Show venue', hideVenue: 'Hide venue', balletvloer: 'Dance floor', vleugel: 'Grand piano', orkestbak: 'Orchestra pit' },
+        settings: { colorMode: 'Color mode', language: 'Language', title: 'Settings', save: 'Save', saved: 'Settings saved!', theme: 'Theme', touchscreenMode: 'Touchscreen mode', touchscreenModeHint: 'Larger scrollbar and tap targets for use on touchscreens (e.g. Raspberry Pi kiosk).', venueOrder: 'Venue order', venueOrderHint: 'Drag venues to change the order. Click the eye to hide a venue in the venue dropdown.', resetVenueOrder: 'Reset to default', techOptions: 'Technical options per venue', techOptionsHint: 'Choose per venue which options (dance floor, grand piano, orchestra pit, seating plan) are shown.', yesplan: 'Yesplan', activeOrg: 'Active organisation', activeOrgHint: 'Determine which Yesplan organisation the dashboard uses', org1: 'Organisation 1', org2: 'Organisation 2', orgN: 'Organisation {n}', bothOrgs: 'Both organisations', name: 'Name', baseURL: 'Base URL', apiKey: 'API Key', loadVenues: 'Load Venues', loadVenuesHint: 'Fetches venues for order and header', loadVenuesFullHint: 'Enter Base URL and API Key per organisation, click "Load Venues"', testConnection: 'Test Connection', about: 'About this app', showVenue: 'Show venue', hideVenue: 'Hide venue', balletvloer: 'Dance floor', vleugel: 'Grand piano', orkestbak: 'Orchestra pit', itix: 'Itix', itixBaseURL: 'Seating plan base URL', itixBaseURLHint: 'Enter the admin URL prefix for the seating plan, ending before the performance id (Yesplan event id). Example: https://tickets.example.com/beheer/zaalplattegrond/uitvoeringinfo' },
         status: { online: 'Online', offline: 'Offline', deels: 'Partially available', warning: 'Warning', systemStatus: 'System status', clickForStatus: 'Click for system status' },
         nav: { back: 'Back', backTitle: 'Back to previous screen', home: 'Home', weekView: 'Week overview', techOverview: 'Technical overview', techOverviewTitle: 'Print technical overview for this day (all venues)', prevDay: 'Previous day', nextDay: 'Next day', refresh: 'Refresh', searchEvent: 'Search event', searchEventTitle: 'Search by event name (* and ? as wildcards)' },
         search: { placeholder: 'Event name… (* = any, ? = one character)', wildcardHint: 'Use * for any characters and ? for one character.' },
@@ -39,16 +58,35 @@ const TRANSLATIONS = {
         venue: { allVenues: 'All venues', venue: 'Venue', unknownVenue: 'Unknown venue', venueCount: '{n} venues', venueId: 'Venue {id}' },
         filters: { title: 'Filters', hideCancelled: 'Hide cancelled performances', technischPersoneel: 'Only events with technical staff', technischeResources: 'Only events with technical resources' },
         weekView: { title: 'Week overview', sortByVenue: 'By venue', sortByVenueTitle: 'Sort by venue (settings order)', sortByTime: 'By time', sortByTimeTitle: 'Sort by time', eventsSingle: '{n} event', eventsPlural: '{n} events', filtersPrefix: 'Filters', filterNone: 'none active', filterHideCancelled: 'cancelled hidden', filterTechnischPersoneel: 'technical staff', filterTechnischeResources: 'technical resources' },
-        cards: { yesplan: 'Yesplan', personnel: 'Personnel', itix: 'Sales', priva: 'Priva - Climate', tijdschema: 'Schedule' },
+        cards: { yesplan: 'Yesplan', personnel: 'Personnel', itix: 'Sales', priva: 'Priva - Climate', tijdschema: 'Schedule', seatingPlan: 'Seating plan', openSeatingPlan: 'Open seating plan' },
         personnel: { techniek: 'Technical', horeca: 'Catering', frontOffice: 'Front Office' },
         dataStats: { capaciteit: 'Capacity', verkocht: 'Sold', gereserveerd: 'Reserved', beschikbaar: 'Available', omzet: 'Revenue', gasten: 'Guests', totaal: 'Total', transacties: 'Transactions', omzetEur: 'Revenue (€)', temp: 'Temperature', luchtvochtigheid: 'Humidity', luchtkwaliteit: 'Air quality', co2: 'CO₂' },
         tech: { materiaal: 'Technical equipment:', lijst: 'Technical list:', lijstBijlage: 'Technical list attachment:' },
         resources: { ja: 'yes', nee: 'no', nietBekend: 'not filled in' },
         loading: 'Loading...',
-        messages: { noEvents: 'No events found for {venue} on {date}', noEventsDate: 'No events found on {date}', noEventsWeek: 'No events this week for {venue}.', selectDayVenueTijdschema: 'Select 1 day and 1 venue to see the schedule.', noTijdschema: 'No schedule available for these events.', noPlanning: 'No schedule available for this day', noVerkoop: 'No sales data available for this day', noKlimaat: 'No climate data available', venueOrderReset: 'Venue order reset to default', loadVenuesFirst: 'Load venues first in Yesplan settings.', venuesLoaded: '{n} venues loaded', configureBothOrgs: 'Configure both organisations first for "Both"', fillBaseUrlApiKey: 'Enter Base URL and API Key first for organisation {n}', secureStorageUnavailable: 'Secure API-key storage is unavailable on this system. Configure a keychain/secret service first.' },
+        messages: { noEvents: 'No events found for {venue} on {date}', noEventsDate: 'No events found on {date}', noEventsWeek: 'No events this week for {venue}.', selectDayVenueTijdschema: 'Select 1 day and 1 venue to see the schedule.', noTijdschema: 'No schedule available for these events.', noPlanning: 'No schedule available for this day', noVerkoop: 'No sales data available for this day', noKlimaat: 'No climate data available', venueOrderReset: 'Venue order reset to default', loadVenuesFirst: 'Load venues first in Yesplan settings.', venuesLoaded: '{n} venues loaded', configureBothOrgs: 'Configure both organisations first for "Both"', fillBaseUrlApiKey: 'Enter Base URL and API Key first for organisation {n}', secureStorageUnavailable: 'Secure API-key storage is unavailable on this system. Configure a keychain/secret service first.', seatingPlanUnavailable: 'No seating plan available', seatingPlanNoBase: 'Set the seating plan base URL under Settings → Itix.' },
         techPrint: { title: 'Technical overview', subtitle: 'All venues – {date}', noEvents: 'No events on this day.', venue: 'Venue', time: 'Time', remarks: 'Technical remarks', documents: 'Technical list documents', filterTitle: 'Events for print', filterHint: 'Select which events to include in the overview.', selectAll: 'Select all', deselectAll: 'Deselect all' },
-        errors: { yesplanLoad: 'Could not load Yesplan data', eventsLoad: 'Could not load events', weekLoad: 'Could not load week overview', uurwerkLoad: 'Could not load personnel planning', itixLoad: 'Could not load Itix data', privaLoad: 'Could not load Priva data', settingsSave: 'Could not save settings' },
-        test: { testing: 'Testing...', success: 'Success', failed: 'Failed' }
+        errors: { yesplanLoad: 'Could not load Yesplan data', eventsLoad: 'Could not load events', weekLoad: 'Could not load week overview', uurwerkLoad: 'Could not load personnel planning', itixLoad: 'Could not load Itix data', privaLoad: 'Could not load Priva data', settingsSave: 'Could not save settings', apiServerInvalid: 'Invalid API server URL. Example: http://192.168.1.10:3847', apiServerWrongKind: 'This field is for the Shift Happens API server (port 3847), not Yesplan or the Itix seating URL. Use Yesplan/Itix sections below.' },
+        test: { testing: 'Testing...', success: 'Success', failed: 'Failed' },
+        updates: {
+            sectionTitle: 'Updates (desktop)',
+            hint: 'Only active in the installed app. There is no auto-update when using npm start (development).',
+            checkNow: 'Check for updates now',
+            devNoop: 'Development mode: no update check (use the installed app to test updates).',
+            disabled: 'Updates disabled (SKIP_AUTO_UPDATE).',
+            okAvailable: 'Update available: {v}',
+            okUptodate: 'You are on the latest version.',
+            checkFailed: 'Check failed: {msg}',
+            checking: 'Checking…'
+        },
+        updatesBanner: {
+            checking: 'Checking for updates…',
+            available: 'Update {v} — downloading…',
+            downloading: 'Downloading {n}%',
+            restart: 'Ready — click to restart and install',
+            uptodate: 'You are on the latest version.',
+            privateRepo: 'Updates unavailable (private repo? Token or UPDATE_BASE_URL needed — see docs/UPDATES.md).'
+        }
     }
 };
 
@@ -86,6 +124,7 @@ class TheaterDashboard {
         this.searchKeyboardShift = false;
         this.weekEventCount = 0;
         this.locale = 'nl';  // 'nl' of 'en'
+        this._updateBannerHideTimer = null; // electron-updater banner auto-hide
         this._lastDayString = null;  // Voor middernacht-check: ga automatisch naar home van nieuwe dag
         this.detailContext = null;   // { productionId, productionName, eventName } wanneer je via een event naar detail gaat: alleen die productie tonen
         
@@ -108,6 +147,7 @@ class TheaterDashboard {
         this.setupStatusPopover();
         this.setupSearchEventListeners();
         this.setupAutoRefresh();
+        this.setupDesktopUpdates();
     }
     
     setupDateTimeDisplay() {
@@ -406,10 +446,11 @@ class TheaterDashboard {
         if (!window.electronAPI) return;
 
         try {
-            const [yesplan, yesplan2, priva, app] = await Promise.all([
+            const [yesplan, yesplan2, priva, itix, app] = await Promise.all([
                 window.electronAPI.getConfig('yesplan'),
                 window.electronAPI.getConfig('yesplan2'),
                 window.electronAPI.getConfig('priva'),
+                window.electronAPI.getConfig('itix'),
                 window.electronAPI.getConfig('app')
             ]);
             
@@ -417,6 +458,7 @@ class TheaterDashboard {
                 yesplan: yesplan || {},
                 yesplan2: yesplan2 || {},
                 priva: priva || {},
+                itix: itix || {},
                 app: app || {}
             };
             
@@ -458,6 +500,7 @@ class TheaterDashboard {
                 yesplan: {},
                 yesplan2: {},
                 priva: {},
+                itix: {},
                 app: {}
             };
         }
@@ -3195,6 +3238,27 @@ class TheaterDashboard {
         container.innerHTML = `<div class="tijdschema-list">${html}</div>`;
     }
 
+    /**
+     * Koppelt .rider-link (zaalplattegrond, bijlagen) aan openExternal na dynamische HTML.
+     */
+    setupRiderLinkHandlers(container) {
+        if (!container) return;
+        container.querySelectorAll('.rider-link').forEach((a) => {
+            a.addEventListener('click', async (ev) => {
+                ev.preventDefault();
+                ev.stopPropagation();
+                const url = a.getAttribute('data-rider-url');
+                if (url && window.electronAPI?.openExternal) {
+                    try {
+                        await window.electronAPI.openExternal(url);
+                    } catch (err) {
+                        console.error('Externe link openen:', err);
+                    }
+                }
+            });
+        });
+    }
+
     setupDragAndDrop(container) {
         const eventsList = container.querySelector('.events-list');
         if (!eventsList) return;
@@ -3973,6 +4037,19 @@ class TheaterDashboard {
         `;
     }
 
+    /**
+     * Itix / tickets: basis-URL uit instellingen + Yesplan-event-id voor zaalplattegrond-link.
+     * baseURL zonder slash aan het einde; er wordt /{eventId} toegevoegd.
+     */
+    getItixSeatingPlanUrl(eventId) {
+        if (typeof window !== 'undefined' && typeof window.buildItixSeatingPlanUrl === 'function') {
+            return window.buildItixSeatingPlanUrl(this.config?.itix?.baseURL, eventId);
+        }
+        const base = String(this.config?.itix?.baseURL || '').trim().replace(/\/+$/, '');
+        if (!base || eventId == null || eventId === '') return '';
+        return `${base}/${encodeURIComponent(String(eventId))}`;
+    }
+
     async updateItixDisplay(data, reservationsData = null) {
         const container = document.getElementById('itixContent');
         
@@ -4058,8 +4135,14 @@ class TheaterDashboard {
                         const gasten = event.aantalGasten || 0;
                         const totaal = sold + reservedCount + gasten;
                         
-                        // Zaaloverzicht-snelkoppeling op basis van event-id.
-                        const eventId = event.id || event.eventId || null;
+                        // Itix-zaalplattegrond: uitvoeringsnummer uit ticketing-koppeling, niet Yesplan event.id (te lang).
+                        let seatingPlanId = '';
+                        if (typeof window !== 'undefined' && typeof window.pickItixSeatingPlanEventId === 'function') {
+                            seatingPlanId = window.pickItixSeatingPlanEventId(event);
+                        } else {
+                            const t = (v) => (v != null && String(v).trim() !== '' ? String(v).trim() : '');
+                            seatingPlanId = t(event.ticketingId) || t(event.rawEvent?.ticketing?.id) || t(event.eventId) || t(event.id);
+                        }
                         
                         const primaryVenueId = Array.isArray(event.venueIds) && event.venueIds.length > 0 ? event.venueIds[0] : null;
                         const displayOptions = this.getBalletvloerVleugelDisplay(event.venue, primaryVenueId);
@@ -4067,24 +4150,28 @@ class TheaterDashboard {
                         let seatingPlanBlock = '';
                         if (showSeatingPlan) {
                             let seatingPlanHtml;
-                            if (eventId) {
-                                const seatingPlanUrl = `https://tickets.wilminktheater.nl/beheer/zaalplattegrond/uitvoeringinfo/${encodeURIComponent(String(eventId))}`;
-                                const escapedPlanUrl = escapeInline(seatingPlanUrl);
-                                seatingPlanHtml = `
+                            if (seatingPlanId) {
+                                const seatingPlanUrl = this.getItixSeatingPlanUrl(seatingPlanId);
+                                if (seatingPlanUrl) {
+                                    const escapedPlanUrl = escapeInline(seatingPlanUrl);
+                                    seatingPlanHtml = `
                                     <a href="#" class="rider-link"
                                        data-rider-url="${escapedPlanUrl}"
                                        style="color: #818cf8; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(129, 140, 248, 0.1); border-radius: 4px; transition: all 0.2s; cursor: pointer;">
                                         <i class="fas fa-external-link-alt"></i>
-                                        <span>Open zaalplattegrond</span>
+                                        <span>${this.escapeHtml(this.t('cards.openSeatingPlan'))}</span>
                                     </a>
                                 `;
+                                } else {
+                                    seatingPlanHtml = `<p style="color: #718096; font-size: 0.9rem; margin: 0;">${this.escapeHtml(this.t('messages.seatingPlanNoBase'))}</p>`;
+                                }
                             } else {
-                                seatingPlanHtml = `<p style="color: #718096; font-size: 0.9rem; margin: 0;">Geen zaalplattegrond beschikbaar</p>`;
+                                seatingPlanHtml = `<p style="color: #718096; font-size: 0.9rem; margin: 0;">${this.escapeHtml(this.t('messages.seatingPlanUnavailable'))}</p>`;
                             }
                             seatingPlanBlock = `
                                 <div>
                                     <h4 style="margin-bottom: 0.5rem; margin-top: 0; color: #e2e8f0; font-size: 1rem; font-weight: 600;">
-                                        Zaalplattegrond
+                                        ${this.escapeHtml(this.t('cards.seatingPlan'))}
                                     </h4>
                                     ${seatingPlanHtml}
                                 </div>
@@ -4174,6 +4261,7 @@ class TheaterDashboard {
                 </div>
                 ` : ''}
             `;
+            this.setupRiderLinkHandlers(container);
             return;
         }
 
@@ -4426,6 +4514,9 @@ class TheaterDashboard {
         document.getElementById('privaApiKey').value = this.config.priva?.apiKey || '';
         document.getElementById('privaSystemId').value = this.config.priva?.systemId || '';
 
+        const itixBaseEl = document.getElementById('itixBaseURL');
+        if (itixBaseEl) itixBaseEl.value = this.config.itix?.baseURL || '';
+
         // Thema
         const themeSelect = document.getElementById('themeSelect');
         if (themeSelect) {
@@ -4449,6 +4540,14 @@ class TheaterDashboard {
             apiServerSection.style.display = 'block';
             apiServerURLInput.value = localStorage.getItem('SHIFT_HAPPENS_API_BASE') || window.SHIFT_HAPPENS_API_BASE || '';
         }
+
+        const desktopUpdateSection = document.getElementById('desktopUpdateSection');
+        const updateCheckResult = document.getElementById('updateCheckResult');
+        if (desktopUpdateSection) {
+            const showDesktopUpdates = !!(window.__IS_ELECTRON__ && typeof window.electronAPI?.checkForUpdates === 'function');
+            desktopUpdateSection.style.display = showDesktopUpdates ? 'block' : 'none';
+        }
+        if (updateCheckResult) updateCheckResult.textContent = '';
 
         // Zaalvolgorde
         this.populateVenueOrderSettings();
@@ -4737,6 +4836,9 @@ class TheaterDashboard {
                     baseURL: document.getElementById('privaBaseURL').value,
                     apiKey: document.getElementById('privaApiKey').value,
                     systemId: document.getElementById('privaSystemId').value
+                },
+                itix: {
+                    baseURL: (document.getElementById('itixBaseURL')?.value || '').trim()
                 }
             };
 
@@ -4756,15 +4858,36 @@ class TheaterDashboard {
                 throw new Error(this.t('errors.settingsSave'));
             }
 
-            // API-server URL opslaan (iPhone/web)
+            // API-server URL opslaan (iPhone/web): alleen overschrijven als er iets is ingevuld.
+            // Leeg laten wist de opgeslagen URL niet — anders raak je bij "alleen thema opslaan" per ongeluk de werkende server kwijt (regressie na base-URL-instelling).
             if (window.__SHIFT_HAPPENS_MOBILE__) {
-                const apiUrl = (document.getElementById('apiServerURL')?.value || '').trim();
-                if (apiUrl) {
-                    localStorage.setItem('SHIFT_HAPPENS_API_BASE', apiUrl);
-                    window.SHIFT_HAPPENS_API_BASE = apiUrl;
-                } else {
-                    localStorage.removeItem('SHIFT_HAPPENS_API_BASE');
-                    window.SHIFT_HAPPENS_API_BASE = '';
+                const apiUrlRaw = (document.getElementById('apiServerURL')?.value || '').trim();
+                if (apiUrlRaw) {
+                    let s = apiUrlRaw;
+                    if (!/^https?:\/\//i.test(s)) s = 'http://' + s;
+                    let u;
+                    try {
+                        u = new URL(s);
+                    } catch {
+                        throw new Error(this.t('errors.apiServerInvalid'));
+                    }
+                    const host = u.hostname.toLowerCase();
+                    if (host.includes('yesplan')) {
+                        throw new Error(this.t('errors.apiServerWrongKind'));
+                    }
+                    const p = (u.pathname || '').toLowerCase();
+                    if (p.includes('zaalplattegrond') || p.includes('uitvoeringinfo')) {
+                        throw new Error(this.t('errors.apiServerWrongKind'));
+                    }
+                    const pathPart = u.pathname === '/' ? '' : u.pathname.replace(/\/$/, '');
+                    const normalized = u.origin + pathPart;
+                    localStorage.setItem('SHIFT_HAPPENS_API_BASE', normalized);
+                    window.SHIFT_HAPPENS_API_BASE = normalized;
+                }
+                // Formulierveld weer gelijk trekken met opgeslagen waarde (bij leeg laten = behouden)
+                const apiIn = document.getElementById('apiServerURL');
+                if (apiIn) {
+                    apiIn.value = localStorage.getItem('SHIFT_HAPPENS_API_BASE') || window.SHIFT_HAPPENS_API_BASE || '';
                 }
             }
 
@@ -5018,6 +5141,125 @@ class TheaterDashboard {
     setupAutoRefresh() {
         // Auto refresh wordt afgehandeld via IPC event van main.js (cron job)
         // Geen extra setInterval nodig om dubbele refreshes te voorkomen
+    }
+
+    /**
+     * Electron: update-banner + handmatige check (Instellingen). Geen-op op web/Capacitor.
+     */
+    setupDesktopUpdates() {
+        if (typeof window.electronAPI?.onUpdateStatus !== 'function') return;
+
+        const banner = document.getElementById('updateBanner');
+        if (banner) {
+            banner.addEventListener('click', () => {
+                if (banner.dataset.phase === 'downloaded' && window.electronAPI.quitAndInstallUpdate) {
+                    window.electronAPI.quitAndInstallUpdate();
+                }
+            });
+        }
+
+        window.electronAPI.onUpdateStatus((payload) => this._handleUpdateStatus(payload));
+
+        const btn = document.getElementById('checkUpdatesBtn');
+        if (btn) {
+            btn.addEventListener('click', () => this.manualCheckForUpdates());
+        }
+    }
+
+    _handleUpdateStatus(p) {
+        const banner = document.getElementById('updateBanner');
+        if (!banner || !p) return;
+
+        if (this._updateBannerHideTimer) {
+            clearTimeout(this._updateBannerHideTimer);
+            this._updateBannerHideTimer = null;
+        }
+
+        banner.className = 'update-banner';
+        banner.dataset.phase = p.phase || '';
+        banner.disabled = false;
+        banner.removeAttribute('title');
+
+        const show = () => { banner.style.display = 'flex'; };
+
+        if (p.phase === 'checking') {
+            show();
+            banner.classList.add('update-banner--disabled');
+            banner.textContent = this.t('updatesBanner.checking');
+            return;
+        }
+        if (p.phase === 'downloading') {
+            show();
+            const pct = p.percent != null ? Math.round(p.percent) : null;
+            banner.classList.add('update-banner--disabled');
+            banner.textContent = pct != null
+                ? this.t('updatesBanner.downloading', { n: String(pct) })
+                : this.t('updatesBanner.checking');
+            return;
+        }
+        if (p.phase === 'available') {
+            show();
+            banner.textContent = this.t('updatesBanner.available', { v: p.version || '?' });
+            return;
+        }
+        if (p.phase === 'downloaded') {
+            show();
+            banner.classList.add('update-banner--ready');
+            banner.textContent = this.t('updatesBanner.restart');
+            banner.title = this.t('updatesBanner.restart');
+            return;
+        }
+        if (p.phase === 'not-available') {
+            show();
+            banner.textContent = this.t('updatesBanner.uptodate');
+            this._updateBannerHideTimer = setTimeout(() => {
+                banner.style.display = 'none';
+            }, 4000);
+            return;
+        }
+        if (p.phase === 'error') {
+            show();
+            banner.classList.add('update-banner--error');
+            const msg = String(p.error || 'Error').slice(0, 160);
+            banner.textContent = msg;
+            this._updateBannerHideTimer = setTimeout(() => {
+                banner.style.display = 'none';
+            }, 10000);
+            return;
+        }
+        if (p.phase === 'info' && p.info === 'private_repo') {
+            show();
+            banner.classList.add('update-banner--info');
+            banner.textContent = this.t('updatesBanner.privateRepo');
+            return;
+        }
+    }
+
+    async manualCheckForUpdates() {
+        const out = document.getElementById('updateCheckResult');
+        if (!window.electronAPI?.checkForUpdates) {
+            if (out) out.textContent = '';
+            return;
+        }
+        if (out) out.textContent = this.t('updates.checking');
+        try {
+            const r = await window.electronAPI.checkForUpdates();
+            if (r.reason === 'development') {
+                if (out) out.textContent = this.t('updates.devNoop');
+            } else if (r.reason === 'disabled') {
+                if (out) out.textContent = this.t('updates.disabled');
+            } else if (r.ok) {
+                if (out) {
+                    out.textContent = r.updateAvailable
+                        ? this.t('updates.okAvailable', { v: r.version || '?' })
+                        : this.t('updates.okUptodate');
+                }
+            } else if (out) {
+                out.textContent = this.t('updates.checkFailed', { msg: r.error || '?' });
+            }
+        } catch (e) {
+            if (out) out.textContent = this.t('updates.checkFailed', { msg: e?.message || String(e) });
+        }
     }
 
     /** Bepaal of balletvloer/vleugel/orkestbak/zaalplattegrond getoond moeten worden.

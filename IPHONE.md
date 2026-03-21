@@ -40,6 +40,10 @@ In de app: **Instellingen (tandwiel)** → sectie **"API-server (iPhone)"** → 
 
 Daarna haalt de app alle data via deze server op.
 
+**Let op:** dit veld is alleen voor het adres van **jouw Shift Happens-server** (poort 3847). Gebruik hier **niet** de Yesplan Base URL of de Itix/ticket-URL voor de zaalplattegrond — die vul je onder Yesplan en Itix in. Verkeerde URL hier geeft geen data meer.
+
+**Leeg laten** bij Opslaan wist de opgeslagen server-URL niet meer; zo raak je die niet kwijt als je alleen andere instellingen aanpast.
+
 ## 3. iOS-project bouwen (Xcode)
 
 Vereisten:
