@@ -1,5 +1,7 @@
 # Theater Dashboard - Huistechneut
 
+> **Ontwikkelaars:** gebruik één clone: `~/theater-dashboard`, branch `main`. Details: [WORKFLOW.md](WORKFLOW.md).
+
 Een cross-platform desktop applicatie voor het monitoren van theater systemen, gebouwd met Electron.
 
 ## Overzicht
