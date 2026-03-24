@@ -2194,9 +2194,9 @@ class TheaterDashboard {
         return { today, minDate, maxDate };
     }
 
-    // Week = vandaag t/m vandaag + 6 dagen (7 dagen vanaf vandaag).
+    // Week = geselecteerde dag t/m +6 dagen (7 dagen vanaf selectedDate; volgt agenda / "kies eigen datum").
     getWeekDateRange() {
-        const start = new Date();
+        const start = new Date(this.selectedDate);
         start.setHours(0, 0, 0, 0);
         const end = new Date(start);
         end.setDate(start.getDate() + 6);
@@ -2428,21 +2428,30 @@ class TheaterDashboard {
                 if (day >= 1 && day <= 31 && month >= 1 && month <= 12 && year >= 1900) {
                     const date = new Date(year, month - 1, day);
                     if (date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day) {
-                        return date.toISOString().split('T')[0];
+                        const y = date.getFullYear();
+                        const m = String(date.getMonth() + 1).padStart(2, '0');
+                        const d = String(date.getDate()).padStart(2, '0');
+                        return `${y}-${m}-${d}`;
                     }
                 }
             }
             return null;
         };
         
-        // Update tekstveld als date input verandert
+        // Update tekstveld als date input verandert (YYYY-MM-DD lokaal, geen UTC-shift)
         dateInput.addEventListener('change', () => {
             if (dateInput.value) {
-                const date = new Date(dateInput.value);
-                const day = String(date.getDate()).padStart(2, '0');
-                const month = String(date.getMonth() + 1).padStart(2, '0');
-                const year = date.getFullYear();
-                dateTextInput.value = `${day}-${month}-${year}`;
+                const p = dateInput.value.split('-');
+                if (p.length === 3) {
+                    const y = parseInt(p[0], 10);
+                    const mo = parseInt(p[1], 10) - 1;
+                    const da = parseInt(p[2], 10);
+                    const date = new Date(y, mo, da);
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const year = date.getFullYear();
+                    dateTextInput.value = `${day}-${month}-${year}`;
+                }
             }
         });
         
@@ -2474,20 +2483,33 @@ class TheaterDashboard {
         
         const handleConfirm = async () => {
             let selectedDateStr = dateInput.value;
-            
-            // Als date input leeg is, probeer tekstveld
-            if (!selectedDateStr && dateTextInput.value) {
+            const parsedManual = dateTextInput.value ? parseDateString(dateTextInput.value.trim()) : null;
+            if (parsedManual) {
+                selectedDateStr = parsedManual;
+                dateInput.value = parsedManual;
+            } else if (!selectedDateStr && dateTextInput.value) {
                 selectedDateStr = parseDateString(dateTextInput.value);
                 if (selectedDateStr) {
                     dateInput.value = selectedDateStr;
                 }
             }
-            
+
             if (selectedDateStr) {
-                const selectedDate = new Date(selectedDateStr);
-                selectedDate.setHours(0, 0, 0, 0);
+                const p = String(selectedDateStr).trim().split('-');
+                let selectedDate = null;
+                if (p.length === 3) {
+                    const y = parseInt(p[0], 10);
+                    const mo = parseInt(p[1], 10) - 1;
+                    const da = parseInt(p[2], 10);
+                    if (!Number.isNaN(y) && !Number.isNaN(mo) && !Number.isNaN(da)) {
+                        selectedDate = new Date(y, mo, da);
+                        selectedDate.setHours(0, 0, 0, 0);
+                    }
+                }
+                if (!selectedDate || Number.isNaN(selectedDate.getTime())) return;
+
                 const { minDate, maxDate } = this.getDateBounds();
-                
+
                 if (selectedDate >= minDate && selectedDate <= maxDate) {
                     await this.selectDate(selectedDate);
                     closeModal();
@@ -2786,6 +2808,7 @@ class TheaterDashboard {
 
         // Update mastertitel in detail view: zaal + evenementnaam (1x), anders alleen zaal
         const isDetailSingleEvent = this.currentView === 'detail' && events.length === 1;
+        const hideVenueInCardFooter = selectedVenueIds.length === 1 || this.currentView === 'detail';
         if (this.currentView === 'detail') {
             if (isDetailSingleEvent) {
                 const ev = events[0];
@@ -2982,7 +3005,7 @@ class TheaterDashboard {
                     }
                     
                     
-                    // Zaal en status – in detail view met 1 event tonen we alleen status (zaal staat in mastertitel)
+                    // Zaal en status: bij één zaal of detailweergave geen dubbele zaal onderaan; status blijft
                     let venueStatusInfo = '';
                     if (!isDetailSingleEvent) {
                         const statusPart = (event.status && event.status !== 'unknown') 
@@ -2990,16 +3013,22 @@ class TheaterDashboard {
                                 ? `${event.status} – ${escapeText(event.bookingManager)}` 
                                 : event.status)
                             : null;
-                        venueStatusInfo = (event.venue && event.venue !== 'Onbekend' && statusPart) 
-                            ? `<p style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
-                                <span><i class="fas fa-map-marker-alt"></i> ${event.venue}</span>
-                                <span><i class="fas fa-info-circle"></i> ${statusPart}</span>
-                            </p>`
-                            : (event.venue && event.venue !== 'Onbekend' 
-                                ? `<p><i class="fas fa-map-marker-alt"></i> ${event.venue}</p>`
-                                : '') + (statusPart 
-                                    ? `<p><i class="fas fa-info-circle"></i> ${statusPart}</p>`
-                                    : '');
+                        if (hideVenueInCardFooter) {
+                            venueStatusInfo = statusPart
+                                ? `<p style="margin-top: 0.5rem; text-align: right;"><i class="fas fa-info-circle"></i> ${statusPart}</p>`
+                                : '';
+                        } else {
+                            venueStatusInfo = (event.venue && event.venue !== 'Onbekend' && statusPart) 
+                                ? `<p style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
+                                    <span><i class="fas fa-map-marker-alt"></i> ${event.venue}</span>
+                                    <span><i class="fas fa-info-circle"></i> ${statusPart}</span>
+                                </p>`
+                                : (event.venue && event.venue !== 'Onbekend' 
+                                    ? `<p><i class="fas fa-map-marker-alt"></i> ${event.venue}</p>`
+                                    : '') + (statusPart 
+                                        ? `<p><i class="fas fa-info-circle"></i> ${statusPart}</p>`
+                                        : '');
+                        }
                     } else if (event.status && event.status !== 'unknown') {
                         const statusPart = event.bookingManager 
                             ? `${event.status} – ${escapeText(event.bookingManager)}` 
