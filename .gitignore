@@ -43,3 +43,6 @@ data/
 
 # Claude / tooling worktrees (voorkomt Jest "Haste module naming collision")
 .claude/
+
+# Lokaal agent/build log
+.agent_report.txt
