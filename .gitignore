@@ -46,3 +46,4 @@ data/
 
 # Lokaal agent/build log
 .agent_report.txt
+.git-commit-push-log.txt
