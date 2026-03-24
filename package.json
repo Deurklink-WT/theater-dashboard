@@ -30,11 +30,8 @@
     "itix",
     "priva"
   ],
-  "author": {
-    "name": "PdV",
-    "email": "support@example.com"
-  },
-  "homepage": "https://example.com",
+  "author": "Huistechneut",
+  "homepage": "https://github.com/Deurklink-WT/theater-dashboard#readme",
   "license": "UNLICENSED",
   "devDependencies": {
     "@capacitor/cli": "^6.0.0",
@@ -138,7 +135,7 @@
       ],
       "category": "Utility",
       "icon": "build/icon.png",
-      "maintainer": "PdV <support@example.com>"
+      "maintainer": "Huistechneut"
     },
     "deb": {
       "depends": [
@@ -163,5 +160,12 @@
   "overrides": {
     "tar": "^7.5.12",
     "@tootallnate/once": "^3.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Deurklink-WT/theater-dashboard.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Deurklink-WT/theater-dashboard/issues"
   }
 }
