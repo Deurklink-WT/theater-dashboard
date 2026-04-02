@@ -316,15 +316,27 @@ class YesplanAPI {
           rawEvent: e.rawEvent || e,
           status: e.status?.name || e.status || 'unknown',
           urenInfo: null,
-          resources: [],
+          resources: this.extractResources(e, null, null, null),
           technicalMaterialResources: [],
-          balletvloerExplicit: false,
-          hasBalletvloer: false,
-          vleugelExplicit: false,
-          hasVleugel: false,
-          orkestbakExplicit: false,
-          hasOrkestbak: false,
-          orkestbakValue: null
+          balletvloerExplicit: this.extractResources(e, null, null, null).some((r) => {
+            const lower = String(r || '').toLowerCase();
+            return lower.includes('balletvloer') || lower.includes('ballet');
+          }),
+          hasBalletvloer: this.extractResources(e, null, null, null).some((r) => {
+            const lower = String(r || '').toLowerCase();
+            return lower.includes('balletvloer') || lower.includes('ballet');
+          }),
+          vleugelExplicit: this.extractResources(e, null, null, null).some((r) => {
+            const lower = String(r || '').toLowerCase();
+            return lower.includes('vleugel') || lower.includes('piano');
+          }),
+          hasVleugel: this.extractResources(e, null, null, null).some((r) => {
+            const lower = String(r || '').toLowerCase();
+            return lower.includes('vleugel') || lower.includes('piano');
+          }),
+          orkestbakExplicit: this.extractResources(e, null, null, null).some((r) => String(r || '').toLowerCase().includes('orkestbak')),
+          hasOrkestbak: this.extractResources(e, null, null, null).some((r) => String(r || '').toLowerCase().includes('orkestbak')),
+          orkestbakValue: this.extractResources(e, null, null, null).some((r) => String(r || '').toLowerCase().includes('orkestbak')) ? 'ja' : null
         };
       });
 
