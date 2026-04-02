@@ -4826,20 +4826,25 @@ class TheaterDashboard {
                 }
             };
 
-            // Opslaan van configuraties
-            for (const [system, config] of Object.entries(configs)) {
-                if (system === 'app') continue; // app apart behandeld
-                const result = await window.electronAPI.saveConfig(system, config);
-                if (!result?.success) {
-                    const msg = result?.error === 'SECURE_STORAGE_UNAVAILABLE'
-                        ? this.t('messages.secureStorageUnavailable')
-                        : this.t('errors.settingsSave');
-                    throw new Error(msg);
-                }
-            }
+            // Sla app-instellingen eerst op zodat UI-vinkjes/thema altijd persistenteren,
+            // ook als secure storage voor API keys op dit apparaat niet beschikbaar is.
             const appSaveResult = await window.electronAPI.saveConfig('app', configs.app);
             if (!appSaveResult?.success) {
                 throw new Error(this.t('errors.settingsSave'));
+            }
+
+            // Opslaan van overige configuraties (best effort per systeem)
+            const saveWarnings = [];
+            for (const [system, config] of Object.entries(configs)) {
+                if (system === 'app') continue;
+                const result = await window.electronAPI.saveConfig(system, config);
+                if (!result?.success) {
+                    if (result?.error === 'SECURE_STORAGE_UNAVAILABLE') {
+                        saveWarnings.push(this.t('messages.secureStorageUnavailable'));
+                        continue;
+                    }
+                    throw new Error(this.t('errors.settingsSave'));
+                }
             }
 
             // API-server URL opslaan (iPhone/web): alleen overschrijven als er iets is ingevuld.
@@ -4895,6 +4900,9 @@ class TheaterDashboard {
             // Data herladen met nieuwe configuratie
             await this.loadAllData();
 
+            if (saveWarnings.length > 0) {
+                this.showError('settings', Array.from(new Set(saveWarnings)).join(' '));
+            }
             this.showSuccess(this.t('settings.saved'));
         } catch (error) {
             console.error('Instellingen opslaan fout:', error);
