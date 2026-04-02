@@ -340,9 +340,10 @@ class YesplanAPI {
         };
       });
 
-      // Voor weekfilters hebben we per event event-customdata nodig
-      // (urenInfo.techniek en technische materialen), maar we willen géén volledige formatEvents doen.
-      if (includeEventDetailsForWeekFilters && minimal.length > 0) {
+      // Voor weekfilters en resource-correctheid in weekoverzicht halen we (gelimiteerd)
+      // event-customdata op. Zonder deze verrijking ontbreken balletvloer/vleugel/orkestbak
+      // soms in dag-events en lijkt de koppeling "weg".
+      if (minimal.length > 0) {
         const maxCustomDataCalls = Number(process.env.YESPLAN_WEEK_CUSTOMDATA_CALLS_MAX || 120);
         let calls = 0;
 
@@ -354,11 +355,36 @@ class YesplanAPI {
 
           // Let op: getEventCustomDataRaw doet caching + dedupe (in-flight).
           const eventCustomData = await this.getEventCustomDataRaw(raw.id);
-          const urenInfo = this.extractUrenInfo(eventCustomData);
-          const technicalMaterialResources = this.extractTechnicalMaterialResources(raw, eventCustomData);
 
-          minimalEvent.urenInfo = urenInfo;
-          minimalEvent.technicalMaterialResources = technicalMaterialResources;
+          // Verrijk resourcevelden voor weekkaart (ook als filters uit staan)
+          const enrichedResources = this.extractResources(raw, null, null, eventCustomData);
+          const hasBalletvloer = enrichedResources.some((r) => {
+            const lower = String(r || '').toLowerCase();
+            return lower.includes('balletvloer') || lower.includes('ballet');
+          });
+          const hasVleugel = enrichedResources.some((r) => {
+            const lower = String(r || '').toLowerCase();
+            return lower.includes('vleugel') || lower.includes('piano');
+          });
+          const hasOrkestbak = enrichedResources.some((r) =>
+            String(r || '').toLowerCase().includes('orkestbak')
+          );
+
+          minimalEvent.resources = enrichedResources;
+          minimalEvent.balletvloerExplicit = hasBalletvloer;
+          minimalEvent.hasBalletvloer = hasBalletvloer;
+          minimalEvent.vleugelExplicit = hasVleugel;
+          minimalEvent.hasVleugel = hasVleugel;
+          minimalEvent.orkestbakExplicit = hasOrkestbak;
+          minimalEvent.hasOrkestbak = hasOrkestbak;
+          minimalEvent.orkestbakValue = hasOrkestbak ? 'ja' : null;
+
+          if (includeEventDetailsForWeekFilters) {
+            const urenInfo = this.extractUrenInfo(eventCustomData);
+            const technicalMaterialResources = this.extractTechnicalMaterialResources(raw, eventCustomData);
+            minimalEvent.urenInfo = urenInfo;
+            minimalEvent.technicalMaterialResources = technicalMaterialResources;
+          }
 
           calls += 1;
           // Kleine spacing om bursts op 429 te beperken.
