@@ -24,23 +24,27 @@ need gh
 need cp
 need mktemp
 
-mac_src="$(/bin/ls -t "$DIST_DIR"/*arm64.dmg 2>/dev/null | sed -n '1p')"
+mac_dmg_src="$(/bin/ls -t "$DIST_DIR"/*arm64.dmg 2>/dev/null | sed -n '1p')"
+mac_zip_src="$(/bin/ls -t "$DIST_DIR"/*arm64-mac.zip 2>/dev/null | sed -n '1p')"
 win_src="$(/bin/ls -t "$DIST_DIR"/*Setup*1.5*.exe "$DIST_DIR"/*Setup*.exe 2>/dev/null | sed -n '1p')"
 pi_src="$(/bin/ls -t "$DIST_DIR"/*arm64.AppImage 2>/dev/null | sed -n '1p')"
 
-[[ -n "$mac_src" ]] || { echo "Geen mac DMG gevonden in $DIST_DIR" >&2; exit 1; }
+[[ -n "$mac_dmg_src" ]] || { echo "Geen mac DMG gevonden in $DIST_DIR" >&2; exit 1; }
+[[ -n "$mac_zip_src" ]] || { echo "Geen mac ZIP gevonden in $DIST_DIR" >&2; exit 1; }
 [[ -n "$win_src" ]] || { echo "Geen Windows EXE gevonden in $DIST_DIR" >&2; exit 1; }
 [[ -n "$pi_src" ]] || { echo "Geen Pi AppImage gevonden in $DIST_DIR" >&2; exit 1; }
 
 tmp="$(mktemp -d)"
 trap 'rm -rf "$tmp"' EXIT
 
-cp "$mac_src" "$tmp/Shift-Happens-mac-arm64.dmg"
+cp "$mac_dmg_src" "$tmp/Shift-Happens-mac-arm64.dmg"
+cp "$mac_zip_src" "$tmp/Shift-Happens-mac-arm64.zip"
 cp "$win_src" "$tmp/Shift-Happens-win-x64.exe"
 cp "$pi_src" "$tmp/Shift-Happens-pi-arm64.AppImage"
 
 gh release upload "$TAG" \
   "$tmp/Shift-Happens-mac-arm64.dmg" \
+  "$tmp/Shift-Happens-mac-arm64.zip" \
   "$tmp/Shift-Happens-win-x64.exe" \
   "$tmp/Shift-Happens-pi-arm64.AppImage" \
   --repo "$REPO" --clobber

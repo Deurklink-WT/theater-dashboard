@@ -19,17 +19,18 @@ Specifieke release-tag:
 Voor niet-technische gebruikers kun je ook `scripts/install-mac.command` gebruiken.
 Deze haalt automatisch de actuele `install-mac-from-github.sh` op van GitHub en voert die uit.
 
-## Stabiele assetnaam
+## Stabiele assetnamen
 
-Voor macOS verwacht de installer bij voorkeur deze asset op de release:
+Voor macOS publiceer je bij voorkeur beide assets:
 
-- `Shift-Happens-mac-arm64.dmg`
+- `Shift-Happens-mac-arm64.zip` (voorkeur voor installer)
+- `Shift-Happens-mac-arm64.dmg` (fallback)
 
 Daarnaast blijft `latest-mac.yml` nodig voor updater metadata.
 
 ## Waarom dit betrouwbaarder is
 
 - kiest automatisch juiste architectuur (`arm64`/`x64`)
-- fallback op meerdere DMG-naamvarianten
+- probeert eerst ZIP en valt daarna terug op DMG
 - duidelijke foutmeldingen per stap
 - geen risicovolle brede delete van `/Applications`
