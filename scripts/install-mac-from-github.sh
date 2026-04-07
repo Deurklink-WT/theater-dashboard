@@ -1,84 +1,162 @@
 #!/usr/bin/env bash
-# Download Shift Happens (macOS arm64) van GitHub Releases en installeer naar /Applications.
+# Download Shift Happens van GitHub Releases en installeer naar /Applications.
 #
-# Vereist: GitHub CLI (gh) en ingelogd met toegang tot de repo (private repo).
-#
-# "Latest" (zoals Docker :latest):
-#   Zonder tag download je altijd de nieuwste GitHub-release — vergelijkbaar met een latest-tag.
-#   Optioneel: upload bij elke release een asset met een VASTE naam (zie docs/UPDATES.md), dan
-#   blijft ook de download-URL stabiel: .../releases/latest/download/<vaste-naam>.dmg
+# Eigenschappen:
+# - Auto detectie van arch (arm64/x64)
+# - Werkt met publieke repo (geen gh nodig)
+# - Fallback op meerdere assetnaam-varianten
+# - Duidelijke foutmelding per stap
 #
 # Gebruik:
-#   ./scripts/install-mac-from-github.sh                    # nieuwste release (= latest)
-#   ./scripts/install-mac-from-github.sh v1.5.6             # vaste tag
-#   STABLE_DMG_NAME="Shift-Happens-mac-arm64.dmg" \
-#     ./scripts/install-mac-from-github.sh                  # alleen dit bestand (aanbevolen na upload)
+#   ./scripts/install-mac-from-github.sh            # latest
+#   ./scripts/install-mac-from-github.sh v1.5.9     # specifieke tag
 #
 # Optioneel:
-#   REPO=owner/repo ./scripts/install-mac-from-github.sh
+#   REPO=owner/repo APP_NAME="Shift Happens" ./scripts/install-mac-from-github.sh
 
 set -euo pipefail
 
 REPO="${REPO:-Deurklink-WT/theater-dashboard}"
-TAG="${1:-}"
-# Vaste assetnaam op elke release (optioneel; anders pattern *arm64.dmg)
-STABLE_DMG_NAME="${STABLE_DMG_NAME:-}"
+APP_NAME="${APP_NAME:-Shift Happens}"
+TAG="${1:-latest}"
 
-if ! command -v gh >/dev/null 2>&1; then
-  echo "Installeer eerst GitHub CLI: brew install gh && gh auth login" >&2
-  exit 1
-fi
+need() {
+  command -v "$1" >/dev/null 2>&1 || {
+    echo "Fout: vereist commando ontbreekt: $1" >&2
+    exit 1
+  }
+}
 
-TMPDIR="${TMPDIR:-/tmp}"
-WORKDIR=$(mktemp -d "${TMPDIR}/shift-happens-install.XXXXXX")
-cleanup() { rm -rf "$WORKDIR"; }
+need curl
+need hdiutil
+need ditto
+need uname
+need python3
+
+ARCH_RAW="$(uname -m)"
+case "$ARCH_RAW" in
+  arm64|aarch64) ARCH="arm64" ;;
+  x86_64|amd64) ARCH="x64" ;;
+  *)
+    echo "Fout: onbekende mac architectuur: $ARCH_RAW" >&2
+    exit 1
+    ;;
+esac
+
+TMPDIR_ROOT="${TMPDIR:-/tmp}"
+WORKDIR="$(mktemp -d "$TMPDIR_ROOT/shift-happens-install.XXXXXX")"
+MNT="$WORKDIR/mnt"
+DMG="$WORKDIR/app.dmg"
+
+cleanup() {
+  hdiutil detach "$MNT" >/dev/null 2>&1 || true
+  rm -rf "$WORKDIR"
+}
 trap cleanup EXIT
 
-cd "$WORKDIR"
-
-PATTERN="${STABLE_DMG_NAME:-*arm64.dmg}"
-
-if [[ -n "$TAG" ]]; then
-  echo "Download release $TAG van $REPO (pattern: $PATTERN) ..."
-  gh release download "$TAG" --repo "$REPO" --pattern "$PATTERN" --clobber
-else
-  echo "Download nieuwste release (= latest) van $REPO (pattern: $PATTERN) ..."
-  gh release download --repo "$REPO" --pattern "$PATTERN" --clobber
-fi
-
-shopt -s nullglob
-DMG=( *.dmg )
-shopt -u nullglob
-
-if [[ ${#DMG[@]} -eq 0 ]]; then
-  echo "Geen .dmg gevonden. Controleer release-assets (pattern: $PATTERN)." >&2
-  exit 1
-fi
-
-if [[ ${#DMG[@]} -gt 1 ]]; then
-  echo "Meerdere .dmg gevonden; gebruik STABLE_DMG_NAME met één vaste bestandsnaam op de release." >&2
-  printf '%s\n' "${DMG[@]}"
-  exit 1
-fi
-
-DMG_FILE="${DMG[0]}"
-echo "DMG: $DMG_FILE"
-
-MNT="$WORKDIR/mnt"
 mkdir -p "$MNT"
-echo "Mount DMG ..."
-hdiutil attach "$DMG_FILE" -mountpoint "$MNT" -nobrowse
 
-APP=$(find "$MNT" -maxdepth 2 -name "*.app" -print -quit)
-if [[ -z "$APP" || ! -d "$APP" ]]; then
-  hdiutil detach "$MNT" || true
-  echo "Geen .app gevonden in DMG." >&2
+if [[ "$TAG" == "latest" ]]; then
+  API_URL="https://api.github.com/repos/${REPO}/releases/latest"
+else
+  API_URL="https://api.github.com/repos/${REPO}/releases/tags/${TAG}"
+fi
+
+echo "Release metadata ophalen: $REPO ($TAG, $ARCH)"
+RELEASE_JSON="$(curl -fsSL "$API_URL")" || {
+  echo "Fout: kan release metadata niet ophalen. Controleer repo/tag/netwerk." >&2
+  exit 1
+}
+
+DMG_URL="$(RELEASE_JSON="$RELEASE_JSON" ARCH="$ARCH" python3 - <<'PY'
+import json, os
+
+j = json.loads(os.environ['RELEASE_JSON'])
+arch = os.environ['ARCH']
+assets = j.get('assets', [])
+names = [a.get('name', '') for a in assets]
+
+preferred = [
+  f"Shift-Happens-mac-{arch}.dmg",
+  f"Shift.Happens-mac-{arch}.dmg",
+]
+
+# Fallbacks op veelvoorkomende oude/nieuwe naamvormen
+contains_priority = [
+  f"mac-{arch}.dmg",
+  f"{arch}.dmg",
+  ".dmg",
+]
+
+def url_for(name):
+  for a in assets:
+    if a.get('name') == name:
+      return a.get('browser_download_url', '')
+  return ''
+
+url = ''
+for n in preferred:
+  url = url_for(n)
+  if url:
+    break
+
+if not url:
+  lowered = [(a.get('name','').lower(), a.get('browser_download_url','')) for a in assets]
+  for needle in contains_priority:
+    n = needle.lower()
+    for name, u in lowered:
+      if n in name and name.endswith('.dmg'):
+        url = u
+        break
+    if url:
+      break
+
+print(url)
+PY
+)"
+
+if [[ -z "$DMG_URL" ]]; then
+  echo "Fout: geen passende DMG-asset gevonden voor arch=$ARCH op release $TAG." >&2
+  echo "Tip: controleer assets op https://github.com/${REPO}/releases" >&2
   exit 1
 fi
 
-echo "Installeer naar /Applications ..."
-rm -rf "/Applications/$(basename "$APP")"
-cp -R "$APP" /Applications/
+echo "Download: $DMG_URL"
+curl -fL "$DMG_URL" -o "$DMG" || {
+  echo "Fout: downloaden van DMG is mislukt." >&2
+  exit 1
+}
 
-hdiutil detach "$MNT"
-echo "Klaar: $(basename "$APP") staat in /Applications"
+echo "Mount DMG"
+hdiutil attach "$DMG" -mountpoint "$MNT" -nobrowse -quiet || {
+  echo "Fout: DMG mounten mislukt." >&2
+  exit 1
+}
+
+APP_PATH="$(/bin/ls -d "$MNT"/*.app 2>/dev/null | sed -n '1p')"
+if [[ -z "$APP_PATH" || ! -d "$APP_PATH" ]]; then
+  echo "Fout: geen .app gevonden in DMG." >&2
+  exit 1
+fi
+
+APP_BASENAME="$(basename "$APP_PATH")"
+if [[ "$APP_BASENAME" != *.app ]]; then
+  echo "Fout: ongeldige app-naam in DMG: $APP_BASENAME" >&2
+  exit 1
+fi
+
+if [[ "$APP_NAME" != "${APP_BASENAME%.app}" ]]; then
+  echo "Waarschuwing: app-naam in DMG is "$APP_BASENAME" (verwacht: "$APP_NAME.app")."
+fi
+
+DEST="/Applications/$APP_BASENAME"
+echo "Installeer: $DEST"
+sudo ditto "$APP_PATH" "$DEST"
+
+# Best effort: verwijder quarantine en refresh icon cache
+sudo xattr -dr com.apple.quarantine "$DEST" 2>/dev/null || true
+touch "$DEST" || true
+killall Finder >/dev/null 2>&1 || true
+killall Dock >/dev/null 2>&1 || true
+
+echo "Klaar: $DEST"

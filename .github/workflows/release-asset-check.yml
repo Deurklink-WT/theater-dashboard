@@ -1,0 +1,60 @@
+name: Release Asset Check
+
+on:
+  release:
+    types: [published, edited]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag (bijv. v1.5.9)"
+        required: true
+        type: string
+
+jobs:
+  validate-assets:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Resolve release tag
+        id: tag
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "tag=${{ inputs.tag }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag=${{ github.event.release.tag_name }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Validate required assets
+        env:
+          REPO: ${{ github.repository }}
+          TAG: ${{ steps.tag.outputs.tag }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          api="https://api.github.com/repos/${REPO}/releases/tags/${TAG}"
+          json="$(curl -fsSL -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" "$api")"
+
+          echo "Controleer release assets voor $REPO@$TAG"
+
+          python3 - <<'PY' "$json"
+import json
+import sys
+
+release = json.loads(sys.argv[1])
+assets = [a.get('name', '') for a in release.get('assets', [])]
+required = [
+    'Shift-Happens-mac-arm64.dmg',
+    'latest-mac.yml',
+]
+missing = [name for name in required if name not in assets]
+
+if missing:
+    print('Ontbrekende verplichte assets:', ', '.join(missing))
+    print('Aanwezige assets:')
+    for name in assets:
+        print(' -', name)
+    sys.exit(1)
+
+print('OK: verplichte mac-assets aanwezig.')
+PY
