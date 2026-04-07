@@ -1,6 +1,6 @@
 name: Release Asset Check
 
-on:
+"on":
   release:
     types: [published, edited]
   workflow_dispatch:
