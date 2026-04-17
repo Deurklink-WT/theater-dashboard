@@ -88,17 +88,25 @@ jobs:
       - name: Upload mac updater metadata + assets
         shell: bash
         run: |
+          set -euo pipefail
           TAG="${{ steps.tag.outputs.tag }}"
           VER="${TAG#v}"
-          gh release upload "$TAG" \
-            "dist/latest-mac.yml#latest-mac.yml" \
-            "dist/Shift Happens-${VER}-arm64-mac.zip#Shift.Happens-${VER}-arm64-mac.zip" \
-            "dist/Shift Happens-${VER}-arm64-mac.zip.blockmap#Shift.Happens-${VER}-arm64-mac.zip.blockmap" \
-            "dist/Shift Happens-${VER}-arm64.dmg#Shift.Happens-${VER}-arm64.dmg" \
-            "dist/Shift Happens-${VER}-arm64.dmg.blockmap#Shift.Happens-${VER}-arm64.dmg.blockmap" \
-            "dist/Shift Happens-${VER}-x64-mac.zip#Shift.Happens-${VER}-x64-mac.zip" \
-            "dist/Shift Happens-${VER}-x64-mac.zip.blockmap#Shift.Happens-${VER}-x64-mac.zip.blockmap" \
-            "dist/Shift Happens-${VER}-x64.dmg#Shift.Happens-${VER}-x64.dmg" \
-            "dist/Shift Happens-${VER}-x64.dmg.blockmap#Shift.Happens-${VER}-x64.dmg.blockmap" \
-            --repo "$GITHUB_REPOSITORY" \
-            --clobber
+          upload() {
+            local path="$1"
+            local label="$2"
+            if [ ! -f "$path" ]; then
+              echo "Skip (ontbreekt): $path"
+              return 0
+            fi
+            echo "Upload: $path -> $label"
+            gh release upload "$TAG" "${path}#${label}" --repo "$GITHUB_REPOSITORY" --clobber
+          }
+          upload "dist/latest-mac.yml" "latest-mac.yml"
+          upload "dist/Shift Happens-${VER}-arm64-mac.zip" "Shift.Happens-${VER}-arm64-mac.zip"
+          upload "dist/Shift Happens-${VER}-arm64-mac.zip.blockmap" "Shift.Happens-${VER}-arm64-mac.zip.blockmap"
+          upload "dist/Shift Happens-${VER}-arm64.dmg" "Shift.Happens-${VER}-arm64.dmg"
+          upload "dist/Shift Happens-${VER}-arm64.dmg.blockmap" "Shift.Happens-${VER}-arm64.dmg.blockmap"
+          upload "dist/Shift Happens-${VER}-x64-mac.zip" "Shift.Happens-${VER}-x64-mac.zip"
+          upload "dist/Shift Happens-${VER}-x64-mac.zip.blockmap" "Shift.Happens-${VER}-x64-mac.zip.blockmap"
+          upload "dist/Shift Happens-${VER}-x64.dmg" "Shift.Happens-${VER}-x64.dmg"
+          upload "dist/Shift Happens-${VER}-x64.dmg.blockmap" "Shift.Happens-${VER}-x64.dmg.blockmap"
