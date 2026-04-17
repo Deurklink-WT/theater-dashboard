@@ -122,6 +122,10 @@ class TheaterDashboard {
         this.searchDebounceTimer = null;
         this.searchRequestSeq = 0; // voorkomt dat oudere zoekresponses nieuwe resultaten overschrijven
         this.searchKeyboardShift = false;
+        this.touchInputKeyboardShift = false;
+        this.touchInputKeyboardTarget = null;
+        this.settingsNavInitialized = false;
+        this.settingsPageKey = 'app-config';
         this.weekEventCount = 0;
         this.locale = 'nl';  // 'nl' of 'en'
         this._updateBannerHideTimer = null; // electron-updater banner auto-hide
@@ -408,6 +412,9 @@ class TheaterDashboard {
         
         observer.observe(document.body, { childList: true, subtree: true });
 
+        // Virtueel toetsenbord voor invoervelden in instellingen (touchscreen-modus).
+        this.setupTouchscreenInputKeyboard();
+
         // Close modal on outside click
         document.getElementById('settingsModal').addEventListener('click', (e) => {
             if (e.target.id === 'settingsModal') {
@@ -429,6 +436,151 @@ class TheaterDashboard {
                 this.openSettings();
             });
         }
+    }
+
+    setupTouchscreenInputKeyboard() {
+        const ensureKeyboardEl = () => {
+            let el = document.getElementById('touchInputKeyboard');
+            if (el) return el;
+            el = document.createElement('div');
+            el.id = 'touchInputKeyboard';
+            el.style.cssText = [
+                'position: fixed',
+                'left: 0',
+                'right: 0',
+                'bottom: 0',
+                'z-index: 3000',
+                'display: none',
+                'background: rgba(23, 30, 47, 0.97)',
+                'backdrop-filter: blur(6px)',
+                'border-top: 1px solid #4a5568',
+                'padding: 0.4rem'
+            ].join(';');
+            el.innerHTML = '<div id="touchInputKeyboardKeys"></div>';
+            document.body.appendChild(el);
+            return el;
+        };
+
+        const keyboardRows = [
+            ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
+            ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+            ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+            ['Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'Backspace'],
+            ['Close', 'Space', 'Enter']
+        ];
+
+        const insertAtCursor = (input, text) => {
+            const start = input.selectionStart ?? input.value.length;
+            const end = input.selectionEnd ?? start;
+            const before = input.value.slice(0, start);
+            const after = input.value.slice(end);
+            input.value = `${before}${text}${after}`;
+            const pos = start + text.length;
+            input.setSelectionRange(pos, pos);
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+        };
+
+        const renderKeyboard = () => {
+            const keysWrap = document.getElementById('touchInputKeyboardKeys');
+            if (!keysWrap) return;
+            keysWrap.innerHTML = '';
+            keyboardRows.forEach((row) => {
+                const rowEl = document.createElement('div');
+                rowEl.className = 'search-keyboard-row';
+                row.forEach((key) => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'search-key';
+                    if (key === 'Space') btn.classList.add('search-key-wide');
+                    if (key === 'Backspace' || key === 'Shift' || key === 'Enter' || key === 'Close') btn.classList.add('search-key-special');
+                    if (key === 'Shift' && this.touchInputKeyboardShift) btn.classList.add('active');
+                    btn.dataset.key = key;
+                    const isLetter = /^[a-z]$/.test(key);
+                    btn.textContent = isLetter ? (this.touchInputKeyboardShift ? key.toUpperCase() : key) : (key === 'Space' ? 'spatie' : key);
+                    rowEl.appendChild(btn);
+                });
+                keysWrap.appendChild(rowEl);
+            });
+        };
+
+        const isTouchscreenMode = () => document.body.classList.contains('touchscreen-mode');
+        const isSettingsTextInput = (el) => {
+            if (!(el instanceof HTMLElement)) return false;
+            if (!el.closest('#settingsModal')) return false;
+            if (el.tagName !== 'INPUT') return false;
+            const input = el;
+            if (input.disabled || input.readOnly) return false;
+            const type = String(input.type || 'text').toLowerCase();
+            return ['text', 'password', 'url', 'search', 'email', 'tel'].includes(type);
+        };
+
+        const showKeyboard = (input) => {
+            if (!isTouchscreenMode() || !isSettingsTextInput(input)) return;
+            const el = ensureKeyboardEl();
+            this.touchInputKeyboardTarget = input;
+            renderKeyboard();
+            el.style.display = 'block';
+        };
+
+        const hideKeyboard = () => {
+            const el = document.getElementById('touchInputKeyboard');
+            if (el) el.style.display = 'none';
+            this.touchInputKeyboardShift = false;
+            this.touchInputKeyboardTarget = null;
+        };
+
+        document.addEventListener('focusin', (e) => {
+            const target = e.target;
+            if (isSettingsTextInput(target)) showKeyboard(target);
+        });
+
+        document.addEventListener('focusout', () => {
+            setTimeout(() => {
+                const active = document.activeElement;
+                const keyboardHasFocus = !!active?.closest?.('#touchInputKeyboard');
+                if (!keyboardHasFocus && !isSettingsTextInput(active)) hideKeyboard();
+            }, 0);
+        });
+
+        document.addEventListener('click', (e) => {
+            const keyBtn = e.target?.closest?.('#touchInputKeyboard .search-key');
+            if (!keyBtn) return;
+            const key = keyBtn.dataset.key;
+            const input = this.touchInputKeyboardTarget;
+            if (!input) return;
+            input.focus();
+            if (key === 'Shift') {
+                this.touchInputKeyboardShift = !this.touchInputKeyboardShift;
+                renderKeyboard();
+                return;
+            }
+            if (key === 'Backspace') {
+                const start = input.selectionStart ?? input.value.length;
+                const end = input.selectionEnd ?? start;
+                if (start !== end) {
+                    insertAtCursor(input, '');
+                } else if (start > 0) {
+                    input.setSelectionRange(start - 1, start);
+                    insertAtCursor(input, '');
+                }
+                return;
+            }
+            if (key === 'Enter' || key === 'Close') {
+                hideKeyboard();
+                input.blur();
+                return;
+            }
+            if (key === 'Space') {
+                insertAtCursor(input, ' ');
+            } else {
+                const out = this.touchInputKeyboardShift ? key.toUpperCase() : key;
+                insertAtCursor(input, out);
+                if (this.touchInputKeyboardShift && /^[a-z]$/i.test(key)) {
+                    this.touchInputKeyboardShift = false;
+                    renderKeyboard();
+                }
+            }
+        });
     }
 
     getActiveYesplanConfig() {
@@ -1610,8 +1762,7 @@ class TheaterDashboard {
     updateBackButtonVisibility() {
         const backBtn = document.getElementById('backBtn');
         if (!backBtn) return;
-        const lastEntry = this.viewHistory.length > 0 ? this.viewHistory[this.viewHistory.length - 1] : null;
-        const canGoBack = this.canNavigateToHistoryEntry(lastEntry);
+        const canGoBack = this.findLastNavigableHistoryEntry() !== null;
         backBtn.disabled = !canGoBack;
         backBtn.classList.toggle('btn-back--disabled', !canGoBack);
     }
@@ -1626,12 +1777,48 @@ class TheaterDashboard {
         return false;
     }
 
+    _normalizeDayString(value) {
+        if (!value) return null;
+        const d = value instanceof Date ? new Date(value) : new Date(String(value));
+        if (Number.isNaN(d.getTime())) return null;
+        d.setHours(0, 0, 0, 0);
+        return d.toISOString().split('T')[0];
+    }
+
+    _historyEntryChangesState(entry) {
+        if (!entry || typeof entry === 'string') return false;
+        const entryVenues = Array.isArray(entry.selectedVenues) ? entry.selectedVenues.map(v => String(v)) : [];
+        const currentVenues = Array.isArray(this.selectedVenues) ? this.selectedVenues.map(v => String(v)) : [];
+        const sameVenues = entryVenues.length === currentVenues.length && entryVenues.every((v, i) => v === currentVenues[i]);
+
+        const sameDate = this._normalizeDayString(entry.selectedDate) === this._normalizeDayString(this.selectedDate);
+        const sameDetailContext = JSON.stringify(entry.detailContext || null) === JSON.stringify(this.detailContext || null);
+
+        return !(sameVenues && sameDate && sameDetailContext);
+    }
+
+    findLastNavigableHistoryEntry() {
+        for (let i = this.viewHistory.length - 1; i >= 0; i--) {
+            const candidate = this.viewHistory[i];
+            if (this.canNavigateToHistoryEntry(candidate)) {
+                return { index: i, entry: candidate };
+            }
+        }
+        return null;
+    }
+
     canNavigateToHistoryEntry(entry) {
         if (!entry) return false;
         if (typeof entry === 'string') return this.canNavigateToView(entry);
 
         const viewName = entry.view;
-        if (!viewName || viewName === this.currentView) return false;
+        if (!viewName) return false;
+
+        // Zelfde view kan alsnog een geldige "terug" zijn (bijv. andere datum in detail/week).
+        if (viewName === this.currentView) {
+            if (!this._historyEntryChangesState(entry)) return false;
+        }
+
         if (viewName === 'home' || viewName === 'week') return true;
         if (viewName === 'detail') {
             return Array.isArray(entry.selectedVenues) && entry.selectedVenues.length === 1;
@@ -1641,10 +1828,16 @@ class TheaterDashboard {
 
     async showPreviousView() {
         this._pendingHistorySnapshot = null;
-        const candidate = this.viewHistory.length > 0 ? this.viewHistory.pop() : null;
-        const targetEntry = this.canNavigateToHistoryEntry(candidate)
-            ? (typeof candidate === 'string' ? { view: candidate } : candidate)
-            : null;
+
+        let targetEntry = null;
+        while (this.viewHistory.length > 0) {
+            const candidate = this.viewHistory.pop();
+            if (this.canNavigateToHistoryEntry(candidate)) {
+                targetEntry = (typeof candidate === 'string' ? { view: candidate } : candidate);
+                break;
+            }
+        }
+
         if (!targetEntry) {
             this.updateBackButtonVisibility();
             return;
@@ -2094,8 +2287,8 @@ class TheaterDashboard {
             const clickClass = clickable ? ' week-event-clickable' : '';
 
             return `
-                <div class="week-event-card${clickClass}" data-event-id="${event.id || ''}"${clickAttrs}>
-                    <h4 class="week-event-title">${title}</h4>
+                <div class="week-event-card${clickClass}" draggable="false" data-event-id="${event.id || ''}"${clickAttrs}>
+                    <h4 class="week-event-title" draggable="false">${title}</h4>
                     ${performer}
                     <p><i class="fas fa-clock"></i> <strong>${timeRange}</strong></p>
                     ${venue}
@@ -2127,6 +2320,12 @@ class TheaterDashboard {
         }
         html += '</div>';
         container.innerHTML = html;
+
+        // Weekoverzicht is alleen klikbaar; drag&drop staat hier expliciet uit.
+        container.querySelectorAll('.week-event-card, .week-event-title').forEach((el) => {
+            el.setAttribute('draggable', 'false');
+            el.addEventListener('dragstart', (ev) => ev.preventDefault());
+        });
 
         container.querySelectorAll('.rider-link').forEach((a) => {
             a.addEventListener('click', async (ev) => {
@@ -2316,6 +2515,10 @@ class TheaterDashboard {
     
     async selectDate(date) {
         date.setHours(0, 0, 0, 0);
+        if (!this._isNavigatingBack) {
+            this.viewHistory.push(this.createViewSnapshot());
+            if (this.viewHistory.length > 50) this.viewHistory.shift();
+        }
         const { minDate, maxDate } = this.getDateBounds();
         
         // Alleen binnen bereik toestaan (max 1 week terug en 1 jaar vooruit)
@@ -2537,6 +2740,10 @@ class TheaterDashboard {
     
     async goToNextDay() {
         const { maxDate } = this.getDateBounds();
+        if (!this._isNavigatingBack) {
+            this.viewHistory.push(this.createViewSnapshot());
+            if (this.viewHistory.length > 50) this.viewHistory.shift();
+        }
         
         const nextDate = new Date(this.selectedDate);
         nextDate.setDate(nextDate.getDate() + 1);
@@ -2563,6 +2770,10 @@ class TheaterDashboard {
 
     async goToPreviousDay() {
         const { minDate } = this.getDateBounds();
+        if (!this._isNavigatingBack) {
+            this.viewHistory.push(this.createViewSnapshot());
+            if (this.viewHistory.length > 50) this.viewHistory.shift();
+        }
         
         const prevDate = new Date(this.selectedDate);
         prevDate.setDate(prevDate.getDate() - 1);
@@ -2650,6 +2861,22 @@ class TheaterDashboard {
         const selectedVenueIds = this.getSelectedVenueIds();
         // Check of "Alle zalen" is geselecteerd
         const isAllVenues = selectedVenueIds.length === 0;
+
+        const renderNoEventsMessage = () => {
+            if (this.currentView === 'detail') this.updateDetailViewTitle(this.getVenueName(), null);
+            const venueName = this.getVenueName();
+            const d = this.selectedDate ? new Date(this.selectedDate) : new Date();
+            const dateLabel = d.toLocaleDateString(this.locale === 'en' ? 'en-GB' : 'nl-NL', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            const message = venueName
+                ? this.t('messages.noEvents', { venue: venueName, date: dateLabel })
+                : this.t('messages.noEventsDate', { date: dateLabel });
+            container.innerHTML = `<div class="info-message">${message}</div>`;
+        };
         
         // Pas grid layout aan
         if (isAllVenues) {
@@ -2659,14 +2886,7 @@ class TheaterDashboard {
         }
         
         if (!data.success || !data.data || data.data.length === 0) {
-            if (this.currentView === 'detail') this.updateDetailViewTitle(this.getVenueName(), null);
-            const venueName = this.getVenueName();
-            const d = this.selectedDate ? new Date(this.selectedDate) : new Date();
-            const dateLabel = d.toLocaleDateString(this.locale === 'en' ? 'en-GB' : 'nl-NL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-            const message = venueName 
-                ? this.t('messages.noEvents', { venue: venueName, date: dateLabel })
-                : this.t('messages.noEventsDate', { date: dateLabel });
-            container.innerHTML = `<div class="info-message">${message}</div>`;
+            renderNoEventsMessage();
             return;
         }
 
@@ -2759,15 +2979,8 @@ class TheaterDashboard {
             });
         }
 
-        if (events.length === 0) {
-            if (this.currentView === 'detail') this.updateDetailViewTitle(this.getVenueName(), null);
-            const venueName = this.getVenueName();
-            const d = this.selectedDate ? new Date(this.selectedDate) : new Date();
-            const dateLabel = d.toLocaleDateString(this.locale === 'en' ? 'en-GB' : 'nl-NL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-            const message = venueName 
-                ? this.t('messages.noEvents', { venue: venueName, date: dateLabel })
-                : this.t('messages.noEventsDate', { date: dateLabel });
-            container.innerHTML = `<div class="info-message">${message}</div>`;
+        if (!data.success || !data.data || data.data.length === 0) {
+            renderNoEventsMessage();
             return;
         }
         
@@ -2846,7 +3059,6 @@ class TheaterDashboard {
                     let resourcesInfo = '';
                     if (showBalletvloer || showVleugel || showOrkestbak) {
                         const topLineParts = [];
-                        let orkestbakLine = '';
                         if (showBalletvloer) {
                             const balletvloerStatus = event.balletvloerExplicit ? (event.hasBalletvloer ? this.t('resources.ja') : this.t('resources.nee')) : this.t('resources.nietBekend');
                             topLineParts.push(`Balletvloer: <strong>${balletvloerStatus}</strong>`);
@@ -2859,26 +3071,57 @@ class TheaterDashboard {
                             const orkestbakStatus = (event.orkestbakExplicit || event.orkestbakValue)
                                 ? (event.orkestbakValue || (event.hasOrkestbak ? this.t('resources.ja') : this.t('resources.nee')))
                                 : this.t('resources.nietBekend');
-                            orkestbakLine = `Orkestbak: <strong>${orkestbakStatus}</strong>`;
+                            topLineParts.push(`Orkestbak: <strong>${orkestbakStatus}</strong>`);
                         }
                         const topLineHtml = topLineParts
                             .map((part) => `<span style="white-space: nowrap;">${part}</span>`)
-                            .join('');
+                            .join('<span style="opacity:.7;">&nbsp;&nbsp;</span>');
                         resourcesInfo = `
                             <div style="margin-top: 0.5rem; padding: 0.5rem; background: #374151; border-radius: 6px; font-size: 0.85rem; color: #a0aec0;">
-                                ${topLineHtml ? `<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.75rem 1rem;">${topLineHtml}</div>` : ''}
-                                ${orkestbakLine ? `<div style="margin-top: 0.2rem;">${orkestbakLine}</div>` : ''}
+                                ${topLineHtml ? `<div style="display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${topLineHtml}</div>` : ''}
                             </div>
                         `;
                     }
                     
                     // Technisch materiaal uit /resources/Technisch materiaal
-                    const escapeText = (value) => String(value || '')
-                        .replace(/&/g, '&amp;')
-                        .replace(/</g, '&lt;')
-                        .replace(/>/g, '&gt;')
-                        .replace(/"/g, '&quot;')
-                        .replace(/'/g, '&#039;');
+                    const escapeText = (value) => this.escapeHtml(value);
+                    const infoBoxStyle = 'margin-top: 0.35rem; padding: 0.6rem 0.75rem; background: #374151; border-radius: 6px; font-size: 0.85rem;';
+
+                    // Technisch personeel (urenInfo) in het algemene zalenoverzicht
+                    const normalizeTechnicalStaffEntry = (entry) => {
+                        const raw = String(entry || '').trim();
+                        if (!raw) return '';
+                        const parts = raw.split(/\s+[-–—]\s+/).map(p => p.trim()).filter(Boolean);
+                        if (parts.length >= 2) {
+                            const last = parts[parts.length - 1];
+                            const prev = parts[parts.length - 2];
+                            const looksLikeTime = /^\d{1,2}\s+(jan|feb|maa|mrt|maart|apr|mei|jun|jul|aug|sep|okt|oktober|nov|dec)[a-z]*\s+\d{1,2}:\d{2}\s*-\s*\d{1,2}:\d{2}$/i.test(last)
+                                || /^\d{1,2}:\d{2}\s*-\s*\d{1,2}:\d{2}$/.test(last);
+                            if (looksLikeTime) return `${prev} - ${last}`;
+                        }
+                        return raw;
+                    };
+                    const technicalStaffEntries = (event.urenInfo?.techniek || [])
+                        .map(normalizeTechnicalStaffEntry)
+                        .filter(Boolean)
+                        .filter((entry) => {
+                            const lower = entry.toLowerCase();
+                            if (lower.includes('vrijwilliger') || lower.includes('volunteer')) return false;
+                            if (lower === 'opmerkingen techniek' || lower === 'opmerkingentechniek') return false;
+                            if (lower.includes('productie_technischelijst_opmerkingentechniek')) return false;
+                            return true;
+                        });
+                    const technicalStaffInfo = technicalStaffEntries.length > 0
+                        ? `<div style="${infoBoxStyle}">
+                            <div style="display: flex; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.25rem;">
+                                <i class="fas fa-users-cog" style="color: #818cf8; margin-top: 0.125rem;"></i>
+                                <div style="flex: 1;">
+                                    <div style="color: #e2e8f0; font-weight: 500; margin-bottom: 0.25rem;">Technisch personeel:</div>
+                                    <div style="color: #a0aec0; white-space: pre-wrap; word-wrap: break-word;">${technicalStaffEntries.map(escapeText).join('<br>')}</div>
+                                </div>
+                            </div>
+                        </div>`
+                        : '';
 
                     let technicalMaterialInfo = '';
                     const technicalMaterialResources = event.technicalMaterialResources || [];
@@ -2887,42 +3130,42 @@ class TheaterDashboard {
                             const escapedItem = escapeText(item);
                             return `<span style="display: inline-flex; align-items: center; padding: 0.25rem 0.5rem; border: 1px solid #4a5568; border-radius: 6px; background: #2d3748; color: #e2e8f0; font-size: 0.8rem;">${escapedItem}</span>`;
                         }).join(' ');
-                        technicalMaterialInfo = `<div style="margin-top: 0.5rem; padding: 0.75rem; background: #374151; border-radius: 6px; font-size: 0.85rem;">
+                        technicalMaterialInfo = `<div style="${infoBoxStyle}">
                             <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
                                 <i class="fas fa-toolbox" style="color: #818cf8;"></i>
                                 <span style="color: #e2e8f0; font-weight: 500;">Technisch materiaal:</span>
                             </div>
                             <div style="display: flex; flex-wrap: wrap; gap: 0.4rem;">${materialsHtml}</div>
                         </div>`;
+                    } else {
+                        technicalMaterialInfo = `<div style="${infoBoxStyle}">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                                <i class="fas fa-toolbox" style="color: #818cf8;"></i>
+                                <span style="color: #e2e8f0; font-weight: 500;">Technisch materiaal:</span>
+                            </div>
+                            <div style="color: #a0aec0; padding-left: 1.75rem;">-</div>
+                        </div>`;
                     }
 
                     // Technische opmerkingen
-                    let technicalRemarksInfo = '';
-                    if (event.technicalRemarks) {
-                        const rawRemarks = String(event.technicalRemarks || '').trim();
-                        const lowerRemarks = rawRemarks.toLowerCase();
-                        const isPlaceholderRemarks =
-                            lowerRemarks === 'opmerkingen techniek' ||
-                            lowerRemarks === 'opmerkingentechniek' ||
-                            lowerRemarks.includes('productie_technischelijst_opmerkingentechniek');
-                        const remarksText = isPlaceholderRemarks ? '-' : rawRemarks;
-                        // Escape HTML om XSS te voorkomen
-                        const escapedRemarks = remarksText
-                            .replace(/&/g, '&amp;')
-                            .replace(/</g, '&lt;')
-                            .replace(/>/g, '&gt;')
-                            .replace(/"/g, '&quot;')
-                            .replace(/'/g, '&#039;');
-                        technicalRemarksInfo = `<div style="margin-top: 0.5rem; padding: 0.75rem; background: #374151; border-radius: 6px; font-size: 0.85rem;">
-                            <div style="display: flex; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.25rem;">
-                                <i class="fas fa-comment-alt" style="color: #818cf8; margin-top: 0.125rem;"></i>
-                                <div style="flex: 1;">
-                                    <div style="color: #e2e8f0; font-weight: 500; margin-bottom: 0.25rem;">Opmerkingen techniek:</div>
-                                    <div style="color: #a0aec0; white-space: pre-wrap; word-wrap: break-word;">${escapedRemarks}</div>
-                                </div>
+                    const rawRemarks = String(event.technicalRemarks || '').trim();
+                    const lowerRemarks = rawRemarks.toLowerCase();
+                    const isPlaceholderRemarks =
+                        !rawRemarks ||
+                        lowerRemarks === 'opmerkingen techniek' ||
+                        lowerRemarks === 'opmerkingentechniek' ||
+                        lowerRemarks.includes('productie_technischelijst_opmerkingentechniek');
+                    const remarksText = isPlaceholderRemarks ? '-' : rawRemarks;
+                    const escapedRemarks = escapeText(remarksText);
+                    let technicalRemarksInfo = `<div style="${infoBoxStyle}">
+                        <div style="display: flex; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.25rem;">
+                            <i class="fas fa-comment-alt" style="color: #818cf8; margin-top: 0.125rem;"></i>
+                            <div style="flex: 1;">
+                                <div style="color: #e2e8f0; font-weight: 500; margin-bottom: 0.25rem;">Opmerkingen techniek:</div>
+                                <div style="color: #a0aec0; white-space: pre-wrap; word-wrap: break-word;">${escapedRemarks}</div>
                             </div>
-                        </div>`;
-                    }
+                        </div>
+                    </div>`;
                     
                     // Alle documenten uit TECHNISCHE LIJST
                     let technicalListInfo = '';
@@ -2954,17 +3197,24 @@ class TheaterDashboard {
                             `;
                         }).join('');
                         
-                        technicalListInfo = `<div style="margin-top: 0.5rem; padding: 0.75rem; background: #374151; border-radius: 6px; font-size: 0.85rem;">
+                        technicalListInfo = `<div style="${infoBoxStyle}">
                             <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
                                 <i class="fas fa-folder-open" style="color: #818cf8;"></i>
                                 <span style="color: #e2e8f0; font-weight: 500;">Technische lijst:</span>
                             </div>
                             ${docsHtml}
                         </div>`;
+                    } else {
+                        technicalListInfo = `<div style="${infoBoxStyle}">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                                <i class="fas fa-folder-open" style="color: #818cf8;"></i>
+                                <span style="color: #e2e8f0; font-weight: 500;">Technische lijst:</span>
+                            </div>
+                            <div style="color: #a0aec0; padding-left: 1.75rem;">-</div>
+                        </div>`;
                     }
                     
                     // Backwards compatibility: toon ook oude rider attachment als er geen nieuwe documenten zijn
-                    let riderInfo = '';
                     if (technicalDocs.length === 0 && event.riderAttachment && event.riderAttachment.url) {
                         const urlParts = event.riderAttachment.url.split('/');
                         const fileName = urlParts[urlParts.length - 1] || 'Technische lijst';
@@ -2973,7 +3223,11 @@ class TheaterDashboard {
                         const riderDate = event.riderAttachment.date ? new Date(event.riderAttachment.date).toLocaleDateString('nl-NL', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '';
                         const riderAuthor = event.riderAttachment.author || '';
                         const escapedUrl = event.riderAttachment.url.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-                        riderInfo = `<div style="margin-top: 0.5rem; padding: 0.75rem; background: #374151; border-radius: 6px; font-size: 0.85rem;">
+                        technicalListInfo = `<div style="${infoBoxStyle}">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                                <i class="fas fa-folder-open" style="color: #818cf8;"></i>
+                                <span style="color: #e2e8f0; font-weight: 500;">Technische lijst:</span>
+                            </div>
                             <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
                                 <i class="fas fa-file-pdf" style="color: #818cf8;"></i>
                                 <span style="color: #e2e8f0; font-weight: 500;">Technische lijst bijlage:</span>
@@ -3068,17 +3322,21 @@ class TheaterDashboard {
                     const eventIdAttr = event.id ? `data-event-id="${event.id}"` : '';
                     const titleBlock = isDetailSingleEvent ? '' : `<h4 ${draggableAttr} class="${isHomeView ? 'drag-handle' : ''}">${title}</h4>${performerInfo}`;
                     
+                    const venueNameAttr = event.venue && event.venue !== 'Onbekend'
+                        ? `data-venue-name="${this.escapeHtml(String(event.venue))}"`
+                        : '';
+
                     return `
-                    <div class="data-item ${clickableClass}" ${clickableAttrs} ${eventIdAttr}>
+                    <div class="data-item ${clickableClass}" ${clickableAttrs} ${eventIdAttr} ${venueNameAttr} style="display:flex;flex-direction:column;height:100%;">
                         ${titleBlock}
                         <p><i class="fas fa-clock"></i> <strong>${timeRange}</strong></p>
                         ${extraTimeInfo}
                         ${resourcesInfo}
+                        ${technicalStaffInfo}
                         ${technicalListInfo}
                         ${technicalRemarksInfo}
                         ${technicalMaterialInfo}
-                        ${riderInfo}
-                        ${venueStatusInfo}
+                        <div class="event-bottom-meta" style="margin-top:auto;">${venueStatusInfo}</div>
                     </div>
                 `;
                 }).join('')}
@@ -3441,6 +3699,26 @@ class TheaterDashboard {
                 
                 await window.electronAPI.saveConfig('app', currentConfig);
                 this.config.app = currentConfig;
+
+                // Als gebruiker in "Alle zalen" events sleept, vertaal die volgorde ook naar zaalvolgorde.
+                // Zo blijft Instellingen > Zaalvolgorde synchroon met wat in de home-grid is gezet.
+                const isAllVenuesView = this.currentView === 'home' && (!this.selectedVenues || this.selectedVenues.length === 0);
+                if (isAllVenuesView) {
+                    const draggedVenueOrder = Array.from(items)
+                        .map(item => String(item.getAttribute('data-venue-name') || '').trim())
+                        .filter(Boolean)
+                        .map(name => name.toUpperCase())
+                        .filter((name, idx, arr) => arr.indexOf(name) === idx);
+
+                    if (draggedVenueOrder.length > 0) {
+                        const existingVenueOrder = this.getVenueOrder().map(v => String(v || '').toUpperCase()).filter(Boolean);
+                        const mergedVenueOrder = [
+                            ...draggedVenueOrder,
+                            ...existingVenueOrder.filter(v => !draggedVenueOrder.includes(v))
+                        ];
+                        await this.saveVenueOrder(mergedVenueOrder);
+                    }
+                }
             } catch (error) {
                 console.error('Fout bij opslaan event volgorde:', error);
             }
@@ -4450,11 +4728,203 @@ class TheaterDashboard {
 
     openSettings() {
         this.populateSettingsForm();
+        this.setupSettingsNavigation();
+        this.activateSettingsPage(this.settingsPageKey || 'app-config');
+        const modal = document.getElementById('settingsModal');
+        const modalContent = modal?.querySelector('.modal-content');
+        const modalBody = modal?.querySelector('.modal-body');
+        if (modalContent) {
+            // Houd het instellingenvenster altijd op een vaste hoogte voor consistente UX.
+            modalContent.style.height = '90vh';
+            modalContent.style.maxHeight = '90vh';
+            modalContent.style.display = 'flex';
+            modalContent.style.flexDirection = 'column';
+        }
+        if (modalBody) {
+            modalBody.style.flex = '1';
+            modalBody.style.maxHeight = 'none';
+            modalBody.style.minHeight = '0';
+        }
         document.getElementById('settingsModal').classList.add('show');
     }
 
     closeSettings() {
         document.getElementById('settingsModal').classList.remove('show');
+    }
+
+    setupSettingsNavigation() {
+        if (this.settingsNavInitialized) return;
+        const modal = document.getElementById('settingsModal');
+        if (!modal) return;
+
+        const settingsBody = modal.querySelector('.modal-body') || modal.querySelector('.settings-content') || modal;
+        if (!settingsBody) return;
+
+        const contentRoot = settingsBody.querySelector('.settings-content') || settingsBody.querySelector('.config-grid') || settingsBody;
+        if (!contentRoot) return;
+        const settingsForm = modal.querySelector('#settingsForm');
+
+        this.settingsPages = [
+            {
+                key: 'app-config',
+                title: this.locale === 'en' ? 'App Configuration' : 'App configuratie',
+                selectors: [
+                    '#themeSelect', '#languageSelect', '#touchscreenModeCheckbox',
+                    '#activeYesplanOrg',
+                    '#yesplanOrgName', '#yesplanBaseURL', '#yesplanApiKey',
+                    '#yesplanOrgName2', '#yesplanBaseURL2', '#yesplanApiKey2',
+                    '#privaBaseURL', '#privaApiKey', '#privaSystemId',
+                    '#apiServerSection',
+                    '.loadVenuesBtn'
+                ]
+            },
+            {
+                key: 'yesplan',
+                title: this.locale === 'en' ? 'Yesplan Settings' : 'Yesplan instellingen',
+                selectors: ['#venueOrderList', '#resetVenueOrder', '#venueResourceOptionsList']
+            },
+            {
+                key: 'itix',
+                title: this.locale === 'en' ? 'Itix Settings' : 'Itix instellingen',
+                selectors: ['#itixBaseURL']
+            },
+            {
+                key: 'about',
+                title: this.locale === 'en' ? 'About this app' : 'Over deze app',
+                selectors: ['#desktopUpdateSection', '#updateCheckResult']
+            }
+        ];
+
+        // Tabs-nav (zonder DOM verplaatsing van settingsblokken)
+        const nav = document.createElement('div');
+        nav.className = 'settings-subnav';
+        nav.style.cssText = 'display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;min-height:56px;margin-bottom:.85rem;position:sticky;top:0;z-index:20;background:#2d3748;padding:.45rem .4rem;border:1px solid #334155;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,.18);';
+
+        contentRoot.prepend(nav);
+
+        // Voorkom dat inhoud "onder" de tabknoppen schuift:
+        // tabs staan buiten de scroll, alleen het formulier scrollt.
+        if (settingsBody && settingsForm) {
+            settingsBody.style.overflow = 'hidden';
+            settingsBody.style.display = 'flex';
+            settingsBody.style.flexDirection = 'column';
+            settingsBody.style.gap = '0.5rem';
+            settingsBody.style.minHeight = '0';
+            settingsBody.style.flex = '1';
+            settingsForm.style.overflowY = 'auto';
+            settingsForm.style.overflowX = 'hidden';
+            settingsForm.style.maxHeight = 'none';
+            settingsForm.style.height = '100%';
+            settingsForm.style.flex = '1';
+            settingsForm.style.paddingRight = '0.25rem';
+            settingsForm.style.marginBottom = '0';
+        }
+
+        const pagesByKey = new Set(this.settingsPages.map((p) => p.key));
+        this.settingsPageSections = {};
+        this.settingsPages.forEach((p) => { this.settingsPageSections[p.key] = []; });
+
+        const sectionToPage = (sectionEl) => {
+            if (!sectionEl) return null;
+            if (sectionEl.id === 'apiServerSection') return 'app-config';
+            if (sectionEl.id === 'desktopUpdateSection') return 'app-config'; // updates horen bij app-configuratie
+            if (sectionEl.querySelector('#themeSelect') || sectionEl.querySelector('#touchscreenModeCheckbox')) return 'app-config';
+            if (sectionEl.querySelector('#yesplanBaseURL') || sectionEl.querySelector('#yesplanBaseURL2') || sectionEl.querySelector('#activeYesplanOrg')) return 'app-config';
+            if (sectionEl.querySelector('#privaBaseURL')) return 'app-config';
+            if (sectionEl.querySelector('#venueOrderList') || sectionEl.querySelector('#venueResourceOptionsList')) return 'yesplan';
+            if (sectionEl.querySelector('#itixBaseURL')) return 'itix';
+            if (sectionEl.querySelector('h3')?.textContent?.toLowerCase().includes('over deze app')) return 'about';
+            return null;
+        };
+
+        const allSections = Array.from(modal.querySelectorAll('#settingsForm > .settings-section'));
+        allSections.forEach((section) => {
+            const page = sectionToPage(section);
+            if (!page || !pagesByKey.has(page)) return;
+            section.dataset.settingsPage = page;
+            if (section.dataset.settingsOriginalDisplay === undefined) {
+                section.dataset.settingsOriginalDisplay = section.style.display || '';
+            }
+            this.settingsPageSections[page].push(section);
+        });
+
+        // Gewenste volgorde binnen Yesplan-tab:
+        // 1) vinkjes/technische opties 2) zaalvolgorde.
+        if (Array.isArray(this.settingsPageSections.yesplan)) {
+            this.settingsPageSections.yesplan.sort((a, b) => {
+                const rank = (section) => {
+                    if (section.querySelector('#venueResourceOptionsList')) return 0;
+                    if (section.querySelector('#venueOrderList')) return 1;
+                    return 2;
+                };
+                return rank(a) - rank(b);
+            });
+        }
+
+        // Zet de fysieke sectievolgorde in het formulier gelijk aan de tab-volgorde en subvolgorde.
+        if (settingsForm) {
+            const desired = [
+                ...(this.settingsPageSections['app-config'] || []),
+                ...(this.settingsPageSections['yesplan'] || []),
+                ...(this.settingsPageSections['itix'] || []),
+                ...(this.settingsPageSections['about'] || [])
+            ];
+            desired.forEach((section) => {
+                if (section?.parentElement === settingsForm) settingsForm.appendChild(section);
+            });
+        }
+
+        this.settingsPages.forEach((p) => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'settings-subnav-btn';
+            btn.dataset.page = p.key;
+            btn.textContent = p.title;
+            btn.style.cssText = 'padding:.45rem .85rem;font-size:.86rem;line-height:1.2;border:1px solid #475569;border-radius:10px;background:rgba(51,65,85,.55);color:#e2e8f0;box-shadow:none;transition:all .15s ease;cursor:pointer;';
+            btn.addEventListener('mouseenter', () => {
+                if (btn.dataset.page !== this.settingsPageKey) {
+                    btn.style.background = 'rgba(71,85,105,.6)';
+                    btn.style.borderColor = '#64748b';
+                }
+            });
+            btn.addEventListener('mouseleave', () => {
+                if (btn.dataset.page !== this.settingsPageKey) {
+                    btn.style.background = 'rgba(51,65,85,.55)';
+                    btn.style.borderColor = '#475569';
+                }
+            });
+            btn.addEventListener('click', () => this.activateSettingsPage(p.key));
+            nav.appendChild(btn);
+        });
+
+        this.settingsNavInitialized = true;
+    }
+
+    activateSettingsPage(pageKey) {
+        const modal = document.getElementById('settingsModal');
+        if (!modal) return;
+        this.settingsPageKey = pageKey;
+
+        if (this.settingsPageSections) {
+            Object.values(this.settingsPageSections).flat().forEach((section) => {
+                const shouldShow = section.dataset.settingsPage === pageKey;
+                section.style.display = shouldShow ? (section.dataset.settingsOriginalDisplay || '') : 'none';
+            });
+        }
+
+        modal.querySelectorAll('.settings-subnav-btn').forEach((btn) => {
+            const active = btn.dataset.page === pageKey;
+            btn.classList.toggle('active', active);
+            btn.style.background = active ? 'linear-gradient(180deg, #7c8ef3 0%, #667eea 100%)' : 'rgba(51,65,85,.55)';
+            btn.style.color = active ? '#fff' : '#e2e8f0';
+            btn.style.borderColor = active ? '#8190f8' : '#475569';
+            btn.style.boxShadow = active ? '0 0 0 1px rgba(129,144,248,.35), 0 4px 12px rgba(102,126,234,.25)' : 'none';
+            btn.style.transform = active ? 'translateY(-1px)' : 'translateY(0)';
+        });
+
+        // Voorkom "verspringen": bij tabwissel altijd starten vanaf bovengrens van instellingen.
+        const settingsForm = modal.querySelector('#settingsForm');
+        if (settingsForm) settingsForm.scrollTop = 0;
     }
 
     getOrgDisplayName(orgNum) {
@@ -4685,12 +5155,13 @@ class TheaterDashboard {
             const id = String(venue.id);
             let v = saved[id];
             if (!v) {
-                const fallback = this.getBalletvloerVleugelDisplay(venue.name, null);
+                // Eerste installatie / geen lokale instellingen voor deze zaal:
+                // start met alle vinkjes uit. Bij updates met bestaande data blijft saved[id] leidend.
                 v = {
-                    balletvloer: fallback.showBalletvloer,
-                    vleugel: fallback.showVleugel,
-                    orkestbak: fallback.showOrkestbak,
-                    zaalplattegrond: fallback.showZaalplattegrond
+                    balletvloer: false,
+                    vleugel: false,
+                    orkestbak: false,
+                    zaalplattegrond: false
                 };
             }
             const item = document.createElement('div');
@@ -4781,6 +5252,12 @@ class TheaterDashboard {
         if (!window.electronAPI) return;
 
         try {
+            // Bewaar huidige schermcontext zodat Opslaan de gebruiker niet naar een andere zaal/view duwt.
+            const preservedSelectedVenues = Array.isArray(this.selectedVenues) ? [...this.selectedVenues] : [];
+            const preservedSelectedDate = this.selectedDate ? new Date(this.selectedDate) : new Date();
+            const preservedCurrentView = this.currentView;
+            const preservedDetailContext = this.detailContext ? { ...this.detailContext } : null;
+
             const configs = {
                 yesplan: {
                     name: document.getElementById('yesplanOrgName').value.trim(),
@@ -4801,6 +5278,9 @@ class TheaterDashboard {
                         const v = document.getElementById('activeYesplanOrg').value;
                         return v === 'both' ? 'both' : (parseInt(v, 10) || 1);
                     })(),
+                    selectedVenues: preservedSelectedVenues,
+                    selectedVenue: preservedSelectedVenues.length === 1 ? preservedSelectedVenues[0] : null,
+                    selectedDate: preservedSelectedDate.toISOString(),
                     venueResourceOptions: (() => {
                         const opts = {};
                         const list = document.getElementById('venueResourceOptionsList');
@@ -4882,6 +5362,12 @@ class TheaterDashboard {
 
             // Configuratie herladen
             await this.loadConfig();
+
+            // Herstel bewaarde context direct na config-reload.
+            this.selectedVenues = preservedSelectedVenues;
+            this.selectedDate = preservedSelectedDate;
+            this.currentView = preservedCurrentView;
+            this.detailContext = preservedDetailContext;
             
             // Thema, taal en touchscreen-modus toepassen na opslaan
             const theme = document.getElementById('themeSelect').value;
@@ -4892,6 +5378,11 @@ class TheaterDashboard {
             
             // Zalen opnieuw laden als Yesplan configuratie is gewijzigd
             await this.loadVenues(); // Header dropdown zalen
+            // loadVenues kan selections opschonen; forceer bewaarde keuze terug zolang die nog bestaat.
+            this.selectedVenues = preservedSelectedVenues;
+            const hiddenSelect = document.getElementById('venueSelect');
+            if (hiddenSelect) hiddenSelect.value = this.selectedVenues.length === 1 ? this.selectedVenues[0] : '';
+            this.updateVenueSelectorDisplay();
             
             // Zaalvolgorde en technische opties opnieuw laden in instellingen
             this.populateVenueOrderSettings();
@@ -4921,6 +5412,8 @@ class TheaterDashboard {
         document.body.classList.toggle('touchscreen-mode', !!enabled);
         const searchKeyboard = document.getElementById('searchKeyboard');
         if (searchKeyboard && !enabled) searchKeyboard.style.display = 'none';
+        const touchInputKeyboard = document.getElementById('touchInputKeyboard');
+        if (touchInputKeyboard && !enabled) touchInputKeyboard.style.display = 'none';
     }
 
     t(key, params = {}) {

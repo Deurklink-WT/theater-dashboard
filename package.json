@@ -1,6 +1,6 @@
 {
   "name": "theater-dashboard",
-  "version": "1.5.9",
+  "version": "1.5.92",
   "description": "Theater dashboard voor Huistechneut - integratie van Yesplan, Uurwerk, Itix en Priva systemen",
   "main": "src/main.js",
   "scripts": {

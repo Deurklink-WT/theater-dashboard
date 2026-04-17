@@ -1311,12 +1311,18 @@ class YesplanAPI {
       ];
       if (blockedExact.includes(lower)) return true;
       if (lower.startsWith('extra bijlage')) return true;
-      // Niet-technische (financiele/ticketing) resources nooit als technisch materiaal tonen.
+      // Niet-technische (financiele/ticketing/horeca-logistiek) resources nooit als technisch materiaal tonen.
+      // Yesplan zet soms horeca/logistiek onder dezelfde "Technisch materiaal"-structuur; die filteren we hier weg.
       const blockedContains = [
         'ticketing', 'ticket', 'tickets', 'consumptiebon', 'consumptiebonnen',
         'servicekosten', 'handelingkosten', 'handlingskosten', 'nacalculatie',
         'facilitair', 'financieel', 'facturatie', 'btw', 'garderobe', 'pauzedrankje',
-        'internetsite', 'website', 'web site', 'webpagina', 'vermelding internetsite'
+        'internetsite', 'website', 'web site', 'webpagina', 'vermelding internetsite',
+        'drankbuffet', 'drank buffet', 'buffet plaats', 'horeca', 'catering', 'gastronomie',
+        'koffiebar', 'theebar',
+        // Personeelsresources zijn geen "technisch materiaal"
+        'ondersteunend personeel', 'technisch personeel', 'personeel',
+        'beveiliging', 'techniekmedewerker', 'technicus', 'stagemanager'
       ];
       if (blockedContains.some(term => lower.includes(term))) return true;
       // Zaalcodes of locatienamen (zoals DKW/WTPY) zijn geen technisch materiaal.
@@ -1338,10 +1344,13 @@ class YesplanAPI {
 
     const getResourceName = (resource) => {
       if (!resource || typeof resource !== 'object') return null;
-      return resource.name ||
+      // Gebruik waar mogelijk expliciete titel uit Yesplan.
+      return resource.title ||
+        resource.name ||
         resource.resource_name ||
-        resource.title ||
+        resource.resource?.title ||
         resource.resource?.name ||
+        resource.item?.title ||
         resource.item?.name ||
         null;
     };
@@ -1378,6 +1387,7 @@ class YesplanAPI {
       }
 
       const fieldsToCheck = [
+        resource.title,
         resource.name,
         resource.path,
         resource.full_path,
@@ -1394,8 +1404,11 @@ class YesplanAPI {
       const hasMatch = fieldsToCheck.some(matchesTechnicalMaterial) || hasDeepMatch(resource);
       if (forceAdd || hasMatch) {
         addMaterial(
+          resource.title ||
           resource.name ||
           resource.resource_name ||
+          resource.resource?.title ||
+          resource.resource?.name ||
           resource.path ||
           resource.full_path ||
           getResourceName(resource)
@@ -1406,6 +1419,27 @@ class YesplanAPI {
     const isLikelyMaterialKey = (k) => {
       const key = String(k || '').toLowerCase();
       return key.includes('resource') || key.includes('materiaal') || key.includes('material');
+    };
+
+    const isPersonnelLikeObject = (obj) => {
+      if (!obj || typeof obj !== 'object') return false;
+      const values = [
+        obj.type,
+        obj.resourcespecies,
+        obj.category?.name,
+        obj.group?.name,
+        obj.group?.parent?.name,
+        obj.parent?.name,
+        obj.name,
+        obj.title,
+        obj.resource_name
+      ].filter(Boolean).map(v => String(v).toLowerCase());
+      return values.some(v =>
+        v.includes('personeel') ||
+        v.includes('human') ||
+        v.includes('beveiliging') ||
+        v.includes('techniekmedewerker')
+      );
     };
 
     // event.resources (array)
@@ -1440,19 +1474,26 @@ class YesplanAPI {
     }
 
     // Fallback: als resources op een andere plek in event zitten, pak ze toch mee.
-    const scanEventForMaterialLikeData = (obj, depth = 0) => {
+    const scanEventForMaterialLikeData = (obj, depth = 0, techContext = false) => {
       if (!obj || typeof obj !== 'object' || depth > 5) return;
       if (Array.isArray(obj)) {
-        obj.forEach(v => scanEventForMaterialLikeData(v, depth + 1));
+        obj.forEach(v => scanEventForMaterialLikeData(v, depth + 1, techContext));
         return;
       }
       for (const [key, value] of Object.entries(obj)) {
         if (value == null) continue;
+        const nextTechContext = techContext || matchesTechnicalMaterial(key);
         if (isLikelyMaterialKey(key)) {
-          if (typeof value === 'object') inspectResource(value, true);
+          // Alleen forceren als we echt in "technisch materiaal"-context zitten.
+          if (typeof value === 'object' && nextTechContext) {
+            inspectResource(value, true);
+          }
         }
         if (typeof value === 'object') {
-          scanEventForMaterialLikeData(value, depth + 1);
+          // Vermijd dat personeelsstructuren als materiaal worden geïnterpreteerd.
+          if (!isPersonnelLikeObject(value)) {
+            scanEventForMaterialLikeData(value, depth + 1, nextTechContext);
+          }
         }
       }
     };
