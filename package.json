@@ -1,6 +1,6 @@
 {
   "name": "theater-dashboard",
-  "version": "1.5.92",
+  "version": "1.5.93",
   "description": "Theater dashboard voor Huistechneut - integratie van Yesplan, Uurwerk, Itix en Priva systemen",
   "main": "src/main.js",
   "scripts": {
@@ -18,7 +18,8 @@
     "server": "node src/server/api-server.js",
     "cap:ios": "npx cap sync ios && npx cap open ios",
     "cap:sync": "npx cap sync",
-    "inject-update-token": "node scripts/inject-update-token.js"
+    "inject-update-token": "node scripts/inject-update-token.js",
+    "build:mac:release": "npm run inject-update-token && electron-builder --mac --publish never"
   },
   "keywords": [
     "theater",
@@ -83,8 +84,7 @@
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
       "entitlements": "build/entitlements.mac.plist",
-      "entitlementsInherit": "build/entitlements.mac.plist",
-      "identity": null
+      "entitlementsInherit": "build/entitlements.mac.plist"
     },
     "dmg": {
       "title": "${productName} ${version}",

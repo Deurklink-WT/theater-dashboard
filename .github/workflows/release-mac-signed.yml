@@ -1,0 +1,83 @@
+name: Release macOS Signed
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag (bijv. v1.5.93)
+        required: true
+        type: string
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-sign-notarize-mac:
+    runs-on: macos-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      CSC_LINK: ${{ secrets.CSC_LINK }}
+      CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+      APPLE_ID: ${{ secrets.APPLE_ID }}
+      APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      GH_TOKEN_UPDATER: ${{ secrets.GH_TOKEN_UPDATER }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Resolve tag
+        id: tag
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "tag=${{ inputs.tag }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Inject updater token (optional)
+        shell: bash
+        run: |
+          if [ -n "${GH_TOKEN_UPDATER}" ]; then
+            export GH_TOKEN="$GH_TOKEN_UPDATER"
+          fi
+          npm run inject-update-token
+
+      - name: Build signed + notarized mac artifacts
+        run: npm run build:mac:release
+
+      - name: Ensure release exists
+        shell: bash
+        run: |
+          TAG="${{ steps.tag.outputs.tag }}"
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release $TAG bestaat al"
+          else
+            gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --title "$TAG" --notes "Automatisch aangemaakt voor macOS signed artifacts."
+          fi
+
+      - name: Upload mac updater metadata + assets
+        shell: bash
+        run: |
+          TAG="${{ steps.tag.outputs.tag }}"
+          VER="${TAG#v}"
+          gh release upload "$TAG" \
+            "dist/latest-mac.yml#latest-mac.yml" \
+            "dist/Shift Happens-${VER}-arm64-mac.zip#Shift.Happens-${VER}-arm64-mac.zip" \
+            "dist/Shift Happens-${VER}-arm64-mac.zip.blockmap#Shift.Happens-${VER}-arm64-mac.zip.blockmap" \
+            "dist/Shift Happens-${VER}-arm64.dmg#Shift.Happens-${VER}-arm64.dmg" \
+            "dist/Shift Happens-${VER}-arm64.dmg.blockmap#Shift.Happens-${VER}-arm64.dmg.blockmap" \
+            --repo "$GITHUB_REPOSITORY" \
+            --clobber

@@ -2,6 +2,32 @@
 
 **Stap-voor-stap testen:** zie [`UPDATE-TEST-STAPPEN.md`](./UPDATE-TEST-STAPPEN.md) (Fase A: dev-knop; Fase B: echte release).
 
+## macOS auto-install structureel fixen (signing + notarization)
+
+Voor betrouwbare in-app installatie op macOS moeten releases **gesigned en notarized** zijn.
+
+### GitHub secrets (repo settings)
+
+Zet deze secrets in GitHub:
+
+- `CSC_LINK`: base64/pad/data-URL naar je `.p12` Developer ID Application certificaat
+- `CSC_KEY_PASSWORD`: wachtwoord van dat `.p12` certificaat
+- `APPLE_ID`: Apple ID voor notarization
+- `APPLE_APP_SPECIFIC_PASSWORD`: app-specifiek wachtwoord van Apple ID
+- `APPLE_TEAM_ID`: je Apple Team ID
+- `GH_TOKEN_UPDATER` (optioneel): read-only token voor private release feed injectie
+
+### Workflow
+
+Gebruik workflow **`Release macOS Signed`** (`.github/workflows/release-mac-signed.yml`):
+
+- trigger op tag (`v*`) of handmatig met `tag`
+- bouwt mac artifacts
+- signeert + notarize via electron-builder env vars
+- uploadt updater-metadata (`latest-mac.yml`) en mac assets naar de release
+
+> Zonder geldige signing/notarization kan `electron-updater` downloaden, maar install op macOS alsnog blokkeren met code-signature fouten.
+
 ## Hoe het werkt
 
 1. **Jij bouwt** een nieuwe versie (`npm run build:win` / `build:mac` / `build:pi`).

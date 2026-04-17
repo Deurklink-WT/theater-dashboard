@@ -46,7 +46,8 @@ const TRANSLATIONS = {
             downloading: 'Downloaden {n}%',
             restart: 'Klaar — tik om te herstarten en te installeren',
             uptodate: 'Je hebt de nieuwste versie.',
-            privateRepo: 'Updates niet bereikbaar (private repo? Token of UPDATE_BASE_URL nodig — zie docs/UPDATES.md).'
+            privateRepo: 'Updates niet bereikbaar (private repo? Token of UPDATE_BASE_URL nodig — zie docs/UPDATES.md).',
+            manualInstall: 'Update gedownload, maar automatische installatie is geblokkeerd. Klik hier voor handmatige installatie.'
         }
     },
     en: {
@@ -85,7 +86,8 @@ const TRANSLATIONS = {
             downloading: 'Downloading {n}%',
             restart: 'Ready — click to restart and install',
             uptodate: 'You are on the latest version.',
-            privateRepo: 'Updates unavailable (private repo? Token or UPDATE_BASE_URL needed — see docs/UPDATES.md).'
+            privateRepo: 'Updates unavailable (private repo? Token or UPDATE_BASE_URL needed — see docs/UPDATES.md).',
+            manualInstall: 'Update downloaded, but auto-install is blocked. Click here for manual installation.'
         }
     }
 };
@@ -5638,6 +5640,10 @@ class TheaterDashboard {
         if (banner) {
             banner.addEventListener('click', async () => {
                 const phase = banner.dataset.phase;
+                if (phase === 'manual-download' && window.electronAPI?.openExternal) {
+                    await window.electronAPI.openExternal('https://github.com/Deurklink-WT/theater-dashboard/releases/latest');
+                    return;
+                }
                 if (phase === 'downloaded' && window.electronAPI.quitAndInstallUpdate) {
                     try {
                         const r = await window.electronAPI.quitAndInstallUpdate();
@@ -5730,9 +5736,21 @@ class TheaterDashboard {
             return;
         }
         if (p.phase === 'error') {
+            const raw = String(p.error || 'Error');
+            const lower = raw.toLowerCase();
+            const isSignatureLike = lower.includes('code signature') || lower.includes('codesign') || lower.includes('cannot be verified');
+
             show();
+            if (isSignatureLike) {
+                banner.classList.add('update-banner--info');
+                banner.dataset.phase = 'manual-download';
+                banner.textContent = this.t('updatesBanner.manualInstall');
+                banner.title = this.t('updatesBanner.manualInstall');
+                return;
+            }
+
             banner.classList.add('update-banner--error');
-            const msg = String(p.error || 'Error').slice(0, 160);
+            const msg = raw.slice(0, 160);
             banner.textContent = msg;
             this._updateBannerHideTimer = setTimeout(() => {
                 banner.style.display = 'none';
@@ -5740,9 +5758,8 @@ class TheaterDashboard {
             return;
         }
         if (p.phase === 'info' && p.info === 'private_repo') {
-            show();
-            banner.classList.add('update-banner--info');
-            banner.textContent = this.t('updatesBanner.privateRepo');
+            // Niet als storende opstartbanner tonen; alleen bij handmatige check in instellingen.
+            banner.style.display = 'none';
             return;
         }
     }
