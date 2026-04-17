@@ -67,15 +67,22 @@ import json, os
 j = json.loads(os.environ['RELEASE_JSON'])
 arch = os.environ['ARCH']
 assets = j.get('assets', [])
+ver = (j.get('tag_name') or '').lstrip('v')
 
 zip_preferred = [
   f"Shift-Happens-mac-{arch}.zip",
-  f"Shift.Happens-{j.get('tag_name','').lstrip('v')}-{arch}-mac.zip",
+  f"Shift.Happens-{ver}-{arch}-mac.zip",
 ]
+# electron-builder --x64 --arm64 op Apple Silicon: x64-ZIP heet vaak *-mac.zip zonder "x64"
+if arch == "x64":
+  zip_preferred.append(f"Shift.Happens-{ver}-mac.zip")
+
 dmg_preferred = [
   f"Shift-Happens-mac-{arch}.dmg",
-  f"Shift.Happens-{j.get('tag_name','').lstrip('v')}-{arch}.dmg",
+  f"Shift.Happens-{ver}-{arch}.dmg",
 ]
+if arch == "x64":
+  dmg_preferred.append(f"Shift.Happens-{ver}.dmg")
 
 def find_exact(names):
   for n in names:
