@@ -106,7 +106,12 @@ jobs:
           upload "dist/Shift Happens-${VER}-arm64-mac.zip.blockmap" "Shift.Happens-${VER}-arm64-mac.zip.blockmap"
           upload "dist/Shift Happens-${VER}-arm64.dmg" "Shift.Happens-${VER}-arm64.dmg"
           upload "dist/Shift Happens-${VER}-arm64.dmg.blockmap" "Shift.Happens-${VER}-arm64.dmg.blockmap"
+          # x64: electron-builder gebruikt soms *-x64-* en soms *-mac.zip / *.dmg (bij combined --x64 --arm64)
           upload "dist/Shift Happens-${VER}-x64-mac.zip" "Shift.Happens-${VER}-x64-mac.zip"
           upload "dist/Shift Happens-${VER}-x64-mac.zip.blockmap" "Shift.Happens-${VER}-x64-mac.zip.blockmap"
+          upload "dist/Shift Happens-${VER}-mac.zip" "Shift.Happens-${VER}-x64-mac.zip"
+          upload "dist/Shift Happens-${VER}-mac.zip.blockmap" "Shift.Happens-${VER}-x64-mac.zip.blockmap"
           upload "dist/Shift Happens-${VER}-x64.dmg" "Shift.Happens-${VER}-x64.dmg"
           upload "dist/Shift Happens-${VER}-x64.dmg.blockmap" "Shift.Happens-${VER}-x64.dmg.blockmap"
+          upload "dist/Shift Happens-${VER}.dmg" "Shift.Happens-${VER}-x64.dmg"
+          upload "dist/Shift Happens-${VER}.dmg.blockmap" "Shift.Happens-${VER}-x64.dmg.blockmap"
