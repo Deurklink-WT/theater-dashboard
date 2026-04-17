@@ -1,6 +1,7 @@
 /**
  * Automatische updates voor geïnstalleerde builds (niet bij `npm start`).
  * Stuurt status naar de renderer (header-banner) via kanaal `update-status`.
+ * Eerste check na opstart loopt stil (geen zoek- of up-to-date-banner); bij beschikbare update of fout wél.
  *
  * Private GitHub-repo: API is niet publiek. Zet GH_TOKEN (read-only, alleen repo releases)
  * op de machine, of gebruik UPDATE_BASE_URL naar een publieke map met latest*.yml.
@@ -21,6 +22,8 @@ try {
 }
 
 let intervalId = null;
+/** Eerste automatische check na opstart: geen "Zoeken…" / "Je bent up-to-date"-banner; wél bij update of fout. */
+let suppressQuietStartupBanner = true;
 
 function loadGithubPublish() {
   try {
@@ -86,10 +89,12 @@ function setupAutoUpdater(mainWindow) {
   autoUpdater.autoInstallOnAppQuit = true;
 
   autoUpdater.on('checking-for-update', () => {
+    if (suppressQuietStartupBanner) return;
     sendStatus(mainWindow, { phase: 'checking' });
   });
 
   autoUpdater.on('update-available', (info) => {
+    suppressQuietStartupBanner = false;
     sendStatus(mainWindow, {
       phase: 'available',
       version: info?.version || null
@@ -97,6 +102,10 @@ function setupAutoUpdater(mainWindow) {
   });
 
   autoUpdater.on('update-not-available', () => {
+    if (suppressQuietStartupBanner) {
+      suppressQuietStartupBanner = false;
+      return;
+    }
     sendStatus(mainWindow, { phase: 'not-available' });
   });
 
@@ -116,6 +125,7 @@ function setupAutoUpdater(mainWindow) {
   });
 
   autoUpdater.on('error', (err) => {
+    suppressQuietStartupBanner = false;
     const msg = err?.message || String(err);
     console.warn('[Update]', msg);
 
@@ -136,6 +146,7 @@ function setupAutoUpdater(mainWindow) {
 
   setTimeout(() => {
     autoUpdater.checkForUpdates().catch((e) => {
+      suppressQuietStartupBanner = false;
       const msg = e?.message || String(e);
       console.warn('[Update] check failed:', msg);
       // Alleen expliciete info-hint; echte fouten komen via `error`-event (voorkomt dubbele banners).
@@ -158,6 +169,7 @@ async function checkForUpdatesNow() {
   if (process.env.SKIP_AUTO_UPDATE === '1') {
     return { ok: false, reason: 'disabled' };
   }
+  suppressQuietStartupBanner = false;
   try {
     const r = await autoUpdater.checkForUpdates();
     return {
