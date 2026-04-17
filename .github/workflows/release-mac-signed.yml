@@ -60,17 +60,17 @@ jobs:
         run: |
           set -euo pipefail
           if [ -n "${CSC_LINK:-}" ]; then
-            echo "Building met CSC_LINK (signed)"
-            npm run build:mac:release
+            echo "Building met CSC_LINK (signed), arm64 + x64"
+            npm run build:mac:release -- --x64 --arm64
           else
-            echo "Geen CSC_LINK — unsigned mac build (artifacts wel op release)"
+            echo "Geen CSC_LINK — unsigned mac build arm64 + x64 (artifacts op release)"
             unset CSC_LINK || true
             unset CSC_KEY_PASSWORD || true
             unset APPLE_ID || true
             unset APPLE_APP_SPECIFIC_PASSWORD || true
             unset APPLE_TEAM_ID || true
             export CSC_IDENTITY_AUTO=false
-            npx electron-builder --mac --publish never \
+            npx electron-builder --mac --publish never --x64 --arm64 \
               --config.mac.identity=null \
               --config.mac.hardenedRuntime=false
           fi
