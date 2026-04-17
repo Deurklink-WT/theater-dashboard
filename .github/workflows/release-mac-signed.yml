@@ -79,5 +79,9 @@ jobs:
             "dist/Shift Happens-${VER}-arm64-mac.zip.blockmap#Shift.Happens-${VER}-arm64-mac.zip.blockmap" \
             "dist/Shift Happens-${VER}-arm64.dmg#Shift.Happens-${VER}-arm64.dmg" \
             "dist/Shift Happens-${VER}-arm64.dmg.blockmap#Shift.Happens-${VER}-arm64.dmg.blockmap" \
+            "dist/Shift Happens-${VER}-x64-mac.zip#Shift.Happens-${VER}-x64-mac.zip" \
+            "dist/Shift Happens-${VER}-x64-mac.zip.blockmap#Shift.Happens-${VER}-x64-mac.zip.blockmap" \
+            "dist/Shift Happens-${VER}-x64.dmg#Shift.Happens-${VER}-x64.dmg" \
+            "dist/Shift Happens-${VER}-x64.dmg.blockmap#Shift.Happens-${VER}-x64.dmg.blockmap" \
             --repo "$GITHUB_REPOSITORY" \
             --clobber
