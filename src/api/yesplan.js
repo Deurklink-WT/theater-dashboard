@@ -379,6 +379,9 @@ class YesplanAPI {
           minimalEvent.hasOrkestbak = hasOrkestbak;
           minimalEvent.orkestbakValue = hasOrkestbak ? 'ja' : null;
 
+          const artiestNaam = this.extractArtiestFromEventCustomData(eventCustomData);
+          if (artiestNaam) minimalEvent.performer = artiestNaam;
+
           if (includeEventDetailsForWeekFilters) {
             const urenInfo = this.extractUrenInfo(eventCustomData);
             const technicalMaterialResources = this.extractTechnicalMaterialResources(raw, eventCustomData);
@@ -2049,6 +2052,58 @@ class YesplanAPI {
     return best;
   }
 
+
+  /**
+   * "Artiest" uit event-customdata (Algemene informatie), los van event.group-naam
+   * (groep is vaak de showtitel, niet de impresario/artiest).
+   */
+  extractArtiestFromEventCustomData(rawCustomData) {
+    const eventCustomData = rawCustomData?.data ?? rawCustomData?.customdata ?? rawCustomData;
+    if (!eventCustomData || typeof eventCustomData !== 'object') return null;
+
+    const toText = (v) => {
+      if (v == null) return '';
+      if (typeof v === 'string') return v.trim();
+      if (typeof v === 'number' || typeof v === 'boolean') return String(v).trim();
+      if (typeof v === 'object' && !Array.isArray(v)) {
+        const x = v.value ?? v.text ?? v.label ?? v.name;
+        if (x != null && typeof x !== 'object') return String(x).trim();
+      }
+      return '';
+    };
+
+    const isArtiestFieldMeta = (meta) => {
+      const t = String(meta || '').toLowerCase();
+      if (t.includes('opmerking') || t.includes('remark') || t.includes('notes')) return false;
+      return t.includes('artiest') || /\bartist\b/.test(t);
+    };
+
+    let best = null;
+    const visit = (obj, depth = 0) => {
+      if (!obj || typeof obj !== 'object' || depth > 16) return;
+      if (Array.isArray(obj)) {
+        obj.forEach((x) => visit(x, depth + 1));
+        return;
+      }
+      const meta = `${obj.keyword || ''} ${obj.name || ''} ${obj.label || ''}`;
+      const val = toText(obj.value);
+      if (!best && val && isArtiestFieldMeta(meta) && val.length > 0 && val.length < 600) {
+        best = val;
+      }
+      (obj.children || []).forEach((c) => visit(c, depth + 1));
+      (obj.groups || []).forEach((g) => visit(g, depth + 1));
+      (obj.fields || []).forEach((f) => visit(f, depth + 1));
+      if (obj.customdata) visit(obj.customdata, depth + 1);
+      for (const [k, v] of Object.entries(obj)) {
+        if (['children', 'groups', 'fields', 'customdata', 'value'].includes(k)) continue;
+        if (v && typeof v === 'object') visit(v, depth + 1);
+      }
+    };
+
+    visit(eventCustomData);
+    return best || null;
+  }
+
   // Extract ureninfo (Uurwerk personeelsplanning) uit eventCustomData
   // Bestand tegen Yesplan-structuurwijzigingen: exacte keywords + zoeken op naam/deel-keyword
   extractUrenInfo(rawCustomData) {
@@ -2089,9 +2144,11 @@ class YesplanAPI {
       const results = {};
       const traverse = (obj) => {
         if (!obj || typeof obj !== 'object') return;
-        if (obj.keyword && keywords.includes(obj.keyword)) {
+        if (obj.keyword) {
           const str = toValueString(obj.value);
-          if (str) results[obj.keyword] = str;
+          if (!str) { getTraverseTargets(obj).forEach(traverse); return; }
+          const hit = keywords.find((k) => String(k).toLowerCase() === String(obj.keyword).toLowerCase());
+          if (hit) results[hit] = str;
         }
         getTraverseTargets(obj).forEach(traverse);
       };
@@ -2120,7 +2177,7 @@ class YesplanAPI {
       return results;
     };
 
-    const urenKeywords = ['urenuurwerktechniek', 'urenuurwerkhoreca', 'urenuurwerkfrontoffice'];
+    const urenKeywords = ['urenuurwerktechniek', 'urenuurwerkhoreca', 'urenuurwerkfrontoffice', 'uren_uurwerk_techniek', 'uren_uurwerk_horeca', 'uren_uurwerk_frontoffice'];
     const nostradamusKeywords = ['nostradamus_uren_dienst', 'nostradamus_uren_afdeling', 'nostradamus_uren_team'];
 
     // Fallback op keyword/naam/label: géén puur "opmerkingen …" velden (bijv. Opmerkingen techniek),
@@ -2147,9 +2204,31 @@ class YesplanAPI {
       const t = String(s || '').toLowerCase();
       if (!t) return false;
       let matchesDept = false;
-      if (deptHint === 'horeca') matchesDept = t.includes('horeca');
-      else if (deptHint === 'frontOffice') matchesDept = t.includes('frontoffice') || t.includes('front office');
-      else if (deptHint === 'techniek') matchesDept = t.includes('techniek') || t.includes('uurwerk');
+      if (deptHint === 'horeca') {
+        matchesDept =
+          t.includes('horeca') ||
+          t.includes('catering') ||
+          t.includes('bediening') ||
+          t.includes('keuken') ||
+          t.includes('horecaploeg');
+      } else if (deptHint === 'frontOffice') {
+        matchesDept =
+          t.includes('frontoffice') ||
+          t.includes('front office') ||
+          t.includes('receptie') ||
+          t.includes('garderobe') ||
+          t.includes('ticketing') ||
+          t.includes('foyer') ||
+          t.includes('entree') ||
+          t.includes('uitleenkassa') ||
+          t.includes('publieksservice') ||
+          t.includes('publiekservice') ||
+          t.includes('balie') ||
+          t.includes('zaalwacht') ||
+          (t.includes('publiek') && (t.includes('service') || t.includes('balie')));
+      } else if (deptHint === 'techniek') {
+        matchesDept = t.includes('techniek') || t.includes('uurwerk');
+      }
       if (!matchesDept) return false;
       if (isPureRemarkFieldName(t) && !looksLikeUrenUurwerkFieldName(t)) return false;
       return true;
@@ -2180,6 +2259,136 @@ class YesplanAPI {
     if (horeca.length === 0 && fallback['horeca']) horeca = parseUrenText(fallback['horeca']);
     if (frontOffice.length === 0 && fallback['frontOffice']) frontOffice = parseUrenText(fallback['frontOffice']);
 
+    const mergeUniqueUren = (base, extra) => {
+      const seen = new Set((base || []).map((x) => String(x)));
+      const out = (base || []).slice();
+      for (const line of extra || []) {
+        const L = String(line);
+        if (!seen.has(L)) {
+          seen.add(L);
+          out.push(L);
+        }
+      }
+      return out;
+    };
+    if (found['uren_uurwerk_techniek']) techniek = mergeUniqueUren(techniek, parseUrenText(found['uren_uurwerk_techniek']));
+    if (found['uren_uurwerk_horeca']) horeca = mergeUniqueUren(horeca, parseUrenText(found['uren_uurwerk_horeca']));
+    if (found['uren_uurwerk_frontoffice']) frontOffice = mergeUniqueUren(frontOffice, parseUrenText(found['uren_uurwerk_frontoffice']));
+    const gatherUrenLinesFromCustomTree = (predicate) => {
+      const out = [];
+      const seen = new Set();
+      const walk = (obj) => {
+        if (!obj || typeof obj !== 'object') return;
+        const meta = [obj.keyword, obj.name, obj.label].filter(Boolean).join(' ').toLowerCase();
+        const str = toValueString(obj.value);
+        if (!str || !String(str).trim()) {
+          getTraverseTargets(obj).forEach(walk);
+          return;
+        }
+        if (predicate(meta)) {
+          parseUrenText(str).forEach((line) => {
+            if (!seen.has(line)) {
+              seen.add(line);
+              out.push(line);
+            }
+          });
+        }
+        getTraverseTargets(obj).forEach(walk);
+      };
+      walk(eventCustomData);
+      return out;
+    };
+    const horecaFromLooseFields = gatherUrenLinesFromCustomTree((meta) => {
+      if (isPureRemarkFieldName(meta) && !looksLikeUrenUurwerkFieldName(meta)) return false;
+      if (/\btechniek\b/.test(meta) && !/\b(horeca|catering|bediening)\b/.test(meta)) return false;
+      return (
+        /\b(horeca|catering|bediening|keuken|horecaploeg)\b/.test(meta) &&
+        (looksLikeUrenUurwerkFieldName(meta) || /\b(uren|planning|dienst|shift|uur)\b/.test(meta))
+      );
+    });
+    const frontFromLooseFields = gatherUrenLinesFromCustomTree((meta) => {
+      if (isPureRemarkFieldName(meta) && !looksLikeUrenUurwerkFieldName(meta)) return false;
+      if (/\b(horeca|catering|bediening|keuken)\b/.test(meta) && !/\b(front|receptie|publiek|foyer|entree)\b/.test(meta)) return false;
+      return (
+        /\b(front[\\s_-]*office|frontoffice|receptie|garderobe|ticketing|publieksservice|publiekservice|foyer|entree|balie|zaalwacht|uitleenkassa|kaartverkoop)\b/.test(meta) &&
+        (looksLikeUrenUurwerkFieldName(meta) || /\b(uren|planning|dienst|shift|uur)\b/.test(meta))
+      );
+    });
+    if (horecaFromLooseFields.length) horeca = mergeUniqueUren(horeca, horecaFromLooseFields);
+    if (frontFromLooseFields.length) frontOffice = mergeUniqueUren(frontOffice, frontFromLooseFields);
+
+    // Vaak staan Techniek/Horeca/Front Office in hetzelfde multiline-veld (bv. urenuurwerktechniek) met sectiekoppen.
+    const splitUurwerkLinesBySectionHeaders = (inputLines) => {
+      const buckets = { techniek: [], horeca: [], frontOffice: [] };
+      let mode = 'techniek';
+
+      const looksLikeDataLine = (x) =>
+        /\b\d{1,2}:\d{2}\b/.test(x) ||
+        /\d{1,2}\s+(jan|feb|maa|mrt|apr|mei|jun|jul|aug|sep|okt|nov|dec)/i.test(x);
+
+      const headerModeIfAny = (line) => {
+        const x = String(line || '').trim();
+        if (!x) return null;
+        if (looksLikeDataLine(x)) return null;
+        const compact = x.replace(/\s+/g, ' ');
+        if (/^horeca$/i.test(compact) || /^horeca\s*:\s*$/i.test(compact)) return 'horeca';
+        if (/^bediening$/i.test(compact) || /^catering$/i.test(compact)) return 'horeca';
+        if (/^front\s*office$/i.test(compact) || /^frontoffice$/i.test(compact) || /^fo$/i.test(compact)) {
+          return 'frontOffice';
+        }
+        if (/^receptie$/i.test(compact) || /^garderobe$/i.test(compact) || /^ticketing$/i.test(compact)) {
+          return 'frontOffice';
+        }
+        if (/^techniek$/i.test(compact)) return 'techniek';
+        if (/^publiek(s|sservice)?$/i.test(compact)) return 'frontOffice';
+        if (/^\d+[\.\)]\s*(horeca|bediening|catering)\b/i.test(x)) return 'horeca';
+        if (/^\d+[\.\)]\s*(front\s*office|frontoffice|fo|receptie|garderobe)\b/i.test(x)) return 'frontOffice';
+        if (/^\d+[\.\)]\s*techniek\b/i.test(x)) return 'techniek';
+        if (/^#{1,3}\s*horeca\b/i.test(x)) return 'horeca';
+        if (/^#{1,3}\s*(front\s*office|frontoffice|fo)\b/i.test(x)) return 'frontOffice';
+        if (/^#{1,3}\s*techniek\b/i.test(x)) return 'techniek';
+        // Sectie tussen streepjes: "--- Horeca ---"
+        if (/^[-–—\s]*(horeca|bediening|catering)[-–—\s]*$/i.test(compact)) return 'horeca';
+        if (/^[-–—\s]*(front\s*office|frontoffice|fo|receptie)[-–—\s]*$/i.test(compact)) return 'frontOffice';
+        return null;
+      };
+
+      for (const raw of inputLines || []) {
+        const line = String(raw || '').trim();
+        if (!line) continue;
+
+        const inlineHoreca = /^\s*(horeca|bediening|catering)\s*:\s*(.+)$/i.exec(line);
+        if (inlineHoreca) {
+          const rest = inlineHoreca[2].trim();
+          if (rest) {
+            buckets.horeca.push(rest);
+            continue;
+          }
+        }
+        const inlineFo = /^\s*(front\s*office|frontoffice|receptie|garderobe|ticketing)\s*:\s*(.+)$/i.exec(line);
+        if (inlineFo) {
+          const rest = inlineFo[2].trim();
+          if (rest) {
+            buckets.frontOffice.push(rest);
+            continue;
+          }
+        }
+
+        const hm = headerModeIfAny(line);
+        if (hm) {
+          mode = hm;
+          continue;
+        }
+        buckets[mode].push(line);
+      }
+      return buckets;
+    };
+
+    const sectioned = splitUurwerkLinesBySectionHeaders(techniek);
+    techniek = sectioned.techniek;
+    horeca = mergeUniqueUren(horeca, sectioned.horeca);
+    frontOffice = mergeUniqueUren(frontOffice, sectioned.frontOffice);
+
     // Verwijder losse tekstregels zonder diensttijd / typische Yesplan-structuur (bijv. opmerkingen die
     // per ongeluk in het uurwerkveld staan, of die via API toch binnenkomen).
     const isPlausibleUurwerkPlanningLine = (line) => {
@@ -2194,6 +2403,47 @@ class YesplanAPI {
       return false;
     };
     techniek = techniek.filter(isPlausibleUurwerkPlanningLine);
+
+    // Soms staat horeca/frontoffice nog in hetzelfde veld als techniek (of omgekeerd verkeerd gelabeld).
+    // Verplaats duidelijke horeca/FO-regels naar de juiste buckets zodat de Personeel-kaart klopt.
+    const lineLooksLikeHoreca = (line) => {
+      const l = String(line || '').toLowerCase();
+      if (!l) return false;
+      if (/\b(licht|geluid|audio|video|spot|rigging|toneel|pod\b|technicus|a67|dimmer)\b/.test(l)) return false;
+      return (
+        /\bhoreca\b/.test(l) ||
+        /\b(bediening|barmedewerker|catering|keuken|glaswerk|buffet|gastheer|gastvrouw|horecaploeg)\b/.test(l)
+      );
+    };
+    const lineLooksLikeFrontOffice = (line) => {
+      const l = String(line || '').toLowerCase();
+      if (!l) return false;
+      if (/\b(licht|geluid|audio|video|spot|rigging|toneel)\b/.test(l)) return false;
+      if (/\bhoreca\b/.test(l)) return false;
+      if (/\b(bediening|barmedewerker|catering|keuken|glaswerk|buffet|gastheer|gastvrouw|horecaploeg)\b/.test(l)) {
+        return false;
+      }
+      return (
+        /\b(front\s*office|frontoffice|receptie|kassa|garderobe|ticketing|uitleenkassa|entree|foyer|zaalwacht|publieksservice|bezoekersservice|publieksdienst|kaartverkoop|kaartcontrole|ticketcontrole|ticket\s*scan|ncscan)\b/.test(l) ||
+        /\b(hoofd\s+publiek|publiekservice)\b/.test(l)
+      );
+    };
+    const horecaExtra = [];
+    const frontExtra = [];
+    const techniekRest = techniek.filter((line) => {
+      if (lineLooksLikeHoreca(line)) {
+        horecaExtra.push(line);
+        return false;
+      }
+      if (lineLooksLikeFrontOffice(line)) {
+        frontExtra.push(line);
+        return false;
+      }
+      return true;
+    });
+    techniek = techniekRest;
+    if (horecaExtra.length) horeca = (horeca || []).concat(horecaExtra);
+    if (frontExtra.length) frontOffice = (frontOffice || []).concat(frontExtra);
 
     // Nostradamus: exact + fallback op naam
     const nostradamusFound = findByKeywordRecursive(eventCustomData, nostradamusKeywords);
@@ -2770,8 +3020,11 @@ class YesplanAPI {
       const startTime = event.defaultschedulestart || event.starttime || event.start_date;
       const endTime = event.defaultscheduleend || event.endtime || event.end_date;
       
-      // Haal uitvoerende op uit group of parentgroup
-      const performer = event.group?.name || event.parentgroup?.name || null;
+      // Artiest uit customdata (veld "Artiest"), anders groepsnaam (vaak showtitel)
+      const performer = this.extractArtiestFromEventCustomData(eventCustomData)
+        || event.group?.name
+        || event.parentgroup?.name
+        || null;
       
       // Haal schedule tijden op (voor opbouw, pauze, etc.)
       const scheduleStartTime = event.defaultschedulestarttime;

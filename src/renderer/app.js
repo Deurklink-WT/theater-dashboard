@@ -3027,7 +3027,7 @@ class TheaterDashboard {
         if (this.currentView === 'detail') {
             if (isDetailSingleEvent) {
                 const ev = events[0];
-                const eventTitle = ev.performer ? `${ev.title} - ${ev.performer}` : ev.title;
+                const eventTitle = this.buildEventDisplayTitle(ev.title, ev.performer);
                 this.updateDetailViewTitle(this.getVenueName(), eventTitle);
             } else {
                 this.updateDetailViewTitle(this.getVenueName(), null);
@@ -3040,8 +3040,10 @@ class TheaterDashboard {
                     // Titel zonder artiest
                     const title = event.title;
                     
-                    // Artiest op aparte regel
-                    const performerInfo = event.performer ? `<p style="margin-top: 0.25rem; color: #a0aec0; font-size: 0.9rem;"><i class="fas fa-user"></i> ${event.performer}</p>` : '';
+                    // Artiest op aparte regel (ook als Yesplan titel en artiest dezelfde tekst heeft)
+                    const performerInfo = event.performer
+                        ? `<p style="margin-top: 0.25rem; color: #a0aec0; font-size: 0.9rem;"><i class="fas fa-user"></i> ${event.performer}</p>`
+                        : '';
                     
                     // Gebruik schedule tijden als beschikbaar, anders start/end tijd
                     let timeRange = '';
@@ -3088,42 +3090,6 @@ class TheaterDashboard {
                     // Technisch materiaal uit /resources/Technisch materiaal
                     const escapeText = (value) => this.escapeHtml(value);
                     const infoBoxStyle = 'margin-top: 0.35rem; padding: 0.6rem 0.75rem; background: #374151; border-radius: 6px; font-size: 0.85rem;';
-
-                    // Technisch personeel (urenInfo) in het algemene zalenoverzicht
-                    const normalizeTechnicalStaffEntry = (entry) => {
-                        const raw = String(entry || '').trim();
-                        if (!raw) return '';
-                        const parts = raw.split(/\s+[-–—]\s+/).map(p => p.trim()).filter(Boolean);
-                        if (parts.length >= 2) {
-                            const last = parts[parts.length - 1];
-                            const prev = parts[parts.length - 2];
-                            const looksLikeTime = /^\d{1,2}\s+(jan|feb|maa|mrt|maart|apr|mei|jun|jul|aug|sep|okt|oktober|nov|dec)[a-z]*\s+\d{1,2}:\d{2}\s*-\s*\d{1,2}:\d{2}$/i.test(last)
-                                || /^\d{1,2}:\d{2}\s*-\s*\d{1,2}:\d{2}$/.test(last);
-                            if (looksLikeTime) return `${prev} - ${last}`;
-                        }
-                        return raw;
-                    };
-                    const technicalStaffEntries = (event.urenInfo?.techniek || [])
-                        .map(normalizeTechnicalStaffEntry)
-                        .filter(Boolean)
-                        .filter((entry) => {
-                            const lower = entry.toLowerCase();
-                            if (lower.includes('vrijwilliger') || lower.includes('volunteer')) return false;
-                            if (lower === 'opmerkingen techniek' || lower === 'opmerkingentechniek') return false;
-                            if (lower.includes('productie_technischelijst_opmerkingentechniek')) return false;
-                            return true;
-                        });
-                    const technicalStaffInfo = technicalStaffEntries.length > 0
-                        ? `<div style="${infoBoxStyle}">
-                            <div style="display: flex; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.25rem;">
-                                <i class="fas fa-users-cog" style="color: #818cf8; margin-top: 0.125rem;"></i>
-                                <div style="flex: 1;">
-                                    <div style="color: #e2e8f0; font-weight: 500; margin-bottom: 0.25rem;">Technisch personeel:</div>
-                                    <div style="color: #a0aec0; white-space: pre-wrap; word-wrap: break-word;">${technicalStaffEntries.map(escapeText).join('<br>')}</div>
-                                </div>
-                            </div>
-                        </div>`
-                        : '';
 
                     let technicalMaterialInfo = '';
                     const technicalMaterialResources = event.technicalMaterialResources || [];
@@ -3334,7 +3300,6 @@ class TheaterDashboard {
                         <p><i class="fas fa-clock"></i> <strong>${timeRange}</strong></p>
                         ${extraTimeInfo}
                         ${resourcesInfo}
-                        ${technicalStaffInfo}
                         ${technicalListInfo}
                         ${technicalRemarksInfo}
                         ${technicalMaterialInfo}
@@ -4215,8 +4180,6 @@ class TheaterDashboard {
                 'verder hebben we nodig',
                 'we nemen zelf',
                 'er komt geen technicus',
-                'graag',
-                'nodig',
                 'gemaild',
                 'microfoon',
                 'headset',
@@ -4249,8 +4212,14 @@ class TheaterDashboard {
                 const parsed = extractNameAndTime(e) || fallbackParse(e);
                 if (parsed) return parsed;
                 const raw = cleanRawPersonnelEntry(e);
-                // Laat alleen korte, naam-achtige ruwe regels zien als parser niet matcht.
-                return isLikelySimplePersonnelRaw(raw) ? { name: raw, time: '' } : null;
+                if (isLikelySimplePersonnelRaw(raw)) return { name: raw, time: '' };
+                // Fallback: regel met diensttijd maar afwijkend formaat (vaak horeca/FO)
+                const full = String(e || '').trim();
+                const hasTime = /\b\d{1,2}:\d{2}\b/.test(full);
+                if (hasTime && full.length <= 220 && full.split(/\s+/).length <= 25) {
+                    return { name: full, time: '' };
+                }
+                return null;
             }).filter(Boolean);
             if (pairs.length === 0) return [];
             const seen = new Set();
@@ -4294,54 +4263,43 @@ class TheaterDashboard {
         const horecaDisplay = toDisplayNameTimePairs(horeca);
         const frontOfficeDisplay = toDisplayNameTimePairs(frontOffice);
 
-        // Tel totaal aantal entries (op basis van unieke namen)
-        const totalEntries = techniekDisplay.length + horecaDisplay.length + frontOfficeDisplay.length;
+        const escInline = (text) => String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        const renderPersonnelRows = (pairs) => {
+            if (!pairs.length) {
+                return '<div style="padding: 0.5rem; background: #1a202c; border-radius: 4px; font-size: 0.85rem; color: #718096;">—</div>';
+            }
+            return pairs.map((p) => {
+                const text = p.time ? `${p.name} – ${p.time}` : p.name;
+                return `<div style="padding: 0.5rem; background: #1a202c; border-radius: 4px; font-size: 0.85rem; color: #a0aec0;">${escInline(text)}</div>`;
+            }).join('');
+        };
 
         container.innerHTML = `
             <div class="shifts-list">
-                ${techniekDisplay.length > 0 || horecaDisplay.length > 0 || frontOfficeDisplay.length > 0 ? `
-                    ${techniekDisplay.length > 0 ? `
-                        <div class="data-item" style="margin-bottom: 1.5rem;">
-                            <h4 style="margin-bottom: 0.75rem; color: #e2e8f0; font-size: 1rem; font-weight: 600;">
-                                ${this.t('personnel.techniek')}
-                            </h4>
-                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                                ${techniekDisplay.map(p => {
-                                    const text = p.time ? `${p.name} – ${p.time}` : p.name;
-                                    return `<div style="padding: 0.5rem; background: #1a202c; border-radius: 4px; font-size: 0.85rem; color: #a0aec0;">${String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>`;
-                                }).join('')}
-                            </div>
-                        </div>
-                    ` : ''}
-                    ${horecaDisplay.length > 0 ? `
-                        <div class="data-item" style="margin-bottom: 1.5rem;">
-                            <h4 style="margin-bottom: 0.75rem; color: #e2e8f0; font-size: 1rem; font-weight: 600;">
-                                ${this.t('personnel.horeca')}
-                            </h4>
-                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                                ${horecaDisplay.map(p => {
-                                    const text = p.time ? `${p.name} – ${p.time}` : p.name;
-                                    return `<div style="padding: 0.5rem; background: #1a202c; border-radius: 4px; font-size: 0.85rem; color: #a0aec0;">${String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>`;
-                                }).join('')}
-                            </div>
-                        </div>
-                    ` : ''}
-                    ${frontOfficeDisplay.length > 0 ? `
-                        <div class="data-item" style="margin-bottom: 1.5rem;">
-                            <h4 style="margin-bottom: 0.75rem; color: #e2e8f0; font-size: 1rem; font-weight: 600;">
-                                ${this.t('personnel.frontOffice')}
-                            </h4>
-                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                                ${frontOfficeDisplay.map(p => {
-                                    const text = p.time ? `${p.name} – ${p.time}` : p.name;
-                                    return `<div style="padding: 0.5rem; background: #1a202c; border-radius: 4px; font-size: 0.85rem; color: #a0aec0;">${String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>`;
-                                }).join('')}
-                            </div>
-                        </div>
-                    ` : ''}
-                ` : `
-                    <div class="info-message">Geen planning beschikbaar voor deze dag</div>
-                `}
+                <div class="data-item" style="margin-bottom: 1.5rem;">
+                    <h4 style="margin-bottom: 0.75rem; color: #e2e8f0; font-size: 1rem; font-weight: 600;">
+                        ${this.t('personnel.techniek')}
+                    </h4>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        ${renderPersonnelRows(techniekDisplay)}
+                    </div>
+                </div>
+                <div class="data-item" style="margin-bottom: 1.5rem;">
+                    <h4 style="margin-bottom: 0.75rem; color: #e2e8f0; font-size: 1rem; font-weight: 600;">
+                        ${this.t('personnel.horeca')}
+                    </h4>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        ${renderPersonnelRows(horecaDisplay)}
+                    </div>
+                </div>
+                <div class="data-item" style="margin-bottom: 1.5rem;">
+                    <h4 style="margin-bottom: 0.75rem; color: #e2e8f0; font-size: 1rem; font-weight: 600;">
+                        ${this.t('personnel.frontOffice')}
+                    </h4>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        ${renderPersonnelRows(frontOfficeDisplay)}
+                    </div>
+                </div>
             </div>
         `;
     }
@@ -4399,10 +4357,7 @@ class TheaterDashboard {
                 <div class="events-list" style="margin-bottom: 1rem;">
                     ${await Promise.all(yesplanEvents.map(async (event) => {
                         // Format titel met uitvoerende (niet tonen als 1 event in detail – staat in mastertitel)
-                        let title = event.title;
-                        if (event.performer) {
-                            title = `${event.title} - ${event.performer}`;
-                        }
+                        let title = this.buildEventDisplayTitle(event.title, event.performer);
                         
                         // Tijd range (niet tonen als 1 event in detail – staat in Yesplan card)
                         let timeRange = '';
@@ -5833,6 +5788,14 @@ class TheaterDashboard {
             }
         }
         return null;
+    }
+
+    /** Mastertitel / gekoppelde koppen: "titel - artiest" zodra artiest in Yesplan staat. */
+    buildEventDisplayTitle(title, performer) {
+        const t = String(title || '').trim();
+        const p = String(performer || '').trim();
+        if (!p) return t;
+        return `${t} - ${p}`;
     }
 
     updateDetailViewTitle(venueName, eventTitle) {
