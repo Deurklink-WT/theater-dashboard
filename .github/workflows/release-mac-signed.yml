@@ -55,8 +55,25 @@ jobs:
           fi
           npm run inject-update-token
 
-      - name: Build signed + notarized mac artifacts
-        run: npm run build:mac:release
+      - name: Build mac artifacts (signed + notarized, of unsigned op CI)
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -n "${CSC_LINK:-}" ]; then
+            echo "Building met CSC_LINK (signed)"
+            npm run build:mac:release
+          else
+            echo "Geen CSC_LINK — unsigned mac build (artifacts wel op release)"
+            unset CSC_LINK || true
+            unset CSC_KEY_PASSWORD || true
+            unset APPLE_ID || true
+            unset APPLE_APP_SPECIFIC_PASSWORD || true
+            unset APPLE_TEAM_ID || true
+            export CSC_IDENTITY_AUTO=false
+            npx electron-builder --mac --publish never \
+              --config.mac.identity=null \
+              --config.mac.hardenedRuntime=false
+          fi
 
       - name: Ensure release exists
         shell: bash
