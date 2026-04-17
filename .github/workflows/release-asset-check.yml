@@ -38,25 +38,30 @@ jobs:
           echo "Controleer release assets voor $REPO@$TAG"
 
           python3 - <<'PY' "$json"
-import json
-import sys
+          import json
+          import sys
 
-release = json.loads(sys.argv[1])
-assets = [a.get('name', '') for a in release.get('assets', [])]
-missing = []
-if 'latest-mac.yml' not in assets:
-    missing.append('latest-mac.yml')
-if not any(name.endswith('-arm64-mac.zip') for name in assets):
-    missing.append('*-arm64-mac.zip')
-if not any(name.endswith('-arm64.dmg') for name in assets):
-    missing.append('*-arm64.dmg')
+          release = json.loads(sys.argv[1])
+          assets = [a.get('name', '') for a in release.get('assets', [])]
+          missing = []
+          if 'latest-mac.yml' not in assets:
+              missing.append('latest-mac.yml')
+          if not any(name.endswith('-arm64-mac.zip') for name in assets):
+              missing.append('*-arm64-mac.zip')
+          if not any(name.endswith('-arm64.dmg') for name in assets):
+              missing.append('*-arm64.dmg')
+          if not any(name.endswith('-x64-mac.zip') for name in assets):
+              missing.append('*-x64-mac.zip')
+          if not any(name.endswith('-x64.dmg') for name in assets):
+              missing.append('*-x64.dmg')
 
-if missing:
-    print('Ontbrekende verplichte assets:', ', '.join(missing))
-    print('Aanwezige assets:')
-    for name in assets:
-        print(' -', name)
-    sys.exit(1)
+          if missing:
+              print('Ontbrekende verplichte assets:', ', '.join(missing))
+              print('Aanwezige assets:')
+              for name in assets:
+                  print(' -', name)
+              sys.exit(1)
 
-print('OK: verplichte mac-assets aanwezig.')
-PY
+          print('OK: verplichte mac-assets aanwezig.')
+          PY
+
