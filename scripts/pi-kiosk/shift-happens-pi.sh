@@ -55,22 +55,45 @@ load_env_file() {
   fi
 }
 
+# GitHub API via Python (urllib): op sommige Pi's geeft curl in subshell lege stdout.
 api_latest_json() {
-  local url="https://api.github.com/repos/${GITHUB_REPO}/releases/latest"
-  local hdr=(
-    -H "Accept: application/vnd.github+json"
-    -H "X-GitHub-Api-Version: 2022-11-28"
-    -H "User-Agent: Shift-Happens-Pi/1.0 (Linux; GitHub-API)"
-  )
-  local curlopts=(-fsSL --connect-timeout 20 --max-time 90)
-  if [[ -n "${SHIFT_HAPPENS_CURL_IPV4:-}" ]]; then
-    curlopts+=(--ipv4)
-  fi
-  if [[ -n "${GH_TOKEN:-}" ]]; then
-    curl "${curlopts[@]}" "${hdr[@]}" -H "Authorization: Bearer ${GH_TOKEN}" "$url"
-  else
-    curl "${curlopts[@]}" "${hdr[@]}" "$url"
-  fi
+  GITHUB_REPO="$GITHUB_REPO" GH_TOKEN="${GH_TOKEN:-}" python3 - <<'PY'
+import os
+import sys
+import urllib.error
+import urllib.request
+
+repo = (os.environ.get("GITHUB_REPO") or "").strip() or "Deurklink-WT/theater-dashboard"
+token = (os.environ.get("GH_TOKEN") or "").strip()
+url = f"https://api.github.com/repos/{repo}/releases/latest"
+req = urllib.request.Request(url)
+req.add_header("Accept", "application/vnd.github+json")
+req.add_header("X-GitHub-Api-Version", "2022-11-28")
+req.add_header("User-Agent", "Shift-Happens-Pi/1.0 (Python-urllib)")
+if token:
+    req.add_header("Authorization", f"Bearer {token}")
+try:
+    with urllib.request.urlopen(req, timeout=90) as resp:
+        body = resp.read().decode()
+except urllib.error.HTTPError as e:
+    err = ""
+    try:
+        err = e.read().decode(errors="replace")
+    except Exception:
+        pass
+    print(f"shift-happens-pi: GitHub API HTTP {e.code}: {err[:600]}", file=sys.stderr)
+    sys.exit(1)
+except Exception as e:
+    print(f"shift-happens-pi: GitHub API: {e}", file=sys.stderr)
+    sys.exit(1)
+if not (body or "").strip():
+    print("shift-happens-pi: leeg antwoord van GitHub API", file=sys.stderr)
+    sys.exit(1)
+if body.lstrip()[:1] != "{":
+    print(f"shift-happens-pi: verwacht JSON, kreeg: {body[:200]!r}", file=sys.stderr)
+    sys.exit(1)
+sys.stdout.write(body)
+PY
 }
 
 read_release_appimage_triple() {
