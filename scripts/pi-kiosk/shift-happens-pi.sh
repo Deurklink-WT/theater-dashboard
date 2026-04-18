@@ -55,81 +55,80 @@ load_env_file() {
   fi
 }
 
-# GitHub API via Python (urllib): op sommige Pi's geeft curl in subshell lege stdout.
-api_latest_json() {
+# Eén Python-stap: API + JSON + arm64-AppImage (geen tweede python via bash-pipe).
+github_fetch_arm64_appimage_triple() {
   GITHUB_REPO="$GITHUB_REPO" GH_TOKEN="${GH_TOKEN:-}" python3 - <<'PY'
+import json
 import os
+import re
 import sys
 import urllib.error
 import urllib.request
 
 repo = (os.environ.get("GITHUB_REPO") or "").strip() or "Deurklink-WT/theater-dashboard"
 token = (os.environ.get("GH_TOKEN") or "").strip()
-url = f"https://api.github.com/repos/{repo}/releases/latest"
-req = urllib.request.Request(url)
+api = f"https://api.github.com/repos/{repo}/releases/latest"
+req = urllib.request.Request(api)
 req.add_header("Accept", "application/vnd.github+json")
 req.add_header("X-GitHub-Api-Version", "2022-11-28")
-req.add_header("User-Agent", "Shift-Happens-Pi/1.0 (Python-urllib)")
+req.add_header("User-Agent", "Shift-Happens-Pi/1.0 (Python-one-shot)")
 if token:
     req.add_header("Authorization", f"Bearer {token}")
 try:
     with urllib.request.urlopen(req, timeout=90) as resp:
-        body = resp.read().decode()
+        raw = resp.read().decode()
 except urllib.error.HTTPError as e:
     err = ""
     try:
         err = e.read().decode(errors="replace")
     except Exception:
         pass
-    print(f"shift-happens-pi: GitHub API HTTP {e.code}: {err[:600]}", file=sys.stderr)
+    print(f"shift-happens-pi: GitHub API HTTP {e.code}: {err[:800]}", file=sys.stderr)
     sys.exit(1)
 except Exception as e:
-    print(f"shift-happens-pi: GitHub API: {e}", file=sys.stderr)
+    print(f"shift-happens-pi: GitHub API / netwerk: {e}", file=sys.stderr)
     sys.exit(1)
-if not (body or "").strip():
+if not (raw or "").strip():
     print("shift-happens-pi: leeg antwoord van GitHub API", file=sys.stderr)
     sys.exit(1)
-if body.lstrip()[:1] != "{":
-    print(f"shift-happens-pi: verwacht JSON, kreeg: {body[:200]!r}", file=sys.stderr)
+try:
+    data = json.loads(raw)
+except json.JSONDecodeError as e:
+    print(f"shift-happens-pi: JSON parse: {e} — begin: {raw[:400]!r}", file=sys.stderr)
     sys.exit(1)
-sys.stdout.write(body)
-PY
-}
-
-read_release_appimage_triple() {
-  local json="$1"
-  if [[ -z "${json//[$' \t\n\r']}" ]]; then
-    die "GitHub API gaf een leeg antwoord. Probeer: export SHIFT_HAPPENS_CURL_IPV4=1. Test: curl -fsSL -H 'User-Agent: t' https://api.github.com/repos/${GITHUB_REPO}/releases/latest | head -c 200"
-  fi
-  if [[ "${json:0:1}" != "{" ]]; then
-    die "Geen geldige JSON van GitHub API: ${json:0:200}"
-  fi
-  lines=()
-  readarray -t lines < <(echo "$json" | parse_appimage_from_release) || true
-  if (( ${#lines[@]} < 3 )) || [[ -z "${lines[0]:-}" ]]; then
-    die "Geen Shift.Happens-*-arm64.AppImage in de laatste release (of parser mislukt)."
-  fi
-}
-
-parse_appimage_from_release() {
-  python3 - <<'PY'
-import json, re, sys
-j = json.load(sys.stdin)
-tag = j.get("tag_name") or ""
-assets = j.get("assets") or []
-pat = re.compile(r"^Shift\.Happens-.+-arm64\.AppImage$")
+tag = data.get("tag_name") or ""
+assets = data.get("assets") or []
+pat_dot = re.compile(r"^Shift\.Happens-.+-arm64\.AppImage$")
+pat_space = re.compile(r"^Shift Happens-.+-arm64\.AppImage$")
 for a in assets:
-    name = a.get("name") or ""
-    url = a.get("browser_download_url") or ""
-    if pat.match(name) and url:
+    name = (a.get("name") or "").strip()
+    bu = (a.get("browser_download_url") or "").strip()
+    if not name or not bu:
+        continue
+    if pat_dot.match(name) or pat_space.match(name):
         ver = tag.lstrip("v") or ""
         print(name)
-        print(url)
+        print(bu)
         print(ver)
         sys.exit(0)
-sys.stderr.write("Geen Shift.Happens-*-arm64.AppImage in deze release.\n")
+names = [a.get("name") for a in assets if a.get("name")]
+print(
+    "shift-happens-pi: geen *-arm64.AppImage in laatste release. "
+    f"Assets ({len(names)}): {names[:30]}",
+    file=sys.stderr,
+)
 sys.exit(1)
 PY
+}
+
+fill_lines_from_github() {
+  lines=()
+  if ! readarray -t lines < <(github_fetch_arm64_appimage_triple); then
+    die "GitHub-release kon niet worden gelezen (zie stderr hierboven)."
+  fi
+  if (( ${#lines[@]} < 3 )) || [[ -z "${lines[0]:-}" ]]; then
+    die "Onverwacht korte output van GitHub-parser."
+  fi
 }
 
 get_local_appimage_version() {
@@ -214,10 +213,8 @@ download_release_asset() {
   require_cmd python3
   load_env_file
 
-  local json name url ver
-  lines=()
-  json="$(api_latest_json)" || die "GitHub API mislukt (netwerk, of private repo zonder GH_TOKEN in ${ENV_FILE})."
-  read_release_appimage_triple "$json"
+  local name url ver
+  fill_lines_from_github
   name="${lines[0]}"
   url="${lines[1]}"
   ver="${lines[2]}"
@@ -231,10 +228,8 @@ cmd_update_if_newer() {
   require_cmd python3
   load_env_file
 
-  local json name url remote_ver local_ver
-  lines=()
-  json="$(api_latest_json)" || die "GitHub API mislukt (netwerk, of private repo zonder GH_TOKEN in ${ENV_FILE})."
-  read_release_appimage_triple "$json"
+  local name url remote_ver local_ver
+  fill_lines_from_github
   name="${lines[0]}"
   url="${lines[1]}"
   remote_ver="${lines[2]}"
