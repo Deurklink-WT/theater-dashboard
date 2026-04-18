@@ -1,0 +1,101 @@
+# Bouwt Shift Happens voor Raspberry Pi / Linux arm64 (AppImage) en uploadt naar de release.
+name: Release Linux Pi (arm64 AppImage)
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag (bijv. v1.5.93)
+        required: true
+        type: string
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-linux-arm64-appimage:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN_UPDATER: ${{ secrets.GH_TOKEN_UPDATER }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event_name == 'workflow_dispatch' && format('refs/tags/{0}', github.event.inputs.tag) || github.ref }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install system deps (AppImage / electron-builder)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libfuse2 squashfs-tools rpm libarchive-tools
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Resolve tag
+        id: tag
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "tag=${{ inputs.tag }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Inject updater token (optional)
+        shell: bash
+        run: |
+          if [ -n "${GH_TOKEN_UPDATER:-}" ]; then
+            export GH_TOKEN="$GH_TOKEN_UPDATER"
+          fi
+          npm run inject-update-token
+
+      - name: Build Pi / Linux arm64 AppImage
+        run: npm run build:pi
+
+      - name: List dist (debug)
+        run: ls -la dist/ || true
+
+      - name: Ensure release exists
+        shell: bash
+        run: |
+          TAG="${{ steps.tag.outputs.tag }}"
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release $TAG bestaat al"
+          else
+            gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --title "$TAG" --notes "Automatisch aangemaakt voor Linux Pi AppImage."
+          fi
+
+      - name: Upload Pi AppImage + updater metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          TAG="${{ steps.tag.outputs.tag }}"
+          VER="${TAG#v}"
+          upload() {
+            local path="$1"
+            local label="$2"
+            if [ ! -f "$path" ]; then
+              echo "Skip (ontbreekt): $path"
+              return 0
+            fi
+            echo "Upload: $path -> $label"
+            gh release upload "$TAG" "${path}#${label}" --repo "$GITHUB_REPOSITORY" --clobber
+          }
+          upload "dist/Shift Happens-${VER}-arm64.AppImage" "Shift.Happens-${VER}-arm64.AppImage"
+          upload "dist/Shift Happens-${VER}-arm64.AppImage.blockmap" "Shift.Happens-${VER}-arm64.AppImage.blockmap"
+          for meta in dist/latest-linux-arm64.yml dist/latest-linux.yml; do
+            if [ -f "$meta" ]; then
+              upload "$meta" "$(basename "$meta")"
+            fi
+          done
