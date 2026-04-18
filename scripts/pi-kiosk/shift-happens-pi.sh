@@ -283,13 +283,27 @@ write_env_template() {
 # Optioneel: GitHub token voor install/update via API bij een private repository.
 # GH_TOKEN=ghp_voorbeeld
 
-# Display (meestal :0 op Pi met desktop; voor autostart meestal niet nodig)
-# DISPLAY=:0
+# X11-scherm (standaard op Raspberry Pi OS met desktop; nodig voor kiosk + systemd --user)
+DISPLAY=:0
 
 # Extra argumenten voor Electron (spaties toegestaan; alleen indien nodig)
 # EXTRA_APPIMAGE_ARGS=--no-sandbox
 EOF
     echo "Aangemaakt: $ENV_FILE (pas aan indien nodig)"
+  fi
+}
+
+# Zonder DISPLAY start Electron onder systemd --user vaak niet (lege GUI).
+ensure_display_in_env_for_kiosk() {
+  write_env_template
+  touch "$ENV_FILE"
+  if ! grep -qE '^[[:space:]]*DISPLAY=' "$ENV_FILE"; then
+    {
+      echo ""
+      echo "# Toegevoegd voor kiosk-autostart / systemd (X11)"
+      echo "DISPLAY=:0"
+    } >> "$ENV_FILE"
+    echo "${SCRIPT_NAME}: DISPLAY=:0 toegevoegd aan ${ENV_FILE}"
   fi
 }
 
