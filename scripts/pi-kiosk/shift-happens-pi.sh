@@ -311,7 +311,7 @@ EOF
 cmd_kiosk_autostart() {
   require_cmd mkdir
   ensure_appimage_or_die
-  write_env_template
+  ensure_display_in_env_for_kiosk
   write_kiosk_wrapper
   mkdir -p "$(dirname "$DESKTOP_AUTOSTART")"
   cat > "$DESKTOP_AUTOSTART" <<EOF
@@ -319,7 +319,7 @@ cmd_kiosk_autostart() {
 Type=Application
 Name=Shift Happens (kiosk)
 Comment=Theater Dashboard kiosk
-Exec=${WRAPPER_SCRIPT}
+Exec=/usr/bin/env DISPLAY=:0 ${WRAPPER_SCRIPT}
 Icon=application-x-executable
 Terminal=false
 Categories=Utility;
@@ -327,7 +327,9 @@ X-GNOME-Autostart-enabled=true
 EOF
   chmod 644 "$DESKTOP_AUTOSTART"
   echo "Autostart: $DESKTOP_AUTOSTART"
-  echo "Log opnieuw in of herstart de sessie om te starten."
+  echo "Zonder automatisch inloggen op de desktop start de kiosk niet na een reboot:"
+  echo "  sudo raspi-config → System Options → Boot / Auto Login → Desktop Autologin"
+  echo "Daarna: opnieuw inloggen of herstarten. (Gebruik je óók systemd kiosk: één methode, anders dubbele app.)"
 }
 
 cmd_install_update_timer() {
@@ -372,7 +374,7 @@ EOF
 cmd_kiosk_systemd() {
   require_cmd mkdir
   ensure_appimage_or_die
-  write_env_template
+  ensure_display_in_env_for_kiosk
   write_kiosk_wrapper
   mkdir -p "$SYSTEMD_USER_DIR"
   cat > "$SYSTEMD_UNIT" <<EOF
@@ -384,6 +386,8 @@ PartOf=graphical-session.target
 [Service]
 Type=simple
 EnvironmentFile=-${ENV_FILE}
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=%h/.Xauthority
 ExecStart=${WRAPPER_SCRIPT}
 Restart=on-failure
 RestartSec=5
@@ -393,7 +397,9 @@ WantedBy=graphical-session.target
 EOF
   echo "User unit: $SYSTEMD_UNIT"
   echo "Voer uit: systemctl --user daemon-reload && systemctl --user enable --now shift-happens-kiosk.service"
-  echo "Eventueel: loginctl enable-linger \$USER"
+  echo "Na reboot moet je automatisch op de desktop inloggen: sudo raspi-config → Boot / Auto Login → Desktop Autologin"
+  echo "Als je óók ~/.config/autostart/… gebruikt: dubbele kiosk — verwijder het .desktop-bestand of schakel deze service uit."
+  echo "Eventueel (user timers zonder login): loginctl enable-linger \$USER"
 }
 
 cmd_install_deps() {
