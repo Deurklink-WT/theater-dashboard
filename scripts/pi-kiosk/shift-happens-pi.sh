@@ -164,8 +164,9 @@ download_release_asset() {
   load_env_file
 
   local json name url ver
-  json="$(api_latest_json)" || die "GitHub API mislukt (private repo? zet GH_TOKEN in ${ENV_FILE} of export)."
-  readarray -t lines < <(echo "$json" | parse_appimage_from_release)
+  lines=()
+  json="$(api_latest_json)" || die "GitHub API mislukt (netwerk, of private repo zonder GH_TOKEN in ${ENV_FILE})."
+  read_release_appimage_triple "$json"
   name="${lines[0]}"
   url="${lines[1]}"
   ver="${lines[2]}"
@@ -180,8 +181,9 @@ cmd_update_if_newer() {
   load_env_file
 
   local json name url remote_ver local_ver
-  json="$(api_latest_json)" || die "GitHub API mislukt (private repo? zet GH_TOKEN in ${ENV_FILE} of export)."
-  readarray -t lines < <(echo "$json" | parse_appimage_from_release)
+  lines=()
+  json="$(api_latest_json)" || die "GitHub API mislukt (netwerk, of private repo zonder GH_TOKEN in ${ENV_FILE})."
+  read_release_appimage_triple "$json"
   name="${lines[0]}"
   url="${lines[1]}"
   remote_ver="${lines[2]}"
