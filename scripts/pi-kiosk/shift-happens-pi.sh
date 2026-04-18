@@ -57,11 +57,34 @@ load_env_file() {
 
 api_latest_json() {
   local url="https://api.github.com/repos/${GITHUB_REPO}/releases/latest"
-  local hdr=(-H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28")
+  local hdr=(
+    -H "Accept: application/vnd.github+json"
+    -H "X-GitHub-Api-Version: 2022-11-28"
+    -H "User-Agent: Shift-Happens-Pi/1.0 (Linux; GitHub-API)"
+  )
+  local curlopts=(-fsSL --connect-timeout 20 --max-time 90)
+  if [[ -n "${SHIFT_HAPPENS_CURL_IPV4:-}" ]]; then
+    curlopts+=(--ipv4)
+  fi
   if [[ -n "${GH_TOKEN:-}" ]]; then
-    curl -fsS "${hdr[@]}" -H "Authorization: Bearer ${GH_TOKEN}" "$url"
+    curl "${curlopts[@]}" "${hdr[@]}" -H "Authorization: Bearer ${GH_TOKEN}" "$url"
   else
-    curl -fsS "${hdr[@]}" "$url"
+    curl "${curlopts[@]}" "${hdr[@]}" "$url"
+  fi
+}
+
+read_release_appimage_triple() {
+  local json="$1"
+  if [[ -z "${json//[$' \t\n\r']}" ]]; then
+    die "GitHub API gaf een leeg antwoord. Probeer: export SHIFT_HAPPENS_CURL_IPV4=1. Test: curl -fsSL -H 'User-Agent: t' https://api.github.com/repos/${GITHUB_REPO}/releases/latest | head -c 200"
+  fi
+  if [[ "${json:0:1}" != "{" ]]; then
+    die "Geen geldige JSON van GitHub API: ${json:0:200}"
+  fi
+  lines=()
+  readarray -t lines < <(echo "$json" | parse_appimage_from_release) || true
+  if (( ${#lines[@]} < 3 )) || [[ -z "${lines[0]:-}" ]]; then
+    die "Geen Shift.Happens-*-arm64.AppImage in de laatste release (of parser mislukt)."
   fi
 }
 
