@@ -12,7 +12,7 @@
 #   ./shift-happens-pi.sh status
 #   ./shift-happens-pi.sh install-deps
 #
-# Omgeving: GITHUB_REPO, SHIFT_HAPPENS_HOME, GH_TOKEN
+# Omgeving: GITHUB_REPO, SHIFT_HAPPENS_HOME, GH_TOKEN, SHIFT_HAPPENS_CURL_IPV4=1
 # Config: ~/.config/shift-happens/env
 
 set -euo pipefail
@@ -139,9 +139,14 @@ download_parts_to_install() {
   local tmp="${INSTALL_DIR}/${name}.part"
   echo "Download: $name (v${ver})"
   if [[ -n "${GH_TOKEN:-}" ]]; then
-    curl -fL --retry 3 --retry-delay 2 -H "Authorization: Bearer ${GH_TOKEN}" -o "$tmp" "$url"
+    curl -fL --retry 3 --retry-delay 2 \
+      -H "User-Agent: Shift-Happens-Pi/1.0" \
+      -H "Authorization: Bearer ${GH_TOKEN}" \
+      -o "$tmp" "$url"
   else
-    curl -fL --retry 3 --retry-delay 2 -o "$tmp" "$url"
+    curl -fL --retry 3 --retry-delay 2 \
+      -H "User-Agent: Shift-Happens-Pi/1.0" \
+      -o "$tmp" "$url"
   fi
   chmod a+x "$tmp"
   mv -f "$tmp" "${INSTALL_DIR}/${name}"
