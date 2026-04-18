@@ -30,6 +30,7 @@ fi
 
 APPIMAGE_LINK="${INSTALL_DIR}/ShiftHappens.AppImage"
 WRAPPER_SCRIPT="${INSTALL_DIR}/run-kiosk.sh"
+WAIT_DISPLAY_SCRIPT="${INSTALL_DIR}/wait-for-display.sh"
 ENV_DIR="${HOME}/.config/shift-happens"
 ENV_FILE="${ENV_DIR}/env"
 DESKTOP_AUTOSTART="${HOME}/.config/autostart/shift-happens-kiosk.desktop"
@@ -322,11 +323,46 @@ EOF
   echo "Wrapper: $WRAPPER_SCRIPT"
 }
 
+write_wait_for_display_script() {
+  cat > "$WAIT_DISPLAY_SCRIPT" <<'EOS'
+#!/usr/bin/env bash
+# Wacht tot X11 op :0 of een Wayland-socket bestaat (race na autologin).
+set -e
+rt="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+for _ in $(seq 1 120); do
+  [[ -S /tmp/.X11-unix/X0 ]] && exit 0
+  if compgen -G "${rt}/wayland-*" >/dev/null 2>&1; then
+    for s in "${rt}"/wayland-*; do
+      [[ -S "$s" ]] && exit 0
+    done
+  fi
+  sleep 1
+done
+echo "shift-happens-pi: geen X11/Wayland-socket na 120s — kiosk start toch" >&2
+exit 0
+EOS
+  chmod a+x "$WAIT_DISPLAY_SCRIPT"
+}
+
+# Raspberry Pi OS (LXDE): betrouwbaarder dan alleen XDG .desktop voor autostart na login.
+append_lxsession_pi_autostart() {
+  local f="${HOME}/.config/lxsession/LXDE-pi/autostart"
+  mkdir -p "$(dirname "$f")"
+  local line="@${WRAPPER_SCRIPT}"
+  if [[ -f "$f" ]] && grep -qF "$line" "$f" 2>/dev/null; then
+    echo "Al aanwezig in ${f}"
+    return 0
+  fi
+  echo "$line" >> "$f"
+  echo "${SCRIPT_NAME}: regel toegevoegd aan ${f} (sessie-autostart Pi-desktop)"
+}
+
 cmd_kiosk_autostart() {
   require_cmd mkdir
   ensure_appimage_or_die
   ensure_display_in_env_for_kiosk
   write_kiosk_wrapper
+  append_lxsession_pi_autostart
   mkdir -p "$(dirname "$DESKTOP_AUTOSTART")"
   cat > "$DESKTOP_AUTOSTART" <<EOF
 [Desktop Entry]
@@ -343,7 +379,8 @@ EOF
   echo "Autostart: $DESKTOP_AUTOSTART"
   echo "Zonder automatisch inloggen op de desktop start de kiosk niet na een reboot:"
   echo "  sudo raspi-config → System Options → Boot / Auto Login → Desktop Autologin"
-  echo "Daarna: opnieuw inloggen of herstarten. (Gebruik je óók systemd kiosk: één methode, anders dubbele app.)"
+  echo "Daarna: opnieuw inloggen of herstarten."
+  echo "Dubbele kiosk voorkomen: gebruik óf kiosk-autostart (nu o.a. LXDE-sessie) óf 'kiosk-systemd', niet beide — anders twee vensters."
 }
 
 cmd_install_update_timer() {
@@ -390,30 +427,34 @@ cmd_kiosk_systemd() {
   ensure_appimage_or_die
   ensure_display_in_env_for_kiosk
   write_kiosk_wrapper
+  write_wait_for_display_script
   mkdir -p "$SYSTEMD_USER_DIR"
   cat > "$SYSTEMD_UNIT" <<EOF
 [Unit]
 Description=Shift Happens (kiosk)
-After=graphical-session.target
-PartOf=graphical-session.target
+# Op Raspberry Pi OS wordt graphical-session.target in systemd --user vaak NIET actief (geen GNOME).
+# default.target wel, zodra je desktop-sessie start na autologin.
+After=network-online.target
 
 [Service]
 Type=simple
 EnvironmentFile=-${ENV_FILE}
 Environment=DISPLAY=:0
 Environment=XAUTHORITY=%h/.Xauthority
+Environment=XDG_RUNTIME_DIR=%t
+ExecStartPre=${WAIT_DISPLAY_SCRIPT}
 ExecStart=${WRAPPER_SCRIPT}
 Restart=on-failure
 RestartSec=5
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=default.target
 EOF
   echo "User unit: $SYSTEMD_UNIT"
   echo "Voer uit: systemctl --user daemon-reload && systemctl --user enable --now shift-happens-kiosk.service"
-  echo "Na reboot moet je automatisch op de desktop inloggen: sudo raspi-config → Boot / Auto Login → Desktop Autologin"
-  echo "Als je óók ~/.config/autostart/… gebruikt: dubbele kiosk — verwijder het .desktop-bestand of schakel deze service uit."
-  echo "Eventueel (user timers zonder login): loginctl enable-linger \$USER"
+  echo "Na reboot: sudo raspi-config → Boot / Auto Login → Desktop Autologin (anders geen grafische user-sessie)."
+  echo "Tip bij dubbele kiosk: schakel systemd uit (systemctl --user disable shift-happens-kiosk) en gebruik alleen kiosk-autostart, of omgekeerd."
+  echo "Eventueel: loginctl enable-linger \$USER (user@ bij boot; kiosk heeft nog steeds autologin nodig voor scherm)"
 }
 
 cmd_install_deps() {
