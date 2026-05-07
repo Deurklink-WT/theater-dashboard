@@ -10617,7 +10617,8 @@ class TheaterDashboard {
 
     showError(system, message) {
         const container = document.getElementById(`${system}Content`);
-        container.innerHTML = `<div class="info-message">${message}</div>`;
+        if (!container) return;
+        container.innerHTML = `<div class="info-message">${this.escapeHtml(message)}</div>`;
     }
 
     calculateTotalRevenue(events) {
