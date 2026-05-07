@@ -471,7 +471,7 @@ class TheaterDashboard {
         this.tijdschemaScheduleData = null; // laatste geladen tijdschema (detail / timer)
         this._voorstellingTimerClockInterval = null;
         /** Per dagdeel (ochtend / middag / avond): eigen stopwatch en stappen. */
-        this.voorstellingTimerBySlot = {};
+        this.voorstellingTimerBySlot = Object.create(null);
         /** Laatste sessies voor clock-tick en render (buildTimerDaySessions). */
         this._timerSessions = [];
         /** Debounce voor lokale opslag van timer-marks (electron-store). */
@@ -3960,7 +3960,7 @@ class TheaterDashboard {
                             const docName = decodedFileName.endsWith('.pdf') ? decodedFileName.replace('.pdf', '') : decodedFileName;
                             const docDate = doc.date ? new Date(doc.date).toLocaleDateString('nl-NL', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '';
                             const docAuthor = doc.author || '';
-                            const escapedUrl = doc.url.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                            const escapedUrl = this.escapeHtml(String(doc.url || ''));
                             const category = doc.category || 'Document';
                             
                             return `
@@ -4002,7 +4002,7 @@ class TheaterDashboard {
                         const riderName = decodedFileName.endsWith('.pdf') ? decodedFileName.replace('.pdf', '') : decodedFileName;
                         const riderDate = event.riderAttachment.date ? new Date(event.riderAttachment.date).toLocaleDateString('nl-NL', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '';
                         const riderAuthor = event.riderAttachment.author || '';
-                        const escapedUrl = event.riderAttachment.url.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                        const escapedUrl = this.escapeHtml(String(event.riderAttachment.url || ''));
                         technicalListInfo = `<div style="${infoBoxStyle}">
                             <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
                                 <i class="fas fa-folder-open" style="color: #818cf8;"></i>
@@ -7385,26 +7385,32 @@ class TheaterDashboard {
             running: false,
             accumulatedMs: 0,
             runStartedAt: null,
-            marks: {},
-            markElapsedMs: {},
+            marks: Object.create(null),
+            markElapsedMs: Object.create(null),
             remarks: [],
             pauseDurationMinutes: 20,
             pauseCountdownEndAt: null,
             customStepOrder: null,
-            customLabels: {}
+            customLabels: Object.create(null)
         };
     }
 
+    isUnsafeObjectKey(value) {
+        const key = String(value || '').trim();
+        return key === '__proto__' || key === 'prototype' || key === 'constructor';
+    }
+
     ensureVoorstellingSlotState(slotId) {
+        if (this.isUnsafeObjectKey(slotId)) return this.createEmptyVoorstellingSlotState();
         if (!this.voorstellingTimerBySlot[slotId]) {
             this.voorstellingTimerBySlot[slotId] = this.createEmptyVoorstellingSlotState();
         } else {
             const st = this.voorstellingTimerBySlot[slotId];
             if (st.pauseDurationMinutes == null || Number.isNaN(Number(st.pauseDurationMinutes))) st.pauseDurationMinutes = 20;
             if (st.pauseCountdownEndAt === undefined) st.pauseCountdownEndAt = null;
-            if (!st.markElapsedMs) st.markElapsedMs = {};
+            if (!st.markElapsedMs || typeof st.markElapsedMs !== 'object') st.markElapsedMs = Object.create(null);
             if (!Array.isArray(st.remarks)) st.remarks = [];
-            if (st.customLabels === undefined) st.customLabels = {};
+            if (!st.customLabels || typeof st.customLabels !== 'object') st.customLabels = Object.create(null);
             if (st.customStepOrder === undefined) st.customStepOrder = null;
         }
         return this.voorstellingTimerBySlot[slotId];
@@ -7413,7 +7419,7 @@ class TheaterDashboard {
     pruneVoorstellingSlotState(activeSlotIds) {
         const keep = new Set(activeSlotIds);
         Object.keys(this.voorstellingTimerBySlot).forEach((k) => {
-            if (!keep.has(k)) delete this.voorstellingTimerBySlot[k];
+            if (this.isUnsafeObjectKey(k) || !keep.has(k)) delete this.voorstellingTimerBySlot[k];
         });
     }
 
@@ -7465,11 +7471,13 @@ class TheaterDashboard {
     async mergeVoorstellingTimerSnapshotFromStorage(sessions) {
         /** Eerst alles leeg: anders blijven marks van gisteren/andere dag staan als er geen snapshot is. */
         for (const { slotId } of sessions) {
+            if (this.isUnsafeObjectKey(slotId)) continue;
             this.voorstellingTimerBySlot[slotId] = this.createEmptyVoorstellingSlotState();
         }
 
         const recalcAll = () => {
             for (const { slotId } of sessions) {
+                if (this.isUnsafeObjectKey(slotId)) continue;
                 this.recalculateVoorstellingTimerFromMarks(slotId);
             }
         };
@@ -7491,6 +7499,7 @@ class TheaterDashboard {
                 return;
             }
             for (const { slotId, scheduleData: sessSched } of sessions) {
+                if (this.isUnsafeObjectKey(slotId)) continue;
                 const saved = snap.slots[slotId];
                 if (!saved || typeof saved !== 'object') {
                     this.recalculateVoorstellingTimerFromMarks(slotId);
@@ -7500,11 +7509,16 @@ class TheaterDashboard {
                 const st = this.ensureVoorstellingSlotState(slotId);
                 if (Array.isArray(saved.customStepOrder) && saved.customStepOrder.length) {
                     st.customStepOrder = saved.customStepOrder.filter(
-                        (id) => typeof id === 'string' && id.length > 0
+                        (id) => typeof id === 'string' && id.length > 0 && !this.isUnsafeObjectKey(id)
                     );
                 }
                 if (saved.customLabels && typeof saved.customLabels === 'object') {
-                    st.customLabels = { ...saved.customLabels };
+                    const nextLabels = Object.create(null);
+                    Object.entries(saved.customLabels).forEach(([k, v]) => {
+                        if (this.isUnsafeObjectKey(k)) return;
+                        nextLabels[k] = String(v || '').trim();
+                    });
+                    st.customLabels = nextLabels;
                 }
                 if (Array.isArray(saved.remarks)) {
                     st.remarks = saved.remarks
@@ -7531,6 +7545,7 @@ class TheaterDashboard {
         } catch (e) {
             console.warn('Voorstelling timer snapshot laden mislukt:', e);
             for (const { slotId } of sessions) {
+                if (this.isUnsafeObjectKey(slotId)) continue;
                 this.voorstellingTimerBySlot[slotId] = this.createEmptyVoorstellingSlotState();
                 this.recalculateVoorstellingTimerFromMarks(slotId);
             }
@@ -7553,6 +7568,7 @@ class TheaterDashboard {
         const slots = {};
         let any = false;
         for (const { slotId } of sessions) {
+            if (this.isUnsafeObjectKey(slotId)) continue;
             const st = this.voorstellingTimerBySlot[slotId];
             const marks = st?.marks;
             const hasMarks = marks && Object.keys(marks).length > 0;
@@ -7567,7 +7583,12 @@ class TheaterDashboard {
                 payload.customStepOrder = [...st.customStepOrder];
             }
             if (st.customLabels && Object.keys(st.customLabels).length) {
-                payload.customLabels = { ...st.customLabels };
+                const safeLabels = Object.create(null);
+                Object.entries(st.customLabels).forEach(([k, v]) => {
+                    if (this.isUnsafeObjectKey(k)) return;
+                    safeLabels[k] = String(v || '').trim();
+                });
+                if (Object.keys(safeLabels).length) payload.customLabels = safeLabels;
             }
             if (hasRemarks) {
                 payload.remarks = remarks
@@ -7579,7 +7600,7 @@ class TheaterDashboard {
                     }))
                     .filter((r) => r.id && r.stepId && r.wallIso && r.text);
             }
-            slots[slotId] = payload;
+            if (!this.isUnsafeObjectKey(slotId)) slots[slotId] = payload;
             any = true;
         }
         try {
@@ -8575,11 +8596,15 @@ class TheaterDashboard {
         const pauseCount = this.countPauzesInSchedule(sess.scheduleData);
         const st = this.ensureVoorstellingSlotState(slotId);
         const prevOrder = st.customStepOrder?.length ? [...st.customStepOrder] : null;
-        const prevLabels = { ...(st.customLabels || {}) };
+        const prevLabels = Object.create(null);
+        Object.entries(st.customLabels || {}).forEach(([k, v]) => {
+            if (this.isUnsafeObjectKey(k)) return;
+            prevLabels[k] = String(v || '').trim();
+        });
         if (!st.customStepOrder?.length) {
             st.customStepOrder = [...this.getVoorstellingTimerStepsForSlot(slotId, pauseCount)];
         }
-        if (!st.customLabels) st.customLabels = {};
+        if (!st.customLabels || typeof st.customLabels !== 'object') st.customLabels = Object.create(null);
         this._timerColumnEditBackup = { slotId, order: prevOrder, labels: prevLabels };
         this._voorstellingTimerEditingSlotId = slotId;
         void this.renderVoorstellingTimerUI({ skipStorageMerge: true });
@@ -8590,7 +8615,12 @@ class TheaterDashboard {
             const { slotId, order, labels } = this._timerColumnEditBackup;
             const st = this.ensureVoorstellingSlotState(slotId);
             st.customStepOrder = order ? [...order] : null;
-            st.customLabels = { ...labels };
+            const nextLabels = Object.create(null);
+            Object.entries(labels || {}).forEach(([k, v]) => {
+                if (this.isUnsafeObjectKey(k)) return;
+                nextLabels[k] = String(v || '').trim();
+            });
+            st.customLabels = nextLabels;
         }
         this._timerColumnEditBackup = null;
         this._voorstellingTimerEditingSlotId = null;
@@ -8631,7 +8661,7 @@ class TheaterDashboard {
         if (fromIndex < 0 || fromIndex >= steps.length || toIndex < 0 || toIndex >= steps.length) return;
         const [item] = steps.splice(fromIndex, 1);
         steps.splice(toIndex, 0, item);
-        this.ensureVoorstellingSlotState(slotId).customStepOrder = steps;
+        this.ensureVoorstellingSlotState(slotId).customStepOrder = steps.filter((id) => !this.isUnsafeObjectKey(id));
         void this.renderVoorstellingTimerUI({ skipStorageMerge: true });
     }
 
@@ -8703,12 +8733,13 @@ class TheaterDashboard {
 
     removeTimerStepFromColumn(slotId, stepId) {
         if (typeof stepId !== 'string' || !stepId.startsWith('custom_')) return;
+        if (this.isUnsafeObjectKey(slotId) || this.isUnsafeObjectKey(stepId)) return;
         const sess = (this._timerSessions || []).find((s) => s.slotId === slotId);
         if (!sess) return;
         const pauseCount = this.countPauzesInSchedule(sess.scheduleData);
         const steps = this.getVoorstellingTimerStepsForSlot(slotId, pauseCount).filter((id) => id !== stepId);
         const st = this.ensureVoorstellingSlotState(slotId);
-        st.customStepOrder = steps;
+        st.customStepOrder = steps.filter((id) => !this.isUnsafeObjectKey(id));
         delete st.customLabels[stepId];
         delete st.marks[stepId];
         if (st.markElapsedMs && stepId in st.markElapsedMs) delete st.markElapsedMs[stepId];
