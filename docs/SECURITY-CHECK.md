@@ -8,7 +8,7 @@ Korte controle van de veiligheidsaanpassingen en wat er nog is gedaan.
   In `main.js`: `safeStorage` voor `apiKey`; opslag als `_apiKeyEncrypted`, bij uitlezen decrypt. Keys staan niet in platte tekst in de config op schijf waar Electron draait.
 
 - **Externe links alleen naar allowlist (Electron)**  
-  `open-external` in main controleert `isUrlAllowed()`: alleen `https://` en host in `ALLOWED_EXTERNAL_HOSTS` (yesplan.nl, wilminktheater.nl, huistechneut.nl, itix.nl, priva.nl). Anders wordt de URL geblokkeerd.
+  `open-external` in main controleert `isUrlAllowed()`: alleen `https://` en host in `ALLOWED_EXTERNAL_HOSTS` (yesplan.nl, itix.nl, priva.nl). Anders wordt de URL geblokkeerd.
 
 - **XSS-preventie**  
   Veel plekken gebruiken `escapeHtml` / `escapeText` bij dynamische HTML (zoektresultaten, weekoverzicht, technische opmerkingen, rider-links, print, etc.).

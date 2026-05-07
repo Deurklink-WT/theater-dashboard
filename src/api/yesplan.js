@@ -1,5 +1,7 @@
 const axios = require('axios');
 const { format, parseISO } = require('date-fns');
+const http = require('http');
+const https = require('https');
 
 function safeLog(level, ...args) {
   try {
@@ -15,17 +17,24 @@ class YesplanAPI {
     this.apiKey = config.apiKey || '';
     this.organizationId = config.organizationId || '';
     this.verboseLogs = process.argv.includes('--dev') || process.argv.includes('--yesplan-search') || process.env.YESPLAN_DEBUG === '1';
+    this.localAddress = String(config.localAddress || '').trim();
+    this.fieldProfile = this.normalizeFieldProfile(config.fieldProfile);
     
     // Yesplan gebruikt api_key als query parameter, niet als header
     // Timeout 30s: formatEvents doet veel calls per event; korte timeout gaf "helemaal niks" bij trage API
-    this.client = axios.create({
+    const axiosConfig = {
       baseURL: this.baseURL,
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
       },
       timeout: 30000
-    });
+    };
+    if (this.localAddress) {
+      axiosConfig.httpAgent = new http.Agent({ keepAlive: true, localAddress: this.localAddress });
+      axiosConfig.httpsAgent = new https.Agent({ keepAlive: true, localAddress: this.localAddress });
+    }
+    this.client = axios.create(axiosConfig);
 
     // Cache op datum-niveau om dezelfde day-requests te dedupliceren.
     // Dit helpt vooral bij weekweergave (dag-voor-dag ophalen) en bij snelle navigatie.
@@ -41,6 +50,20 @@ class YesplanAPI {
     this._eventCustomDataInFlight = new Map(); // eventId -> Promise<customdata>
     this._eventCustomDataCacheTtlMs = Number(process.env.YESPLAN_EVENT_CUSTOMDATA_CACHE_TTL_MS || (6 * 60 * 60 * 1000)); // default 6h
     this._eventCustomDataCacheMax = Number(process.env.YESPLAN_EVENT_CUSTOMDATA_CACHE_MAX || 500);
+  }
+
+  normalizeFieldProfile(rawProfile) {
+    const src = (rawProfile && typeof rawProfile === 'object') ? rawProfile : {};
+    const toList = (arr) => Array.isArray(arr)
+      ? arr.map((v) => String(v || '').trim().toLowerCase()).filter(Boolean)
+      : [];
+    return {
+      techniek: toList(src.techniek),
+      horeca: toList(src.horeca),
+      frontOffice: toList(src.frontOffice),
+      nostradamus: toList(src.nostradamus),
+      exclude: toList(src.exclude)
+    };
   }
 
   debugLog(...args) {
@@ -2125,6 +2148,54 @@ class YesplanAPI {
       if (!s || !s.trim()) return [];
       return s.split('\n').map(l => l.trim()).filter(l => l.length > 0);
     };
+    const hasProfileMatchers = ['techniek', 'horeca', 'frontOffice', 'nostradamus']
+      .some((k) => (this.fieldProfile?.[k] || []).length > 0);
+    const profileBuckets = { techniek: [], horeca: [], frontOffice: [], nostradamus: [] };
+    const addUniqueLines = (arr, lines) => {
+      const seen = new Set((arr || []).map((x) => String(x)));
+      for (const line of lines || []) {
+        const text = String(line || '').trim();
+        if (!text || seen.has(text)) continue;
+        seen.add(text);
+        arr.push(text);
+      }
+    };
+    if (hasProfileMatchers) {
+      const profileMatch = (bucket, meta) => {
+        const m = this.fieldProfile?.[bucket] || [];
+        if (!m.length || !meta) return false;
+        return m.some((needle) => meta.includes(needle));
+      };
+      const profileExcludeMatch = (meta) => {
+        const excludes = this.fieldProfile?.exclude || [];
+        if (!excludes.length || !meta) return false;
+        return excludes.some((needle) => meta.includes(needle));
+      };
+      const walkProfile = (obj, depth = 0) => {
+        if (!obj || typeof obj !== 'object' || depth > 16) return;
+        if (Array.isArray(obj)) {
+          obj.forEach((x) => walkProfile(x, depth + 1));
+          return;
+        }
+        const meta = `${obj.keyword || ''} ${obj.name || ''} ${obj.label || ''}`.toLowerCase();
+        const value = toValueString(obj.value);
+        if (value && !profileExcludeMatch(meta)) {
+          if (profileMatch('techniek', meta)) addUniqueLines(profileBuckets.techniek, parseUrenText(value));
+          if (profileMatch('horeca', meta)) addUniqueLines(profileBuckets.horeca, parseUrenText(value));
+          if (profileMatch('frontOffice', meta)) addUniqueLines(profileBuckets.frontOffice, parseUrenText(value));
+          if (profileMatch('nostradamus', meta)) addUniqueLines(profileBuckets.nostradamus, parseUrenText(value));
+        }
+        (obj.children || []).forEach((c) => walkProfile(c, depth + 1));
+        (obj.groups || []).forEach((g) => walkProfile(g, depth + 1));
+        (obj.fields || []).forEach((f) => walkProfile(f, depth + 1));
+        if (obj.customdata) walkProfile(obj.customdata, depth + 1);
+        for (const [k, v] of Object.entries(obj)) {
+          if (['children', 'groups', 'fields', 'customdata', 'value'].includes(k)) continue;
+          if (v && typeof v === 'object') walkProfile(v, depth + 1);
+        }
+      };
+      walkProfile(eventCustomData);
+    }
 
     // Verzamel alle te doorlopen nodes (bekende keys + elke array van objecten, voor tabs/sections etc.)
     const getTraverseTargets = (obj) => {
@@ -2227,6 +2298,13 @@ class YesplanAPI {
           t.includes('zaalwacht') ||
           (t.includes('publiek') && (t.includes('service') || t.includes('balie')));
       } else if (deptHint === 'techniek') {
+        // "techniek_balkonopen" e.d. zijn vaak booleans (Yes/No), geen personeelsregels.
+        const isNonPersonnelTechFlag =
+          t.includes('balkonopen') ||
+          t.includes('balcony') ||
+          t.includes('open?') ||
+          t.includes('open ?');
+        if (isNonPersonnelTechFlag) return false;
         matchesDept = t.includes('techniek') || t.includes('uurwerk');
       }
       if (!matchesDept) return false;
@@ -2274,6 +2352,9 @@ class YesplanAPI {
     if (found['uren_uurwerk_techniek']) techniek = mergeUniqueUren(techniek, parseUrenText(found['uren_uurwerk_techniek']));
     if (found['uren_uurwerk_horeca']) horeca = mergeUniqueUren(horeca, parseUrenText(found['uren_uurwerk_horeca']));
     if (found['uren_uurwerk_frontoffice']) frontOffice = mergeUniqueUren(frontOffice, parseUrenText(found['uren_uurwerk_frontoffice']));
+    if (profileBuckets.techniek.length) techniek = mergeUniqueUren(techniek, profileBuckets.techniek);
+    if (profileBuckets.horeca.length) horeca = mergeUniqueUren(horeca, profileBuckets.horeca);
+    if (profileBuckets.frontOffice.length) frontOffice = mergeUniqueUren(frontOffice, profileBuckets.frontOffice);
     const gatherUrenLinesFromCustomTree = (predicate) => {
       const out = [];
       const seen = new Set();
@@ -2402,7 +2483,13 @@ class YesplanAPI {
       }
       return false;
     };
+    const techniekBeforePlausibleFilter = (techniek || []).slice();
     techniek = techniek.filter(isPlausibleUurwerkPlanningLine);
+    // Sommige organisaties (o.a. Metropool) vullen techniek niet altijd met klassieke tijdregels.
+    // Als het filter alles weghaalt maar er wel techniekregels waren, behoud de originele inhoud.
+    if (techniek.length === 0 && techniekBeforePlausibleFilter.length > 0) {
+      techniek = techniekBeforePlausibleFilter;
+    }
 
     // Soms staat horeca/frontoffice nog in hetzelfde veld als techniek (of omgekeerd verkeerd gelabeld).
     // Verplaats duidelijke horeca/FO-regels naar de juiste buckets zodat de Personeel-kaart klopt.
@@ -2452,6 +2539,14 @@ class YesplanAPI {
       Object.values(nostradamusFound),
       nostradamusFallback['nostradamus'] ? [nostradamusFallback['nostradamus']] : []
     ).forEach(v => { if (v) nostradamus = nostradamus.concat(parseUrenText(v)); });
+    if (profileBuckets.nostradamus.length) nostradamus = mergeUniqueUren(nostradamus, profileBuckets.nostradamus);
+
+    // Filter statuswaarden ("Yes", "OFF", "No", ...) die geen personeelsleden zijn.
+    const isStatusOnly = (line) => /^(yes|no|on|off|ja|nee|true|false|nvt|n\.v\.t\.)$/i.test(String(line || '').trim());
+    techniek = (techniek || []).filter((line) => !isStatusOnly(line));
+    horeca = (horeca || []).filter((line) => !isStatusOnly(line));
+    frontOffice = (frontOffice || []).filter((line) => !isStatusOnly(line));
+    nostradamus = (nostradamus || []).filter((line) => !isStatusOnly(line));
 
     return { techniek, horeca, frontOffice, nostradamus };
   }
@@ -2501,7 +2596,49 @@ class YesplanAPI {
     if (!eventId) return { techniek: [], horeca: [], frontOffice: [], nostradamus: [] };
     try {
       const customData = await this.getEventCustomDataRaw(eventId);
-      return this.extractUrenInfo(customData);
+      const parsed = this.extractUrenInfo(customData);
+      const hasTechniek = (parsed?.techniek?.length || 0) > 0;
+      const hasOther = ((parsed?.horeca?.length || 0) + (parsed?.frontOffice?.length || 0) + (parsed?.nostradamus?.length || 0)) > 0;
+      if (!hasTechniek && hasOther) {
+        const hints = [];
+        const walk = (obj, depth = 0) => {
+          if (!obj || typeof obj !== 'object' || depth > 12) return;
+          if (Array.isArray(obj)) {
+            obj.forEach((x) => walk(x, depth + 1));
+            return;
+          }
+          const meta = [obj.keyword, obj.name, obj.label].filter(Boolean).join(' ').trim();
+          const value = obj.value;
+          let valueText = '';
+          if (typeof value === 'string') valueText = value.trim();
+          else if (value && typeof value === 'object') valueText = String(value.text || value.value || value.data || '').trim();
+          const metaLower = meta.toLowerCase();
+          if (meta && valueText && (
+            metaLower.includes('techn') ||
+            metaLower.includes('uurwerk') ||
+            metaLower.includes('crew') ||
+            metaLower.includes('stage') ||
+            metaLower.includes('podium')
+          )) {
+            hints.push({
+              meta,
+              sample: valueText.split('\n').map((l) => l.trim()).filter(Boolean).slice(0, 2).join(' | ')
+            });
+          }
+          (obj.children || []).forEach((c) => walk(c, depth + 1));
+          (obj.groups || []).forEach((g) => walk(g, depth + 1));
+          (obj.fields || []).forEach((f) => walk(f, depth + 1));
+          if (obj.customdata) walk(obj.customdata, depth + 1);
+          for (const [k, v] of Object.entries(obj)) {
+            if (['children', 'groups', 'fields', 'customdata', 'value'].includes(k)) continue;
+            if (v && typeof v === 'object') walk(v, depth + 1);
+          }
+        };
+        walk(customData?.data ?? customData?.customdata ?? customData);
+        const preview = hints.slice(0, 6).map((h) => `${h.meta}: ${h.sample}`).join(' || ');
+        this.debugLog(`[Personeel debug] event=${eventId} techniek=0, fallback hints: ${preview || 'geen techniek-gerelateerde velden gevonden'}`);
+      }
+      return parsed;
     } catch (err) {
       return { techniek: [], horeca: [], frontOffice: [], nostradamus: [] };
     }
@@ -3406,23 +3543,42 @@ class YesplanAPI {
       let ticketsReserved = 0;
       let revenue = 0;
       let aantalGasten = 0;
+      let totaalBezoekers = 0;
+      const salesSource = { sold: 'none', reserved: 'none', capacity: 'none', guests: 'none' };
       let ticketingIdFromCustomData = null;
 
       const num = (v) => (typeof v === 'number' && !Number.isNaN(v)) ? v : parseInt(v) || 0;
       const float = (v) => (typeof v === 'number' && !Number.isNaN(v)) ? v : parseFloat(v) || 0;
       const unwrap = (v) => (v != null && typeof v === 'object' && ('value' in v || 'data' in v)) ? (v.value ?? v.data) : v;
       const applyVerkoopValue = (keywordLower, nameLower, value) => {
+        const meta = `${keywordLower} ${nameLower}`.trim();
         const v = unwrap(value);
-        if (keywordLower.includes('capaciteit') || nameLower.includes('capaciteit') || nameLower.includes('capacity')) {
-          capacity = num(v);
-        } else if (keywordLower.includes('verkocht') || nameLower.includes('verkocht') || nameLower.includes('sold')) {
-          soldTickets = num(v);
-        } else if (keywordLower.includes('gereserveerd') || keywordLower.includes('reserved') || nameLower.includes('gereserveerd') || nameLower.includes('reserved')) {
-          ticketsReserved = num(v);
+        const n = num(v);
+        const setMax = (current, next) => Math.max(num(current), num(next));
+        if (meta.includes('capaciteit') || meta.includes('capacity')) {
+          capacity = setMax(capacity, n);
+          if (n > 0 && salesSource.capacity === 'none') salesSource.capacity = 'customdata';
+        } else if (meta.includes('verkocht') || meta.includes('sold') || meta.includes('verkoop')) {
+          soldTickets = setMax(soldTickets, n);
+          if (n > 0 && salesSource.sold === 'none') salesSource.sold = 'customdata';
+        } else if (meta.includes('gereserveerd') || meta.includes('reserved')) {
+          ticketsReserved = setMax(ticketsReserved, n);
+          if (n > 0 && salesSource.reserved === 'none') salesSource.reserved = 'customdata';
+        } else if (meta.includes('vrijkaart') || meta.includes('complimentary') || meta.includes('guestlist')) {
+          // Vrijkaarten tellen we als gasten in de UI.
+          aantalGasten = setMax(aantalGasten, n);
+          if (n > 0 && salesSource.guests === 'none') salesSource.guests = 'customdata';
+        } else if (meta.includes('totaal bezoeker') || meta.includes('total visitor') || meta.includes('totaal bezoekers')) {
+          const bezoekers = n;
+          totaalBezoekers = setMax(totaalBezoekers, bezoekers);
+          // Als totaal bezoekers bekend is, leid vrijkaarten af waar mogelijk.
+          if (bezoekers > 0 && soldTickets > 0 && aantalGasten === 0 && bezoekers >= soldTickets) {
+            aantalGasten = bezoekers - soldTickets;
+          }
         } else if (keywordLower.includes('recette') || keywordLower.includes('revenue') || nameLower.includes('recette') || nameLower.includes('revenue') || nameLower.includes('omzet')) {
           revenue = float(v);
         } else if (keywordLower.includes('gasten') || keywordLower.includes('guests') || nameLower.includes('gasten') || nameLower.includes('guests')) {
-          aantalGasten = num(v);
+          aantalGasten = setMax(aantalGasten, n);
         } else if ((keywordLower.includes('ticketing') && keywordLower.includes('id')) || (nameLower.includes('ticketing') && nameLower.includes('id'))) {
           const sid = String(v != null ? v : value).trim();
           if (sid && !keywordLower.includes('group')) ticketingIdFromCustomData = sid;
@@ -3445,28 +3601,52 @@ class YesplanAPI {
       const customForWalk = eventCustomData?.data ?? eventCustomData;
       if (customForWalk) walkVerkoop(customForWalk);
       
-      // Fallback naar ticketingData
-      if (capacity === 0 && ticketingData) {
-        capacity = ticketingData.capacity || ticketingData.max_capacity || ticketingData.total_capacity || 0;
-        soldTickets = ticketingData.sold || ticketingData.sold_tickets || ticketingData.tickets_sold || ticketingData.booked || 0;
-        ticketsReserved = ticketingData.reserved || ticketingData.tickets_reserved || 0;
-        revenue = ticketingData.revenue || ticketingData.total_revenue || ticketingData.sales_revenue || 0;
+      // Fallback naar ticketingData (per veld, onafhankelijk van capacity).
+      if (ticketingData) {
+        if (capacity === 0) {
+          capacity = num(ticketingData.capacity || ticketingData.max_capacity || ticketingData.total_capacity);
+          if (capacity > 0) salesSource.capacity = 'ticketing';
+        }
+        if (soldTickets === 0) {
+          soldTickets = num(ticketingData.sold || ticketingData.sold_tickets || ticketingData.tickets_sold || ticketingData.booked);
+          if (soldTickets > 0) salesSource.sold = 'ticketing';
+        }
+        if (ticketsReserved === 0) {
+          ticketsReserved = num(ticketingData.reserved || ticketingData.tickets_reserved);
+          if (ticketsReserved > 0) salesSource.reserved = 'ticketing';
+        }
+        if (revenue === 0) {
+          revenue = float(ticketingData.revenue || ticketingData.total_revenue || ticketingData.sales_revenue);
+        }
       }
       
-      // Fallback naar event.ticketing
-      if (capacity === 0 && event.ticketing) {
-        capacity = event.ticketing.capacity || event.ticketing.max_capacity || 0;
-        soldTickets = event.ticketing.sold || event.ticketing.sold_tickets || 0;
-        ticketsReserved = parseInt(event.ticketing.reserved) || 0;
-        revenue = event.ticketing.revenue || 0;
+      // Fallback naar event.ticketing (ook per veld).
+      if (event.ticketing) {
+        if (capacity === 0) {
+          capacity = num(event.ticketing.capacity || event.ticketing.max_capacity || event.ticketing.total_capacity);
+          if (capacity > 0) salesSource.capacity = 'event.ticketing';
+        }
+        if (soldTickets === 0) {
+          soldTickets = num(event.ticketing.sold || event.ticketing.sold_tickets || event.ticketing.tickets_sold || event.ticketing.booked);
+          if (soldTickets > 0) salesSource.sold = 'event.ticketing';
+        }
+        if (ticketsReserved === 0) {
+          ticketsReserved = num(event.ticketing.reserved || event.ticketing.tickets_reserved);
+          if (ticketsReserved > 0) salesSource.reserved = 'event.ticketing';
+        }
+        if (revenue === 0) {
+          revenue = float(event.ticketing.revenue || event.ticketing.total_revenue || event.ticketing.sales_revenue);
+        }
       }
       
       // Fallback naar event velden
       if (capacity === 0) {
         capacity = event.capacity || event.max_capacity || event.total_capacity || 0;
+        if (capacity > 0) salesSource.capacity = 'event';
       }
       if (soldTickets === 0) {
-        soldTickets = event.sold_tickets || event.tickets_sold || event.sold || event.booked_tickets || 0;
+        soldTickets = event.sold_tickets || event.tickets_sold || event.sold || event.booked_tickets || event.soldTickets || 0;
+        if (soldTickets > 0) salesSource.sold = 'event';
       }
       if (revenue === 0) {
         revenue = event.revenue || event.total_revenue || event.sales_revenue || 0;
@@ -3474,8 +3654,13 @@ class YesplanAPI {
       
       // Haal reserveringen op (van Itix naar Yesplan) - fallback
       if (ticketsReserved === 0) {
+        if (event.ticketsReserved) {
+          ticketsReserved = parseInt(event.ticketsReserved) || 0;
+          if (ticketsReserved > 0) salesSource.reserved = 'event';
+        } else
         if (event.itix_data && event.itix_data.Gereserveerd) {
           ticketsReserved = parseInt(event.itix_data.Gereserveerd) || 0;
+          if (ticketsReserved > 0) salesSource.reserved = 'event.itix_data';
         } else if (event.properties && Array.isArray(event.properties)) {
           const reservedProp = event.properties.find(p => 
             p.name && (p.name.toLowerCase().includes('gereserveerd') || 
@@ -3484,8 +3669,44 @@ class YesplanAPI {
           );
           if (reservedProp && reservedProp.value) {
             ticketsReserved = parseInt(reservedProp.value) || 0;
+            if (ticketsReserved > 0) salesSource.reserved = 'event.properties';
           }
         }
+      }
+
+      // Validatie/verzoening: customdata bevat soms jaartallen of labels die als verkoop worden gelezen.
+      // Als verkocht duidelijk onrealistisch is t.o.v. capaciteit/totaal bezoekers, val terug op ticketingbronnen.
+      const ticketingSoldFallback = num(
+        ticketingData?.sold ||
+        ticketingData?.sold_tickets ||
+        ticketingData?.tickets_sold ||
+        ticketingData?.booked ||
+        event?.ticketing?.sold ||
+        event?.ticketing?.sold_tickets ||
+        event?.ticketing?.tickets_sold ||
+        event?.ticketing?.booked ||
+        event?.sold_tickets ||
+        event?.tickets_sold ||
+        event?.sold ||
+        event?.booked_tickets ||
+        event?.soldTickets
+      );
+      const soldLooksUnrealisticForCapacity = capacity > 0 && soldTickets > (capacity + 25);
+      const soldLooksUnrealisticForVisitors = totaalBezoekers > 0 && soldTickets > (totaalBezoekers + 25);
+      if ((soldLooksUnrealisticForCapacity || soldLooksUnrealisticForVisitors) && ticketingSoldFallback > 0) {
+        soldTickets = ticketingSoldFallback;
+        salesSource.sold = 'ticketing(sanity)';
+      }
+      if (totaalBezoekers > 0 && soldTickets > totaalBezoekers && aantalGasten > 0) {
+        const derivedSold = totaalBezoekers - aantalGasten;
+        if (derivedSold >= 0) {
+          soldTickets = derivedSold;
+          salesSource.sold = 'derived(total-guests)';
+        }
+      }
+      if (totaalBezoekers > 0 && aantalGasten === 0 && totaalBezoekers >= soldTickets) {
+        aantalGasten = totaalBezoekers - soldTickets;
+        if (aantalGasten > 0) salesSource.guests = 'derived(total-sold)';
       }
       
       const availableTickets = capacity > 0 ? capacity - soldTickets : 0;
@@ -3517,6 +3738,7 @@ class YesplanAPI {
         ticketsReserved: ticketsReserved,
         aantalGasten: aantalGasten,
         ticketingId: ticketingId,
+        salesSource,
         // Schedule informatie
         scheduleStartTime: scheduleStartTime,
         scheduleEndTime: scheduleEndTime,

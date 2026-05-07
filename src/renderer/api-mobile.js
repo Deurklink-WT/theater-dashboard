@@ -88,7 +88,7 @@
       try {
         var u = new URL(trimmed);
         var host = u.hostname.toLowerCase();
-        var allowed = ['yesplan.nl', 'yesplan.com', 'wilminktheater.nl', 'tickets.wilminktheater.nl', 'huistechneut.nl', 'itix.nl', 'priva.nl'];
+        var allowed = ['yesplan.nl', 'yesplan.com', 'itix.nl', 'priva.nl'];
         var ok = allowed.some(function (a) { return host === a || host.endsWith('.' + a); });
         if (!ok) return Promise.resolve({ success: false, error: 'URL not allowed' });
         window.open(trimmed, '_blank', 'noopener');

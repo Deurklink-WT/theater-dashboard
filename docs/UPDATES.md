@@ -44,7 +44,7 @@ Dan werkt de standaard GitHub-feed in de app **niet** voor willekeurige eindgebr
 
 **Oplossingen:**
 
-- **Eigen update-URL (aanbevolen bij private repo):** host `latest.yml` + installers op een **HTTPS**-pad waar iedereen mag lezen (bijv. je eigen server, S3/R2, of een map op `huistechneut.nl`).  
+- **Eigen update-URL (aanbevolen bij private repo):** host `latest.yml` + installers op een **HTTPS**-pad waar iedereen mag lezen (bijv. je eigen server, S3/R2, of een publieke HTTPS-host).
   Start de app met:
   ```bash
   export UPDATE_BASE_URL="https://voorbeeld.nl/shift-happens-updates"

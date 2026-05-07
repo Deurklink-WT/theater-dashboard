@@ -1,13 +1,16 @@
 const axios = require('axios');
 const { format, parseISO } = require('date-fns');
+const http = require('http');
+const https = require('https');
 
 class PrivaAPI {
   constructor(config = {}) {
     this.baseURL = config.baseURL || '';
     this.apiKey = config.apiKey || '';
     this.systemId = config.systemId || '';
-    
-    this.client = axios.create({
+    this.localAddress = String(config.localAddress || '').trim();
+
+    const axiosConfig = {
       baseURL: this.baseURL,
       headers: {
         'Authorization': `Bearer ${this.apiKey}`,
@@ -15,7 +18,12 @@ class PrivaAPI {
         'Accept': 'application/json'
       },
       timeout: 10000
-    });
+    };
+    if (this.localAddress) {
+      axiosConfig.httpAgent = new http.Agent({ keepAlive: true, localAddress: this.localAddress });
+      axiosConfig.httpsAgent = new https.Agent({ keepAlive: true, localAddress: this.localAddress });
+    }
+    this.client = axios.create(axiosConfig);
   }
 
   async getClimateData(params = {}) {

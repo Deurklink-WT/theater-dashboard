@@ -40,6 +40,24 @@ body.ios-app .header {
     max-width: 100%;
 }
 
+body.ios-app.show-mode-active .header {
+    background: #b91c1c !important;
+    border-bottom-color: rgba(255, 255, 255, 0.25) !important;
+}
+body.ios-app.show-mode-active .header-title i,
+body.ios-app.show-mode-active .header-title-text span,
+body.ios-app.show-mode-active .header-datetime {
+    color: #ffffff !important;
+}
+
+body.ios-app .header-show-mode-label {
+    font-size: 1.24rem;
+    padding: 0.45rem 0.85rem;
+    letter-spacing: 0.1em;
+    border-width: 2px;
+    border-radius: 14px;
+}
+
 body.ios-app .header-content {
     max-width: 100%;
     flex-wrap: wrap;
@@ -47,6 +65,28 @@ body.ios-app .header-content {
     flex-direction: column;
     align-items: stretch;
     gap: 0.35rem;
+}
+
+body.ios-app .header-show-mode-slot {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    flex: 1 1 auto;
+    order: 2;
+    min-width: 0;
+}
+
+body.ios-app .header-title {
+    order: 1;
+}
+
+body.ios-app #backBtn {
+    order: 3;
+}
+
+body.ios-app .header-actions {
+    order: 4;
 }
 
 /* Regel 1: alleen titel + datum/tijd (compact) */
@@ -62,15 +102,25 @@ body.ios-app .header-title {
 
 body.ios-app .header-title-text {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.3rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.15rem;
     min-width: 0;
     flex: 1;
     overflow: hidden;
 }
 
-body.ios-app .header-title-text span:first-child {
+body.ios-app .header-title-top {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    min-width: 0;
+    width: 100%;
+}
+
+body.ios-app .header-title-top .header-app-name {
     flex-shrink: 0;
 }
 
@@ -81,7 +131,7 @@ body.ios-app .header-datetime {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 58%;
+    max-width: 100%;
 }
 
 body.ios-app .header-title i {
@@ -159,11 +209,11 @@ body.ios-app .date-selector .custom-select-value {
 }
 
 /* Tweede rij: alleen terug, zaal, instellingen */
-body.ios-app .header-actions .btn-back span {
+body.ios-app #backBtn span {
     display: none;
 }
 
-body.ios-app .header-actions .btn-back {
+body.ios-app #backBtn {
     display: none !important;
 }
 
@@ -421,6 +471,15 @@ body.ios-app .week-view-wrapper,
 body.ios-app .detail-view-wrapper {
     max-width: 100%;
     min-width: 0;
+    min-height: 0;
+}
+
+body.ios-app .voorstelling-timer-wrapper,
+body.ios-app .luminex-view-wrapper,
+body.ios-app .osc-monitor-wrapper {
+    max-width: 100%;
+    min-width: 0;
+    min-height: 0;
 }
 
 /* ---- Modal = iOS sheet (vanonder, afgerond) ---- */

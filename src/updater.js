@@ -13,14 +13,6 @@ const path = require('path');
 const { app } = require('electron');
 const { autoUpdater } = require('electron-updater');
 
-/** Alleen aanwezig na `npm run inject-update-token` vóór build (zie scripts/). */
-let bakedInGithubToken = '';
-try {
-  bakedInGithubToken = String(require('./generated/update-token')).trim();
-} catch (_) {
-  /* bestand ontbreekt vóór eerste inject — ok */
-}
-
 let intervalId = null;
 /** Eerste automatische check na opstart: geen "Zoeken…" / "Je bent up-to-date"-banner; wél bij update of fout. */
 let suppressQuietStartupBanner = true;
@@ -60,7 +52,7 @@ function setupAutoUpdater(mainWindow) {
 
   const base = String(process.env.UPDATE_BASE_URL || '').trim().replace(/\/$/, '');
   const ghToken = String(
-    process.env.GH_TOKEN || process.env.GITHUB_TOKEN || bakedInGithubToken || ''
+    process.env.GH_TOKEN || process.env.GITHUB_TOKEN || ''
   ).trim();
 
   if (base) {

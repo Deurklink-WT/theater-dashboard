@@ -21,6 +21,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // Configuratie
   saveConfig: (system, config) => ipcRenderer.invoke('save-config', system, config),
   getConfig: (system) => ipcRenderer.invoke('get-config', system),
+  getNetworkInterfaces: () => ipcRenderer.invoke('get-network-interfaces'),
+  unlockMasterMode: (password) => ipcRenderer.invoke('unlock-master-mode', { password }),
+  discoverMasterMode: () => ipcRenderer.invoke('discover-master-mode'),
+  getMasterModeStatus: () => ipcRenderer.invoke('get-master-mode-status'),
 
   // Event listeners
   onAutoRefresh: (callback) => ipcRenderer.on('auto-refresh', callback),
@@ -41,5 +45,27 @@ contextBridge.exposeInMainWorld('electronAPI', {
     const handler = (_event, payload) => callback(payload);
     ipcRenderer.on('update-status', handler);
     return () => ipcRenderer.removeListener('update-status', handler);
+  },
+
+  /** LumiNode mDNS (_luminex._tcp), zie companion-module bonjourQueries */
+  discoverLuminodes: () => ipcRenderer.invoke('luminode-discover'),
+
+  /** sACN E1.31: actieve universes in een bereik (multicast scan) */
+  discoverSacnUniverses: (opts) => ipcRenderer.invoke('sacn-discover', opts),
+
+  /** LumiNode REST: deviceinfo, pipeline/sources, IO */
+  getLuminodeCapabilities: (host, password) =>
+    ipcRenderer.invoke('luminode-capabilities', { host, password }),
+
+  luminodeFetchJson: (opts) => ipcRenderer.invoke('luminode-fetch-json', opts),
+
+  luminodeWriteJson: (opts) => ipcRenderer.invoke('luminode-write-json', opts),
+
+  /** OSC / Stream Deck / Companion → voorstelling-timer (main stuurt osc-timer-trigger) */
+  onOscTimerTrigger: (callback) => {
+    const channel = 'osc-timer-trigger';
+    const handler = (_event, payload) => callback(payload);
+    ipcRenderer.on(channel, handler);
+    return () => ipcRenderer.removeListener(channel, handler);
   }
 });

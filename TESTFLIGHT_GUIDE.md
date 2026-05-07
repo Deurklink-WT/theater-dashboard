@@ -18,7 +18,7 @@ Voordat je begint, zorg dat je hebt:
    - **Platform**: macOS
    - **Name**: Shift Happens (of jouw gewenste naam)
    - **Primary Language**: Nederlands
-   - **Bundle ID**: `com.huistechneut.shift-happens` (moet overeenkomen met package.json)
+   - **Bundle ID**: `com.example.shift-happens` (moet overeenkomen met package.json)
    - **SKU**: Unieke identifier (bijv. `shift-happens-001`)
 6. Klik "Create"
 

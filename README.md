@@ -1,4 +1,4 @@
-# Theater Dashboard - Huistechneut
+# Theater Dashboard
 
 > **Ontwikkelaars:** gebruik één clone: `~/theater-dashboard`, branch `main`. Details: [WORKFLOW.md](WORKFLOW.md).
 
@@ -209,5 +209,5 @@ MIT License - Zie LICENSE bestand voor details.
 
 ## Support
 
-Voor vragen of problemen, neem contact op met het Huistechneut team.
+Voor vragen of problemen, neem contact op met het team.
 

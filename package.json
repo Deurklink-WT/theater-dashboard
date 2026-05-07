@@ -1,11 +1,12 @@
 {
   "name": "theater-dashboard",
-  "version": "1.5.93",
-  "description": "Theater dashboard voor Huistechneut - integratie van Yesplan, Uurwerk, Itix en Priva systemen",
+  "version": "1.6.0-beta.0",
+  "description": "Theater dashboard - integratie van Yesplan, Uurwerk, Itix en Priva systemen",
   "main": "src/main.js",
   "scripts": {
-    "start": "electron .",
-    "dev": "electron . --dev",
+    "start": "electronmon .",
+    "start:once": "electron .",
+    "dev": "electronmon . -- --dev",
     "build": "npm run inject-update-token && electron-builder",
     "build:mac": "npm run inject-update-token && electron-builder --mac",
     "build:win": "npm run inject-update-token && electron-builder --win",
@@ -31,7 +32,7 @@
     "itix",
     "priva"
   ],
-  "author": "Huistechneut",
+  "author": "Team",
   "homepage": "https://github.com/Deurklink-WT/theater-dashboard#readme",
   "license": "UNLICENSED",
   "devDependencies": {
@@ -40,20 +41,23 @@
     "@capacitor/ios": "^6.0.0",
     "electron": "^35.7.5",
     "electron-builder": "^24.6.4",
+    "electronmon": "^2.0.4",
     "jest": "^29.7.0"
   },
   "dependencies": {
     "axios": "^1.13.6",
+    "bonjour-service": "^1.3.0",
     "chart.js": "^4.4.0",
     "cors": "^2.8.5",
     "date-fns": "^2.30.0",
     "electron-store": "^8.1.0",
     "electron-updater": "^6.8.3",
     "express": "^4.18.2",
-    "node-cron": "^3.0.3"
+    "node-cron": "^3.0.3",
+    "sacn": "^4.6.2"
   },
   "build": {
-    "appId": "com.huistechneut.shift-happens",
+    "appId": "com.example.shift-happens",
     "productName": "Shift Happens",
     "directories": {
       "output": "dist",
@@ -137,7 +141,7 @@
       ],
       "category": "Utility",
       "icon": "build/icon.png",
-      "maintainer": "Huistechneut"
+      "maintainer": "Team"
     },
     "deb": {
       "depends": [

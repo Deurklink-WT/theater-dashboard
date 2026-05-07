@@ -1,5 +1,5 @@
 {
-  "appId": "com.huistechneut.shifthappens",
+  "appId": "com.example.shifthappens",
   "appName": "Shift Happens",
   "webDir": "src/renderer",
   "server": {

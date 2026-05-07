@@ -1,13 +1,19 @@
 const axios = require('axios');
 const { format, parseISO } = require('date-fns');
+const http = require('http');
+const https = require('https');
+// #region agent log
+fetch('http://127.0.0.1:7671/ingest/2548f020-a557-4bec-9e00-75fa0560139b',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'16a395'},body:JSON.stringify({sessionId:'16a395',runId:'cleanup-usage-scan',hypothesisId:'H2',location:'src/api/itix.js:5',message:'Itix module loaded',data:{module:'itix'},timestamp:Date.now()})}).catch(()=>{});
+// #endregion
 
 class ItixAPI {
   constructor(config = {}) {
     this.baseURL = config.baseURL || '';
     this.apiKey = config.apiKey || '';
     this.venueId = config.venueId || '';
-    
-    this.client = axios.create({
+    this.localAddress = String(config.localAddress || '').trim();
+
+    const axiosConfig = {
       baseURL: this.baseURL,
       headers: {
         'Authorization': `Bearer ${this.apiKey}`,
@@ -15,7 +21,12 @@ class ItixAPI {
         'Accept': 'application/json'
       },
       timeout: 10000
-    });
+    };
+    if (this.localAddress) {
+      axiosConfig.httpAgent = new http.Agent({ keepAlive: true, localAddress: this.localAddress });
+      axiosConfig.httpsAgent = new https.Agent({ keepAlive: true, localAddress: this.localAddress });
+    }
+    this.client = axios.create(axiosConfig);
   }
 
   async getSales(params = {}) {

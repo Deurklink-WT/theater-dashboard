@@ -1,5 +1,5 @@
 # Electron Builder configuratie (zie https://www.electron.build/configuration/configuration)
-appId: com.huistechneut.shift-happens
+appId: com.example.shift-happens
 productName: Shift Happens
 directories:
   output: dist
