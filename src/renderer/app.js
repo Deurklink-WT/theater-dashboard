@@ -11403,7 +11403,15 @@ class TheaterDashboard {
 
         try {
             // Bewaar huidige schermcontext zodat Opslaan de gebruiker niet naar een andere zaal/view duwt.
-            const preservedSelectedVenues = Array.isArray(this.selectedVenues) ? [...this.selectedVenues] : [];
+            const currentActiveOrg = this.config?.app?.activeYesplanOrg;
+            const requestedActiveOrgRaw = document.getElementById('activeYesplanOrg')?.value;
+            const requestedActiveOrg = requestedActiveOrgRaw === 'both'
+                ? 'both'
+                : (parseInt(requestedActiveOrgRaw, 10) || 1);
+            const didSwitchActiveOrg = String(currentActiveOrg ?? '1') !== String(requestedActiveOrg);
+            const preservedSelectedVenues = didSwitchActiveOrg
+                ? []
+                : (Array.isArray(this.selectedVenues) ? [...this.selectedVenues] : []);
             const preservedSelectedDate = this.selectedDate ? new Date(this.selectedDate) : new Date();
             const preservedCurrentView = this.currentView;
             const preservedDetailContext = this.detailContext ? { ...this.detailContext } : null;
@@ -11446,7 +11454,7 @@ class TheaterDashboard {
                         oscInterface: document.getElementById('networkOscInterface')?.value || 'auto'
                     },
                     activeYesplanOrg: (() => {
-                        const v = document.getElementById('activeYesplanOrg').value;
+                        const v = requestedActiveOrgRaw;
                         return v === 'both' ? 'both' : (parseInt(v, 10) || 1);
                     })(),
                     selectedVenues: preservedSelectedVenues,
