@@ -23,16 +23,16 @@ function normalizeHost(raw) {
 }
 
 function friendlyFetchError(host, path, err, status) {
-  const msg = String(err && err.message ? err.message : err);
+  const msg = String(err && err.message ? err.message : err || '');
   if (status === 401) return `${host}: wachtwoord verkeerd (HTTP 401)`;
   if (status === 403) return `${host}: geen toegang (HTTP 403)`;
   if (/abort|timeout/i.test(msg)) return `${host}: timeout — node niet bereikbaar op poort 80?`;
   if (/ECONNREFUSED/i.test(msg)) return `${host}: verbinding geweigerd — IP klopt? Node aan?`;
   if (/EHOSTUNREACH|ENETUNREACH/i.test(msg)) return `${host}: netwerk onbereikbaar — verkeerde subnet/VLAN?`;
   if (/ENOTFOUND/i.test(msg)) return `${host}: hostnaam niet gevonden`;
-  if (/fetch failed/i.test(msg)) return `${host}: niet bereikbaar (${msg})`;
+  if (/fetch failed/i.test(msg)) return `${host}: niet bereikbaar`;
   if (status) return `${host}: HTTP ${status} op /api/${path}`;
-  return `${host}: ${msg}`;
+  return `${host}: verbinding mislukt`;
 }
 
 /** /api/processblock kan array, object-map of wrapper zijn — normaliseer naar array. */
@@ -101,7 +101,14 @@ async function testNodeConnection(nodeConfig) {
       firmware: deviceInfo.firmware || deviceInfo.software_version || null,
     };
   } catch (err) {
-    return { ok: false, ip, ms: Date.now() - started, error: String(err.message || err) };
+    // Geen raw exception-tekst naar de UI: friendlyFetchError mapt al naar vaste meldingen.
+    const status = err && err.status ? err.status : undefined;
+    return {
+      ok: false,
+      ip,
+      ms: Date.now() - started,
+      error: friendlyFetchError(ip, 'deviceinfo', err, status),
+    };
   }
 }
 
@@ -267,7 +274,8 @@ class LuminodePoller {
       this.lastOk = Date.now();
     } catch (err) {
       this.online = false;
-      this.error = String(err.message || err);
+      const status = err && err.status ? err.status : undefined;
+      this.error = friendlyFetchError(this.ip, 'poll', err, status);
     }
   }
 
