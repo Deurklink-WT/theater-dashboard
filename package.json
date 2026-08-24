@@ -38,7 +38,7 @@
   "devDependencies": {
     "@capacitor/cli": "^6.0.0",
     "@capacitor/core": "^6.0.0",
-    "@capacitor/ios": "^6.0.0",
+    "@capacitor/ios": "^8.5.0",
     "electron": "^39.8.10",
     "electron-builder": "^24.6.4",
     "electronmon": "^2.0.4",
