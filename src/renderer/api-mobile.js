@@ -32,10 +32,13 @@
     }
   }
 
+  // CF Access secret alleen in-memory (niet in localStorage).
+  var cloudflareAccessClientSecretMem = '';
+
   function getAccessHeaders() {
     var out = {};
     var id = String(localStorage.getItem('SHIFT_HAPPENS_ACCESS_CLIENT_ID') || '').trim();
-    var secret = String(localStorage.getItem('SHIFT_HAPPENS_ACCESS_CLIENT_SECRET') || '').trim();
+    var secret = String(cloudflareAccessClientSecretMem || '').trim();
     if (id && secret) {
       out['CF-Access-Client-Id'] = id;
       out['CF-Access-Client-Secret'] = secret;
@@ -46,6 +49,11 @@
     else out['X-Shift-Client'] = 'web';
     return out;
   }
+
+  window.__SHIFT_SET_CF_ACCESS_SECRET__ = function (secret) {
+    cloudflareAccessClientSecretMem = String(secret || '').trim();
+    try { localStorage.removeItem('SHIFT_HAPPENS_ACCESS_CLIENT_SECRET'); } catch (_) { /* ignore */ }
+  };
 
   function sendPresence() {
     var token = String(localStorage.getItem('SHIFT_HAPPENS_AUTH_TOKEN') || '').trim();

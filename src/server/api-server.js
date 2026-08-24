@@ -9,6 +9,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const rateLimit = require('express-rate-limit');
 const store = require('./store');
 const timerSync = require('./voorstelling-timer-sync');
 const trekkenlijstSync = require('./trekkenlijst-sync');
@@ -190,8 +191,28 @@ async function getYesplanReservations(params) {
 const app = express();
 const PORT = process.env.PORT || 3847;
 
+const apiLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: Number(process.env.SHIFT_HAPPENS_API_RATE_MAX || 180),
+  standardHeaders: true,
+  legacyHeaders: false
+});
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: Number(process.env.SHIFT_HAPPENS_AUTH_RATE_MAX || 40),
+  standardHeaders: true,
+  legacyHeaders: false
+});
+const staticLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: Number(process.env.SHIFT_HAPPENS_STATIC_RATE_MAX || 300),
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
 app.use(cors());
 app.use(express.json());
+app.use('/api/', apiLimiter);
 
 // --- Auth (whitelist e-mail/wachtwoord) ---
 app.get('/api/auth/status', (req, res) => {
@@ -202,7 +223,7 @@ app.get('/api/auth/status', (req, res) => {
   });
 });
 
-app.post('/api/auth/bootstrap', (req, res) => {
+app.post('/api/auth/bootstrap', authLimiter, (req, res) => {
   const { email, password } = req.body || {};
   const result = accessAuth.bootstrapAdmin({ email, password });
   if (!result.success) return res.status(400).json(result);
@@ -211,7 +232,7 @@ app.post('/api/auth/bootstrap', (req, res) => {
   res.json(login);
 });
 
-app.post('/api/auth/login', (req, res) => {
+app.post('/api/auth/login', authLimiter, (req, res) => {
   const { email, password } = req.body || {};
   const result = accessAuth.login({ email, password });
   if (!result.success) return res.status(401).json(result);
@@ -444,7 +465,7 @@ app.post('/api/open-external', protectApi, (req, res) => {
 });
 
 const controlpanelDir = path.join(__dirname, 'controlpanel');
-app.use('/controlpanel', express.static(controlpanelDir, {
+app.use('/controlpanel', staticLimiter, express.static(controlpanelDir, {
   etag: false,
   lastModified: false,
   setHeaders(res, filePath) {
@@ -454,19 +475,19 @@ app.use('/controlpanel', express.static(controlpanelDir, {
     }
   }
 }));
-app.get('/controlpanel', (req, res) => {
+app.get('/controlpanel', staticLimiter, (req, res) => {
   res.set('Cache-Control', 'no-store');
   res.sendFile(path.join(controlpanelDir, 'index.html'));
 });
 
-app.get('/', (req, res) => {
+app.get('/', staticLimiter, (req, res) => {
   res.redirect('/controlpanel');
 });
 
 // Optioneel: serveer de web-ui vanaf dezelfde server (voor eenvoudige deploy)
 const staticDir = path.join(__dirname, '..', 'renderer');
-app.use('/app', express.static(staticDir));
-app.get('/app', (req, res) => {
+app.use('/app', staticLimiter, express.static(staticDir));
+app.get('/app', staticLimiter, (req, res) => {
   res.sendFile(path.join(staticDir, 'index.html'));
 });
 

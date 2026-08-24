@@ -2160,7 +2160,12 @@ class TheaterDashboard {
             metaEl.textContent = `${events.length} resultaat${events.length !== 1 ? 'en' : ''}`;
         }
 
-        const escapeHtml = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        const escapeHtml = (s) => String(s || '')
+            .replace(/\\/g, '&#92;')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
 
         const statusClass = (statusStr) => {
             const s = String(statusStr || '').toLowerCase();
@@ -3146,7 +3151,11 @@ class TheaterDashboard {
                 return /\d+\s*man\b/.test(u) || /^(mcgz|wtpy|dkw|mckz|wtso|mkvk)\b/.test(u) || /^techniek\s+algemeen$/i.test(u) || /^techniek$/i.test(u) || u.length < 3;
             };
             const looksLikeName = (p) => !looksLikeDateOrTime(p) && !looksLikeVenueRole(p) && /^[a-zA-Z\u00C0-\u024F\s\-']+$/.test(p) && p.length > 2;
-            const timeOnly = (t) => String(t || '').replace(/^\d{1,2}\s+(jan|feb|maa|mrt|maart|apr|mei|jun|jul|aug|sep|okt|oktober|nov|dec)[a-z]*\s+/i, '').trim() || t;
+            const timeOnly = (t) => {
+                const s = String(t || '');
+                const m = s.match(/^\d{1,2}\s+(?:jan|feb|maa|mrt|maart|apr|mei|jun|jul|aug|sep|okt|oktober|nov|dec)[a-z]*\s+(.*)$/i);
+                return (m ? m[1] : s).trim() || s;
+            };
             const cleanRawPersonnelEntry = (entry) => {
                 const parts = String(entry || '').split(/\s+[-–—]\s+/).map(p => p.trim()).filter(Boolean);
                 if (!parts.length) return '';
@@ -6245,11 +6254,8 @@ class TheaterDashboard {
             || localStorage.getItem('SHIFT_HAPPENS_ACCESS_CLIENT_ID')
             || ''
         ).trim();
-        const secret = String(
-            this.config?.app?.cloudflareAccessClientSecret
-            || localStorage.getItem('SHIFT_HAPPENS_ACCESS_CLIENT_SECRET')
-            || ''
-        ).trim();
+        // Secret nooit in localStorage (CodeQL clear-text storage); alleen in-memory config.
+        const secret = String(this.config?.app?.cloudflareAccessClientSecret || '').trim();
         if (!id || !secret) return {};
         return {
             'CF-Access-Client-Id': id,
@@ -6282,8 +6288,11 @@ class TheaterDashboard {
         const secret = String(this.config?.app?.cloudflareAccessClientSecret || '').trim();
         if (id) localStorage.setItem('SHIFT_HAPPENS_ACCESS_CLIENT_ID', id);
         else localStorage.removeItem('SHIFT_HAPPENS_ACCESS_CLIENT_ID');
-        if (secret) localStorage.setItem('SHIFT_HAPPENS_ACCESS_CLIENT_SECRET', secret);
-        else localStorage.removeItem('SHIFT_HAPPENS_ACCESS_CLIENT_SECRET');
+        // Verwijder eventuele oude clear-text secret uit localStorage.
+        localStorage.removeItem('SHIFT_HAPPENS_ACCESS_CLIENT_SECRET');
+        if (typeof window.__SHIFT_SET_CF_ACCESS_SECRET__ === 'function') {
+            window.__SHIFT_SET_CF_ACCESS_SECRET__(secret);
+        }
     }
 
     fetchShiftHappensApi(url, options = {}) {
@@ -10310,7 +10319,13 @@ class TheaterDashboard {
     }
 
     escapeHtml(str) {
-        return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+        return String(str || '')
+            .replace(/\\/g, '&#92;')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
     }
 
     formatNetworkInterfaceLabel(iface) {
@@ -11136,7 +11151,7 @@ class TheaterDashboard {
             }
         } catch (error) {
             console.error('Instellingen opslaan fout:', error);
-            this.showError('settings', error?.message || this.t('errors.settingsSave'));
+            this.showError('settings', this.escapeHtml(error?.message || this.t('errors.settingsSave')));
         }
     }
 

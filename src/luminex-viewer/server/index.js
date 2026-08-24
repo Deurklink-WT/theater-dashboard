@@ -193,7 +193,8 @@ const server = http.createServer(async (req, res) => {
       });
       json(res, result.ok ? 200 : 400, result);
     } catch (err) {
-      json(res, 400, { error: String(err.message || err) });
+      const msg = err && err.message ? String(err.message) : 'Request failed';
+      json(res, 400, { error: msg });
     }
     return;
   }
@@ -210,7 +211,8 @@ const server = http.createServer(async (req, res) => {
       const result = await testNodeConnection({ ip, password });
       json(res, 200, result);
     } catch (err) {
-      json(res, 400, { error: String(err.message || err) });
+      const msg = err && err.message ? String(err.message) : 'Request failed';
+      json(res, 400, { error: msg });
     }
     return;
   }
@@ -280,7 +282,7 @@ const server = http.createServer(async (req, res) => {
         state.apply(config);
         json(res, 200, { ok: true });
       } catch (err) {
-        json(res, 400, { error: String(err.message || err) });
+        json(res, 400, { error: err && err.message ? String(err.message) : 'Request failed' });
       }
       return;
     }

@@ -13,7 +13,7 @@ function safeLog(level, ...args) {
 
 class YesplanAPI {
   constructor(config = {}) {
-    this.baseURL = config.baseURL || '';
+    this.baseURL = this.sanitizeBaseURL(config.baseURL || '');
     this.apiKey = config.apiKey || '';
     this.organizationId = config.organizationId || '';
     this.verboseLogs = process.argv.includes('--dev') || process.argv.includes('--yesplan-search') || process.env.YESPLAN_DEBUG === '1';
@@ -50,6 +50,26 @@ class YesplanAPI {
     this._eventCustomDataInFlight = new Map(); // eventId -> Promise<customdata>
     this._eventCustomDataCacheTtlMs = Number(process.env.YESPLAN_EVENT_CUSTOMDATA_CACHE_TTL_MS || (6 * 60 * 60 * 1000)); // default 6h
     this._eventCustomDataCacheMax = Number(process.env.YESPLAN_EVENT_CUSTOMDATA_CACHE_MAX || 500);
+  }
+
+  /** Alleen https + yesplan-hosts toestaan (voorkomt SSRF via geconfigureerde baseURL). */
+  sanitizeBaseURL(raw) {
+    const input = String(raw || '').trim();
+    if (!input) return '';
+    try {
+      const u = new URL(input);
+      if (u.protocol !== 'https:') return '';
+      const host = u.hostname.toLowerCase();
+      const ok =
+        host === 'yesplan.nl' ||
+        host.endsWith('.yesplan.nl') ||
+        host === 'yesplan.com' ||
+        host.endsWith('.yesplan.com');
+      if (!ok) return '';
+      return u.origin;
+    } catch (_) {
+      return '';
+    }
   }
 
   normalizeFieldProfile(rawProfile) {

@@ -97,9 +97,11 @@ function verifyToken(token) {
 }
 
 function extractBearer(req) {
-  const h = req.headers.authorization || req.headers.Authorization || '';
-  const m = String(h).match(/^Bearer\s+(.+)$/i);
-  return m ? m[1].trim() : '';
+  const h = String(req.headers.authorization || req.headers.Authorization || '');
+  // Geen regex met \s+ (ReDoS); vaste "Bearer "-prefix.
+  if (h.length < 7) return '';
+  if (h.slice(0, 7).toLowerCase() !== 'bearer ') return '';
+  return h.slice(7).trim();
 }
 
 function isAuthEnabled() {

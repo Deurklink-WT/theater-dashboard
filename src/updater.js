@@ -36,13 +36,27 @@ function sendStatus(mainWindow, payload) {
   }
 }
 
+function messageMentionsGithubApiHost(msg) {
+  const s = String(msg || '');
+  const urlMatch = s.match(/https?:\/\/[^\s"'<>]+/i);
+  if (urlMatch) {
+    try {
+      const host = new URL(urlMatch[0]).hostname.toLowerCase();
+      return host === 'api.github.com';
+    } catch (_) {
+      /* ignore parse errors */
+    }
+  }
+  return false;
+}
+
 function isLikelyPrivateRepoError(msg) {
   const s = String(msg || '');
   return (
     /404|not\s*found|403|401|bad credentials|could not find|unable to find|latest version|ERR_UPDATER/i.test(s) ||
     s.includes('HttpError') ||
     s.includes('releases/latest') ||
-    s.includes('api.github.com')
+    messageMentionsGithubApiHost(s)
   );
 }
 
