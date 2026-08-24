@@ -32,7 +32,7 @@
     "itix",
     "priva"
   ],
-  "author": "Team",
+  "author": "PdV",
   "homepage": "https://github.com/Deurklink-WT/theater-dashboard#readme",
   "license": "UNLICENSED",
   "devDependencies": {
@@ -165,7 +165,8 @@
   },
   "overrides": {
     "tar": "^7.5.12",
-    "@tootallnate/once": "^3.0.1"
+    "@tootallnate/once": "^3.0.1",
+    "uuid": "^11.1.1"
   },
   "repository": {
     "type": "git",

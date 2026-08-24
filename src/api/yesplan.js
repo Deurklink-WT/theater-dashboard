@@ -84,6 +84,15 @@ class YesplanAPI {
     return id;
   }
 
+  /** Alleen dd-mm-yyyy in Yesplan date-paden (voorkomt path-injectie / SSRF-taint). */
+  sanitizeYesplanDate(raw) {
+    const formatted = this.formatDateForYesplan(raw);
+    if (!/^\d{2}-\d{2}-\d{4}$/.test(formatted)) {
+      throw new Error('Ongeldige Yesplan-datum');
+    }
+    return formatted;
+  }
+
   assertAllowedRequestUrl(req) {
     const base = String(this.baseURL || '').trim();
     if (!base) throw new Error('Yesplan baseURL ontbreekt of is ongeldig');
@@ -96,6 +105,27 @@ class YesplanAPI {
     if (absolute.hostname.toLowerCase() !== allowed.hostname.toLowerCase()) {
       throw new Error('Yesplan-request host komt niet overeen met geconfigureerde baseURL');
     }
+  }
+
+  /**
+   * Alleen relatieve /api/... paden naar de gesanitizede baseURL.
+   * CodeQL-barrière: absolute URL's en vreemde path-tekens worden geweigerd.
+   */
+  async yesplanGet(pathWithQuery) {
+    const raw = String(pathWithQuery || '');
+    if (!raw.startsWith('/api/')) {
+      throw new Error('Alleen relatieve Yesplan /api-paden zijn toegestaan');
+    }
+    if (/^[a-z][a-z0-9+.-]*:/i.test(raw) || raw.includes('\\') || raw.includes('//', 1)) {
+      throw new Error('Absolute of ongeldige Yesplan-URL geweigerd');
+    }
+    const q = raw.indexOf('?');
+    const pathOnly = q === -1 ? raw : raw.slice(0, q);
+    if (!/^\/api\/[A-Za-z0-9/_\-.:]+$/.test(pathOnly)) {
+      throw new Error('Ongeldig Yesplan-pad');
+    }
+    this.assertAllowedRequestUrl({ url: raw });
+    return this.client.get(raw);
   }
 
   normalizeFieldProfile(rawProfile) {
@@ -140,7 +170,7 @@ class YesplanAPI {
   async fetchEventsForDate(dateIso, options = {}) {
     const { tagRequestedDate = false, maxRetries = 4, baseDelayMs = 450 } = options;
 
-    const dateStr = this.formatDateForYesplan(dateIso);
+    const dateStr = this.sanitizeYesplanDate(dateIso);
     const cacheKey = `date:${dateStr}`; // per YesplanAPI-instantie (dus per org/baseURL/apiKey)
     const cached = this._eventsCache.get(cacheKey);
     const now = Date.now();
@@ -164,7 +194,7 @@ class YesplanAPI {
     const fetchPromise = (async () => {
       for (let attempt = 0; attempt <= maxRetries; attempt++) {
         try {
-          const response = await this.client.get(url);
+          const response = await this.yesplanGet(url);
           const events = response.data?.data || (Array.isArray(response.data) ? response.data : []);
           return Array.isArray(events) ? events : [];
         } catch (error) {
@@ -212,7 +242,7 @@ class YesplanAPI {
           allEvents = await this.fetchEventsForDate(startDate, { tagRequestedDate: false, maxRetries: 2, baseDelayMs: 350 });
         } catch (error) {
           if (error?.response?.status === 401 || error?.response?.status === 403) hadAuthError = true;
-          const dateStr = this.formatDateForYesplan(startDate);
+          const dateStr = this.sanitizeYesplanDate(startDate);
           safeLog('error', `Error fetching events for ${dateStr}:`, error.message);
         }
       } else if (startDate && endDate) {
@@ -233,7 +263,7 @@ class YesplanAPI {
             if (dayEvents.length > 0) allEvents = allEvents.concat(dayEvents);
           } catch (error) {
             if (error?.response?.status === 401 || error?.response?.status === 403) hadAuthError = true;
-            const dateStr = this.formatDateForYesplan(requestedDate);
+            const dateStr = this.sanitizeYesplanDate(requestedDate);
             safeLog('error', `Error fetching events for ${dateStr}:`, error.message);
           }
           await this.sleep(100);
@@ -495,10 +525,10 @@ class YesplanAPI {
       const { startDate, endDate, limit = 100, venueId } = params;
       let allEvents = [];
       if (startDate && endDate && startDate === endDate) {
-        const dateStr = this.formatDateForYesplan(startDate);
+        const dateStr = this.sanitizeYesplanDate(startDate);
         const queryString = this.addApiKey();
         const url = `/api/events/date:${dateStr}?${queryString}`;
-        const response = await this.client.get(url);
+        const response = await this.yesplanGet(url);
         const events = response.data?.data || (Array.isArray(response.data) ? response.data : []);
         if (Array.isArray(events)) allEvents = events;
       } else if (startDate && endDate) {
@@ -508,20 +538,20 @@ class YesplanAPI {
         const currentDate = new Date(start);
         const queryString = this.addApiKey();
         while (currentDate <= end) {
-          const dateStr = this.formatDateForYesplan(toLocalDateStr(currentDate));
+          const dateStr = this.sanitizeYesplanDate(toLocalDateStr(currentDate));
           const url = `/api/events/date:${dateStr}?${queryString}`;
           try {
-            const response = await this.client.get(url);
+            const response = await this.yesplanGet(url);
             const events = response.data?.data || (Array.isArray(response.data) ? response.data : []);
             if (Array.isArray(events) && events.length > 0) allEvents = allEvents.concat(events);
           } catch (e) { if (e.response?.status !== 404) safeLog('error', e.message); }
           currentDate.setDate(currentDate.getDate() + 1);
         }
       } else if (startDate) {
-        const dateStr = this.formatDateForYesplan(startDate);
+        const dateStr = this.sanitizeYesplanDate(startDate);
         const queryString = this.addApiKey();
         const url = `/api/events/date:${dateStr}?${queryString}`;
-        const response = await this.client.get(url);
+        const response = await this.yesplanGet(url);
         const events = response.data?.data || (Array.isArray(response.data) ? response.data : []);
         if (Array.isArray(events)) allEvents = events;
       }
@@ -627,7 +657,7 @@ class YesplanAPI {
         let saw429 = false;
         for (const url of urls) {
           try {
-            const response = await this.client.get(url);
+            const response = await this.yesplanGet(url);
             const raw = response.data?.data || (Array.isArray(response.data) ? response.data : []);
             const arr = Array.isArray(raw) ? raw : [];
             // Zodra een endpoint-vorm geldig antwoordt, stoppen we met alternatieve URL-vormen.
@@ -647,7 +677,7 @@ class YesplanAPI {
           await sleep(600);
           for (const url of urls) {
             try {
-              const retryRes = await this.client.get(url);
+              const retryRes = await this.yesplanGet(url);
               const retryRaw = retryRes.data?.data || (Array.isArray(retryRes.data) ? retryRes.data : []);
               const retryArr = Array.isArray(retryRaw) ? retryRaw : [];
               return retryArr;
@@ -718,9 +748,9 @@ class YesplanAPI {
             const m = String(d.getMonth() + 1).padStart(2, '0');
             const day = String(d.getDate()).padStart(2, '0');
             const dateISO = `${y}-${m}-${day}`;
-            const yesplanDate = this.formatDateForYesplan(dateISO);
+            const yesplanDate = this.sanitizeYesplanDate(dateISO);
             try {
-              const response = await this.client.get(`/api/events/date:${yesplanDate}?${dateQueryString}`);
+              const response = await this.yesplanGet(`/api/events/date:${yesplanDate}?${dateQueryString}`);
               consecutive429 = 0;
               const raw = response.data?.data || (Array.isArray(response.data) ? response.data : []);
               const arr = Array.isArray(raw) ? raw : [];
@@ -2779,7 +2809,7 @@ class YesplanAPI {
       try {
         const queryString = this.addApiKey();
         const url = `/api/event/${id}/customdata?${queryString}`;
-        const res = await this.client.get(url);
+        const res = await this.yesplanGet(url);
         const data = res?.data ?? null;
 
         if (this._eventCustomDataCache.size >= this._eventCustomDataCacheMax) {
@@ -2882,7 +2912,7 @@ class YesplanAPI {
       const queryString = this.addApiKey();
       const url = queryString ? `/api/event/${id}/schedule?${queryString}` : `/api/event/${id}/schedule`;
 
-      const response = await this.client.get(url);
+      const response = await this.yesplanGet(url);
 
       return {
         success: true,
@@ -2908,7 +2938,7 @@ class YesplanAPI {
       const queryString = this.addApiKey();
       const url = queryString ? `/api/event/${id}?${queryString}` : `/api/event/${id}`;
       
-      const response = await this.client.get(url);
+      const response = await this.yesplanGet(url);
       
       return {
         success: true,
@@ -2935,8 +2965,8 @@ class YesplanAPI {
       const queryParams = {};
       
       if (eventId) queryParams.event_id = eventId;
-      if (startDate) queryParams.start_date = this.formatDateForYesplan(startDate);
-      if (endDate) queryParams.end_date = this.formatDateForYesplan(endDate);
+      if (startDate) queryParams.start_date = this.sanitizeYesplanDate(startDate);
+      if (endDate) queryParams.end_date = this.sanitizeYesplanDate(endDate);
       if (venueId) queryParams.venue_id = venueId;
       
       const queryString = this.addApiKey(queryParams);
@@ -2947,7 +2977,7 @@ class YesplanAPI {
       // Probeer /api/reservations
       try {
         const url = `/api/reservations?${queryString}`;
-        const response = await this.client.get(url);
+        const response = await this.yesplanGet(url);
         const data = response.data?.data || (Array.isArray(response.data) ? response.data : []);
         if (Array.isArray(data)) {
           reservations = data;
@@ -2957,7 +2987,7 @@ class YesplanAPI {
         if (error.response?.status === 404) {
           try {
             const url = `/api/bookings?${queryString}`;
-            const response = await this.client.get(url);
+            const response = await this.yesplanGet(url);
             const data = response.data?.data || (Array.isArray(response.data) ? response.data : []);
             if (Array.isArray(data)) {
               reservations = data;
@@ -3206,12 +3236,12 @@ class YesplanAPI {
       // Sequentieel met lichte pacing om rate limiting te vermijden.
       const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
       for (const date of daysToCheck) {
-        const dateStr = this.formatDateForYesplan(date.toISOString().split('T')[0]);
+        const dateStr = this.sanitizeYesplanDate(date.toISOString().split('T')[0]);
         const queryString = this.addApiKey();
         const url = `/api/events/date:${dateStr}?${queryString}`;
 
         try {
-          const response = await this.client.get(url);
+          const response = await this.yesplanGet(url);
           consecutiveRateLimitHits = 0;
           const events = response.data?.data || (Array.isArray(response.data) ? response.data : []);
           if (Array.isArray(events) && events.length > 0) {
@@ -3343,28 +3373,28 @@ class YesplanAPI {
         // 1. Altijd event customdata ophalen (personeel, techniek, etc.)
         try {
           const eventCustomDataUrl = `/api/event/${eventApiId}/customdata?${queryString}`;
-          const eventCustomDataResponse = await this.client.get(eventCustomDataUrl);
+          const eventCustomDataResponse = await this.yesplanGet(eventCustomDataUrl);
           eventCustomData = eventCustomDataResponse.data;
         } catch (error) {}
 
         // 2. Altijd event details + ticketing + resourcebookings ophalen (kaartverkoop, zaalplattegrond)
         try {
           const eventDetailUrl = `/api/event/${eventApiId}?${queryString}&expand=ticketing,resources,resourcebookings,contactbookings`;
-          const eventDetailResponse = await this.client.get(eventDetailUrl);
+          const eventDetailResponse = await this.yesplanGet(eventDetailUrl);
           eventDetails = eventDetailResponse.data || null;
           if (eventDetails?.ticketing) ticketingData = eventDetails.ticketing;
           if (eventDetails?.resourcebookings) resourceBookingsData = eventDetails.resourcebookings;
         } catch (error) {
           try {
             const ticketingUrl = `/api/event/${eventApiId}/ticketing?${queryString}`;
-            const ticketingResponse = await this.client.get(ticketingUrl);
+            const ticketingResponse = await this.yesplanGet(ticketingUrl);
             ticketingData = ticketingResponse.data;
           } catch (e2) {}
         }
         if (!resourceBookingsData) {
           try {
             const rbUrl = `/api/event/${eventApiId}/resourcebookings?${queryString}`;
-            const rbRes = await this.client.get(rbUrl);
+            const rbRes = await this.yesplanGet(rbUrl);
             resourceBookingsData = rbRes.data?.data || rbRes.data;
           } catch (error) {}
         }
@@ -3375,12 +3405,12 @@ class YesplanAPI {
         if (groupRef && groupId) {
           try {
             const groupUrl = groupRef.url?.includes('?') ? groupRef.url : `${groupRef.url}?${queryString}`;
-            const groupResponse = await this.client.get(groupUrl);
+            const groupResponse = await this.yesplanGet(groupUrl);
             groupData = groupResponse.data;
           } catch (error) {}
           try {
             const customDataUrl = `/api/group/${groupId}/customdata?${queryString}`;
-            const customDataResponse = await this.client.get(customDataUrl);
+            const customDataResponse = await this.yesplanGet(customDataUrl);
             customData = customDataResponse.data;
           } catch (error) {}
         }
@@ -4111,7 +4141,7 @@ class YesplanAPI {
       const queryString = this.addApiKey({ limit: 1 });
       const url = queryString ? `/api/events?${queryString}` : '/api/events';
       
-      const response = await this.client.get(url);
+      const response = await this.yesplanGet(url);
       return {
         success: true,
         message: 'Verbinding succesvol'
