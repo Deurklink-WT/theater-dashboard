@@ -1,0 +1,12 @@
+node_modules
+dist
+.git
+.cursor
+*.md
+docs
+ios
+android
+build
+scripts
+tests
+**/.DS_Store

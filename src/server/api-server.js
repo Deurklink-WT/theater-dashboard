@@ -2,7 +2,7 @@
  * Shift Happens - API server voor iPhone/web clients
  * Zelfde logica als Electron IPC-handlers, via REST.
  * Start met: node src/server/api-server.js
- * @author PdV
+ * @author Team
  * @license UNLICENSED
  */
 
@@ -10,6 +10,11 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const store = require('./store');
+const timerSync = require('./voorstelling-timer-sync');
+const trekkenlijstSync = require('./trekkenlijst-sync');
+const auditLog = require('./audit-log');
+const accessAuth = require('./access-auth');
+const presence = require('./connection-tracker');
 
 const YesplanAPI = require('../api/yesplan');
 const PrivaAPI = require('../api/priva');
@@ -188,12 +193,178 @@ const PORT = process.env.PORT || 3847;
 app.use(cors());
 app.use(express.json());
 
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({ ok: true, service: 'shift-happens-api' });
+// --- Auth (whitelist e-mail/wachtwoord) ---
+app.get('/api/auth/status', (req, res) => {
+  res.json({
+    success: true,
+    needsBootstrap: accessAuth.needsBootstrap(),
+    authEnabled: accessAuth.isAuthEnabled()
+  });
 });
 
-// Config
+app.post('/api/auth/bootstrap', (req, res) => {
+  const { email, password } = req.body || {};
+  const result = accessAuth.bootstrapAdmin({ email, password });
+  if (!result.success) return res.status(400).json(result);
+  const login = accessAuth.login({ email, password });
+  if (login.success) presence.upsert(login.token, login.user, req);
+  res.json(login);
+});
+
+app.post('/api/auth/login', (req, res) => {
+  const { email, password } = req.body || {};
+  const result = accessAuth.login({ email, password });
+  if (!result.success) return res.status(401).json(result);
+  presence.upsert(result.token, result.user, req, {
+    client: req.headers['x-shift-client'] || req.body?.client,
+    view: req.body?.view
+  });
+  res.json(result);
+});
+
+app.post('/api/auth/presence', accessAuth.requireAuth, (req, res) => {
+  const { client, view } = req.body || {};
+  presence.upsert(req.shiftAuthToken, req.shiftUser, req, { client, view });
+  res.json({ success: true });
+});
+
+app.get('/api/auth/me', accessAuth.requireAuth, (req, res) => {
+  res.json({ success: true, user: req.shiftUser });
+});
+
+app.get('/api/admin/users', accessAuth.requireAuth, accessAuth.requireAdmin, (req, res) => {
+  res.json({ success: true, users: accessAuth.listUsers() });
+});
+
+app.get('/api/admin/connections', accessAuth.requireAuth, (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  const connections = presence.listActive();
+  res.json({
+    success: true,
+    staleAfterSeconds: Math.round(presence.STALE_MS / 1000),
+    count: connections.length,
+    connections
+  });
+});
+
+app.delete('/api/admin/connections/:id', accessAuth.requireAuth, accessAuth.requireAdmin, (req, res) => {
+  const ok = presence.remove(req.params.id);
+  if (!ok) return res.status(404).json({ success: false, error: 'NOT_FOUND' });
+  res.json({ success: true });
+});
+
+app.post('/api/admin/users', accessAuth.requireAuth, accessAuth.requireAdmin, (req, res) => {
+  const { email, password, role } = req.body || {};
+  const result = accessAuth.createUser({ email, password, role });
+  if (!result.success) return res.status(400).json(result);
+  res.json(result);
+});
+
+app.patch('/api/admin/users/:id', accessAuth.requireAuth, accessAuth.requireAdmin, (req, res) => {
+  const result = accessAuth.updateUser(req.params.id, req.body || {}, req.shiftUser);
+  if (!result.success) {
+    const code = result.error === 'NOT_FOUND' ? 404 : 400;
+    return res.status(code).json(result);
+  }
+  res.json(result);
+});
+
+app.delete('/api/admin/users/:id', accessAuth.requireAuth, accessAuth.requireAdmin, (req, res) => {
+  const result = accessAuth.deleteUser(req.params.id, req.shiftUser);
+  if (!result.success) {
+    const code = result.error === 'NOT_FOUND' ? 404 : 400;
+    return res.status(code).json(result);
+  }
+  res.json(result);
+});
+
+function protectApi(req, res, next) {
+  if (!accessAuth.isAuthEnabled()) return next();
+  return accessAuth.requireAuth(req, res, next);
+}
+
+// Health check (+ presence bij ingelogde clients)
+app.get('/api/health', (req, res) => {
+  const token = accessAuth.extractBearer(req);
+  const user = token ? accessAuth.verifyToken(token) : null;
+  if (user && token) {
+    presence.upsert(token, user, req, {
+      client: req.headers['x-shift-client'],
+      view: req.headers['x-shift-view']
+    });
+  }
+  if (accessAuth.isAuthEnabled() && !user) {
+    return res.json({ ok: true, authRequired: true, presenceTracking: true });
+  }
+  res.json({
+    ok: true,
+    service: 'shift-happens-api',
+    timerSync: true,
+    authRequired: accessAuth.isAuthEnabled(),
+    presenceTracking: true
+  });
+});
+
+app.use('/api/voorstelling-timer', protectApi);
+app.get('/api/voorstelling-timer/snapshots', (req, res) => {
+  res.json(timerSync.listSnapshots());
+});
+
+app.get('/api/voorstelling-timer/snapshot/:key', (req, res) => {
+  const key = decodeURIComponent(req.params.key || '');
+  const result = timerSync.getSnapshot(key);
+  if (!result.success) return res.status(400).json(result);
+  res.json(result);
+});
+
+app.put('/api/voorstelling-timer/snapshot', (req, res) => {
+  const result = timerSync.putSnapshot(req.body || {});
+  if (!result.success) {
+    const code = result.conflict ? 409 : 400;
+    return res.status(code).json(result);
+  }
+  res.json(result);
+});
+
+app.use('/api/trekkenlijst', protectApi);
+app.get('/api/trekkenlijst/items', (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  res.json(trekkenlijstSync.listItems());
+});
+
+app.get('/api/trekkenlijst/item/:key', (req, res) => {
+  const key = decodeURIComponent(req.params.key || '');
+  const result = trekkenlijstSync.getItem(key);
+  if (!result.success) return res.status(400).json(result);
+  res.json(result);
+});
+
+app.put('/api/trekkenlijst/item', (req, res) => {
+  const body = req.body || {};
+  const actor = {
+    userId: req.shiftUser?.id || null,
+    email: req.shiftUser?.email || null,
+    client: req.headers['x-shift-client'] || null
+  };
+  const result = trekkenlijstSync.putItem(body, actor);
+  if (!result.success) {
+    const code = result.conflict ? 409 : 400;
+    return res.status(code).json(result);
+  }
+  res.json(result);
+});
+
+app.get('/api/admin/audit-log', accessAuth.requireAuth, (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  const { limit, email, action } = req.query || {};
+  res.json(auditLog.listEntries({
+    limit: limit != null ? Number(limit) : 100,
+    email: email || '',
+    action: action || ''
+  }));
+});
+
+app.use('/api/config', protectApi);
 app.get('/api/config/:system', (req, res) => {
   const system = req.params.system;
   const raw = store.get(system, {});
@@ -213,7 +384,8 @@ app.post('/api/config', (req, res) => {
   res.json({ success: true });
 });
 
-// Yesplan
+app.use('/api/yesplan', protectApi);
+app.use('/api/priva', protectApi);
 app.post('/api/yesplan/data', async (req, res) => {
   try {
     const result = await getYesplanData(req.body || {});
@@ -256,7 +428,6 @@ app.post('/api/yesplan/schedule', async (req, res) => {
   }
 });
 
-// Priva
 app.post('/api/priva/data', async (req, res) => {
   try {
     const priva = new PrivaAPI(secureConfigFromStorage(store.get('priva', {})));
@@ -268,9 +439,28 @@ app.post('/api/priva/data', async (req, res) => {
   }
 });
 
-// Open external: server doet niets, client opent URL zelf
-app.post('/api/open-external', (req, res) => {
+app.post('/api/open-external', protectApi, (req, res) => {
   res.json({ success: true });
+});
+
+const controlpanelDir = path.join(__dirname, 'controlpanel');
+app.use('/controlpanel', express.static(controlpanelDir, {
+  etag: false,
+  lastModified: false,
+  setHeaders(res, filePath) {
+    if (filePath.endsWith('.html') || filePath.endsWith('.js') || filePath.endsWith('.css')) {
+      res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+      res.set('Pragma', 'no-cache');
+    }
+  }
+}));
+app.get('/controlpanel', (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  res.sendFile(path.join(controlpanelDir, 'index.html'));
+});
+
+app.get('/', (req, res) => {
+  res.redirect('/controlpanel');
 });
 
 // Optioneel: serveer de web-ui vanaf dezelfde server (voor eenvoudige deploy)

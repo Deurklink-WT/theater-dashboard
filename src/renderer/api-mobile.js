@@ -3,7 +3,7 @@
  * Zelfde interface als Electron preload (window.electronAPI), maar via fetch naar de API-server.
  * Wordt alleen gebruikt als window.electronAPI nog niet bestaat (geen Electron).
  * Stel de server in via localStorage 'SHIFT_HAPPENS_API_BASE' of window.SHIFT_HAPPENS_API_BASE.
- * @author PdV
+ * @author Team
  * @license UNLICENSED
  */
 
@@ -32,6 +32,37 @@
     }
   }
 
+  function getAccessHeaders() {
+    var out = {};
+    var id = String(localStorage.getItem('SHIFT_HAPPENS_ACCESS_CLIENT_ID') || '').trim();
+    var secret = String(localStorage.getItem('SHIFT_HAPPENS_ACCESS_CLIENT_SECRET') || '').trim();
+    if (id && secret) {
+      out['CF-Access-Client-Id'] = id;
+      out['CF-Access-Client-Secret'] = secret;
+    }
+    var token = String(localStorage.getItem('SHIFT_HAPPENS_AUTH_TOKEN') || '').trim();
+    if (token) out.Authorization = 'Bearer ' + token;
+    if (window.__SHIFT_HAPPENS_MOBILE__) out['X-Shift-Client'] = 'iphone';
+    else out['X-Shift-Client'] = 'web';
+    return out;
+  }
+
+  function sendPresence() {
+    var token = String(localStorage.getItem('SHIFT_HAPPENS_AUTH_TOKEN') || '').trim();
+    var base = getBase();
+    if (!token || !base) return;
+    fetch(base.replace(/\/$/, '') + '/api/auth/presence', {
+      method: 'POST',
+      headers: Object.assign({ 'Content-Type': 'application/json' }, getAccessHeaders()),
+      body: JSON.stringify({ client: 'iphone', view: 'app' })
+    }).catch(function () {});
+  }
+
+  if (localStorage.getItem('SHIFT_HAPPENS_AUTH_TOKEN')) {
+    sendPresence();
+    setInterval(sendPresence, 30000);
+  }
+
   function apiBaseMissingError() {
     return new Error(
       'Shift Happens API-server niet ingesteld. Open Instellingen → sectie API-server (iPhone) en vul het adres in van jouw server (bijv. http://192.168.1.10:3847), niet de Yesplan- of ticket-URL.'
@@ -44,7 +75,7 @@
     const url = base.replace(/\/$/, '') + path;
     return fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: Object.assign({ 'Content-Type': 'application/json' }, getAccessHeaders()),
       body: body ? JSON.stringify(body) : undefined
     }).then(function (r) {
       if (!r.ok) throw new Error(r.statusText || 'Request failed');
@@ -56,7 +87,7 @@
     const base = getBase();
     if (!base) return Promise.reject(apiBaseMissingError());
     const url = base.replace(/\/$/, '') + path;
-    return fetch(url).then(function (r) {
+    return fetch(url, { headers: getAccessHeaders() }).then(function (r) {
       if (!r.ok) throw new Error(r.statusText || 'Request failed');
       return r.json();
     });
@@ -73,7 +104,6 @@
     getYesplanVenues: function (params) { return post('/api/yesplan/venues', params || {}); },
     getYesplanReservations: function (params) { return post('/api/yesplan/reservations', params); },
     getYesplanSchedule: function (eventId, org) { return post('/api/yesplan/schedule', { eventId, org }); },
-    getItixData: function (params) { return post('/api/itix/data', params); },
     getPrivaData: function (params) { return post('/api/priva/data', params); },
     saveConfig: function (system, config) { return post('/api/config', { system, config }); },
     getConfig: function (system) { return get('/api/config/' + encodeURIComponent(system)); },

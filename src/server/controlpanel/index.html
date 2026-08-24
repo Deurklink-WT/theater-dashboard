@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shift Happens — Toegang beheer</title>
+  <link rel="stylesheet" href="style.css?v=20260824-8">
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Shift Happens</h1>
+      <p class="sub">Toegang beheer</p>
+    </header>
+
+    <section id="bootstrapSection" class="card hidden">
+      <h2>Eerste admin aanmaken</h2>
+      <p>Nog geen gebruikers. Maak het eerste beheeraccount aan.</p>
+      <form id="bootstrapForm">
+        <label>E-mail<input type="email" id="bootstrapEmail" required autocomplete="username"></label>
+        <label>Wachtwoord (min. 8 tekens)<input type="password" id="bootstrapPassword" required minlength="8" autocomplete="new-password"></label>
+        <button type="submit">Admin aanmaken</button>
+      </form>
+      <p id="bootstrapError" class="error" aria-live="polite"></p>
+    </section>
+
+    <section id="loginSection" class="card hidden">
+      <h2>Inloggen</h2>
+      <form id="loginForm">
+        <label>E-mail<input type="email" id="loginEmail" required autocomplete="username"></label>
+        <label>Wachtwoord<input type="password" id="loginPassword" required autocomplete="current-password"></label>
+        <button type="submit">Inloggen</button>
+      </form>
+      <p id="loginError" class="error" aria-live="polite"></p>
+    </section>
+
+    <section id="adminSection" class="card hidden">
+      <div class="toolbar">
+        <div>
+          <strong id="adminWelcome"></strong>
+          <span class="badge" id="adminRole"></span>
+        </div>
+        <button type="button" id="logoutBtn" class="btn-secondary">Uitloggen</button>
+      </div>
+
+      <h2>Verbonden clients <span id="connectionsCount" class="badge">0</span></h2>
+        <p class="hint">Live overzicht (ververst elke 3 s). Offline na ~25 s; blijft grijs staan tot je hem verwijdert. <span id="connectionsUpdated"></span></p>
+      <table id="connectionsTable">
+          <thead>
+            <tr><th>Status</th><th>E-mail</th><th>Client</th><th>View</th><th>Laatst gezien</th><th></th></tr>
+          </thead>
+          <tbody id="connectionsBody">
+            <tr><td colspan="6" class="hint">Bezig met laden…</td></tr>
+          </tbody>
+        </table>
+
+      <h2 style="margin-top: 1.5rem;">Activiteitenlog <span id="auditLogCount" class="badge">0</span></h2>
+      <p class="hint">Wie deed wat (o.a. trekkenlijsten). Ververs elke 5 s. <span id="auditLogUpdated"></span></p>
+      <div class="audit-toolbar">
+        <label>Filter e-mail<input type="email" id="auditFilterEmail" placeholder="optioneel"></label>
+        <label>Actie<input type="text" id="auditFilterAction" placeholder="bijv. trekkenlijst" value="trekkenlijst"></label>
+        <button type="button" id="auditRefreshBtn" class="btn-secondary">Ververs</button>
+      </div>
+      <table id="auditLogTable">
+        <thead>
+          <tr><th>Tijd</th><th>Gebruiker</th><th>Actie</th><th>Doel</th><th>Detail</th></tr>
+        </thead>
+        <tbody id="auditLogBody">
+          <tr><td colspan="5" class="hint">Bezig met laden…</td></tr>
+        </tbody>
+      </table>
+
+      <div id="userPanel" class="hidden">
+        <h2 style="margin-top: 1.5rem;">Whitelist gebruikers</h2>
+        <p class="hint">Alleen deze e-mailadressen mogen inloggen. De rest wordt geweigerd.</p>
+
+        <form id="addUserForm" class="add-form">
+          <input type="email" id="newEmail" placeholder="naam@organisatie.nl" required>
+          <input type="password" id="newPassword" placeholder="wachtwoord (min. 8)" required minlength="8">
+          <select id="newRole">
+            <option value="user">Gebruiker</option>
+            <option value="admin">Admin</option>
+          </select>
+          <button type="submit">Toevoegen</button>
+        </form>
+        <p id="addUserError" class="error" aria-live="polite"></p>
+
+        <table id="usersTable">
+          <thead>
+            <tr><th>E-mail</th><th>Rol</th><th>Status</th><th></th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div id="nonAdminPanel" class="hidden">
+        <p>Je bent ingelogd als gebruiker. Gebruikersbeheer is alleen voor admins.</p>
+        <p><a href="/app">Naar Shift Happens app →</a></p>
+      </div>
+    </section>
+  </div>
+  <script src="app.js?v=20260824-8"></script>
+</body>
+</html>
