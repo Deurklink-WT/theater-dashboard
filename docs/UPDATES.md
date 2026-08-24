@@ -32,7 +32,7 @@ Gebruik workflow **`Release macOS Signed`** (`.github/workflows/release-mac-sign
 
 1. **Jij bouwt** een nieuwe versie (`npm run build:win` / `build:mac` / `build:pi`).
 2. **Jij publiceert** op **GitHub Releases** (zelfde repo als in `package.json` → `build.publish`).
-   - In de repo staan neutrale placeholders (`example-org` / `theater-dashboard`). Zet vóór een echte release `build.publish.owner`/`repo` goed, **of** gebruik `UPDATE_BASE_URL` naar je eigen HTTPS-feed.
+   - Publish-target staat in `package.json` → `build.publish` (`Deurklink-WT/theater-dashboard`). Alternatief: `UPDATE_BASE_URL` naar je eigen HTTPS-feed.
 3. **Geïnstalleerde apps** controleren automatisch op updates en downloaden die op de achtergrond. Na download: bij **volgende app-afsluiting** wordt geïnstalleerd (`autoInstallOnAppQuit`).
 
 - In **development** (`npm start`) gebeurt er **geen** auto-update.

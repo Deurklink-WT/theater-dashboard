@@ -33,7 +33,7 @@
     "priva"
   ],
   "author": "PdV",
-  "homepage": "https://github.com/example-org/theater-dashboard#readme",
+  "homepage": "https://github.com/Deurklink-WT/theater-dashboard#readme",
   "license": "UNLICENSED",
   "devDependencies": {
     "@capacitor/cli": "^6.0.0",
@@ -158,7 +158,7 @@
     "publish": [
       {
         "provider": "github",
-        "owner": "example-org",
+        "owner": "Deurklink-WT",
         "repo": "theater-dashboard"
       }
     ]
@@ -169,9 +169,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/example-org/theater-dashboard.git"
+    "url": "https://github.com/Deurklink-WT/theater-dashboard.git"
   },
   "bugs": {
-    "url": "https://github.com/example-org/theater-dashboard/issues"
+    "url": "https://github.com/Deurklink-WT/theater-dashboard/issues"
   }
 }

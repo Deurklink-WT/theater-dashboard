@@ -11416,7 +11416,7 @@ class TheaterDashboard {
             banner.addEventListener('click', async () => {
                 const phase = banner.dataset.phase;
                 if (phase === 'manual-download' && window.electronAPI?.openExternal) {
-                    await window.electronAPI.openExternal('https://github.com/example-org/theater-dashboard/releases/latest');
+                    await window.electronAPI.openExternal('https://github.com/Deurklink-WT/theater-dashboard/releases/latest');
                     return;
                 }
                 if (phase === 'downloaded' && window.electronAPI.quitAndInstallUpdate) {
