@@ -34,6 +34,7 @@ build/dmg-background.png
 
 # Build-time gegenereerd (kan GitHub-token bevatten — nooit committen)
 src/generated/update-token.js
+update-token.js
 .env
 .env.local
 .env.*.local

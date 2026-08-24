@@ -6,7 +6,7 @@ Versie **1.5.4** staat klaar voor uitbrengen op iPhone (TestFlight of App Store)
 
 - **Marketingversie:** 1.5.4 (zichtbaar voor gebruikers)
 - **Buildnummer:** 154 (CURRENT_PROJECT_VERSION in Xcode; verhoog bij elke nieuwe upload)
-- **Bundle ID:** com.huistechneut.shifthappens
+- **Bundle ID:** com.example.shifthappens
 
 ## Stappen om uit te brengen
 
@@ -37,7 +37,7 @@ npm run cap:ios
 ### 4. App Store Connect
 
 - Ga naar [App Store Connect](https://appstoreconnect.apple.com).
-- **Mijn apps** → **Shift Happens** (of maak de app aan als die nog niet bestaat; platform **iOS**, Bundle ID `com.huistechneut.shifthappens`).
+- **Mijn apps** → **Shift Happens** (of maak de app aan als die nog niet bestaat; platform **iOS**, Bundle ID `com.example.shifthappens`).
 - Tab **TestFlight** of **App Store**:
   - **TestFlight:** Na verwerking (enkele minuten) kun je interne/externe testers toevoegen.
   - **App Store:** Maak een nieuwe versie 1.5.4 aan en koppel de geüploade build; vul metadata in en dien in voor beoordeling.
@@ -64,7 +64,7 @@ De web-assets (HTML/CSS/JS) zijn al gekopieerd naar `ios/App/App/public`; alleen
 ## Vereisten
 
 - Apple Developer-account ($99/jaar).
-- App aangemaakt in App Store Connect met Bundle ID `com.huistechneut.shifthappens`.
+- App aangemaakt in App Store Connect met Bundle ID `com.example.shifthappens`.
 - Xcode met ingelogde Apple ID en juist team geselecteerd.
 
 ## API-server (voor gebruikers)

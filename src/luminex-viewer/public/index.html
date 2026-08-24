@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lichtsignaal Viewer — Luminex</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header id="topbar" role="banner">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">⬡</span>
+      <h1>Lichtsignaal Viewer</h1>
+      <span id="mode-pill" class="pill" aria-live="polite">…</span>
+    </div>
+    <div class="stats" aria-label="Status">
+      <span id="stat-sources" class="stat">0 consoles</span>
+      <span id="stat-universes" class="stat">0 streams</span>
+      <span id="stat-nodes" class="stat">0 verwerkers</span>
+      <span id="stat-listener" class="stat warn">Ontvangst: …</span>
+    </div>
+    <div class="actions">
+      <button id="btn-settings" title="Instellingen openen" aria-expanded="false" aria-controls="settings">⚙ Instellingen</button>
+    </div>
+  </header>
+
+  <div id="listener-banner" role="status" aria-live="polite"></div>
+  <div id="route-banner" class="route-banner hidden" role="status" aria-live="polite"></div>
+
+  <div id="settings" class="drawer hidden" role="region" aria-label="Instellingen">
+    <h2>Instellingen</h2>
+    <div class="settings-grid">
+      <label>Weergave
+        <select id="cfg-mode">
+          <option value="auto">Automatisch (echt signaal als het er is)</option>
+          <option value="live">Alleen echt signaal</option>
+          <option value="demo">Demovoorbeeld</option>
+        </select>
+      </label>
+      <label>Welke streams volgen?
+        <span class="range-inputs">
+          <input id="cfg-uni-start" type="number" min="1" max="63999" value="1" aria-label="Eerste stream" />
+          <span>tot</span>
+          <input id="cfg-uni-end" type="number" min="1" max="63999" value="32" aria-label="Laatste stream" />
+        </span>
+      </label>
+      <label>Netwerkverbinding
+        <select id="cfg-iface" aria-describedby="iface-hint">
+          <option value="auto">Automatisch — alle actieve verbindingen</option>
+        </select>
+        <small id="iface-hint" class="field-hint"></small>
+      </label>
+      <label class="full">Streamnamen (binnenkomend) — één per regel: <code>nummer=naam</code>
+        <textarea id="cfg-uni-aliases" rows="2" placeholder="1=Huislicht&#10;2=Podium wash"></textarea>
+      </label>
+      <label class="full">sACN-uitgangen — één per regel: <code>ip/stream=naam</code>
+        <textarea id="cfg-sacn-out-aliases" rows="2" placeholder="10.0.1.230/5=FOH terug&#10;10.0.1.230/8=Side fill"></textarea>
+      </label>
+      <label class="full">DMX-uitgangen — één per regel: <code>ip:poort=naam</code>
+        <textarea id="cfg-port-aliases" rows="2" placeholder="10.0.1.230:0=Podium front&#10;10.0.1.230:1=Achterwand"></textarea>
+      </label>
+      <label class="full">Luminex apparaten — één per regel: <code>ip</code> of <code>ip, naam</code>
+        <textarea id="cfg-nodes" rows="4" placeholder="10.0.1.50, Toneeltoren&#10;10.0.1.51, FOH-rek"></textarea>
+      </label>
+      <div class="settings-actions full">
+        <button type="button" id="btn-discover-nodes">Apparaten zoeken</button>
+        <button type="button" id="btn-test-node">Verbinding testen</button>
+        <span id="node-discover-result"></span>
+        <span id="node-test-result"></span>
+      </div>
+      <div id="discover-panel" class="discover-panel full hidden"></div>
+    </div>
+    <div class="settings-actions">
+      <button id="btn-save">Opslaan &amp; toepassen</button>
+      <span id="save-result"></span>
+    </div>
+  </div>
+
+  <main id="layout">
+    <div id="canvas-wrap">
+      <div id="canvas">
+        <svg id="edges" aria-hidden="true"></svg>
+        <div id="edge-labels" aria-hidden="true"></div>
+        <div class="col" id="col-sources">
+          <div class="col-title">Consoles<small>wie zendt lichtsignaal?</small></div>
+          <div class="col-body" id="list-sources"></div>
+        </div>
+        <div class="col" id="col-universes">
+          <div class="col-title">Binnenkomend<small>welke streams komen binnen?</small></div>
+          <div class="col-body" id="list-universes"></div>
+        </div>
+        <div class="col" id="col-nodes">
+          <div class="col-title">Verwerkers<small>Luminex in het netwerk</small></div>
+          <div class="col-body" id="list-nodes"></div>
+        </div>
+        <div class="col" id="col-outputs">
+          <div class="col-title">Uitgangen<small>naar netwerk of zaal (DMX)</small></div>
+          <div class="col-body" id="list-outputs"></div>
+        </div>
+      </div>
+    </div>
+    <aside id="detail" aria-label="Details en uitleg">
+      <div id="detail-content"></div>
+    </aside>
+  </main>
+
+  <footer id="legend" aria-label="Legenda">
+    <span class="leg"><i class="line active"></i> Signaal loopt</span>
+    <span class="leg"><i class="line dmx-live"></i> Naar zaal (DMX)</span>
+    <span class="leg"><i class="line expected"></i> Ingesteld, nog stil</span>
+    <span class="leg"><span class="badge winner">★</span> Winnende console</span>
+    <span class="leg"><span class="badge merge">Meerdere bronnen</span> op één stream</span>
+    <span class="hint">Klik = route volgen · # = streamnummer · DMX-knop = lichtniveaus</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -2,7 +2,7 @@
  * Shift Happens - File-based config store (voor API-server / iPhone-backend)
  * Zelfde structuur als electron-store: per-systeem keys (yesplan, yesplan2, itix, priva, app).
  * Geen Electron-afhankelijkheid.
- * @author PdV
+ * @author Team
  * @license UNLICENSED
  */
 

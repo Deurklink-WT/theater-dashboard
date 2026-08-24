@@ -94,6 +94,8 @@ jobs:
           }
           upload "dist/Shift Happens-${VER}-arm64.AppImage" "Shift.Happens-${VER}-arm64.AppImage"
           upload "dist/Shift Happens-${VER}-arm64.AppImage.blockmap" "Shift.Happens-${VER}-arm64.AppImage.blockmap"
+          # YML-urls moeten matchen met de GitHub assetlabels (Shift.Happens-...).
+          node scripts/fix-updater-yml-names.js dist/latest-linux-arm64.yml dist/latest-linux.yml || true
           for meta in dist/latest-linux-arm64.yml dist/latest-linux.yml; do
             if [ -f "$meta" ]; then
               upload "$meta" "$(basename "$meta")"

@@ -1,10 +1,10 @@
-/**image.png
+/**
  * Shift Happens - Theater Dashboard
- * Copyright (c) 2026 PdV
+ * Copyright (c) 2026 Team
  * 
  * Proprietary software - All rights reserved
  * 
- * @author PdV
+ * @author Team
  * @license UNLICENSED
  */
 
@@ -12,6 +12,8 @@ const { app, BrowserWindow, ipcMain, Menu, shell, screen, safeStorage } = requir
 const path = require('path');
 const Store = require('electron-store');
 const cron = require('node-cron');
+const os = require('os');
+const { MasterModeService } = require('./main/master-mode');
 const VERBOSE_RUNTIME_LOGS = process.argv.includes('--dev') || process.argv.includes('--yesplan-search') || process.argv.includes('--personnel-wtpy');
 function runtimeLog(...args) {
   if (VERBOSE_RUNTIME_LOGS) console.log(...args);
@@ -79,6 +81,16 @@ function secureConfigFromStorage(config) {
 const YesplanAPI = require('./api/yesplan');
 const PrivaAPI = require('./api/priva');
 const { setupAutoUpdater, checkForUpdatesNow, downloadUpdateNow, quitAndInstallUpdate } = require('./updater');
+const { startOscTimerListener } = require('./main/osc-timer-listener');
+const { browseLuminodes } = require('./main/luminode-discovery');
+const { scanSacnUniverses } = require('./main/sacn-scan');
+const { getLumiNodeCapabilities, fetchJson, writeJson } = require('./main/luminode-api');
+const {
+  startLuminexViewerServer,
+  stopLuminexViewerServer,
+  getLuminexViewerUrl,
+  reloadLuminexViewerConfig,
+} = require('./main/luminex-viewer-server');
 
 // Yesplan response cache (vermindert serverbelasting bij navigatie)
 // Standaard ruim: 6 uur. Overschrijfbaar via env var.
@@ -86,11 +98,34 @@ const YESPLAN_CACHE_TTL_MS = Number(process.env.YESPLAN_CACHE_TTL_MS || (6 * 60 
 const YESPLAN_CACHE_MAX = 100;
 const yesplanCache = new Map();
 const YESPLAN_VENUES_CACHE_TTL_MS = 12 * 60 * 60 * 1000; // 12 uur
+const YESPLAN_PERSONNEL_CACHE_TTL_MS = Number(process.env.YESPLAN_PERSONNEL_CACHE_TTL_MS || (90 * 1000)); // 90s
+const YESPLAN_PERSONNEL_CACHE_MAX = 300;
 const yesplanApiInstances = new Map();
+const yesplanPersonnelCache = new Map();
 
 function getYesplanConfig(org) {
   const key = org === 2 ? 'yesplan2' : 'yesplan';
-  return secureConfigFromStorage(store.get(key, {}));
+  const config = secureConfigFromStorage(store.get(key, {}));
+  const appConfig = store.get('app', {}) || {};
+  const profiles = (appConfig.yesplanFieldProfiles && typeof appConfig.yesplanFieldProfiles === 'object')
+    ? appConfig.yesplanFieldProfiles
+    : {};
+  const profile = profiles[String(org)] || profiles.default || (
+    String(config?.name || '').toLowerCase().includes('metropool')
+      ? {
+          techniek: ['techniek', 'tech', 'podiumtechniek', 'stage crew', 'crew'],
+          horeca: ['horeca', 'catering', 'bediening', 'bar'],
+          frontOffice: ['frontoffice', 'front office', 'publieksservice', 'garderobe', 'ticketing', 'kassa', 'entree'],
+          nostradamus: ['nostradamus'],
+          exclude: ['opmerking', 'opmerkingen', 'remark', 'remarks', 'notes', 'bijzonderheden']
+        }
+      : null
+  );
+  return {
+    ...config,
+    organizationId: org,
+    fieldProfile: profile
+  };
 }
 
 function getActiveYesplanOrg() {
@@ -99,15 +134,62 @@ function getActiveYesplanOrg() {
   return v === 'both' ? 'both' : (v === 2 ? 2 : 1);
 }
 
+function listNetworkInterfaces() {
+  const nets = os.networkInterfaces();
+  const rows = [];
+  for (const [name, addrs] of Object.entries(nets || {})) {
+    for (const a of addrs || []) {
+      if (!a || a.family !== 'IPv4' || a.internal) continue;
+      const address = String(a.address || '').trim();
+      if (!address) continue;
+      rows.push({
+        id: `${name}:${address}`,
+        name,
+        address,
+        cidr: a.cidr || '',
+        mac: a.mac || ''
+      });
+    }
+  }
+  rows.sort((a, b) => {
+    const n = a.name.localeCompare(b.name, 'nl', { numeric: true });
+    if (n !== 0) return n;
+    return a.address.localeCompare(b.address, 'nl', { numeric: true });
+  });
+  return rows;
+}
+
+function getNetworkRoutingConfig() {
+  const appConfig = store.get('app', {}) || {};
+  return (appConfig.networkRouting && typeof appConfig.networkRouting === 'object')
+    ? appConfig.networkRouting
+    : {};
+}
+
+function getSelectedInterfaceAddress(role) {
+  const routing = getNetworkRoutingConfig();
+  const selected = String(routing?.[role] || '').trim();
+  if (!selected || selected === 'auto') return '';
+  const available = listNetworkInterfaces();
+  const byAddress = available.find((i) => i.address === selected);
+  if (byAddress) return byAddress.address;
+  const byId = available.find((i) => i.id === selected);
+  return byId ? byId.address : '';
+}
+
 function getYesplanApi(config = {}) {
+  const localAddress = getSelectedInterfaceAddress('internetInterface');
   const baseURL = String(config.baseURL || '').trim();
   const apiKey = String(config.apiKey || '').trim();
   const org = String(config.organizationId || '');
-  const key = `${baseURL}|${apiKey}|${org}`;
+  const profileKey = (() => {
+    try { return JSON.stringify(config.fieldProfile || {}); } catch (_) { return ''; }
+  })();
+  const key = `${baseURL}|${apiKey}|${org}|${localAddress}|${profileKey}`;
   if (!baseURL || !apiKey) return new YesplanAPI(config);
   const existing = yesplanApiInstances.get(key);
   if (existing) return existing;
-  const api = new YesplanAPI(config);
+  const api = new YesplanAPI({ ...config, localAddress });
   yesplanApiInstances.set(key, api);
   if (yesplanApiInstances.size > 12) {
     const firstKey = yesplanApiInstances.keys().next().value;
@@ -116,11 +198,17 @@ function getYesplanApi(config = {}) {
   return api;
 }
 
-function yesplanCacheKey(params) {
+function yesplanCacheKey(params, activeOrg, singleOrg) {
   const { startDate, endDate, venueId, includeEventDetailsForWeekFilters } = params;
-  const org = getActiveYesplanOrg();
   const detailsKey = includeEventDetailsForWeekFilters ? 'fullWeekFilters' : 'liteWeekFilters';
-  return `yesplan:org${org}:${startDate || ''}:${endDate || ''}:${venueId ?? 'all'}:${detailsKey}`;
+  const orgs = activeOrg === 'both'
+    ? (singleOrg ? [singleOrg] : [1, 2])
+    : [activeOrg === 2 ? 2 : 1];
+  const orgFingerprint = orgs.map((orgNum) => {
+    const cfg = getYesplanConfig(orgNum);
+    return `org${orgNum}@${String(cfg.baseURL || '').trim()}`;
+  }).join('|');
+  return `yesplan:${orgFingerprint}:${startDate || ''}:${endDate || ''}:${venueId ?? 'all'}:${detailsKey}`;
 }
 
 function yesplanCacheGet(key) {
@@ -143,6 +231,44 @@ function yesplanCacheSet(key, data) {
     if (oldest) yesplanCache.delete(oldest);
   }
   yesplanCache.set(key, { data, ts: Date.now() });
+}
+
+function yesplanPersonnelCacheKey(params = {}, activeOrg, venueOrg) {
+  const startDate = String(params.startDate || '').trim();
+  const endDate = String(params.endDate || '').trim();
+  const venueId = String(params.venueId || '').trim() || 'all';
+  const orgs = activeOrg === 'both'
+    ? (venueOrg ? [venueOrg] : [1, 2])
+    : [activeOrg === 2 ? 2 : 1];
+  const orgFingerprint = orgs.map((orgNum) => {
+    const cfg = getYesplanConfig(orgNum);
+    let profileKey = '';
+    try { profileKey = JSON.stringify(cfg.fieldProfile || {}); } catch (_) { profileKey = ''; }
+    return `org${orgNum}@${String(cfg.baseURL || '').trim()}#${profileKey}`;
+  }).join('|');
+  return `personnel:${orgFingerprint}:${startDate}:${endDate}:${venueId}`;
+}
+
+function yesplanPersonnelCacheGet(key) {
+  const ent = yesplanPersonnelCache.get(key);
+  if (!ent) return null;
+  if (Date.now() - ent.ts > YESPLAN_PERSONNEL_CACHE_TTL_MS) {
+    yesplanPersonnelCache.delete(key);
+    return null;
+  }
+  return ent.data;
+}
+
+function yesplanPersonnelCacheSet(key, data) {
+  if (yesplanPersonnelCache.size >= YESPLAN_PERSONNEL_CACHE_MAX) {
+    let oldest = null;
+    let oldestTs = Infinity;
+    for (const [k, v] of yesplanPersonnelCache) {
+      if (v.ts < oldestTs) { oldestTs = v.ts; oldest = k; }
+    }
+    if (oldest) yesplanPersonnelCache.delete(oldest);
+  }
+  yesplanPersonnelCache.set(key, { data, ts: Date.now() });
 }
 
 function venuesCacheStoreGetAll() {
@@ -171,23 +297,80 @@ function venuesCacheStoreGetAny(key) {
 }
 
 let mainWindow;
+let stopOscTimer = null;
+const masterModeService = new MasterModeService({
+  getName: () => {
+    const cfg = store.get('app', {}) || {};
+    const custom = String(cfg.masterModeName || '').trim();
+    if (custom) return custom;
+    const host = String(os.hostname() || '').trim();
+    return host || 'Shift Happens master';
+  }
+});
+
+function getDefaultWindowBounds(isKioskMode) {
+  const MIN_WINDOW_WIDTH = 1920;
+  const MIN_WINDOW_HEIGHT = 1080;
+  if (process.platform === 'darwin' && !isKioskMode) {
+    const { workArea } = screen.getPrimaryDisplay();
+    return { x: workArea.x, y: workArea.y, width: workArea.width, height: workArea.height };
+  }
+  return { width: MIN_WINDOW_WIDTH, height: MIN_WINDOW_HEIGHT };
+}
+
+function isWindowBoundsUsable(bounds) {
+  if (!bounds || typeof bounds !== 'object') return false;
+  const { x, y, width, height } = bounds;
+  if (![x, y, width, height].every((v) => Number.isFinite(v))) return false;
+  if (width < 1920 || height < 1080) return false;
+
+  // Gebruik middelpunt-check zodat venster op aangesloten schermen blijft.
+  const centerX = x + (width / 2);
+  const centerY = y + (height / 2);
+  return screen.getAllDisplays().some(({ workArea }) =>
+    centerX >= workArea.x &&
+    centerX <= workArea.x + workArea.width &&
+    centerY >= workArea.y &&
+    centerY <= workArea.y + workArea.height
+  );
+}
+
+function getInitialWindowBounds(isKioskMode) {
+  const saved = store.get('windowBounds');
+  if (!isKioskMode && isWindowBoundsUsable(saved)) return saved;
+  return getDefaultWindowBounds(isKioskMode);
+}
+
+/** Eén GUI: tweede start (npm start, dubbelklik .app) focust het open venster; CLI-modi uitgezonderd. */
+const _guiSingleInstance =
+  !process.argv.includes('--personnel-wtpy') && !process.argv.includes('--yesplan-search');
+if (_guiSingleInstance) {
+  const gotTheLock = app.requestSingleInstanceLock();
+  if (!gotTheLock) {
+    app.exit(0);
+  } else {
+    app.on('second-instance', () => {
+      if (mainWindow && !mainWindow.isDestroyed()) {
+        if (mainWindow.isMinimized()) mainWindow.restore();
+        mainWindow.show();
+        mainWindow.focus();
+      }
+    });
+  }
+}
 
 function createWindow() {
   // Check voor kiosk mode argument
   const isKioskMode = process.argv.includes('--kiosk') || process.env.KIOSK_MODE === 'true';
-
-  // Op macOS: venster beeldvullend (work area) zodat maximize/groene knop goed werkt
-  let winOpts = { width: 1400, height: 900 };
-  if (process.platform === 'darwin' && !isKioskMode) {
-    const { workArea } = screen.getPrimaryDisplay();
-    winOpts = { x: workArea.x, y: workArea.y, width: workArea.width, height: workArea.height };
-  }
+  const MIN_WINDOW_WIDTH = 1920;
+  const MIN_WINDOW_HEIGHT = 1080;
+  const winOpts = getInitialWindowBounds(isKioskMode);
 
   // Hoofdvenster aanmaken
   mainWindow = new BrowserWindow({
     ...winOpts,
-    minWidth: 1200,
-    minHeight: 800,
+    minWidth: MIN_WINDOW_WIDTH,
+    minHeight: MIN_WINDOW_HEIGHT,
     fullscreen: isKioskMode,
     fullscreenable: true, // Groene plus-knop op Mac doet beeldvullend fullscreen
     kiosk: isKioskMode,
@@ -195,6 +378,7 @@ function createWindow() {
       nodeIntegration: false,
       contextIsolation: true,
       enableRemoteModule: false,
+      webviewTag: true,
       preload: path.join(__dirname, 'preload.js')
     },
     titleBarStyle: 'hiddenInset', // macOS stijl
@@ -208,6 +392,18 @@ function createWindow() {
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
   });
+
+  // Bewaar laatste vensterpositie/-grootte voor volgende start.
+  const persistWindowBounds = () => {
+    if (!mainWindow || mainWindow.isDestroyed()) return;
+    if (mainWindow.isMinimized() || mainWindow.isFullScreen() || mainWindow.isMaximized()) return;
+    const bounds = mainWindow.getBounds();
+    if (!isWindowBoundsUsable(bounds)) return;
+    store.set('windowBounds', bounds);
+  };
+  mainWindow.on('resize', persistWindowBounds);
+  mainWindow.on('move', persistWindowBounds);
+  mainWindow.on('close', persistWindowBounds);
 
   // Op Mac: groene plus-knop → forceer fullscreen als zoom niet beeldvullend is
   if (process.platform === 'darwin' && !isKioskMode) {
@@ -326,7 +522,7 @@ ipcMain.handle('get-yesplan-data', async (event, params) => {
       venueId = idPart || undefined;
     }
     const apiParams = { startDate: params.startDate, endDate: params.endDate, venueId, limit: params.limit, includeEventDetailsForWeekFilters };
-    const key = yesplanCacheKey(apiParams);
+    const key = yesplanCacheKey(apiParams, activeOrg, singleOrg);
     const isWeekRequest = params.startDate && params.endDate && params.startDate !== params.endDate;
 
     const fetchWeek = (api, orgId) => {
@@ -396,7 +592,7 @@ ipcMain.handle('get-yesplan-event-personnel', async (event, { eventId }) => {
       if (!config.baseURL || !config.apiKey) continue;
       const api = getYesplanApi(config);
       const urenInfo = await api.getEventPersonnel(eventId);
-      const hasAny = (urenInfo.techniek?.length || 0) + (urenInfo.horeca?.length || 0) + (urenInfo.frontOffice?.length || 0) + (urenInfo.nostradamus?.length || 0) > 0;
+      const hasAny = Object.values(urenInfo || {}).some((v) => Array.isArray(v) && v.length > 0);
       if (hasAny) return { success: true, data: urenInfo };
     }
     return { success: true, data: { techniek: [], horeca: [], frontOffice: [], nostradamus: [] } };
@@ -409,6 +605,7 @@ ipcMain.handle('get-yesplan-event-personnel', async (event, { eventId }) => {
 /** Personeel voor een datum (en optioneel zaal): haalt events op voor die dag en per event de customdata-personeel. */
 ipcMain.handle('get-yesplan-personnel-for-date', async (event, params) => {
   let { startDate, endDate, venueId } = params || {};
+  const skipCache = !!params?.skipCache || !!params?.forceRefresh;
   const venueRaw = venueId != null ? String(venueId).trim() : '';
   const venueOrg = venueRaw && venueRaw.includes(':') ? Number(venueRaw.split(':')[0]) : null;
   const venueOnlyId = venueRaw && venueRaw.includes(':') ? String(venueRaw.split(':').slice(1).join(':')).trim() : venueRaw;
@@ -419,6 +616,12 @@ ipcMain.handle('get-yesplan-personnel-for-date', async (event, params) => {
   runtimeLog('[Personeel] Aanroep: datum=', start, 'venueId=', venueId || 'alle', 'venueOrg=', venueOrg || 'alle');
   try {
     const activeOrg = getActiveYesplanOrg();
+    const personnelCacheParams = { startDate: start, endDate: end, venueId };
+    const personnelCacheKey = yesplanPersonnelCacheKey(personnelCacheParams, activeOrg, venueOrg);
+    if (!skipCache) {
+      const cached = yesplanPersonnelCacheGet(personnelCacheKey);
+      if (cached) return { ...cached, _fromCache: true };
+    }
     const orgs = activeOrg === 'both'
       ? (venueOrg ? [venueOrg] : [1, 2])
       : [activeOrg];
@@ -451,18 +654,21 @@ ipcMain.handle('get-yesplan-personnel-for-date', async (event, params) => {
         const id = ev.id;
         if (!id) continue;
         const urenInfo = await api.getEventPersonnel(id);
-        if (urenInfo.techniek?.length) merged.techniek = merged.techniek.concat(urenInfo.techniek);
-        if (urenInfo.horeca?.length) merged.horeca = merged.horeca.concat(urenInfo.horeca);
-        if (urenInfo.frontOffice?.length) merged.frontOffice = merged.frontOffice.concat(urenInfo.frontOffice);
-        if (urenInfo.nostradamus?.length) merged.nostradamus = merged.nostradamus.concat(urenInfo.nostradamus);
+        for (const [key, value] of Object.entries(urenInfo || {})) {
+          if (!Array.isArray(value) || value.length === 0) continue;
+          if (!Array.isArray(merged[key])) merged[key] = [];
+          merged[key] = merged[key].concat(value);
+        }
       }
     }
-    const total = merged.techniek.length + merged.horeca.length + merged.frontOffice.length + merged.nostradamus.length;
+    const total = Object.values(merged).reduce((sum, v) => sum + (Array.isArray(v) ? v.length : 0), 0);
     if (!hadValidConfig) {
       runtimeLog('[Personeel] Geen geldige Yesplan-config in deze app. Gebruik Instellingen → Yesplan (org 1/2) en vul base URL + API-key in.');
     }
     runtimeLog('[Personeel] Resultaat: techniek=', merged.techniek.length, 'horeca=', merged.horeca.length, 'frontOffice=', merged.frontOffice.length, 'totaal=', total);
-    return { success: true, data: merged };
+    const out = { success: true, data: merged };
+    yesplanPersonnelCacheSet(personnelCacheKey, out);
+    return out;
   } catch (err) {
     console.error('[Personeel] Fout:', err);
     return { success: false, data: { techniek: [], horeca: [], frontOffice: [], nostradamus: [] } };
@@ -544,8 +750,8 @@ ipcMain.handle('get-yesplan-venues', async (event, params = {}) => {
         getYesplanApi(config1).getVenues(),
         getYesplanApi(config2).getVenues()
       ]);
-      const label1 = (config1.name && String(config1.name).trim()) || 'Org 1';
-      const label2 = (config2.name && String(config2.name).trim()) || 'Org 2';
+      const label1 = (config1.shortName && String(config1.shortName).trim()) || (config1.name && String(config1.name).trim()) || 'Org 1';
+      const label2 = (config2.shortName && String(config2.shortName).trim()) || (config2.name && String(config2.name).trim()) || 'Org 2';
       const v1 = (r1?.success && r1?.data) ? r1.data.map(v => ({ ...v, id: `1:${v.id}`, _organizationId: 1, name: `${v.name || 'Zaal'} (${label1})` })) : [];
       const v2 = (r2?.success && r2?.data) ? r2.data.map(v => ({ ...v, id: `2:${v.id}`, _organizationId: 2, name: `${v.name || 'Zaal'} (${label2})` })) : [];
       const merged = [...v1, ...v2];
@@ -635,7 +841,11 @@ ipcMain.handle('get-yesplan-reservations', async (event, params) => {
 
 ipcMain.handle('get-priva-data', async (event, params) => {
   try {
-    const priva = new PrivaAPI(secureConfigFromStorage(store.get('priva', {})));
+    const localAddress = getSelectedInterfaceAddress('internetInterface');
+    const priva = new PrivaAPI({
+      ...secureConfigFromStorage(store.get('priva', {})),
+      localAddress
+    });
     return await priva.getClimateData(params);
   } catch (error) {
     console.error('Priva API error:', error);
@@ -643,9 +853,34 @@ ipcMain.handle('get-priva-data', async (event, params) => {
   }
 });
 
+ipcMain.handle('get-network-interfaces', async () => {
+  try {
+    return { success: true, data: listNetworkInterfaces() };
+  } catch (error) {
+    return { success: false, error: error && error.message ? error.message : String(error), data: [] };
+  }
+});
+
+ipcMain.handle('unlock-master-mode', async (_event, { password } = {}) => {
+  return masterModeService.unlock(password);
+});
+
+ipcMain.handle('discover-master-mode', async () => {
+  try {
+    const masters = await masterModeService.discoverMaster({ timeoutMs: 1400 });
+    return { success: true, masters };
+  } catch (error) {
+    return { success: false, error: error && error.message ? error.message : String(error), masters: [] };
+  }
+});
+
+ipcMain.handle('get-master-mode-status', async () => {
+  return { success: true, status: masterModeService.getStatus() };
+});
+
 ipcMain.handle('save-config', async (event, system, config) => {
   try {
-    const allowedSystems = new Set(['yesplan', 'yesplan2', 'priva', 'itix', 'app']);
+    const allowedSystems = new Set(['yesplan', 'yesplan2', 'priva', 'itix', 'app', 'voorstellingTimer', 'luminex']);
     if (!allowedSystems.has(system)) {
       return { success: false, error: 'Invalid config system' };
     }
@@ -662,6 +897,29 @@ ipcMain.handle('save-config', async (event, system, config) => {
       ? secureConfigForStorage(config)
       : config;
     store.set(system, toStore);
+    if (system === 'app') {
+      // OSC luistert op gekozen netwerkinterface; herstart listener na opslaan.
+      if (typeof stopOscTimer === 'function') {
+        stopOscTimer();
+        stopOscTimer = null;
+      }
+      stopOscTimer = startOscTimerListener({
+        host: getSelectedInterfaceAddress('oscInterface') || undefined,
+        onTrigger: ({ slotId, stepId }) => {
+          const win = mainWindow;
+          if (!win || win.isDestroyed()) return;
+          win.webContents.send('osc-timer-trigger', { slotId, stepId });
+        }
+      });
+      const masterResult = await masterModeService.applyConfig(config || {});
+      if (!masterResult?.success) {
+        return {
+          success: false,
+          error: masterResult.error || 'MASTER_MODE_FAILED',
+          message: masterResult.message || 'Master mode kon niet worden gestart.'
+        };
+      }
+    }
     return { success: true };
   } catch (error) {
     console.error('Config save error:', error);
@@ -670,7 +928,7 @@ ipcMain.handle('save-config', async (event, system, config) => {
 });
 
 ipcMain.handle('get-config', async (event, system) => {
-  const allowedSystems = new Set(['yesplan', 'yesplan2', 'priva', 'itix', 'app']);
+  const allowedSystems = new Set(['yesplan', 'yesplan2', 'priva', 'itix', 'app', 'voorstellingTimer', 'luminex']);
   if (!allowedSystems.has(system)) return {};
   const raw = store.get(system, {});
   if (!['yesplan', 'yesplan2', 'priva'].includes(system)) return raw;
@@ -707,9 +965,29 @@ function getConfiguredExternalHosts() {
   });
   return hosts;
 }
+function isPrivateLanHttpUrl(url) {
+  try {
+    const u = new URL(url.trim());
+    if (u.protocol !== 'http:') return false;
+    const h = u.hostname.toLowerCase();
+    if (h === 'localhost' || h === '127.0.0.1') return true;
+    const m = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/.exec(h);
+    if (!m) return false;
+    const a = [Number(m[1]), Number(m[2]), Number(m[3]), Number(m[4])];
+    if (a.some((n) => n > 255)) return false;
+    if (a[0] === 10) return true;
+    if (a[0] === 192 && a[1] === 168) return true;
+    if (a[0] === 172 && a[1] >= 16 && a[1] <= 31) return true;
+    return false;
+  } catch (_) {
+    return false;
+  }
+}
+
 function isUrlAllowed(url) {
   if (!url || typeof url !== 'string') return false;
   const trimmed = url.trim();
+  if (isPrivateLanHttpUrl(trimmed)) return true;
   if (!trimmed.startsWith('https://')) return false;
   try {
     const u = new URL(trimmed);
@@ -720,6 +998,94 @@ function isUrlAllowed(url) {
     return false;
   }
 }
+
+ipcMain.handle('luminode-discover', async () => {
+  try {
+    return await browseLuminodes();
+  } catch (error) {
+    console.error('LumiNode discovery error:', error);
+    return {
+      ok: false,
+      error: error && error.message ? error.message : String(error),
+      devices: []
+    };
+  }
+});
+
+ipcMain.handle('sacn-discover', async (_event, opts) => {
+  try {
+    const sacnIface = getSelectedInterfaceAddress('sacnInterface');
+    const luminexIface = getSelectedInterfaceAddress('luminexInterface');
+    return await scanSacnUniverses({
+      ...(opts || {}),
+      iface: (opts && opts.iface) || sacnIface || luminexIface || undefined
+    });
+  } catch (error) {
+    console.error('sACN scan error:', error);
+    return {
+      ok: false,
+      error: error && error.message ? error.message : String(error),
+      universes: []
+    };
+  }
+});
+
+ipcMain.handle('luminode-capabilities', async (_event, { host, password } = {}) => {
+  try {
+    const localAddress = getSelectedInterfaceAddress('luminexInterface');
+    return await getLumiNodeCapabilities(host, password, { localAddress });
+  } catch (error) {
+    console.error('LumiNode capabilities error:', error);
+    return {
+      ok: false,
+      errors: [error && error.message ? error.message : String(error)],
+      deviceinfo: null,
+      processblocks: [],
+      io: null
+    };
+  }
+});
+
+ipcMain.handle('luminode-fetch-json', async (_event, { host, password, path } = {}) => {
+  try {
+    const localAddress = getSelectedInterfaceAddress('luminexInterface');
+    const data = await fetchJson(host, password, path, { localAddress });
+    return { ok: true, data };
+  } catch (error) {
+    return { ok: false, error: error && error.message ? error.message : String(error) };
+  }
+});
+
+ipcMain.handle('ensure-luminex-viewer', async () => {
+  try {
+    const luminex = secureConfigFromStorage(store.get('luminex', {}) || {});
+    const appCfg = store.get('app', {}) || {};
+    const existingUrl = getLuminexViewerUrl();
+    if (existingUrl) {
+      reloadLuminexViewerConfig(luminex, appCfg);
+      return { success: true, url: existingUrl };
+    }
+    const result = await startLuminexViewerServer({
+      userDataDir: app.getPath('userData'),
+      shiftHappensLuminex: luminex,
+      shiftHappensApp: appCfg,
+    });
+    return { success: true, url: result.url };
+  } catch (err) {
+    console.error('ensure-luminex-viewer:', err);
+    return { success: false, error: String(err.message || err) };
+  }
+});
+
+ipcMain.handle('luminode-write-json', async (_event, { host, password, path, body, method } = {}) => {
+  try {
+    const localAddress = getSelectedInterfaceAddress('luminexInterface');
+    const data = await writeJson(host, password, path, body, method || 'PUT', { localAddress });
+    return { ok: true, data };
+  } catch (error) {
+    return { ok: false, error: error && error.message ? error.message : String(error) };
+  }
+});
 
 ipcMain.handle('open-external', async (event, url) => {
   try {
@@ -859,12 +1225,34 @@ app.whenReady().then(() => {
   if (SEARCH_CLI) return runYesplanSearchCli();
   createWindow();
   setupAutoUpdater(mainWindow);
+  masterModeService.applyConfig(store.get('app', {}) || {}, { skipUnlock: true }).catch((error) => {
+    console.error('Master mode startfout:', error?.message || error);
+  });
+  stopOscTimer = startOscTimerListener({
+    host: getSelectedInterfaceAddress('oscInterface') || undefined,
+    onTrigger: ({ slotId, stepId }) => {
+      const win = mainWindow;
+      if (!win || win.isDestroyed()) return;
+      win.webContents.send('osc-timer-trigger', { slotId, stepId });
+    }
+  });
 });
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
   }
+});
+
+app.on('will-quit', () => {
+  if (typeof stopOscTimer === 'function') {
+    stopOscTimer();
+    stopOscTimer = null;
+  }
+  stopLuminexViewerServer();
+  masterModeService.stop().catch(() => {
+    /* ignore */
+  });
 });
 
 app.on('activate', () => {

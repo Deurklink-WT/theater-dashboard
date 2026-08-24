@@ -1,0 +1,27 @@
+{
+  "$schema": "../node_modules/@companion-module/base/assets/manifest.schema.json",
+  "id": "shift-happens-timer",
+  "name": "Shift Happens — voorstelling-timer (OSC)",
+  "shortname": "SH timer",
+  "description": "Stuurt OSC naar de Shift Happens Theater Dashboard-app (timer-stappen via Stream Deck / Companion).",
+  "version": "0.0.0",
+  "license": "MIT",
+  "repository": "git+https://github.com/bitfocus/companion-module-shift-happens-timer.git",
+  "bugs": "https://github.com/bitfocus/companion-module-shift-happens-timer/issues",
+  "maintainers": [
+    {
+      "name": "Team",
+      "email": "info@example.com"
+    }
+  ],
+  "runtime": {
+    "type": "node22",
+    "api": "nodejs-ipc",
+    "apiVersion": "0.0.0",
+    "entrypoint": "../src/main.js"
+  },
+  "legacyIds": [],
+  "manufacturer": "Team",
+  "products": ["Theater Dashboard"],
+  "keywords": ["osc", "timer", "theater", "shift-happens"]
+}

@@ -6,9 +6,9 @@ Dit project werkt het prettigst als je **overal dezelfde map** gebruikt.
 
 | | |
 |---|---|
-| **Pad** | `~/theater-dashboard` → `/Users/werk/theater-dashboard` |
+| **Pad** | `~/theater-dashboard` (canonieke clone) |
 | **Branch** | `main` (dagelijks werk) |
-| **Remote** | `origin` = `https://github.com/Deurklink-WT/theater-dashboard.git` |
+| **Remote** | `origin` = je GitHub-remote (`OWNER/REPO`; zet via `git remote`) |
 
 ### Cursor / VS Code
 

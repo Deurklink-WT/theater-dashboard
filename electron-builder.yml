@@ -1,5 +1,5 @@
 # Electron Builder configuratie (zie https://www.electron.build/configuration/configuration)
-appId: com.huistechneut.shift-happens
+appId: com.example.shift-happens
 productName: Shift Happens
 directories:
   output: dist
@@ -56,7 +56,7 @@ linux:
       arch: [arm64]
   category: Utility
   icon: build/icon.png
-  maintainer: PdV <support@example.com>
+  maintainer: Team <support@example.com>
 
 deb:
   depends:

@@ -13,14 +13,6 @@ const path = require('path');
 const { app } = require('electron');
 const { autoUpdater } = require('electron-updater');
 
-/** Alleen aanwezig na `npm run inject-update-token` vóór build (zie scripts/). */
-let bakedInGithubToken = '';
-try {
-  bakedInGithubToken = String(require('./generated/update-token')).trim();
-} catch (_) {
-  /* bestand ontbreekt vóór eerste inject — ok */
-}
-
 let intervalId = null;
 /** Eerste automatische check na opstart: geen "Zoeken…" / "Je bent up-to-date"-banner; wél bij update of fout. */
 let suppressQuietStartupBanner = true;
@@ -44,13 +36,27 @@ function sendStatus(mainWindow, payload) {
   }
 }
 
+function messageMentionsGithubApiHost(msg) {
+  const s = String(msg || '');
+  const urlMatch = s.match(/https?:\/\/[^\s"'<>]+/i);
+  if (urlMatch) {
+    try {
+      const host = new URL(urlMatch[0]).hostname.toLowerCase();
+      return host === 'api.github.com';
+    } catch (_) {
+      /* ignore parse errors */
+    }
+  }
+  return false;
+}
+
 function isLikelyPrivateRepoError(msg) {
   const s = String(msg || '');
   return (
     /404|not\s*found|403|401|bad credentials|could not find|unable to find|latest version|ERR_UPDATER/i.test(s) ||
     s.includes('HttpError') ||
     s.includes('releases/latest') ||
-    s.includes('api.github.com')
+    messageMentionsGithubApiHost(s)
   );
 }
 
@@ -60,7 +66,7 @@ function setupAutoUpdater(mainWindow) {
 
   const base = String(process.env.UPDATE_BASE_URL || '').trim().replace(/\/$/, '');
   const ghToken = String(
-    process.env.GH_TOKEN || process.env.GITHUB_TOKEN || bakedInGithubToken || ''
+    process.env.GH_TOKEN || process.env.GITHUB_TOKEN || ''
   ).trim();
 
   if (base) {

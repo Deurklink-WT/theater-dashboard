@@ -20,15 +20,20 @@
                     <img src="logowm.png" alt="Logo" class="header-logo" id="headerLogo" style="display: none;" />
                     <i class="fas fa-theater-masks" id="headerIcon"></i>
                     <div class="header-title-text">
-                        <span>Shift Happens</span>
+                        <div class="header-title-top">
+                            <span class="header-app-name">Shift Happens</span>
+                        </div>
                         <span class="header-datetime" id="currentDateTime"></span>
                     </div>
                 </h1>
+                <div class="header-show-mode-slot" id="headerShowModeSlot" aria-hidden="true">
+                    <span id="showModeHeaderLabel" class="header-show-mode-label" lang="en">SHOWMODE</span>
+                </div>
+                <button id="backBtn" class="btn btn-back" type="button" title="Terug naar vorig scherm">
+                    <i class="fas fa-arrow-left"></i>
+                    <span data-i18n="nav.back">Terug</span>
+                </button>
                 <div class="header-actions">
-                    <button id="backBtn" class="btn btn-back" title="Terug naar vorig scherm">
-                        <i class="fas fa-arrow-left"></i>
-                        <span data-i18n="nav.back">Terug</span>
-                    </button>
                     <div class="date-selector" style="display: flex; align-items: center; margin-right: 1rem;">
                         <button id="prevDayBtn" class="btn btn-icon-only" title="Vorige dag">
                             <i class="fas fa-chevron-left"></i>
@@ -72,6 +77,11 @@
                     <button id="weekBtn" class="btn btn-secondary btn-icon-only" title="Weekoverzicht">
                         <i class="fas fa-calendar-week"></i>
                     </button>
+                    <div id="headerTimerSlot">
+                        <button id="voorstellingTimerBtn" type="button" class="btn btn-secondary btn-icon-only" style="display: none;" title="">
+                            <i class="fas fa-stopwatch"></i>
+                        </button>
+                    </div>
                     <div class="header-filter-wrap" style="position: relative;">
                         <button id="filterCancelledBtn" class="btn btn-secondary btn-icon-only" title="Filters">
                             <i class="fas fa-filter"></i>
@@ -112,6 +122,8 @@
 
         <!-- Main Content -->
         <main class="main-content">
+            <div class="main-workspace">
+                <div class="main-workspace-inner" id="mainWorkspaceInner">
             <!-- Weekoverzicht (alleen evenement + technische planning) -->
             <div id="weekViewWrapper" class="week-view-wrapper" style="display: none;">
                 <div class="card week-view-card">
@@ -133,6 +145,47 @@
                     </div>
                     <div class="card-content" id="weekViewContent">
                         <div class="loading" data-i18n="loading">Laden...</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Voorstelling timer (1 dag, 1 zaal, 1 voorstelling + tijdschema) -->
+            <div id="voorstellingTimerWrapper" class="voorstelling-timer-wrapper" style="display: none;">
+                <div class="card voorstelling-timer-card">
+                    <div class="card-header">
+                        <h3 class="voorstelling-timer-card-title">
+                            <i class="fas fa-stopwatch"></i>
+                            <span data-i18n="voorstellingTimer.title">Voorstelling timer</span>
+                            <span id="voorstellingTimerTitleEventPart" class="voorstelling-timer-card-title-event" hidden>
+                                <span class="voorstelling-timer-card-title-sep" aria-hidden="true"> | </span>
+                                <span id="voorstellingTimerTitleEventName" class="voorstelling-timer-card-title-event-name"></span>
+                            </span>
+                        </h3>
+                        <div class="card-header-actions">
+                            <button id="voorstellingTimerExportBtn" type="button" class="btn btn-secondary btn-icon-only" title="">
+                                <i class="fas fa-file-export"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-content voorstelling-timer-body">
+                        <div class="voorstelling-timer-main">
+                            <div class="voorstelling-timer-col voorstelling-timer-col--schema">
+                                <div class="voorstelling-timer-wall-row">
+                                    <div class="voorstelling-timer-clock-block voorstelling-timer-clock-block--wall">
+                                        <div id="voorstellingWallClock" class="voorstelling-wall-clock" aria-live="polite">—:—:—</div>
+                                        <span id="voorstellingTimezoneDisplay" class="voorstelling-timer-clock-label voorstelling-timer-clock-label--tz" aria-live="polite">—</span>
+                                    </div>
+                                    <div id="voorstellingPauseCountdownTopWrap" class="voorstelling-timer-clock-block voorstelling-timer-clock-block--pause" style="display: none;" hidden>
+                                        <div id="voorstellingPauseCountdownTop" class="voorstelling-wall-clock voorstelling-pause-countdown--top" aria-live="polite">—</div>
+                                        <span id="voorstellingAuxClockLabel" class="voorstelling-timer-clock-label">—</span>
+                                    </div>
+                                </div>
+                                <h4 class="voorstelling-timer-col-heading"><i class="fas fa-clock"></i> <span data-i18n="voorstellingTimer.scheduleHeading">Tijdschema (Yesplan)</span></h4>
+                                <div id="voorstellingTimerTijdschema" class="voorstelling-timer-tijdschema"></div>
+                            </div>
+                            <div class="voorstelling-timer-col voorstelling-timer-col--controls">
+                                <div id="voorstellingTimerSessionsRow" class="voorstelling-timer-sessions-row" style="--timer-cols: 1;"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -162,6 +215,11 @@
                 <div class="card card-draggable" data-card-id="uurwerk">
                     <div class="card-header">
                         <h3><i class="fas fa-users"></i> Personeel</h3>
+                        <div class="card-header-actions">
+                            <button id="personnelFilterToggleBtn" class="btn btn-secondary btn-icon-only btn-sm" title="Filters tonen/verbergen">
+                                <i class="fas fa-filter"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="card-content" id="uurwerkContent">
                         <div class="loading" data-i18n="loading">Laden...</div>
@@ -214,6 +272,70 @@
                     </div>
                 </div>
             </div>
+            <!-- Luminex: embedded Lichtsignaal Flow Viewer -->
+            <div id="luminexViewWrapper" class="luminex-view-wrapper" style="display: none;">
+                <p id="luminexViewerError" class="luminex-viewer-error" hidden></p>
+                <webview id="luminexViewerFrame" class="luminex-viewer-frame" src="about:blank" allowpopups></webview>
+            </div>
+            <!-- Trekkenlijsten (Payzaal): komende 20 uit Yesplan -->
+            <div id="trekkenlijstenWrapper" class="trekkenlijsten-wrapper" style="display: none;">
+                <div class="card trekkenlijsten-card">
+                    <div class="card-header trekkenlijsten-card-header">
+                        <h3><i class="fas fa-list-ol"></i> <span data-i18n="trekkenlijsten.title">Trekkenlijsten</span></h3>
+                        <div class="card-header-actions">
+                            <button id="trekkenlijstenRefreshBtn" type="button" class="btn btn-secondary btn-sm" title="Vernieuwen">
+                                <i class="fas fa-sync-alt"></i> <span data-i18n="nav.refresh">Vernieuwen</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-content trekkenlijsten-card-content">
+                        <div id="trekkenlijstenMeta" class="trekkenlijsten-meta" aria-live="polite">Laden…</div>
+                        <div id="trekkenlijstenList" class="trekkenlijsten-list" role="list"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- OSC Monitor: live inkomende OSC timer-triggers -->
+            <div id="oscMonitorWrapper" class="osc-monitor-wrapper" style="display: none;">
+                <header class="osc-monitor-topbar">
+                    <div class="osc-monitor-brand">
+                        <i class="fas fa-wave-square osc-monitor-logo" aria-hidden="true"></i>
+                        <h1 class="osc-monitor-title">OSC Monitor</h1>
+                        <span class="osc-monitor-pill">Live</span>
+                    </div>
+                    <div class="osc-monitor-iface-wrap">
+                        <label class="osc-monitor-iface-label" for="oscMonitorInterface">Adapter</label>
+                        <select id="oscMonitorInterface" class="osc-monitor-iface-select" title="Netwerkadapter voor OSC listener"></select>
+                    </div>
+                    <p class="osc-monitor-meta" id="oscMonitorMeta">Wachten op OSC berichten…</p>
+                    <div class="osc-monitor-actions">
+                        <button id="oscMonitorClearBtn" type="button" class="osc-monitor-action-btn">
+                            <i class="fas fa-trash"></i> <span>Leegmaken</span>
+                        </button>
+                    </div>
+                </header>
+                <div class="osc-monitor-body">
+                    <div class="osc-monitor-table-head" aria-hidden="true">
+                        <span>Tijd</span>
+                        <span>Slot</span>
+                        <span>Stap</span>
+                    </div>
+                    <div id="oscMonitorList" class="osc-monitor-list" role="log" aria-live="polite"></div>
+                </div>
+            </div>
+                </div>
+                <aside class="nav-rail nav-rail--end" id="navRail" aria-label="Showmode navigatie">
+                    <div id="navRailTimerSlot" class="nav-rail-timer-slot" aria-hidden="true"></div>
+                    <button type="button" id="trekkenlijstenNavBtn" class="nav-rail-btn" title="Trekkenlijsten">
+                        <i class="fas fa-list-ol"></i>
+                    </button>
+                    <button type="button" id="luminexNavBtn" class="nav-rail-btn" title="Lichtsignaal">
+                        <i class="fas fa-project-diagram"></i>
+                    </button>
+                    <button type="button" id="oscMonitorNavBtn" class="nav-rail-btn" title="OSC Monitor">
+                        <i class="fas fa-wave-square"></i>
+                    </button>
+                </aside>
+            </div>
         </main>
 
         <!-- Zoek-overlay: Spotlight-achtig met resultatenlijst -->
@@ -245,12 +367,27 @@
             </div>
         </div>
 
+        <!-- Timer: kies voorstelling (showmodus, buiten detail met 1 zaal) -->
+        <div id="timerPickPerformanceModal" class="modal timer-pick-performance-modal-root" aria-hidden="true">
+            <div class="modal-content timer-pick-performance-modal">
+                <div class="modal-header">
+                    <h2 id="timerPickPerformanceHeading"><i class="fas fa-stopwatch"></i> <span data-i18n="voorstellingTimer.pickPerformanceHeading">Voorstelling kiezen</span></h2>
+                    <button type="button" class="modal-close" id="closeTimerPickPerformance" aria-label="Sluiten">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body" id="timerPickPerformanceBody">
+                    <div class="timer-pick-performance-loading" data-i18n="voorstellingTimer.pickPerformanceLoading">Laden…</div>
+                </div>
+            </div>
+        </div>
+
         <!-- Settings Modal -->
         <div id="settingsModal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
                     <h2><i class="fas fa-cog"></i> <span data-i18n="settings.title">Instellingen</span></h2>
-                    <div class="modal-header-version">v1.5.93</div>
+                    <div class="modal-header-version">v1.6.0-beta.1</div>
                     <button class="modal-close" id="closeSettings">
                         <i class="fas fa-times"></i>
                     </button>
@@ -293,12 +430,63 @@
                                 </div>
                             </div>
                             <div class="form-row" style="margin-top: 1rem;">
+                                <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                                    <label for="timezoneModeSelect" data-i18n="settings.timezoneMode">Tijd</label>
+                                    <select id="timezoneModeSelect" class="form-select">
+                                        <option value="auto" data-i18n="settings.timezoneAuto">Automatisch</option>
+                                        <option value="manual" data-i18n="settings.timezoneManual">Handmatig</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="timezoneManualGroup" style="flex: 1; margin-bottom: 0;">
+                                    <label for="timezoneManualSelect" data-i18n="settings.timezoneSelect">Handmatige tijdzone</label>
+                                    <select id="timezoneManualSelect" class="form-select"></select>
+                                </div>
+                                <div class="form-group" id="manualTimeGroup" style="flex: 1; margin-bottom: 0;">
+                                    <label for="manualTimeInput" data-i18n="settings.manualTime">Handmatige tijd</label>
+                                    <input type="time" id="manualTimeInput" step="1" class="form-input" />
+                                </div>
+                            </div>
+                            <div class="form-row" style="margin-top: 1rem;">
                                 <div class="form-group">
                                     <label class="settings-checkbox-label">
                                         <input type="checkbox" id="touchscreenModeCheckbox">
                                         <span data-i18n="settings.touchscreenMode">Touchscreen-modus</span>
                                     </label>
                                     <p style="color: #a0aec0; font-size: 0.8rem; margin-top: 0.35rem;" data-i18n="settings.touchscreenModeHint">Grotere scrollbalk en grotere tikgebieden voor gebruik op aanraakschermen (bijv. Raspberry Pi-kiosk).</p>
+                                </div>
+                            </div>
+                            <div class="form-row" style="margin-top: 1rem;">
+                                <div class="form-group">
+                                    <label class="settings-checkbox-label">
+                                        <input type="checkbox" id="showModeCheckbox">
+                                        <span data-i18n="settings.showMode">Showmodus</span>
+                                    </label>
+                                    <p style="color: #a0aec0; font-size: 0.8rem; margin-top: 0.35rem;" data-i18n="settings.showModeHint">Geeft toegang tot de voorstellingtimer en later meer toneelfuncties. Zet uit als je alleen de planning bekijkt.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3><i class="fas fa-network-wired"></i> <span data-i18n="settings.ioTitle">In/Uit</span></h3>
+                            <p style="color: #a0aec0; font-size: 0.875rem; margin-bottom: 1rem;" data-i18n="settings.ioHint">
+                                Kies per protocol welke netwerkinterface gebruikt wordt. Dezelfde interface mag meerdere keren gekozen worden.
+                            </p>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="networkInternetInterface" data-i18n="settings.interfaceInternet">Internet / API verkeer</label>
+                                    <select id="networkInternetInterface" class="form-select"></select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="networkLuminexSacnInterface" data-i18n="settings.interfaceLuminexSacn">Luminex / sACN</label>
+                                    <select id="networkLuminexSacnInterface" class="form-select"></select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="networkOscInterface" data-i18n="settings.interfaceOsc">OSC listener</label>
+                                    <select id="networkOscInterface" class="form-select"></select>
                                 </div>
                             </div>
                         </div>
@@ -321,16 +509,16 @@
                         <div class="settings-section">
                             <h3><i class="fas fa-filter"></i> <span data-i18n="settings.techOptions">Technische opties per zaal</span></h3>
                             <p style="color: #a0aec0; font-size: 0.875rem; margin-bottom: 1rem;" data-i18n="settings.techOptionsHint">
-                                Kies per zaal welke opties (balletvloer, vleugel, orkestbak, zaalplattegrond) getoond worden. Stel dit in op basis van wat je in Yesplan per zaal ziet.
+                                Kies per zaal welke opties getoond worden. Zaalplattegrond alleen als Itix-URL is ingesteld. Trekkenlijsten: vink alle zalen aan die in showmode meedoen.
                             </p>
                             <div id="venueResourceOptionsList" class="venue-resource-options-list">
                                 <!-- Wordt dynamisch gevuld -->
                             </div>
                         </div>
 
-                        <!-- Yesplan Settings -->
+                        <!-- Actieve organisatie -->
                         <div class="settings-section">
-                            <h3><i class="fas fa-calendar-alt"></i> <span data-i18n="settings.yesplan">Yesplan</span></h3>
+                            <h3><i class="fas fa-building"></i> <span data-i18n="settings.activeOrg">Actieve organisatie</span></h3>
                             <div class="form-group">
                                 <label for="activeYesplanOrg" data-i18n="settings.activeOrg">Actieve organisatie</label>
                                 <select id="activeYesplanOrg" class="form-select">
@@ -340,11 +528,20 @@
                                     Bepaal welke Yesplan-organisatie het dashboard gebruikt
                                 </small>
                             </div>
+                        </div>
+
+                        <!-- Yesplan Settings -->
+                        <div class="settings-section">
+                            <h3><i class="fas fa-calendar-alt"></i> <span data-i18n="settings.yesplan">Yesplan</span></h3>
                             <div class="yesplan-org-block" data-org="1">
                                 <h4 style="color: #cbd5e0; font-size: 0.95rem; margin: 1rem 0 0.5rem 0;" data-i18n="settings.org1">Organisatie 1</h4>
                                 <div class="form-group">
                                     <label for="yesplanOrgName" data-i18n="settings.name">Naam</label>
                                     <input type="text" id="yesplanOrgName" placeholder="bv. Theater A" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="yesplanOrgShortName" data-i18n="settings.shortName">Afkorting</label>
+                                    <input type="text" id="yesplanOrgShortName" placeholder="bv. ORG1" class="form-input">
                                 </div>
                                 <div class="form-group">
                                     <label for="yesplanBaseURL" data-i18n="settings.baseURL">Base URL</label>
@@ -369,6 +566,10 @@
                                 <div class="form-group">
                                     <label for="yesplanOrgName2" data-i18n="settings.name">Naam</label>
                                     <input type="text" id="yesplanOrgName2" placeholder="bv. Theater B" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="yesplanOrgShortName2" data-i18n="settings.shortName">Afkorting</label>
+                                    <input type="text" id="yesplanOrgShortName2" placeholder="bv. ORG2" class="form-input">
                                 </div>
                                 <div class="form-group">
                                     <label for="yesplanBaseURL2" data-i18n="settings.baseURL">Base URL</label>
@@ -400,8 +601,12 @@
                                 Voer het voorvoegsel van de beheer-URL voor de zaalplattegrond in, eindigend vóór het uitvoerings-id (Yesplan-event-id). Voorbeeld: https://tickets.jouworganisatie.nl/beheer/zaalplattegrond/uitvoeringinfo
                             </p>
                             <div class="form-group">
-                                <label for="itixBaseURL" data-i18n="settings.itixBaseURL">Basis-URL zaalplattegrond</label>
-                                <input type="url" id="itixBaseURL" class="form-input" placeholder="https://tickets.jouworganisatie.nl/beheer/zaalplattegrond/uitvoeringinfo" autocomplete="off">
+                                <label for="itixBaseURL1" id="itixBaseURLLabel1">Basis-URL zaalplattegrond (organisatie 1)</label>
+                                <input type="url" id="itixBaseURL1" class="form-input" placeholder="https://tickets.jouworganisatie.nl/beheer/zaalplattegrond/uitvoeringinfo" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="itixBaseURL2" id="itixBaseURLLabel2">Basis-URL zaalplattegrond (organisatie 2)</label>
+                                <input type="url" id="itixBaseURL2" class="form-input" placeholder="https://tickets.jouworganisatie2.nl/beheer/zaalplattegrond/uitvoeringinfo" autocomplete="off">
                             </div>
                         </div>
 
@@ -437,13 +642,86 @@
                             <p id="updateCheckResult" style="color: #94a3b8; font-size: 0.85rem; margin-top: 0.75rem; min-height: 1.25rem;" aria-live="polite"></p>
                         </div>
 
+                        <!-- Centrale Shift-server (login + URL) -->
+                        <div class="settings-section" id="shiftServerSection">
+                            <h3><i class="fas fa-cloud"></i> Shift-server</h3>
+                            <p style="color: #a0aec0; font-size: 0.875rem; margin-bottom: 1rem;">
+                                Verbind met de centrale server voor sync en gedeelde functies. Timer sync tussen apparaten gaat automatisch mee zodra je bent ingelogd.
+                            </p>
+                            <div class="form-row">
+                                <div class="form-group form-group--full">
+                                    <label for="shiftServerBaseUrlInput">Server-URL</label>
+                                    <input type="url" id="shiftServerBaseUrlInput" class="form-input form-input--wide" placeholder="https://..." autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group form-group--half">
+                                    <label for="shiftAuthEmailInput">E-mail</label>
+                                    <input type="email" id="shiftAuthEmailInput" class="form-input" autocomplete="username" placeholder="jouw@email.nl">
+                                </div>
+                                <div class="form-group form-group--half">
+                                    <label for="shiftAuthPasswordInput">Wachtwoord</label>
+                                    <input type="password" id="shiftAuthPasswordInput" class="form-input" autocomplete="current-password" placeholder="">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <button type="button" class="btn btn-secondary" id="shiftAuthLoginBtn">
+                                    <i class="fas fa-sign-in-alt"></i> Inloggen
+                                </button>
+                                <button type="button" class="btn btn-secondary" id="shiftAuthLogoutBtn" style="margin-left: 0.5rem;">
+                                    Uitloggen
+                                </button>
+                            </div>
+                            <p id="shiftAuthStatusLine" style="color: #94a3b8; font-size: 0.8rem; margin-top: 0.25rem; min-height: 1.1rem;" aria-live="polite"></p>
+                        </div>
+
+                        <!-- Master mode (LAN) -->
+                        <div class="settings-section">
+                            <h3><i class="fas fa-server"></i> Master mode (LAN)</h3>
+                            <p style="color: #a0aec0; font-size: 0.875rem; margin-bottom: 1rem;">
+                                Zet 1 apparaat aan als master. Andere clients kunnen deze via auto-discovery vinden.
+                            </p>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="settings-checkbox-label">
+                                        <input type="checkbox" id="masterModeEnabledCheckbox">
+                                        <span>Master mode inschakelen</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group form-group--half">
+                                    <label for="masterModeNameInput">Naam in netwerk</label>
+                                    <input type="text" id="masterModeNameInput" class="form-input" placeholder="bijv. FOH-Master">
+                                </div>
+                                <div class="form-group form-group--half">
+                                    <label for="masterModePortInput">Poort</label>
+                                    <input type="number" id="masterModePortInput" class="form-input" min="1" max="65535" step="1" placeholder="3847">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="masterModeUnlockPassword">Ontgrendelwachtwoord (alleen bij inschakelen)</label>
+                                    <input type="password" id="masterModeUnlockPassword" class="form-input" autocomplete="off" placeholder="Vraag dit aan beheer">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-secondary" id="discoverMasterBtn">
+                                        <i class="fas fa-search"></i> Zoek actieve master
+                                    </button>
+                                    <small id="masterModeDiscoveryResult" style="color: #94a3b8; font-size: 0.8rem; margin-top: 0.5rem; display: block;"></small>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- About Section -->
                         <div class="settings-section">
                             <h3><i class="fas fa-info-circle"></i> Over deze app</h3>
                             <div style="color: #a0aec0; font-size: 0.9rem; line-height: 1.6;">
                                 <p style="margin-bottom: 0.75rem;">
                                     <strong style="color: #cbd5e0;">Shift Happens</strong><br>
-                                    <span style="color: #a0aec0;">Theater Dashboard v1.5.93</span>
+                                    <span style="color: #a0aec0;">Theater Dashboard v1.6.0-beta.1</span>
                                 </p>
                                 <p style="margin-bottom: 0.75rem;">
                                     <strong style="color: #cbd5e0;">Ontwikkeld door:</strong> PdV<br>
@@ -463,6 +741,51 @@
                                         <i class="fas fa-list-alt"></i> Release Notes
                                     </h4>
                                     
+
+                                                                        <!-- Version 1.6.0-beta.1 -->
+                                    <div style="margin-bottom: 1rem;">
+                                        <h5 style="color: #cbd5e0; font-size: 0.95rem; margin-bottom: 0.5rem; font-weight: 600;">
+                                            v1.6.0-beta.1 (24-08-2026)
+                                        </h5>
+                                        <ul style="margin-left: 1.25rem; margin-bottom: 0; padding-left: 0.5rem;">
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Lichtsignaal — embedded Luminex Viewer in showmodus (vervangt de oude patch-matrix).
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> OSC Monitor — full-screen live triggerlog in dezelfde stijl als Lichtsignaal, met netwerkadapter-keuze in de topbar.
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Verbeterd:</strong> Showmodus-navigatie — timer, Lichtsignaal en OSC als knoppen zonder aparte rail-card, bovenaan uitgelijnd met de grote card.
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Verbeterd:</strong> Zaalkiezer compacter buiten touchscreen-modus; grote knoppen blijven beschikbaar mét touchscreen-modus.
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Personeelsfilters verbeterd (dynamische functies, versleepbare volgorde, compactere weergave).
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Verbeterd:</strong> Verkoopcijfers robuuster uit Yesplan, met betere veldmapping en validatie op onrealistische waarden.
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Verbeterd:</strong> Itix-instellingen per organisatie en consistentere zaalplattegrond-logica.
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Verbeterd:</strong> Technische opties per zaal tonen nu alleen relevante onderdelen (mits beschikbaar), met betere zaalcode-detectie.
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                                                        <!-- Version 1.6.0-beta.0 -->
+                                    <div style="margin-bottom: 1rem;">
+                                        <h5 style="color: #cbd5e0; font-size: 0.95rem; margin-bottom: 0.5rem; font-weight: 600;">
+                                            v1.6.0-beta.0 (18-04-2026)
+                                        </h5>
+                                        <ul style="margin-left: 1.25rem; margin-bottom: 0; padding-left: 0.5rem;">
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Voorstelling timer — tijdschema, grote klokken (werkelijke tijd + verstreken tijd) en chronologische stappen met tijdstempels; pauze-blok alleen als het tijdschema een pauze vermeldt.
+                                            </li>
+                                        </ul>
+                                    </div>
 
                                                                         <!-- Version 1.5.93 -->
                                     <div style="margin-bottom: 1rem;">
@@ -827,7 +1150,7 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
-            <span>v1.5.93 © 2026 PdV</span>
+            <span>v1.6.0-beta.1 © 2026 Team</span>
         </div>
     </footer>
 

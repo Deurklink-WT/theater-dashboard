@@ -1,19 +1,32 @@
 /**
  * Shift Happens - Theater Dashboard
- * Copyright (c) 2026 PdV
+ * Copyright (c) 2026 Team
  * 
  * Proprietary software - All rights reserved
  * 
- * @author PdV
+ * @author Team
  * @license UNLICENSED
  */
 
 // Vertalingen (i18n)
 const TRANSLATIONS = {
     nl: {
-        settings: { colorMode: 'Kleurmodus', language: 'Taal', title: 'Instellingen', save: 'Opslaan', saved: 'Instellingen opgeslagen!', theme: 'Thema', touchscreenMode: 'Touchscreen-modus', touchscreenModeHint: 'Grotere scrollbalk en grotere tikgebieden voor gebruik op aanraakschermen (bijv. Raspberry Pi-kiosk).', venueOrder: 'Zaalvolgorde', venueOrderHint: 'Sleep de zalen om de volgorde aan te passen. Klik op het oog om een zaal te verbergen in de zaal-dropdown.', resetVenueOrder: 'Reset naar standaard', techOptions: 'Technische opties per zaal', techOptionsHint: 'Kies per zaal welke opties (balletvloer, vleugel, orkestbak, zaalplattegrond) getoond worden.', yesplan: 'Yesplan', activeOrg: 'Actieve organisatie', activeOrgHint: 'Bepaal welke Yesplan-organisatie het dashboard gebruikt', org1: 'Organisatie 1', org2: 'Organisatie 2', orgN: 'Organisatie {n}', bothOrgs: 'Beide organisaties', name: 'Naam', baseURL: 'Base URL', apiKey: 'API Key', loadVenues: 'Laad Zalen', loadVenuesHint: 'Haalt zalen op voor zaalvolgorde en header', loadVenuesFullHint: 'Vul per organisatie Base URL en API Key in, klik op "Laad Zalen"', testConnection: 'Test Verbinding', about: 'Over deze app', showVenue: 'Zaal tonen', hideVenue: 'Zaal verbergen', balletvloer: 'Balletvloer', vleugel: 'Vleugel', orkestbak: 'Orkestbak', itix: 'Itix', itixBaseURL: 'Basis-URL zaalplattegrond', itixBaseURLHint: 'Voer het voorvoegsel van de beheer-URL voor de zaalplattegrond in, eindigend vóór het uitvoerings-id (Yesplan-event-id). Voorbeeld: https://tickets.jouworganisatie.nl/beheer/zaalplattegrond/uitvoeringinfo' },
-        status: { online: 'Online', offline: 'Offline', deels: 'Deels bereikbaar', warning: 'Waarschuwing', systemStatus: 'Systeemstatus', clickForStatus: 'Klik voor systeemstatus' },
-        nav: { back: 'Terug', backTitle: 'Terug naar vorig scherm', home: 'Home', weekView: 'Weekoverzicht', techOverview: 'Technisch overzicht', techOverviewTitle: 'Print technisch overzicht voor deze dag (alle zalen)', prevDay: 'Vorige dag', nextDay: 'Volgende dag', refresh: 'Vernieuwen', searchEvent: 'Zoek evenement', searchEventTitle: 'Zoek op evenementnaam (* en ? als wildcard)' },
+        settings: { colorMode: 'Kleurmodus', language: 'Taal', title: 'Instellingen', save: 'Opslaan', saved: 'Instellingen opgeslagen!', theme: 'Thema', timezoneMode: 'Tijd', timezoneAuto: 'Automatisch', timezoneManual: 'Handmatig', timezoneSelect: 'Handmatige tijdzone', manualTime: 'Handmatige tijd', touchscreenMode: 'Touchscreen-modus', touchscreenModeHint: 'Grotere scrollbalk en grotere tikgebieden voor gebruik op aanraakschermen (bijv. Raspberry Pi-kiosk).', showMode: 'Showmodus', showModeHint: 'Geeft toegang tot de voorstellingtimer en later meer toneelfuncties. Zet uit als je alleen de planning bekijkt.', ioTitle: 'In/Uit', ioHint: 'Kies per protocol welke netwerkinterface gebruikt wordt. Dezelfde interface mag meerdere keren gekozen worden.', interfaceInternet: 'Internet / API verkeer', interfaceLuminexSacn: 'Luminex / sACN', interfaceOsc: 'OSC listener', interfaceAuto: 'Automatisch (OS standaard)', venueOrder: 'Zaalvolgorde', venueOrderHint: 'Sleep de zalen om de volgorde aan te passen. Klik op het oog om een zaal te verbergen in de zaal-dropdown.', resetVenueOrder: 'Reset naar standaard', techOptions: 'Technische opties per zaal', techOptionsHint: 'Kies per zaal welke opties getoond worden. Zaalplattegrond alleen als Itix-URL is ingesteld. Trekkenlijsten: vink alle zalen aan die in showmode meedoen.', yesplan: 'Yesplan', activeOrg: 'Actieve organisatie', activeOrgHint: 'Bepaal welke Yesplan-organisatie het dashboard gebruikt', org1: 'Organisatie 1', org2: 'Organisatie 2', orgN: 'Organisatie {n}', bothOrgs: 'Beide organisaties', name: 'Naam', shortName: 'Afkorting', baseURL: 'Base URL', apiKey: 'API Key', loadVenues: 'Laad Zalen', loadVenuesHint: 'Haalt zalen op voor zaalvolgorde en header', loadVenuesFullHint: 'Vul per organisatie Base URL en API Key in, klik op "Laad Zalen"', testConnection: 'Test Verbinding', about: 'Over deze app', showVenue: 'Zaal tonen', hideVenue: 'Zaal verbergen', balletvloer: 'Balletvloer', vleugel: 'Vleugel', orkestbak: 'Orkestbak', trekkenlijstenVenue: 'Trekkenlijsten', trekkenlijstenVenueHint: 'Kies welke zaal in showmode de trekkenlijsten-weergave vult (één zaal).', trekkenlijstenVenueLabel: 'Zaal voor trekkenlijsten', trekkenlijstenVenueNone: 'Geen (trekkenlijsten uit)', itix: 'Itix', itixBaseURL: 'Basis-URL zaalplattegrond', itixBaseURLHint: 'Voer het voorvoegsel van de beheer-URL voor de zaalplattegrond in, eindigend vóór het uitvoerings-id (Yesplan-event-id). Voorbeeld: https://tickets.jouworganisatie.nl/beheer/zaalplattegrond/uitvoeringinfo', itixBaseURLOrg: 'Basis-URL zaalplattegrond ({org})' },
+        status: { online: 'Online', offline: 'Offline', deels: 'Deels bereikbaar', warning: 'Waarschuwing', systemStatus: 'Systeemstatus', clickForStatus: 'Klik voor systeemstatus', apiServerLabel: 'API-server', apiServerNotSet: 'Niet ingesteld' },
+        nav: { back: 'Terug', backTitle: 'Terug naar vorig scherm', home: 'Home', weekView: 'Weekoverzicht', voorstellingTimer: 'Voorstelling timer', trekkenlijsten: 'Trekkenlijsten', luminex: 'Lichtsignaal', techOverview: 'Technisch overzicht', techOverviewTitle: 'Print technisch overzicht voor deze dag (alle zalen)', prevDay: 'Vorige dag', nextDay: 'Volgende dag', refresh: 'Vernieuwen', searchEvent: 'Zoek evenement', searchEventTitle: 'Zoek op evenementnaam (* en ? als wildcard)' },
+        trekkenlijsten: {
+            title: 'Trekkenlijsten',
+            lead: 'Komende trekkenlijsten voor {venue} (Yesplan). Opmerkingen en verwerkt-status worden gesynchroniseerd via de Shift-server.',
+            loading: 'Laden…',
+            empty: 'Geen komende trekkenlijsten gevonden voor {venue}.',
+            venueMissing: 'Geen zaal gekozen voor trekkenlijsten. Vink bij Instellingen → Yesplan → Technische opties per zaal één of meer zalen aan.',
+            venueNotFound: 'Gekozen trekkenlijst-zaal niet gevonden in Yesplan.',
+            loadError: 'Kon trekkenlijsten niet laden: {msg}',
+            metaCount: '{n} van de komende 20 trekkenlijsten',
+            verwerkt: 'Verwerkt',
+            commentPlaceholder: 'Opmerking…',
+            syncLoginHint: 'Log in via Instellingen → Shift-server om opmerkingen en verwerkt-status te synchroniseren.'
+        },
         search: { placeholder: 'Evenementnaam… (* = alles, ? = één teken)', wildcardHint: 'Gebruik * voor een reeks tekens en ? voor één teken.' },
         date: { today: 'Vandaag', chooseDate: 'Kies eigen datum', selectDate: 'Selecteer datum:', manualDate: 'Of voer handmatig in (dd-mm-jjjj):', datePlaceholder: 'dd-mm-jjjj', confirm: 'Bevestigen', cancel: 'Annuleren' },
         venue: { allVenues: 'Alle zalen', venue: 'Zaal', unknownVenue: 'Onbekende zaal', venueCount: '{n} zalen', venueId: 'Zaal {id}' },
@@ -48,12 +61,201 @@ const TRANSLATIONS = {
             uptodate: 'Je hebt de nieuwste versie.',
             privateRepo: 'Updates niet bereikbaar (private repo? Token of UPDATE_BASE_URL nodig — zie docs/UPDATES.md).',
             manualInstall: 'Update gedownload, maar automatische installatie is geblokkeerd. Klik hier voor handmatige installatie.'
+        },
+        voorstellingTimer: {
+            title: 'Voorstelling timer',
+            stopwatch: 'Verstreken tijd',
+            logTitle: 'Geregistreerde tijdstippen',
+            scheduleHeading: 'Tijdschema (Yesplan)',
+            replaceTitle: 'Stap opnieuw registreren',
+            replaceBody: 'Er is al een tijdstip voor “{step}” ({slot}). Pas hieronder alleen de kloktijd aan; de timer wordt daarna automatisch opnieuw berekend.',
+            replaceCorrectClockLabel: 'Gecorrigeerde kloktijd',
+            replaceCorrectClockHint: 'Standaard: huidige tijd. Gebruik uu:mm of uu:mm:ss.',
+            replacePreviousRegistration: 'Eerdere registratie: {clock} · {elapsed}',
+            replaceInvalidClock: 'Ongeldige tijd.',
+            replaceRemarkLabel: 'Opmerking',
+            replaceRemarkPlaceholder: 'Typ hier je opmerking...',
+            replaceAddRemark: 'Opmerking plaatsen',
+            replaceEmptyRemark: 'Vul eerst een opmerking in.',
+            remarkEditTitle: 'Opmerking aanpassen',
+            remarkDelete: 'Verwijderen',
+            remarkSave: 'Opslaan',
+            slotOchtend: 'Ochtend',
+            slotMiddag: 'Middag',
+            slotAvond: 'Avond',
+            slotAlledag: 'Dag',
+            replaceConfirm: 'Tijd aanpassen',
+            replaceCancel: 'Annuleren',
+            replaceReset: 'Reset stap',
+            noSchedule: 'Geen tijdschema beschikbaar voor de timer.',
+            notAvailable: 'Timer is alleen beschikbaar bij één voorstelling op deze dag en zaal, met een geladen tijdschema.',
+            buttonDisabledHint: 'Niet beschikbaar: kies één zaal en zorg dat het tijdschema geladen is (geen “Geen tijdschema…” op de kaart).',
+            pickPerformanceHint: 'Kies een voorstelling om de timer te openen',
+            pickPerformanceHeading: 'Voorstelling kiezen',
+            pickPerformanceSub: 'Voorstellingen op de geselecteerde dag in de agenda.',
+            pickPerformanceLoading: 'Voorstellingen laden…',
+            pickPerformanceEmpty: 'Geen voorstellingen op deze dag.',
+            pickPerformanceLoadError: 'Kon de voorstellingen niet laden.',
+            exportTitle: 'Timer exporteren',
+            exportHeading: 'Voorstellings verslag',
+            exportNoData: 'Geen timerregistraties of opmerkingen om te exporteren.',
+            exportPrintedAt: 'Geprint op {time}',
+            exportStep: 'Stap',
+            exportRemark: 'Opmerking',
+            exportSubtotals: 'Subtotalen',
+            exportPauseTotal: 'Pauzes totaal',
+            exportTotalWithPauses: 'Totale tijd incl. pauzes',
+            exportVenue: 'Zaal',
+            exportTechCrew: 'Techniek',
+            exportHorecaCrew: 'Horeca',
+            exportFrontOfficeCrew: 'Front Office',
+            steps: {
+                deuren_open: 'Deuren open',
+                vijf_voor_aanvang: '5 min voor aanvang',
+                aanvang: 'Aanvang',
+                vijf_voor_pauze: '5 min voor pauze',
+                pauze: 'Pauze',
+                vijf_voor_tweede_deel: '5 min aanvang 2e deel',
+                aanvang_tweede_deel: 'Aanvang 2e deel',
+                vijf_voor_einde: '5 min einde voorstelling',
+                einde: 'Einde voorstelling'
+            },
+            pauseDurationLabel: 'Pauzeduur (min)',
+            pauseRemainingLabel: 'Pauze resterend',
+            auxClockUntilFirstAct: 'Tot 1e acte',
+            auxClockPauseRemaining: 'Pauze resterend',
+            auxClockActTimer: '{act} acte',
+            auxClockTotalRunning: 'Speelduur (lopend)',
+            auxClockTotalFinal: 'Speelduur (totaal)',
+            auxClockNoAnchor: 'Timer',
+            columnEditTitle: 'Kolom bewerken',
+            columnEditSave: 'Opslaan',
+            columnEditCancel: 'Annuleren',
+            columnEditAddCustom: 'Vrije knop',
+            columnEditAddBuiltin: 'Standaardstap toevoegen…',
+            columnEditMoveUp: 'Omhoog',
+            columnEditMoveDown: 'Omlaag',
+            columnEditRemove: 'Verwijderen uit lijst',
+            columnEditPromptLabel: 'Label voor de nieuwe knop:',
+            columnEditAddCustomModalTitle: 'Vrije knop toevoegen',
+            columnEditConfirmAdd: 'Toevoegen',
+            columnEditEmptyLabel: 'Vul een label in.',
+            columnEditDrag: 'Sleep om te herschikken'
+        },
+        luminex: {
+            title: 'Luminex',
+            subtitle: 'Het flowschema toont de route via de process engine. Waar de LumiNode-API routing teruggeeft, tekenen we die lijnen; anders gelden je opgeslagen verbindingen. sACN-scan vult live bronnen aan.',
+            compactLead: 'Bij openen halen we engines en I/O van de node op. Je ziet meteen het patchschema (bron → engine → uitgang). sACN-scan is optioneel voor live namen.',
+            inputsTitle: 'Bronnen',
+            outputsTitle: 'Uitgangen',
+            engineColumnTitle: 'Process engine',
+            engineHubLabel: 'Routing',
+            deviceSourceLabel: 'Universe (node)',
+            enginePlaceholder: 'Engine',
+            portIn: 'In {n}',
+            portOut: 'Uit {n}',
+            sacnHeading: 'sACN — actieve bronnen',
+            sacnToolbarLabel: 'sACN',
+            sacnHint: 'Luistert op multicast (poort 5568) binnen het ingestelde bereik. Scan om te zien welke universes actief zijn.',
+            sacnFrom: 'Van',
+            sacnTo: 'Tot',
+            sacnScanBtn: 'Scan sACN',
+            sacnScanning: 'sACN scannen…',
+            sacnDone: '{n} actieve universe(s).',
+            sacnDoneUniversesAndSources: '{u} universe(s), {s} actieve sACN-bron(nen).',
+            sacnEmpty: 'Geen sACN-frames in dit bereik en tijdvenster.',
+            sacnScanMeta: 'Universes {min}–{max} · scan {sec}s',
+            sacnScanMetaIface: ' · multicast op {iface}',
+            sacnSocketWarning: 'Netwerk/socket: {detail}',
+            sacnError: 'sACN-scan mislukt: {msg}',
+            sacnMixedExplain:
+                'Blokken uit de LumiNode zijn geconfigureerde bronnen (vaak 1–4). De scan telt alleen streams die tijdens het scanvenster op dit netwerk binnenkomen — tik «Scan sACN» opnieuw terwijl je zendt als een universe ontbreekt.',
+            notSeenInScanShort: 'Niet gezien in laatste scan',
+            sourceLanOnly: 'Alleen op netwerk (staat nog niet in LumiNode-bronnen)',
+            sacnPick: 'Gebruik als bron',
+            flowReminder: 'Het signaal loopt altijd via de process engine uit stap 2: bron → engine → uitgang.',
+            flowReminderShort: 'Bron → process engine → uitgang',
+            step1Title: 'Stap 1 — LumiNode',
+            step1Hint: 'Zoek het apparaat of vul het IP in en sla op — dan kan de app met je LumiNode praten.',
+            step2Title: 'Stap 2 — Process engine',
+            step2Hint: 'Elke route gaat door een process engine. Haal engines en uitgangen op en kies welke engine bij deze patch hoort.',
+            step3Title: 'Stap 3 — Bron naar uitgang',
+            step3Hint: 'Scan sACN, sleep verbindingen naar een uitgang, en bewaar. Dit hoort bij de gekozen engine.',
+            routingFooterHint: 'Sla process engine en patch lokaal op (dashboard). Volledige device-instellingen blijven via de LumiNode-webinterface.',
+            saveRouteRequiresEngine: 'Kies eerst een process engine in de lijst (of vernieuw engines & I/O als de lijst leeg is).',
+            lumiNodeHeading: 'LumiNode',
+            discoverBtn: 'Zoek LumiNode (mDNS)',
+            discovering: 'Zoeken op het netwerk…',
+            discoverDone: '{n} apparaat(en) gevonden.',
+            discoverEmpty: 'Geen LumiNode via mDNS gevonden. Controleer netwerk of vul handmatig het IP in.',
+            discoverError: 'Zoeken mislukt: {msg}',
+            discoverUnavailable: 'Alleen in de desktop-app (Electron).',
+            hostLabel: 'LumiNode IP',
+            passwordLabel: 'Wachtwoord (optioneel)',
+            saveHost: 'Opslaan',
+            hostSaved: 'Verbinding opgeslagen.',
+            pickDevice: 'Kies',
+            routingHeading: 'Route naar process engine',
+            routingHint: 'Kies de process engine voor je patch en bewaar lokaal. Volledige device-configuratie via de LumiNode-webinterface.',
+            visualPatchHeading: 'Je patch',
+            visualPatchHint: 'Sleep van een bron naar een uitgang. Op de node loopt het signaal via de gekozen process engine. Tik op een lijn om hem te verwijderen.',
+            emptyInputsHint: 'Geen bronnen in dit bereik: verruim het sACN-bereik en tik op «Scan sACN», of wacht tot er DMX/sACN binnenkomt.',
+            dragHint:
+                'Sleep vanaf de ronde poort naar een uitgang (links), of los op het process engine-blok voor de dichtstbijzijnde uitgang.',
+            dragCanvasHint: 'Sleep een blok om het vrij te positioneren; de layout wordt lokaal bewaard.',
+            sourceNetworkLine: 'Netwerk',
+            matrixConnectionsStatus: '{n} verbinding(en) in de patch.',
+            routeSource: 'Brons (sACN universe)',
+            routeSourceManual: 'Of handmatig #',
+            routeEngine: 'Process engine',
+            mergeHint:
+                'Meerdere sACN-universes naar dezelfde process engine worden op de LumiNode samengevoegd (merge). Standaard zet je daar vaak HTP (highest takes precedence) in de webinterface van de node. We proberen de koppelingen van de node uit de API te tonen; als dat niet lukt, zie je je lokaal opgeslagen patch. De merge-modus zelf staat op het apparaat, niet in dit dashboard.',
+            sacnMergeEngineBadge:
+                'sACN na merge (process engine → dit universe)',
+            mergeLine: '{mode} {universes}',
+            mergeLineModeOnly: '{mode}',
+            syncSourcesError: 'Bronnen niet gelezen: {detail}',
+            syncSourcesCountMismatch:
+                'Zelfde aantal bron-universes op de node als in de patch nodig ({current} op device, {desired} in patch). Pas aan in de webinterface of voeg/verwijder verbindingen.',
+            syncSourcesPutError: 'Bronnen niet weggeschreven: {detail}',
+            syncSourcesOk: 'Patch gesynchroniseerd met LumiNode.',
+            syncSourcesNoIo: 'Geen sACN-invoer-I/O voor universe {u} op de node — voeg die toe in de webinterface.',
+            syncSourcesReadOnly:
+                'API weigerde bronnen-wijziging; op veel LumiNodes gaat alleen universe-wissel via pipeline/sources of de webinterface. Controleer of universe 6 als invoer bestaat.',
+            syncNeedsCapabilities: 'Tik eerst op «Vernieuw engines & I/O» — dan kan de app naar de node schrijven.',
+            syncSourcesWorking: 'Bezig met synchroniseren naar LumiNode…',
+            syncToNode: 'Push naar LumiNode',
+            syncSourcesNoChange: 'LumiNode had al dezelfde bron-universes als je patch — geen schrijfactie nodig.',
+            showAllOutputsLabel: 'Toon alle uitgangen (ook zonder patch)',
+            routeOutput: 'Uitgang',
+            fetchCapabilities: 'Vernieuw engines & I/O',
+            fetchCapLoading: 'Laden van LumiNode…',
+            fetchCapDone: 'Data geladen.',
+            fetchCapError: 'LumiNode API: {msg}',
+            openWebUi: 'Open webinterface',
+            saveRoute: 'Bewaar route',
+            routeSaved: 'Route opgeslagen (lokaal).',
+            outputDmx: 'DMX {n}',
+            outputFallback: 'Configureer uitgang in webinterface'
         }
     },
     en: {
-        settings: { colorMode: 'Color mode', language: 'Language', title: 'Settings', save: 'Save', saved: 'Settings saved!', theme: 'Theme', touchscreenMode: 'Touchscreen mode', touchscreenModeHint: 'Larger scrollbar and tap targets for use on touchscreens (e.g. Raspberry Pi kiosk).', venueOrder: 'Venue order', venueOrderHint: 'Drag venues to change the order. Click the eye to hide a venue in the venue dropdown.', resetVenueOrder: 'Reset to default', techOptions: 'Technical options per venue', techOptionsHint: 'Choose per venue which options (dance floor, grand piano, orchestra pit, seating plan) are shown.', yesplan: 'Yesplan', activeOrg: 'Active organisation', activeOrgHint: 'Determine which Yesplan organisation the dashboard uses', org1: 'Organisation 1', org2: 'Organisation 2', orgN: 'Organisation {n}', bothOrgs: 'Both organisations', name: 'Name', baseURL: 'Base URL', apiKey: 'API Key', loadVenues: 'Load Venues', loadVenuesHint: 'Fetches venues for order and header', loadVenuesFullHint: 'Enter Base URL and API Key per organisation, click "Load Venues"', testConnection: 'Test Connection', about: 'About this app', showVenue: 'Show venue', hideVenue: 'Hide venue', balletvloer: 'Dance floor', vleugel: 'Grand piano', orkestbak: 'Orchestra pit', itix: 'Itix', itixBaseURL: 'Seating plan base URL', itixBaseURLHint: 'Enter the admin URL prefix for the seating plan, ending before the performance id (Yesplan event id). Example: https://tickets.example.com/beheer/zaalplattegrond/uitvoeringinfo' },
-        status: { online: 'Online', offline: 'Offline', deels: 'Partially available', warning: 'Warning', systemStatus: 'System status', clickForStatus: 'Click for system status' },
-        nav: { back: 'Back', backTitle: 'Back to previous screen', home: 'Home', weekView: 'Week overview', techOverview: 'Technical overview', techOverviewTitle: 'Print technical overview for this day (all venues)', prevDay: 'Previous day', nextDay: 'Next day', refresh: 'Refresh', searchEvent: 'Search event', searchEventTitle: 'Search by event name (* and ? as wildcards)' },
+        settings: { colorMode: 'Color mode', language: 'Language', title: 'Settings', save: 'Save', saved: 'Settings saved!', theme: 'Theme', timezoneMode: 'Time', timezoneAuto: 'Automatic', timezoneManual: 'Manual', timezoneSelect: 'Manual time zone', manualTime: 'Manual time', touchscreenMode: 'Touchscreen mode', touchscreenModeHint: 'Larger scrollbar and tap targets for use on touchscreens (e.g. Raspberry Pi kiosk).', showMode: 'Show mode', showModeHint: 'Enables the performance timer and future show features. Turn off if you only read the schedule.', ioTitle: 'In/Out', ioHint: 'Choose which network interface each protocol should use. The same interface can be selected multiple times.', interfaceInternet: 'Internet / API traffic', interfaceLuminexSacn: 'Luminex / sACN', interfaceOsc: 'OSC listener', interfaceAuto: 'Automatic (OS default)', venueOrder: 'Venue order', venueOrderHint: 'Drag venues to change the order. Click the eye to hide a venue in the venue dropdown.', resetVenueOrder: 'Reset to default', techOptions: 'Technical options per venue', techOptionsHint: 'Choose per venue which options are shown. Seating plan only if an Itix URL is set. Fly cue lists: check all venues that should appear in show mode.', yesplan: 'Yesplan', activeOrg: 'Active organisation', activeOrgHint: 'Determine which Yesplan organisation the dashboard uses', org1: 'Organisation 1', org2: 'Organisation 2', orgN: 'Organisation {n}', bothOrgs: 'Both organisations', name: 'Name', shortName: 'Abbreviation', baseURL: 'Base URL', apiKey: 'API Key', loadVenues: 'Load Venues', loadVenuesHint: 'Fetches venues for order and header', loadVenuesFullHint: 'Enter Base URL and API Key per organisation, click "Load Venues"', testConnection: 'Test Connection', about: 'About this app', showVenue: 'Show venue', hideVenue: 'Hide venue', balletvloer: 'Dance floor', vleugel: 'Grand piano', orkestbak: 'Orchestra pit', trekkenlijstenVenue: 'Fly cue lists', trekkenlijstenVenueHint: 'Choose which venue fills the fly cue lists view in show mode (one venue).', trekkenlijstenVenueLabel: 'Venue for fly cue lists', trekkenlijstenVenueNone: 'None (fly cue lists off)', itix: 'Itix', itixBaseURL: 'Seating plan base URL', itixBaseURLHint: 'Enter the admin URL prefix for the seating plan, ending before the performance id (Yesplan event id). Example: https://tickets.example.com/beheer/zaalplattegrond/uitvoeringinfo', itixBaseURLOrg: 'Seating plan base URL ({org})' },
+        status: { online: 'Online', offline: 'Offline', deels: 'Partially available', warning: 'Warning', systemStatus: 'System status', clickForStatus: 'Click for system status', apiServerLabel: 'API server', apiServerNotSet: 'Not configured' },
+        nav: { back: 'Back', backTitle: 'Back to previous screen', home: 'Home', weekView: 'Week overview', voorstellingTimer: 'Performance timer', trekkenlijsten: 'Fly cue lists', luminex: 'Lighting signal', techOverview: 'Technical overview', techOverviewTitle: 'Print technical overview for this day (all venues)', prevDay: 'Previous day', nextDay: 'Next day', refresh: 'Refresh', searchEvent: 'Search event', searchEventTitle: 'Search by event name (* and ? as wildcards)' },
+        trekkenlijsten: {
+            title: 'Fly cue lists',
+            lead: 'Upcoming fly cue lists for {venue} (Yesplan). Notes and processed status sync via the Shift server.',
+            loading: 'Loading…',
+            empty: 'No upcoming fly cue lists found for {venue}.',
+            venueMissing: 'No venue selected for fly cue lists. Enable one or more under Settings → Yesplan → Technical options per venue.',
+            venueNotFound: 'Selected fly cue list venue not found in Yesplan.',
+            loadError: 'Could not load fly cue lists: {msg}',
+            metaCount: '{n} of the next 20 fly cue lists',
+            verwerkt: 'Processed',
+            commentPlaceholder: 'Note…',
+            syncLoginHint: 'Log in via Settings → Shift server to sync notes and processed status.'
+        },
         search: { placeholder: 'Event name… (* = any, ? = one character)', wildcardHint: 'Use * for any characters and ? for one character.' },
         date: { today: 'Today', chooseDate: 'Choose date', selectDate: 'Select date:', manualDate: 'Or enter manually (dd-mm-yyyy):', datePlaceholder: 'dd-mm-yyyy', confirm: 'Confirm', cancel: 'Cancel' },
         venue: { allVenues: 'All venues', venue: 'Venue', unknownVenue: 'Unknown venue', venueCount: '{n} venues', venueId: 'Venue {id}' },
@@ -88,6 +290,181 @@ const TRANSLATIONS = {
             uptodate: 'You are on the latest version.',
             privateRepo: 'Updates unavailable (private repo? Token or UPDATE_BASE_URL needed — see docs/UPDATES.md).',
             manualInstall: 'Update downloaded, but auto-install is blocked. Click here for manual installation.'
+        },
+        voorstellingTimer: {
+            title: 'Performance timer',
+            stopwatch: 'Elapsed time',
+            logTitle: 'Recorded timestamps',
+            scheduleHeading: 'Schedule (Yesplan)',
+            replaceTitle: 'Register step again',
+            replaceBody: 'There is already a timestamp for “{step}” ({slot}). Adjust the clock time only; the timer is recalculated automatically after confirming.',
+            replaceCorrectClockLabel: 'Corrected clock time',
+            replaceCorrectClockHint: 'Defaults to current time. Use hh:mm or hh:mm:ss.',
+            replacePreviousRegistration: 'Previous entry: {clock} · {elapsed}',
+            replaceInvalidClock: 'Invalid time.',
+            replaceRemarkLabel: 'Remark',
+            replaceRemarkPlaceholder: 'Type your remark here...',
+            replaceAddRemark: 'Add remark',
+            replaceEmptyRemark: 'Enter a remark first.',
+            remarkEditTitle: 'Edit remark',
+            remarkDelete: 'Delete',
+            remarkSave: 'Save',
+            slotOchtend: 'Morning',
+            slotMiddag: 'Afternoon',
+            slotAvond: 'Evening',
+            slotAlledag: 'Day',
+            replaceConfirm: 'Adjust time',
+            replaceCancel: 'Cancel',
+            replaceReset: 'Reset step',
+            noSchedule: 'No schedule available for the timer.',
+            notAvailable: 'The timer is only available for a single performance on this day and venue, with a loaded schedule.',
+            buttonDisabledHint: 'Unavailable: pick one venue and ensure the schedule has loaded (not “No schedule…” on the card).',
+            pickPerformanceHint: 'Choose a performance to open the timer',
+            pickPerformanceHeading: 'Choose performance',
+            pickPerformanceSub: 'Performances on the selected day.',
+            pickPerformanceLoading: 'Loading performances…',
+            pickPerformanceEmpty: 'No performances on this day.',
+            pickPerformanceLoadError: 'Could not load performances.',
+            exportTitle: 'Export timer',
+            exportHeading: 'Performance report',
+            exportNoData: 'No timer marks or remarks to export.',
+            exportPrintedAt: 'Printed at {time}',
+            exportStep: 'Step',
+            exportRemark: 'Remark',
+            exportSubtotals: 'Subtotals',
+            exportPauseTotal: 'Pauses total',
+            exportTotalWithPauses: 'Total time incl. pauses',
+            exportVenue: 'Venue',
+            exportTechCrew: 'Technical crew',
+            exportHorecaCrew: 'Catering crew',
+            exportFrontOfficeCrew: 'Front Office',
+            steps: {
+                deuren_open: 'Doors open',
+                vijf_voor_aanvang: '5 min before start',
+                aanvang: 'Start',
+                vijf_voor_pauze: '5 min before interval',
+                pauze: 'Interval',
+                vijf_voor_tweede_deel: '5 min before act 2',
+                aanvang_tweede_deel: 'Act 2 starts',
+                vijf_voor_einde: '5 min before end',
+                einde: 'End'
+            },
+            pauseDurationLabel: 'Interval length (min)',
+            pauseRemainingLabel: 'Interval remaining',
+            auxClockUntilFirstAct: 'Until 1st act',
+            auxClockPauseRemaining: 'Interval remaining',
+            auxClockActTimer: '{act} act',
+            auxClockTotalRunning: 'Running time',
+            auxClockTotalFinal: 'Total running time',
+            auxClockNoAnchor: 'Timer',
+            columnEditTitle: 'Edit column',
+            columnEditSave: 'Save',
+            columnEditCancel: 'Cancel',
+            columnEditAddCustom: 'Custom button',
+            columnEditAddBuiltin: 'Add standard step…',
+            columnEditMoveUp: 'Up',
+            columnEditMoveDown: 'Down',
+            columnEditRemove: 'Remove from list',
+            columnEditPromptLabel: 'Label for the new button:',
+            columnEditAddCustomModalTitle: 'Add custom button',
+            columnEditConfirmAdd: 'Add',
+            columnEditEmptyLabel: 'Enter a label.',
+            columnEditDrag: 'Drag to reorder'
+        },
+        luminex: {
+            title: 'Luminex',
+            subtitle: 'The flow shows traffic via the process engine. When the LumiNode API exposes routing, we draw those lines; otherwise your saved connections apply. sACN scan adds live sources.',
+            compactLead: 'On open we load engines and I/O from the node so you immediately see the patch (source → engine → output). sACN scan is optional for live names.',
+            inputsTitle: 'Sources',
+            outputsTitle: 'Outputs',
+            engineColumnTitle: 'Process engine',
+            engineHubLabel: 'Routing',
+            deviceSourceLabel: 'Universe (node)',
+            enginePlaceholder: 'Engine',
+            portIn: 'In {n}',
+            portOut: 'Out {n}',
+            sacnHeading: 'sACN — active sources',
+            sacnToolbarLabel: 'sACN',
+            sacnHint: 'Listens on multicast (port 5568) within the range. Scan to see which universes are active.',
+            sacnFrom: 'From',
+            sacnTo: 'To',
+            sacnScanBtn: 'Scan sACN',
+            sacnScanning: 'Scanning sACN…',
+            sacnDone: '{n} active universe(s).',
+            sacnDoneUniversesAndSources: '{u} universe(s), {s} active sACN source(s).',
+            sacnEmpty: 'No sACN frames in this range and time window.',
+            sacnScanMeta: 'Universes {min}–{max} · scan {sec}s',
+            sacnScanMetaIface: ' · multicast on {iface}',
+            sacnSocketWarning: 'Network/socket: {detail}',
+            sacnError: 'sACN scan failed: {msg}',
+            sacnMixedExplain:
+                'Blocks from the LumiNode are configured sources (often 1–4). The scan only counts streams received on this network during the scan window — tap «Scan sACN» again while transmitting if a universe is missing.',
+            notSeenInScanShort: 'Not seen in last scan',
+            sourceLanOnly: 'On network only (not in LumiNode sources yet)',
+            sacnPick: 'Use as source',
+            flowReminder: 'Signal always goes through the process engine from step 2: source → engine → output.',
+            flowReminderShort: 'Source → process engine → output',
+            step1Title: 'Step 1 — LumiNode',
+            step1Hint: 'Find the device or enter its IP and save — so the app can talk to your LumiNode.',
+            step2Title: 'Step 2 — Process engine',
+            step2Hint: 'Every route goes through a process engine. Load engines and outputs, then pick which engine this patch uses.',
+            step3Title: 'Step 3 — Source to output',
+            step3Hint: 'Scan sACN, drag connections to an output, then save. This belongs to the engine you chose.',
+            routingFooterHint: 'Save process engine and patch locally (dashboard). Full device configuration stays in the LumiNode web UI.',
+            saveRouteRequiresEngine: 'Pick a process engine from the list first (or refresh engines & I/O if the list is empty).',
+            lumiNodeHeading: 'LumiNode',
+            discoverBtn: 'Find LumiNode (mDNS)',
+            discovering: 'Searching the network…',
+            discoverDone: 'Found {n} device(s).',
+            discoverEmpty: 'No LumiNode found via mDNS. Check the network or enter the IP manually.',
+            discoverError: 'Search failed: {msg}',
+            discoverUnavailable: 'Desktop app (Electron) only.',
+            hostLabel: 'LumiNode IP',
+            passwordLabel: 'Password (optional)',
+            saveHost: 'Save',
+            hostSaved: 'Connection saved.',
+            pickDevice: 'Select',
+            routingHeading: 'Route to process engine',
+            routingHint: 'Choose the process engine for your patch and save locally. Full device configuration remains in the LumiNode web UI.',
+            visualPatchHeading: 'Your patch',
+            visualPatchHint: 'Drag from a source to an output. On the device the signal goes through the selected process engine. Click a line to remove it.',
+            emptyInputsHint: 'No sources in this range: widen the sACN range and tap «Scan sACN», or wait for DMX/sACN traffic.',
+            dragHint:
+                'Drag from the round port on the right of a source to an output (left port). You can also release on the process engine block to pick the nearest output.',
+            dragCanvasHint: 'Drag a block to place it freely; layout is saved locally.',
+            sourceNetworkLine: 'Network',
+            matrixConnectionsStatus: '{n} connection(s) in the patch.',
+            routeSource: 'Source (sACN universe)',
+            routeSourceManual: 'Or manual #',
+            routeEngine: 'Process engine',
+            mergeHint:
+                'Multiple sACN universes into the same process engine are merged on the LumiNode. HTP (highest takes precedence) is usually set in the device web UI. We try to show links from the device API; if that fails, you see your locally saved patch. Merge mode itself lives on the hardware, not the dashboard.',
+            sacnMergeEngineBadge: 'sACN after merge (process engine → this universe)',
+            mergeLine: '{mode} {universes}',
+            mergeLineModeOnly: '{mode}',
+            syncSourcesError: 'Could not read sources: {detail}',
+            syncSourcesCountMismatch:
+                'Same number of source universes on device as in patch required ({current} on device, {desired} in patch). Adjust in web UI or add/remove connections.',
+            syncSourcesPutError: 'Could not write sources: {detail}',
+            syncSourcesOk: 'Patch synced to LumiNode.',
+            syncSourcesNoIo: 'No sACN input I/O for universe {u} on the device — add it in the web UI.',
+            syncSourcesReadOnly:
+                'API refused to change sources; on many LumiNodes universe changes only apply via pipeline/sources or the web UI. Ensure universe 6 exists as an input.',
+            syncNeedsCapabilities: 'Tap «Refresh engines & I/O» first — then the app can write to the node.',
+            syncSourcesWorking: 'Syncing to LumiNode…',
+            syncToNode: 'Push to LumiNode',
+            syncSourcesNoChange: 'LumiNode already had the same source universes as your patch — nothing to write.',
+            showAllOutputsLabel: 'Show all outputs (including unused in patch)',
+            routeOutput: 'Output',
+            fetchCapabilities: 'Refresh engines & I/O',
+            fetchCapLoading: 'Loading from LumiNode…',
+            fetchCapDone: 'Data loaded.',
+            fetchCapError: 'LumiNode API: {msg}',
+            openWebUi: 'Open web interface',
+            saveRoute: 'Save route',
+            routeSaved: 'Route saved (local).',
+            outputDmx: 'DMX {n}',
+            outputFallback: 'Configure output in web interface'
         }
     }
 };
@@ -103,19 +480,44 @@ class TheaterDashboard {
         };
         this.selectedVenues = []; // Geselecteerde zalen voor alle plugins
         this.availableVenues = []; // Beschikbare zalen
+        /** Per zaal-id: welke technische opties Yesplan kent (uit events/customdata). */
+        this.yesplanVenueTechOptionsCache = Object.create(null);
         this.selectedDate = new Date(); // Geselecteerde datum (standaard vandaag)
         this.maxDateOffsetForward = 365; // Maximaal 1 jaar vooruit
-        this.maxDateOffsetBackward = 7; // Maximaal 1 week terug
-        this.currentView = 'home'; // 'home', 'detail' of 'week'
+        this.maxDateOffsetBackward = 31; // Maximaal 1 maand terug
+        this.currentView = 'home'; // 'home', 'detail', 'week', 'voorstellingTimer', 'trekkenlijsten', 'luminex' of 'oscMonitor'
+        this._luminexViewerResizeBound = false;
+        this.tijdschemaScheduleData = null; // laatste geladen tijdschema (detail / timer)
+        this._voorstellingTimerClockInterval = null;
+        /** Per dagdeel (ochtend / middag / avond): eigen stopwatch en stappen. */
+        this.voorstellingTimerBySlot = Object.create(null);
+        /** Laatste sessies voor clock-tick en render (buildTimerDaySessions). */
+        this._timerSessions = [];
+        /** Debounce voor lokale opslag van timer-marks (electron-store). */
+        this._voorstellingTimerPersistTimer = null;
+        /** Laatste sleutel waarvoor schijf-merge is gedaan (voorkomt overschrijven bij elke re-render). */
+        this._voorstellingTimerLastMergedKey = null;
+        /** Kolomtitel-bewerken: welke slot-kolom toont stap-volgorde-editor. */
+        this._voorstellingTimerEditingSlotId = null;
+        /** Snapshot vóór bewerken (annuleren). */
+        this._timerColumnEditBackup = null;
+        /** Drag-and-drop voor timerstappen (één keer gebonden op #voorstellingTimerSessionsRow). */
+        this._timerDragListenersAttached = false;
+        this._timerDragHoverRow = null;
         this.previousView = null; // Voor terug-navigatie
         this.viewHistory = []; // Stapel met eerder geopende view-snapshots voor terug-knop
         this._isNavigatingBack = false; // Voorkomt history-vervuiling tijdens terug-navigatie
         this._pendingHistorySnapshot = null; // Snapshot van staat vóór mutatie/navigatie
         this.isOnline = navigator.onLine; // Internetverbinding status
-        this.statusBySystem = { yesplan: null }; // Alleen Yesplan; Priva-koppeling volgt later indien mogelijk
+        this.statusBySystem = { yesplan: null, apiServer: null }; // Yesplan + optioneel Shift Happens API (iPhone/web)
         this.hideCancelledEvents = false; // Filter voor geannuleerde events
         this.filterOnlyWithTechnischPersoneel = false; // Alleen evenementen met technisch personeel
         this.filterOnlyWithTechnischeResources = false; // Alleen evenementen met technische resources
+        this.personnelCategoryFilter = 'all'; // zichtbare filter in Personeel-kaart
+        this.nostradamusRoleFilter = 'all'; // dynamische functie-filter (FOH, Monitor, ...)
+        this.nostradamusRoleOrder = []; // gebruikersvolgorde voor functie-filters
+        this._nostradamusRoleDragMoved = false;
+        this.personnelFiltersCollapsed = true; // filterrijen in Personeel-card standaard verborgen
         this.loadHomeRequestId = 0;  // Latest-request-wins bij datumwissel
         this.loadWeekRequestId = 0;
         this.weekSortMode = 'venue';  // 'venue' = zaalvolgorde instellingen, 'time' = alleen op tijd
@@ -126,6 +528,8 @@ class TheaterDashboard {
         this.searchKeyboardShift = false;
         this.touchInputKeyboardShift = false;
         this.touchInputKeyboardTarget = null;
+        /** 'full' | 'numeric' — virtueel toetsenbord in touchscreen-modus */
+        this.touchInputKeyboardLayout = 'full';
         this.settingsNavInitialized = false;
         this.settingsPageKey = 'app-config';
         this.weekEventCount = 0;
@@ -133,6 +537,20 @@ class TheaterDashboard {
         this._updateBannerHideTimer = null; // electron-updater banner auto-hide
         this._lastDayString = null;  // Voor middernacht-check: ga automatisch naar home van nieuwe dag
         this.detailContext = null;   // { productionId, productionName, eventName } wanneer je via een event naar detail gaat: alleen die productie tonen
+        this._navRailReorderMode = false;
+        this._navRailLongPressTimer = null;
+        this._navRailDragId = null;
+        this._navRailReorderExitTimer = null;
+        this._oscMonitorEntries = [];
+        this._oscMonitorMaxEntries = 250;
+        this._trekkenlijstenItems = [];
+        this._trekkenlijstenLoading = false;
+        this._trekkenlijstSyncState = {};
+        this._trekkenlijstSyncPollInterval = null;
+        this._trekkenlijstPersistTimer = null;
+        this._trekkenlijstPendingSaveKey = null;
+        this._trekkenlijstVenues = [];
+        this._trekkenlijstVenue = null;
         
         this.init();
     }
@@ -145,6 +563,9 @@ class TheaterDashboard {
         // Setup custom venue selector eerst (moet gebeuren voordat we zalen laden)
         this.setupCustomVenueSelector();
         await this.loadConfig();
+        if (window.__SHIFT_HAPPENS_MOBILE__ || this.getShiftServerBaseUrl() || this.getShiftAuthToken()) {
+            void this.refreshApiServerStatus();
+        }
         await this.loadVenues(); // Laad zalen eerst
         this.updateDateDisplay(); // Update datum weergave
         // Start met home view (reset datum naar vandaag)
@@ -159,12 +580,19 @@ class TheaterDashboard {
     setupDateTimeDisplay() {
         this.checkMidnightNavigation();
         this.updateDateTimeDisplay();
-        setInterval(() => this.updateDateTimeDisplay(), 60000);
+        // Zelfde updatecadans als de timer-klok: voorkomt zichtbare achterstand in header.
+        setInterval(() => this.updateDateTimeDisplay(), 1000);
         setInterval(() => this.checkMidnightNavigation(), 3600000);
     }
     
     checkMidnightNavigation() {
-        const todayStr = new Date().toDateString();
+        const locale = this.locale === 'en' ? 'en-GB' : 'nl-NL';
+        const todayStr = new Intl.DateTimeFormat(locale, {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            timeZone: this.getEffectiveTimeZone()
+        }).format(this.getNowDate());
         if (this._lastDayString !== null && todayStr !== this._lastDayString) {
             this._lastDayString = todayStr;
             this.showHomeView(true);
@@ -174,18 +602,29 @@ class TheaterDashboard {
     }
 
     updateDateTimeDisplay() {
-        const now = new Date();
+        const now = this.getNowDate();
         const dateTimeElement = document.getElementById('currentDateTime');
         if (!dateTimeElement) return;
         const locale = this.locale === 'en' ? 'en-GB' : 'nl-NL';
-        const dayName = now.toLocaleDateString(locale, { weekday: 'long' });
-        const day = now.getDate();
-        const month = now.toLocaleDateString(locale, { month: 'long' });
-        const year = now.getFullYear();
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        
-        dateTimeElement.textContent = `| ${dayName} ${day} ${month} ${year} | ${hours}:${minutes} |`;
+        const parts = new Intl.DateTimeFormat(locale, {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+            hourCycle: 'h23',
+            timeZone: this.getEffectiveTimeZone()
+        }).formatToParts(now);
+        const get = (type) => (parts.find((p) => p.type === type)?.value || '').trim();
+        const dayName = get('weekday');
+        const day = get('day');
+        const month = get('month');
+        const year = get('year');
+        const hour = get('hour');
+        const minute = get('minute');
+        dateTimeElement.textContent = `| ${dayName} ${day} ${month} ${year} | ${hour}:${minute} |`;
     }
 
     setupLogo() {
@@ -234,9 +673,85 @@ class TheaterDashboard {
             this.showWeekView();
         });
 
+        document.getElementById('luminexNavBtn')?.addEventListener('click', () => {
+            if (this._navRailReorderMode) return;
+            void this.showLuminexView();
+        });
+        document.getElementById('trekkenlijstenNavBtn')?.addEventListener('click', () => {
+            if (this._navRailReorderMode) return;
+            void this.showTrekkenlijstenView();
+        });
+        document.getElementById('trekkenlijstenRefreshBtn')?.addEventListener('click', () => {
+            void this.loadTrekkenlijsten({ forceRefresh: true });
+        });
+        document.getElementById('oscMonitorNavBtn')?.addEventListener('click', () => {
+            if (this._navRailReorderMode) return;
+            void this.showOscMonitorView();
+        });
+        document.getElementById('oscMonitorClearBtn')?.addEventListener('click', () => {
+            this._oscMonitorEntries = [];
+            this.renderOscMonitorEntries();
+        });
+        document.getElementById('oscMonitorInterface')?.addEventListener('change', (e) => {
+            void this.saveOscMonitorNetworkInterface(e.target?.value);
+        });
+        this.setupNavRailReorder();
+
+        if (window.electronAPI?.onOscTimerTrigger) {
+            window.electronAPI.onOscTimerTrigger((payload) => {
+                const slotId = payload?.slotId;
+                const stepId = payload?.stepId;
+                this.addOscMonitorEntry(payload);
+                if (typeof slotId === 'string' && typeof stepId === 'string') {
+                    this.triggerVoorstellingTimerStepFromOsc(slotId.trim(), stepId.trim());
+                }
+            });
+        }
+
+        const voorstellingTimerBtn = document.getElementById('voorstellingTimerBtn');
+        if (voorstellingTimerBtn) {
+            voorstellingTimerBtn.addEventListener('click', () => {
+                if (this._navRailReorderMode) return;
+                if (!this.isShowModeEnabled()) return;
+                if (this.canOpenVoorstellingTimer()) {
+                    void this.showVoorstellingTimerView();
+                } else {
+                    void this.openTimerPickPerformanceModal();
+                }
+            });
+        }
+        const voorstellingTimerExportBtn = document.getElementById('voorstellingTimerExportBtn');
+        if (voorstellingTimerExportBtn) {
+            voorstellingTimerExportBtn.addEventListener('click', () => {
+                this.openVoorstellingTimerExportWindow();
+            });
+        }
+        document.getElementById('closeTimerPickPerformance')?.addEventListener('click', () => {
+            this.closeTimerPickPerformanceModal();
+        });
+        document.getElementById('timerPickPerformanceModal')?.addEventListener('click', (e) => {
+            if (e.target.id === 'timerPickPerformanceModal') this.closeTimerPickPerformanceModal();
+        });
+        const tijdschemaContentEl = document.getElementById('tijdschemaContent');
+        if (tijdschemaContentEl) {
+            tijdschemaContentEl.addEventListener('click', () => {
+                const card = document.getElementById('tijdschemaCard');
+                if (!card?.classList.contains('tijdschema-card--clickable')) return;
+                this.showVoorstellingTimerView();
+            });
+        }
         document.getElementById('techOverviewBtn').addEventListener('click', () => {
             this.openTechOverviewPrint();
         });
+        const personnelFilterToggleBtn = document.getElementById('personnelFilterToggleBtn');
+        if (personnelFilterToggleBtn) {
+            personnelFilterToggleBtn.addEventListener('click', () => {
+                this.personnelFiltersCollapsed = !this.personnelFiltersCollapsed;
+                this.updatePersonnelFilterToggleState();
+                this.updateUurwerkDisplay(this.data?.uurwerk);
+            });
+            this.updatePersonnelFilterToggleState();
+        }
 
         // Terug-knop (navigatie tussen schermen, niet dagen)
         document.getElementById('backBtn')?.addEventListener('click', () => {
@@ -292,6 +807,10 @@ class TheaterDashboard {
             });
         }
 
+        document.addEventListener('keydown', (e) => {
+            this.handleVoorstellingTimerSpacebarShortcut(e);
+        });
+
         // Refresh button (bypass cache voor verse data)
         document.getElementById('refreshBtn').addEventListener('click', () => {
             this.loadAllData({ forceRefresh: true });
@@ -331,6 +850,57 @@ class TheaterDashboard {
                 const org = parseInt(e.currentTarget.dataset.org, 10) || 1;
                 this.loadVenuesForSettings(org);
             });
+        });
+        document.getElementById('discoverMasterBtn')?.addEventListener('click', async () => {
+            const resultEl = document.getElementById('masterModeDiscoveryResult');
+            if (resultEl) resultEl.textContent = 'Zoeken...';
+            try {
+                const res = await window.electronAPI?.discoverMasterMode?.();
+                if (!res?.success) throw new Error(res?.error || 'onbekende fout');
+                if (!Array.isArray(res.masters) || res.masters.length === 0) {
+                    if (resultEl) resultEl.textContent = 'Geen actieve master gevonden op dit netwerk.';
+                    return;
+                }
+                const m = res.masters[0];
+                if (resultEl) resultEl.textContent = `Master gevonden: ${m.address}:${m.port}${m.name ? ` (${m.name})` : ''}`;
+            } catch (error) {
+                if (resultEl) resultEl.textContent = `Zoeken mislukt: ${error?.message || String(error)}`;
+            }
+        });
+        document.getElementById('masterModeEnabledCheckbox')?.addEventListener('change', () => {
+            this.updateMasterModeInputState();
+        });
+        document.getElementById('shiftServerBaseUrlInput')?.addEventListener('change', () => {
+            const base = this.normalizeShiftHappensApiBase(
+                String(document.getElementById('shiftServerBaseUrlInput')?.value || '').trim()
+            );
+            if (base) {
+                if (!this.config.app) this.config.app = {};
+                this.config.app.shiftServerBaseUrl = base;
+                if (window.electronAPI?.saveConfig) {
+                    void window.electronAPI.saveConfig('app', {
+                        ...this.config.app,
+                        shiftServerBaseUrl: base
+                    });
+                }
+            }
+            if (this.getShiftAuthToken()) this.startShiftPresenceHeartbeat();
+            void this.refreshShiftAuthStatusLine();
+        });
+        document.getElementById('shiftAuthLoginBtn')?.addEventListener('click', () => {
+            const email = document.getElementById('shiftAuthEmailInput')?.value || '';
+            const password = document.getElementById('shiftAuthPasswordInput')?.value || '';
+            void this.loginShiftServer(email, password)
+                .then(() => this.refreshShiftAuthStatusLine())
+                .then(() => this.refreshTimerSyncStatusLine())
+                .then(() => this.refreshApiServerStatus())
+                .catch((e) => {
+                    const el = document.getElementById('shiftAuthStatusLine');
+                    if (el) el.textContent = e?.message || 'Inloggen mislukt.';
+                });
+        });
+        document.getElementById('shiftAuthLogoutBtn')?.addEventListener('click', () => {
+            void this.logoutShiftServer();
         });
 
         // Reset zaalvolgorde knop
@@ -463,12 +1033,16 @@ class TheaterDashboard {
             return el;
         };
 
-        const keyboardRows = [
+        const keyboardRowsFull = [
             ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
             ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
             ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
             ['Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'Backspace'],
             ['Close', 'Space', 'Enter']
+        ];
+        const keyboardRowsNumeric = [
+            ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
+            ['0', 'Backspace', 'Enter', 'Close']
         ];
 
         const insertAtCursor = (input, text) => {
@@ -485,8 +1059,9 @@ class TheaterDashboard {
         const renderKeyboard = () => {
             const keysWrap = document.getElementById('touchInputKeyboardKeys');
             if (!keysWrap) return;
+            const rows = this.touchInputKeyboardLayout === 'numeric' ? keyboardRowsNumeric : keyboardRowsFull;
             keysWrap.innerHTML = '';
-            keyboardRows.forEach((row) => {
+            rows.forEach((row) => {
                 const rowEl = document.createElement('div');
                 rowEl.className = 'search-keyboard-row';
                 row.forEach((key) => {
@@ -506,6 +1081,11 @@ class TheaterDashboard {
         };
 
         const isTouchscreenMode = () => document.body.classList.contains('touchscreen-mode');
+        const isPauseDurationTouchInput = (el) => {
+            if (!(el instanceof HTMLElement)) return false;
+            if (el.tagName !== 'INPUT') return false;
+            return el.hasAttribute('data-slot-pause-duration');
+        };
         const isSettingsTextInput = (el) => {
             if (!(el instanceof HTMLElement)) return false;
             if (!el.closest('#settingsModal')) return false;
@@ -516,10 +1096,15 @@ class TheaterDashboard {
             return ['text', 'password', 'url', 'search', 'email', 'tel'].includes(type);
         };
 
-        const showKeyboard = (input) => {
-            if (!isTouchscreenMode() || !isSettingsTextInput(input)) return;
+        const showKeyboard = (input, layout = 'full') => {
+            if (!isTouchscreenMode()) return;
+            if (layout === 'numeric') {
+                if (!isPauseDurationTouchInput(input)) return;
+            } else if (!isSettingsTextInput(input)) return;
             const el = ensureKeyboardEl();
             this.touchInputKeyboardTarget = input;
+            this.touchInputKeyboardLayout = layout;
+            if (layout === 'full') this.touchInputKeyboardShift = false;
             renderKeyboard();
             el.style.display = 'block';
         };
@@ -528,19 +1113,21 @@ class TheaterDashboard {
             const el = document.getElementById('touchInputKeyboard');
             if (el) el.style.display = 'none';
             this.touchInputKeyboardShift = false;
+            this.touchInputKeyboardLayout = 'full';
             this.touchInputKeyboardTarget = null;
         };
 
         document.addEventListener('focusin', (e) => {
             const target = e.target;
-            if (isSettingsTextInput(target)) showKeyboard(target);
+            if (isPauseDurationTouchInput(target)) showKeyboard(target, 'numeric');
+            else if (isSettingsTextInput(target)) showKeyboard(target, 'full');
         });
 
         document.addEventListener('focusout', () => {
             setTimeout(() => {
                 const active = document.activeElement;
                 const keyboardHasFocus = !!active?.closest?.('#touchInputKeyboard');
-                if (!keyboardHasFocus && !isSettingsTextInput(active)) hideKeyboard();
+                if (!keyboardHasFocus && !isSettingsTextInput(active) && !isPauseDurationTouchInput(active)) hideKeyboard();
             }, 0);
         });
 
@@ -551,6 +1138,34 @@ class TheaterDashboard {
             const input = this.touchInputKeyboardTarget;
             if (!input) return;
             input.focus();
+            const numeric = this.touchInputKeyboardLayout === 'numeric';
+            if (numeric) {
+                if (key === 'Backspace') {
+                    const start = input.selectionStart ?? input.value.length;
+                    const end = input.selectionEnd ?? start;
+                    if (start !== end) {
+                        insertAtCursor(input, '');
+                    } else if (start > 0) {
+                        input.setSelectionRange(start - 1, start);
+                        insertAtCursor(input, '');
+                    }
+                    return;
+                }
+                if (key === 'Enter') {
+                    hideKeyboard();
+                    input.blur();
+                    return;
+                }
+                if (key === 'Close') {
+                    hideKeyboard();
+                    input.blur();
+                    return;
+                }
+                if (/^[0-9]$/.test(key)) {
+                    insertAtCursor(input, key);
+                }
+                return;
+            }
             if (key === 'Shift') {
                 this.touchInputKeyboardShift = !this.touchInputKeyboardShift;
                 renderKeyboard();
@@ -592,6 +1207,214 @@ class TheaterDashboard {
         return this.config.yesplan || {};
     }
 
+    /** Toneel-/showfuncties (o.a. voorstellingtimer). Standaard aan zolang niet expliciet uitgeschakeld. */
+    isShowModeEnabled() {
+        return this.config?.app?.showMode !== false;
+    }
+
+    updateShowModeHeaderChrome() {
+        const on = !!this.isShowModeEnabled();
+        document.body.classList.toggle('show-mode-active', on);
+        document.getElementById('headerShowModeSlot')?.setAttribute('aria-hidden', on ? 'false' : 'true');
+        this.relocateShowModeTimerButton(on);
+    }
+
+    relocateShowModeTimerButton(showModeOn) {
+        const btn = document.getElementById('voorstellingTimerBtn');
+        const headerSlot = document.getElementById('headerTimerSlot');
+        const railSlot = document.getElementById('navRailTimerSlot');
+        if (!btn || !headerSlot || !railSlot) return;
+
+        const target = showModeOn ? railSlot : headerSlot;
+        if (btn.parentElement !== target) target.appendChild(btn);
+        railSlot.setAttribute('aria-hidden', showModeOn ? 'false' : 'true');
+        headerSlot.style.display = showModeOn ? 'none' : '';
+
+        btn.classList.toggle('nav-rail-btn', showModeOn);
+        this.applySavedNavRailOrder();
+    }
+
+    setupNavRailReorder() {
+        const rail = document.getElementById('navRail');
+        if (!rail) return;
+
+        rail.addEventListener('pointerdown', (e) => {
+            const btn = e.target.closest('.nav-rail-btn[id]');
+            if (!btn || !rail.contains(btn)) return;
+            this.clearNavRailLongPressTimer();
+            this._navRailLongPressTimer = setTimeout(() => {
+                this.enterNavRailReorderMode();
+            }, 450);
+        });
+
+        rail.addEventListener('pointerup', () => this.clearNavRailLongPressTimer());
+        rail.addEventListener('pointercancel', () => this.clearNavRailLongPressTimer());
+        rail.addEventListener('pointerleave', () => this.clearNavRailLongPressTimer());
+
+        rail.addEventListener('dragstart', (e) => {
+            const btn = e.target.closest('.nav-rail-btn[id]');
+            if (!btn) return;
+            if (!this._navRailReorderMode) {
+                e.preventDefault();
+                return;
+            }
+            this._navRailDragId = btn.id;
+            btn.classList.add('nav-rail-btn--dragging');
+            if (e.dataTransfer) {
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/plain', btn.id);
+            }
+        });
+
+        rail.addEventListener('dragend', () => {
+            this._navRailDragId = null;
+            rail.querySelectorAll('.nav-rail-btn--dragging').forEach((el) => el.classList.remove('nav-rail-btn--dragging'));
+            this.scheduleNavRailReorderModeExit();
+        });
+
+        rail.addEventListener('dragover', (e) => {
+            if (!this._navRailReorderMode) return;
+            e.preventDefault();
+        });
+
+        rail.addEventListener('drop', (e) => {
+            if (!this._navRailReorderMode) return;
+            e.preventDefault();
+            const dragId = this._navRailDragId || e.dataTransfer?.getData('text/plain');
+            if (!dragId) return;
+            const dragged = document.getElementById(dragId);
+            if (!dragged || dragged.parentElement !== rail) return;
+            const target = e.target.closest('.nav-rail-btn[id]');
+            if (!target || target === dragged || target.parentElement !== rail) {
+                this.saveNavRailOrder().catch(() => {});
+                this.scheduleNavRailReorderModeExit();
+                return;
+            }
+
+            const rect = target.getBoundingClientRect();
+            const insertAfter = e.clientY > rect.top + (rect.height / 2);
+            if (insertAfter) {
+                rail.insertBefore(dragged, target.nextElementSibling);
+            } else {
+                rail.insertBefore(dragged, target);
+            }
+            this.saveNavRailOrder().catch(() => {});
+            this.scheduleNavRailReorderModeExit();
+        });
+    }
+
+    clearNavRailLongPressTimer() {
+        if (!this._navRailLongPressTimer) return;
+        clearTimeout(this._navRailLongPressTimer);
+        this._navRailLongPressTimer = null;
+    }
+
+    enterNavRailReorderMode() {
+        this.clearNavRailLongPressTimer();
+        if (this._navRailReorderMode) return;
+        this._navRailReorderMode = true;
+        document.body.classList.add('nav-rail-reorder-active');
+        const rail = document.getElementById('navRail');
+        rail?.querySelectorAll('.nav-rail-btn[id]').forEach((btn) => btn.setAttribute('draggable', 'true'));
+        this.scheduleNavRailReorderModeExit();
+    }
+
+    scheduleNavRailReorderModeExit() {
+        if (this._navRailReorderExitTimer) clearTimeout(this._navRailReorderExitTimer);
+        this._navRailReorderExitTimer = setTimeout(() => this.exitNavRailReorderMode(), 5000);
+    }
+
+    exitNavRailReorderMode() {
+        if (!this._navRailReorderMode) return;
+        this._navRailReorderMode = false;
+        document.body.classList.remove('nav-rail-reorder-active');
+        const rail = document.getElementById('navRail');
+        rail?.querySelectorAll('.nav-rail-btn[id]').forEach((btn) => {
+            btn.setAttribute('draggable', 'false');
+            btn.classList.remove('nav-rail-btn--dragging');
+        });
+        if (this._navRailReorderExitTimer) {
+            clearTimeout(this._navRailReorderExitTimer);
+            this._navRailReorderExitTimer = null;
+        }
+    }
+
+    applySavedNavRailOrder() {
+        const rail = document.getElementById('navRail');
+        if (!rail) return;
+        const railSlot = document.getElementById('navRailTimerSlot');
+        let order = Array.isArray(this.config?.app?.navRailOrder)
+            ? this.config.app.navRailOrder.map((id) => String(id))
+            : [];
+
+        const TIMER_ID = 'voorstellingTimerBtn';
+        const TREK_ID = 'trekkenlijstenNavBtn';
+        const LUMINEX_ID = 'luminexNavBtn';
+
+        // Eenmalige migratie: trekkenlijsten hoort direct onder de timer (niet achter Luminex).
+        if (order.length) {
+            const trekIdx = order.indexOf(TREK_ID);
+            const luminexIdx = order.indexOf(LUMINEX_ID);
+            const missing = trekIdx < 0;
+            const afterLuminex = trekIdx >= 0 && luminexIdx >= 0 && trekIdx > luminexIdx;
+            if (missing || afterLuminex) {
+                order = order.filter((id) => id !== TREK_ID);
+                const ti = order.indexOf(TIMER_ID);
+                if (ti >= 0) order.splice(ti + 1, 0, TREK_ID);
+                else order.unshift(TREK_ID);
+                this.config.app = this.config.app || {};
+                this.config.app.navRailOrder = order;
+                if (window.electronAPI?.getConfig && window.electronAPI?.saveConfig) {
+                    window.electronAPI.getConfig('app').then((cfg) => {
+                        const next = cfg || {};
+                        next.navRailOrder = order;
+                        return window.electronAPI.saveConfig('app', next);
+                    }).catch(() => {});
+                }
+            }
+        }
+
+        if (!order.length) return;
+
+        const known = new Set(order);
+        const appendBtn = (el) => {
+            if (!el) return;
+            if (el.id === TIMER_ID && railSlot) {
+                railSlot.appendChild(el);
+                rail.appendChild(railSlot);
+                return;
+            }
+            rail.appendChild(el);
+        };
+        for (const id of order) {
+            appendBtn(rail.querySelector(`#${CSS.escape(String(id))}`));
+        }
+        rail.querySelectorAll('.nav-rail-btn[id]').forEach((btn) => {
+            if (!known.has(btn.id)) {
+                if (btn.id === TREK_ID) {
+                    const timerEl = document.getElementById(TIMER_ID);
+                    const after = (timerEl?.parentElement === railSlot ? railSlot : timerEl) || null;
+                    if (after?.nextSibling) rail.insertBefore(btn, after.nextSibling);
+                    else if (after) after.after(btn);
+                    else rail.appendChild(btn);
+                } else {
+                    rail.appendChild(btn);
+                }
+            }
+        });
+    }
+
+    async saveNavRailOrder() {
+        const rail = document.getElementById('navRail');
+        if (!rail || !window.electronAPI?.getConfig || !window.electronAPI?.saveConfig) return;
+        const navRailOrder = Array.from(rail.querySelectorAll('.nav-rail-btn[id]')).map((btn) => btn.id);
+        const currentConfig = await window.electronAPI.getConfig('app') || {};
+        currentConfig.navRailOrder = navRailOrder;
+        await window.electronAPI.saveConfig('app', currentConfig);
+        this.config.app = this.config.app || {};
+        this.config.app.navRailOrder = navRailOrder;
+    }
+
     isBothOrgsActive() {
         return this.config?.app?.activeYesplanOrg === 'both';
     }
@@ -615,11 +1438,19 @@ class TheaterDashboard {
                 itix: itix || {},
                 app: app || {}
             };
+            this.syncCloudflareAccessToStorage();
+            this.syncShiftAuthToStorage();
+            if (this.getShiftAuthToken()) this.startShiftPresenceHeartbeat();
+            this.nostradamusRoleOrder = Array.isArray(this.config?.app?.nostradamusRoleOrder)
+                ? this.config.app.nostradamusRoleOrder.map((v) => String(v || '').trim()).filter(Boolean)
+                : [];
             
             // Pas thema toe
             this.applyTheme(this.config.app?.theme || 'default');
             // Pas taal toe
             this.applyLanguage(this.config.app?.language || 'nl');
+            // Pas tijdzone toe
+            await this.refreshEffectiveTimeZone();
             // Touchscreen-modus
             this.applyTouchscreenMode(!!this.config.app?.touchscreenMode);
             
@@ -657,6 +1488,43 @@ class TheaterDashboard {
                 itix: {},
                 app: {}
             };
+            this.nostradamusRoleOrder = [];
+        }
+    }
+
+    getOrderedNostradamusRoles(roleOptions = []) {
+        const roles = roleOptions.map((r) => String(r || '').trim()).filter(Boolean);
+        if (!roles.length) return [];
+        const order = Array.isArray(this.nostradamusRoleOrder) ? this.nostradamusRoleOrder : [];
+        const ordered = [];
+        const seen = new Set();
+        order.forEach((role) => {
+            if (roles.includes(role) && !seen.has(role)) {
+                ordered.push(role);
+                seen.add(role);
+            }
+        });
+        roles.forEach((role) => {
+            if (!seen.has(role)) {
+                ordered.push(role);
+                seen.add(role);
+            }
+        });
+        return ordered;
+    }
+
+    async saveNostradamusRoleOrder(nextOrder = []) {
+        const normalized = nextOrder.map((v) => String(v || '').trim()).filter(Boolean);
+        this.nostradamusRoleOrder = normalized;
+        if (!window.electronAPI?.getConfig || !window.electronAPI?.saveConfig) return;
+        try {
+            const currentConfig = await window.electronAPI.getConfig('app') || {};
+            currentConfig.nostradamusRoleOrder = normalized;
+            await window.electronAPI.saveConfig('app', currentConfig);
+            this.config.app = this.config.app || {};
+            this.config.app.nostradamusRoleOrder = normalized;
+        } catch (error) {
+            console.warn('Opslaan van Nostradamus-functievolgorde mislukt:', error);
         }
     }
 
@@ -678,13 +1546,14 @@ class TheaterDashboard {
             
             if (result && result.success && result.data && Array.isArray(result.data) && result.data.length > 0) {
                 this.availableVenues = result.data;
+                this.mergeYesplanVenueTechOptionsFromVenues(this.availableVenues);
                 this.populateVenueSelector();
                 
                 // Herstel laatst gekozen zalen als beschikbaar
                 if (this.selectedVenues.length > 0) {
-                    const validSelections = this.selectedVenues.filter(id =>
-                        this.availableVenues.some(v => String(v.id) === String(id))
-                    );
+                    const validSelections = this.selectedVenues
+                        .map((id) => this.getCanonicalVenueId(id))
+                        .filter((id) => id && this.availableVenues.some((v) => String(v.id) === String(id)));
                     this.selectedVenues = validSelections;
                     this.updateVenueSelectorDisplay();
                 }
@@ -815,7 +1684,8 @@ class TheaterDashboard {
 
     async selectVenueAndDate(venueId, dateString) {
         // Update venue zonder data te laden
-        this.selectedVenues = venueId ? [String(venueId)] : [];
+        const canonicalVenueId = venueId ? this.getCanonicalVenueId(venueId) : null;
+        this.selectedVenues = canonicalVenueId ? [String(canonicalVenueId)] : [];
         
         // Update datum
         const date = new Date(dateString);
@@ -933,7 +1803,7 @@ class TheaterDashboard {
                 const option = document.createElement('div');
                 option.className = 'custom-select-option';
                 option.dataset.value = venue.id;
-                option.textContent = venue.name || this.t('venue.venueId', { id: venue.id });
+                option.textContent = this.getVenueDisplayName(venue);
                 if (currentValues.includes(String(venue.id))) {
                     option.classList.add('selected');
                 }
@@ -950,7 +1820,7 @@ class TheaterDashboard {
                 sortedVenues.forEach(venue => {
                     const option = document.createElement('option');
                     option.value = venue.id;
-                    option.textContent = venue.name;
+                    option.textContent = this.getVenueDisplayName(venue);
                     hiddenSelect.appendChild(option);
                 });
             }
@@ -982,8 +1852,9 @@ class TheaterDashboard {
             if (selectedIds.length === 0) {
                 valueSpan.textContent = this.t('venue.allVenues');
             } else if (selectedIds.length === 1) {
-                const venue = this.availableVenues.find(v => String(v.id) === String(selectedIds[0]));
-                valueSpan.textContent = venue ? venue.name : this.t('venue.unknownVenue');
+                const canonicalId = this.getCanonicalVenueId(selectedIds[0]);
+                const venue = this.availableVenues.find(v => String(v.id) === String(canonicalId));
+                valueSpan.textContent = venue ? this.getVenueDisplayName(venue) : this.t('venue.unknownVenue');
             } else {
                 valueSpan.textContent = this.t('venue.venueCount', { n: selectedIds.length });
             }
@@ -1022,6 +1893,20 @@ class TheaterDashboard {
             filterBtn.style.background = '';
             filterBtn.style.color = '';
         }
+    }
+
+    updatePersonnelFilterToggleState() {
+        const btn = document.getElementById('personnelFilterToggleBtn');
+        if (!btn) return;
+        const isCollapsed = !!this.personnelFiltersCollapsed;
+        const title = this.locale === 'en'
+            ? (isCollapsed ? 'Show personnel filters' : 'Hide personnel filters')
+            : (isCollapsed ? 'Toon personeel filters' : 'Verberg personeel filters');
+        btn.title = title;
+        btn.setAttribute('aria-label', title);
+        btn.classList.toggle('active', !isCollapsed);
+        btn.style.background = !isCollapsed ? '#667eea' : '';
+        btn.style.color = !isCollapsed ? 'white' : '';
     }
 
     setupSearchEventListeners() {
@@ -1264,7 +2149,7 @@ class TheaterDashboard {
 
         if (!Array.isArray(events) || events.length === 0) {
             if (query && query.length >= 2) {
-                container.innerHTML = `<div class="search-no-results"><i class="fas fa-search"></i> Geen resultaten voor <strong>${query.replace(/</g,'&lt;')}</strong></div>`;
+                container.innerHTML = `<div class="search-no-results"><i class="fas fa-search"></i> Geen resultaten voor <strong>${this.escapeHtml(query)}</strong></div>`;
             }
             return;
         }
@@ -1275,7 +2160,12 @@ class TheaterDashboard {
             metaEl.textContent = `${events.length} resultaat${events.length !== 1 ? 'en' : ''}`;
         }
 
-        const escapeHtml = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        const escapeHtml = (s) => String(s || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/\\/g, '&#92;');
 
         const statusClass = (statusStr) => {
             const s = String(statusStr || '').toLowerCase();
@@ -1421,6 +2311,9 @@ class TheaterDashboard {
             console.error('Data laden fout:', error);
         } finally {
             this.showLoading(false);
+            if (window.__SHIFT_HAPPENS_MOBILE__ || this.getShiftServerBaseUrl() || this.getShiftAuthToken()) {
+            void this.refreshApiServerStatus();
+        }
         }
     }
 
@@ -1461,10 +2354,11 @@ class TheaterDashboard {
             }
 
             this.data.yesplan = result;
+            this.updateYesplanVenueTechOptionsFromEvents(result?.data);
             this.updateYesplanDisplay(result);
             this.updateStatus('yesplan', result.success ? 'online' : 'offline', result.timestamp || new Date());
             // Verkoopkaart werkt volledig op Yesplan-data en reserveringen.
-            this.updateItixDisplay({ success: true, data: [] }, this.data.reservations);
+            this.updateItixDisplay({ success: true, data: [] });
         } catch (error) {
             console.error('Yesplan data fout:', error);
             this.data.yesplan = { success: false, data: [], timestamp: null };
@@ -1488,8 +2382,9 @@ class TheaterDashboard {
                 venueId
             });
             const allUrenInfo = res?.success && res.data ? res.data : { techniek: [], horeca: [], frontOffice: [], nostradamus: [] };
+            const hasAny = Object.values(allUrenInfo || {}).some((v) => Array.isArray(v) && v.length > 0);
             const result = {
-                success: (allUrenInfo.techniek?.length || 0) + (allUrenInfo.horeca?.length || 0) + (allUrenInfo.frontOffice?.length || 0) > 0,
+                success: hasAny,
                 data: allUrenInfo,
                 timestamp: new Date().toISOString()
             };
@@ -1503,23 +2398,11 @@ class TheaterDashboard {
 
     async loadSalesData() {
         try {
-            // Gebruik geselecteerde zaal als beschikbaar
-            const venueId = this.getPrimarySelectedVenueId();
-            const dateRange = this.getDateRange();
-            
-            const reservationsData = await window.electronAPI.getYesplanReservations({
-                startDate: dateRange.start,
-                endDate: dateRange.end,
-                venueId: venueId
-            });
-            this.data.reservations = reservationsData;
-            
-            // Update display met Yesplan verkoopdata en reserveringen
-            this.updateItixDisplay({ success: true, data: [] }, reservationsData);
+            // Verkoopcijfers komen rechtstreeks uit Yesplan eventvelden.
+            this.updateItixDisplay({ success: true, data: [] });
         } catch (error) {
             console.error('Verkoopdata (Yesplan) fout:', error);
-            this.data.reservations = { success: false, data: [] };
-            this.updateItixDisplay({ success: true, data: [] }, this.data.reservations);
+            this.updateItixDisplay({ success: true, data: [] });
         }
     }
 
@@ -1578,7 +2461,11 @@ class TheaterDashboard {
         this.previousView = this.currentView;
         this.currentView = 'home';
         this.detailContext = null;
-        
+        this.hideVoorstellingTimerShell();
+        this.hideLuminexShell();
+        this.hideOscMonitorShell();
+        this.hideTrekkenlijstenShell();
+
         const weekWrapper = document.getElementById('weekViewWrapper');
         const homeContainer = document.getElementById('homeViewContainer');
         const detailWrapper = document.getElementById('detailViewWrapper');
@@ -1597,6 +2484,10 @@ class TheaterDashboard {
 
         document.getElementById('weekBtn')?.classList.remove('active');
         document.getElementById('homeBtn')?.classList.add('active');
+        document.getElementById('voorstellingTimerBtn')?.classList.remove('active');
+        document.getElementById('trekkenlijstenNavBtn')?.classList.remove('active');
+        document.getElementById('luminexNavBtn')?.classList.remove('active');
+        document.getElementById('oscMonitorNavBtn')?.classList.remove('active');
         
         if (dashboardGrid) {
             dashboardGrid.classList.add('home-view');
@@ -1644,6 +2535,7 @@ class TheaterDashboard {
         this.applyCardOrder();
         this.updateMasterStatus();
         this.updateBackButtonVisibility();
+        this.refreshVoorstellingTimerChrome();
     }
     
     async showDetailView(clearDetailContext = false, forceRefresh = false) {
@@ -1652,7 +2544,11 @@ class TheaterDashboard {
         this.currentView = 'detail';
         // Bij dag-navigatie in detailview willen we niet vast blijven zitten op 1 aangeklikt event.
         if (clearDetailContext) this.detailContext = null;
-        
+        this.hideVoorstellingTimerShell();
+        this.hideLuminexShell();
+        this.hideOscMonitorShell();
+        this.hideTrekkenlijstenShell();
+
         const weekWrapper = document.getElementById('weekViewWrapper');
         const homeContainer = document.getElementById('homeViewContainer');
         const detailWrapper = document.getElementById('detailViewWrapper');
@@ -1676,9 +2572,11 @@ class TheaterDashboard {
 
         document.getElementById('weekBtn')?.classList.remove('active');
         document.getElementById('homeBtn')?.classList.remove('active');
+        document.getElementById('voorstellingTimerBtn')?.classList.remove('active');
         
         document.body.classList.remove('home-view-active');
         document.body.classList.remove('week-view-active');
+        document.body.classList.remove('voorstelling-timer-active');
         
         // Toon alle cards expliciet, 4 kolommen in detail view
         if (dashboardGrid) {
@@ -1726,8 +2624,14 @@ class TheaterDashboard {
         this.previousView = this.currentView;
         this.currentView = 'week';
         this.detailContext = null;
+        this.hideVoorstellingTimerShell();
+        this.hideLuminexShell();
+        this.hideOscMonitorShell();
+        this.hideTrekkenlijstenShell();
         document.body.classList.remove('home-view-active');
         document.body.classList.add('week-view-active');
+        document.body.classList.remove('voorstelling-timer-active');
+        document.body.classList.remove('trekkenlijsten-active');
 
         const weekWrapper = document.getElementById('weekViewWrapper');
         const homeContainer = document.getElementById('homeViewContainer');
@@ -1748,6 +2652,7 @@ class TheaterDashboard {
 
         document.getElementById('weekBtn')?.classList.add('active');
         document.getElementById('homeBtn')?.classList.remove('active');
+        document.getElementById('voorstellingTimerBtn')?.classList.remove('active');
 
         const sortWrap = document.getElementById('weekViewSort');
         if (sortWrap) {
@@ -1759,6 +2664,7 @@ class TheaterDashboard {
         this.updateVenueSelectorDisplay();
         await this.loadWeekData();
         this.updateBackButtonVisibility();
+        this.refreshVoorstellingTimerChrome();
     }
 
     updateBackButtonVisibility() {
@@ -1775,6 +2681,18 @@ class TheaterDashboard {
         if (viewName === 'detail') {
             // Detail is alleen zinvol met exact 1 geselecteerde zaal.
             return Array.isArray(this.selectedVenues) && this.selectedVenues.length === 1;
+        }
+        if (viewName === 'voorstellingTimer') {
+            return this.canOpenVoorstellingTimer();
+        }
+        if (viewName === 'luminex') {
+            return true;
+        }
+        if (viewName === 'trekkenlijsten') {
+            return this.isShowModeEnabled();
+        }
+        if (viewName === 'oscMonitor') {
+            return this.isShowModeEnabled();
         }
         return false;
     }
@@ -1825,6 +2743,18 @@ class TheaterDashboard {
         if (viewName === 'detail') {
             return Array.isArray(entry.selectedVenues) && entry.selectedVenues.length === 1;
         }
+        if (viewName === 'voorstellingTimer') {
+            return this.canOpenVoorstellingTimer();
+        }
+        if (viewName === 'luminex') {
+            return true;
+        }
+        if (viewName === 'trekkenlijsten') {
+            return this.isShowModeEnabled();
+        }
+        if (viewName === 'oscMonitor') {
+            return this.isShowModeEnabled();
+        }
         return false;
     }
 
@@ -1865,6 +2795,14 @@ class TheaterDashboard {
                 await this.showDetailView();
             } else if (targetEntry.view === 'week') {
                 await this.showWeekView();
+            } else if (targetEntry.view === 'voorstellingTimer') {
+                await this.showVoorstellingTimerView();
+            } else if (targetEntry.view === 'trekkenlijsten') {
+                await this.showTrekkenlijstenView();
+            } else if (targetEntry.view === 'luminex') {
+                await this.showLuminexView();
+            } else if (targetEntry.view === 'oscMonitor') {
+                await this.showOscMonitorView();
             }
         } finally {
             this._isNavigatingBack = false;
@@ -1918,6 +2856,7 @@ class TheaterDashboard {
                 }
             }
             this.data.yesplan = result;
+            this.updateYesplanVenueTechOptionsFromEvents(result?.data);
             this.updateYesplanDisplay(result);
             this.updateStatus('yesplan', result.success ? 'online' : 'offline', result.timestamp || new Date());
             if (id === this.loadHomeRequestId) await this.loadUurwerkData();
@@ -1932,6 +2871,9 @@ class TheaterDashboard {
             if (id === this.loadHomeRequestId) {
                 this.showLoading(false);
                 this.setDateNavDisabled(false);
+                if (window.__SHIFT_HAPPENS_MOBILE__ || this.getShiftServerBaseUrl() || this.getShiftAuthToken()) {
+            void this.refreshApiServerStatus();
+        }
             }
         }
     }
@@ -2021,6 +2963,9 @@ class TheaterDashboard {
             if (id === this.loadWeekRequestId) {
                 this.showLoading(false);
                 this.setDateNavDisabled(false);
+                if (window.__SHIFT_HAPPENS_MOBILE__ || this.getShiftServerBaseUrl() || this.getShiftAuthToken()) {
+            void this.refreshApiServerStatus();
+        }
             }
         }
     }
@@ -2160,7 +3105,13 @@ class TheaterDashboard {
             if (byDay[key]) byDay[key].push(e);
         });
 
-        const escapeText = (v) => String(v || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+        const escapeText = (v) => String(v || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;')
+            .replace(/\\/g, '&#92;');
 
         const buildEventBlock = (event) => {
             const title = escapeText(event.title);
@@ -2183,10 +3134,12 @@ class TheaterDashboard {
                 const ob = event.orkestbakExplicit || event.orkestbakValue
                     ? (event.orkestbakValue || (event.hasOrkestbak ? this.t('resources.ja') : this.t('resources.nee')))
                     : this.t('resources.nietBekend');
-                if (showBalletvloer) parts.push(`Balletvloer: <strong>${bv}</strong>`);
-                if (showVleugel) parts.push(`Vleugel: <strong>${vl}</strong>`);
-                if (showOrkestbak) parts.push(`Orkestbak: <strong>${ob}</strong>`);
-                resources = `<div class="week-event-resources">${parts.join(' · ')}</div>`;
+                if (this.shouldShowTechnicalPartForEvent(event, 'balletvloer', showBalletvloer)) parts.push(`Balletvloer: <strong>${bv}</strong>`);
+                if (this.shouldShowTechnicalPartForEvent(event, 'vleugel', showVleugel)) parts.push(`Vleugel: <strong>${vl}</strong>`);
+                if (this.shouldShowTechnicalPartForEvent(event, 'orkestbak', showOrkestbak)) parts.push(`Orkestbak: <strong>${ob}</strong>`);
+                if (parts.length) {
+                    resources = `<div class="week-event-resources">${parts.join(' · ')}</div>`;
+                }
             }
 
             let tech = '';
@@ -2204,7 +3157,11 @@ class TheaterDashboard {
                 return /\d+\s*man\b/.test(u) || /^(mcgz|wtpy|dkw|mckz|wtso|mkvk)\b/.test(u) || /^techniek\s+algemeen$/i.test(u) || /^techniek$/i.test(u) || u.length < 3;
             };
             const looksLikeName = (p) => !looksLikeDateOrTime(p) && !looksLikeVenueRole(p) && /^[a-zA-Z\u00C0-\u024F\s\-']+$/.test(p) && p.length > 2;
-            const timeOnly = (t) => String(t || '').replace(/^\d{1,2}\s+(jan|feb|maa|mrt|maart|apr|mei|jun|jul|aug|sep|okt|oktober|nov|dec)[a-z]*\s+/i, '').trim() || t;
+            const timeOnly = (t) => {
+                const s = String(t || '');
+                const m = s.match(/^\d{1,2}\s+(?:jan|feb|maa|mrt|maart|apr|mei|jun|jul|aug|sep|okt|oktober|nov|dec)[a-z]*\s+(.*)$/i);
+                return (m ? m[1] : s).trim() || s;
+            };
             const cleanRawPersonnelEntry = (entry) => {
                 const parts = String(entry || '').split(/\s+[-–—]\s+/).map(p => p.trim()).filter(Boolean);
                 if (!parts.length) return '';
@@ -2523,7 +3480,7 @@ class TheaterDashboard {
         }
         const { minDate, maxDate } = this.getDateBounds();
         
-        // Alleen binnen bereik toestaan (max 1 week terug en 1 jaar vooruit)
+        // Alleen binnen bereik toestaan (max 1 maand terug en 1 jaar vooruit)
         if (date >= minDate && date <= maxDate) {
             this.selectedDate = date;
             this.updateDateDisplay();
@@ -2762,8 +3719,12 @@ class TheaterDashboard {
                 return;
             }
             if (this.selectedVenues.length === 1) {
+                const wasVoorstellingTimer = this.currentView === 'voorstellingTimer';
                 this.detailContext = null;
                 await this.showDetailView(true, true);
+                if (wasVoorstellingTimer && this.canOpenVoorstellingTimer()) {
+                    await this.showVoorstellingTimerView();
+                }
             } else {
                 await this.showHomeView();
             }
@@ -2792,8 +3753,12 @@ class TheaterDashboard {
                 return;
             }
             if (this.selectedVenues.length === 1) {
+                const wasVoorstellingTimer = this.currentView === 'voorstellingTimer';
                 this.detailContext = null;
                 await this.showDetailView(true, true);
+                if (wasVoorstellingTimer && this.canOpenVoorstellingTimer()) {
+                    await this.showVoorstellingTimerView();
+                }
             } else {
                 await this.showHomeView();
             }
@@ -3044,6 +4009,13 @@ class TheaterDashboard {
                     const performerInfo = event.performer
                         ? `<p style="margin-top: 0.25rem; color: #a0aec0; font-size: 0.9rem;"><i class="fas fa-user"></i> ${event.performer}</p>`
                         : '';
+                    const showOrgInfo = this.isBothOrgsActive();
+                    const orgNumRaw = String(event._organizationId || '').trim();
+                    const orgNum = orgNumRaw === '2' ? 2 : 1;
+                    const orgName = this.getOrgDisplayName(orgNum);
+                    const orgBadge = showOrgInfo
+                        ? `<span style="margin-left: 0.75rem; color: #93c5fd; font-size: 0.85rem; white-space: nowrap;"><i class="fas fa-building"></i> ${this.escapeHtml(orgName)}</span>`
+                        : '';
                     
                     // Gebruik schedule tijden als beschikbaar, anders start/end tijd
                     let timeRange = '';
@@ -3063,15 +4035,15 @@ class TheaterDashboard {
                     let resourcesInfo = '';
                     if (showBalletvloer || showVleugel || showOrkestbak) {
                         const topLineParts = [];
-                        if (showBalletvloer) {
+                        if (this.shouldShowTechnicalPartForEvent(event, 'balletvloer', showBalletvloer)) {
                             const balletvloerStatus = event.balletvloerExplicit ? (event.hasBalletvloer ? this.t('resources.ja') : this.t('resources.nee')) : this.t('resources.nietBekend');
                             topLineParts.push(`Balletvloer: <strong>${balletvloerStatus}</strong>`);
                         }
-                        if (showVleugel) {
+                        if (this.shouldShowTechnicalPartForEvent(event, 'vleugel', showVleugel)) {
                             const vleugelStatus = event.vleugelExplicit ? (event.hasVleugel ? this.t('resources.ja') : this.t('resources.nee')) : this.t('resources.nietBekend');
                             topLineParts.push(`Vleugel: <strong>${vleugelStatus}</strong>`);
                         }
-                        if (showOrkestbak) {
+                        if (this.shouldShowTechnicalPartForEvent(event, 'orkestbak', showOrkestbak)) {
                             const orkestbakStatus = (event.orkestbakExplicit || event.orkestbakValue)
                                 ? (event.orkestbakValue || (event.hasOrkestbak ? this.t('resources.ja') : this.t('resources.nee')))
                                 : this.t('resources.nietBekend');
@@ -3080,11 +4052,13 @@ class TheaterDashboard {
                         const topLineHtml = topLineParts
                             .map((part) => `<span style="white-space: nowrap;">${part}</span>`)
                             .join('<span style="opacity:.7;">&nbsp;&nbsp;</span>');
-                        resourcesInfo = `
-                            <div style="margin-top: 0.5rem; padding: 0.5rem; background: #374151; border-radius: 6px; font-size: 0.85rem; color: #a0aec0;">
-                                ${topLineHtml ? `<div style="display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${topLineHtml}</div>` : ''}
-                            </div>
-                        `;
+                        if (topLineHtml) {
+                            resourcesInfo = `
+                                <div style="margin-top: 0.5rem; padding: 0.5rem; background: #374151; border-radius: 6px; font-size: 0.85rem; color: #a0aec0;">
+                                    <div style="display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${topLineHtml}</div>
+                                </div>
+                            `;
+                        }
                     }
                     
                     // Technisch materiaal uit /resources/Technisch materiaal
@@ -3148,7 +4122,7 @@ class TheaterDashboard {
                             const docName = decodedFileName.endsWith('.pdf') ? decodedFileName.replace('.pdf', '') : decodedFileName;
                             const docDate = doc.date ? new Date(doc.date).toLocaleDateString('nl-NL', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '';
                             const docAuthor = doc.author || '';
-                            const escapedUrl = doc.url.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                            const escapedUrl = this.escapeHtml(String(doc.url || ''));
                             const category = doc.category || 'Document';
                             
                             return `
@@ -3190,7 +4164,7 @@ class TheaterDashboard {
                         const riderName = decodedFileName.endsWith('.pdf') ? decodedFileName.replace('.pdf', '') : decodedFileName;
                         const riderDate = event.riderAttachment.date ? new Date(event.riderAttachment.date).toLocaleDateString('nl-NL', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '';
                         const riderAuthor = event.riderAttachment.author || '';
-                        const escapedUrl = event.riderAttachment.url.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                        const escapedUrl = this.escapeHtml(String(event.riderAttachment.url || ''));
                         technicalListInfo = `<div style="${infoBoxStyle}">
                             <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
                                 <i class="fas fa-folder-open" style="color: #818cf8;"></i>
@@ -3258,11 +4232,10 @@ class TheaterDashboard {
                         venueStatusInfo = `<p style="margin-top: 0.5rem;"><i class="fas fa-info-circle"></i> ${statusPart}</p>`;
                     }
                     
-                    // Haal venue ID op uit rawEvent voor klikfunctionaliteit
-                    let venueId = null;
+                    // Gebruik canonieke zaal-id (incl. org-prefix indien nodig) voor klikfunctionaliteit.
+                    let venueId = this.getEventVenueSelectionId(event);
                     let eventDate = null;
-                    if (event.rawEvent && event.rawEvent.locations && Array.isArray(event.rawEvent.locations) && event.rawEvent.locations.length > 0) {
-                        // Neem de eerste location ID
+                    if (!venueId && event.rawEvent && event.rawEvent.locations && Array.isArray(event.rawEvent.locations) && event.rawEvent.locations.length > 0) {
                         venueId = event.rawEvent.locations[0].id;
                     }
                     if (event.startDate) {
@@ -3288,7 +4261,13 @@ class TheaterDashboard {
                     // Maak draagbaar in home view - alleen de titel is draggable
                     const draggableAttr = isHomeView ? 'draggable="true"' : '';
                     const eventIdAttr = event.id ? `data-event-id="${event.id}"` : '';
-                    const titleBlock = isDetailSingleEvent ? '' : `<h4 ${draggableAttr} class="${isHomeView ? 'drag-handle' : ''}">${title}</h4>${performerInfo}`;
+                    const titleBlock = isDetailSingleEvent ? '' : `
+                        <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem;">
+                            <h4 ${draggableAttr} class="${isHomeView ? 'drag-handle' : ''}" style="margin: 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${title}</h4>
+                            ${orgBadge}
+                        </div>
+                        ${performerInfo}
+                    `;
                     
                     const venueNameAttr = event.venue && event.venue !== 'Onbekend'
                         ? `data-venue-name="${this.escapeHtml(String(event.venue))}"`
@@ -3409,6 +4388,43 @@ class TheaterDashboard {
         this.updateTijdschemaDisplay(allScheduleItems);
     }
 
+    /**
+     * HTML voor tijdschema-lijst (zelfde opmaak als op de kaart en in de timer).
+     */
+    buildTijdschemaListHtml(scheduleData) {
+        if (!scheduleData || scheduleData.length === 0) return '';
+
+        const timeToMinutes = (s) => {
+            if (!s || typeof s !== 'string') return 999999;
+            const part = s.split(/[\s–—-]/)[0].trim();
+            const m = part.match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?$/);
+            if (!m) return 999999;
+            const mins = parseInt(m[1], 10) * 60 + parseInt(m[2], 10);
+            return this.normalizeShowDayMinutes(mins) ?? 999999;
+        };
+        const sorted = [...scheduleData].sort((a, b) => {
+            const minA = Math.min(...(a.items || []).map((it) => timeToMinutes(it.time || it.description)));
+            const minB = Math.min(...(b.items || []).map((it) => timeToMinutes(it.time || it.description)));
+            return minA - minB;
+        });
+
+        const escape = (v) => String(v || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        const singleEvent = sorted.length === 1;
+
+        const html = sorted.map(({ eventTitle, items }) => {
+            const sortedItems = [...(items || [])].sort((a, b) => timeToMinutes(a.time || a.description) - timeToMinutes(b.time || b.description));
+            const rows = sortedItems.map((it) => {
+                const time = it.time ? `<span class="tijdschema-time">${escape(it.time)}</span>` : '';
+                const desc = it.description ? `<span class="tijdschema-desc">${escape(it.description)}</span>` : '';
+                return `<div class="tijdschema-row">${time}${time && desc ? ' ' : ''}${desc}</div>`;
+            }).join('');
+            const header = !singleEvent && eventTitle ? `<div class="tijdschema-event-header"><i class="fas fa-calendar-alt"></i> ${escape(eventTitle)}</div>` : '';
+            return `${header}<div class="tijdschema-items">${rows}</div>`;
+        }).join('');
+
+        return `<div class="tijdschema-list">${html}</div>`;
+    }
+
     parseScheduleDescriptionText(text) {
         if (!text || typeof text !== 'string') return [];
         const items = [];
@@ -3458,38 +4474,4044 @@ class TheaterDashboard {
         const card = document.getElementById('tijdschemaCard');
         if (!container || !card) return;
 
+        this.tijdschemaScheduleData = scheduleData && scheduleData.length > 0 ? scheduleData : null;
+
         if (!scheduleData || scheduleData.length === 0) {
             container.innerHTML = `<div class="info-message">${this.t('messages.noTijdschema')}</div>`;
+            card.classList.remove('tijdschema-card--clickable');
+            card.removeAttribute('title');
+            this.refreshVoorstellingTimerChrome();
             return;
         }
 
-        const timeToMinutes = (s) => {
-            if (!s || typeof s !== 'string') return 999999;
-            const part = s.split(/[\s–—-]/)[0].trim();
-            const m = part.match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?$/);
-            return m ? parseInt(m[1], 10) * 60 + parseInt(m[2], 10) : 999999;
+        container.innerHTML = this.buildTijdschemaListHtml(scheduleData);
+        this.refreshVoorstellingTimerChrome();
+    }
+
+    canOpenVoorstellingTimer() {
+        if (!this.isShowModeEnabled()) return false;
+        if (!Array.isArray(this.selectedVenues) || this.selectedVenues.length !== 1) return false;
+        const ev = this.data?.yesplan;
+        // Meerdere voorstellingen op dezelfde dag (bv. matinee + avond) zijn toegestaan: tijdschema bevat alle blokken.
+        if (!ev?.success || !Array.isArray(ev.data) || ev.data.length < 1) return false;
+        return !!(this.tijdschemaScheduleData && this.tijdschemaScheduleData.length > 0);
+    }
+
+    /** Alleen echte pauze-regels, niet aankondigingen zoals "5 min voor pauze". */
+    isActualPauseScheduleRow(item) {
+        const desc = String(item?.description || '').trim().toLowerCase();
+        if (!desc) return false;
+        if (!/\b(pauze|interval|tussenpauze)\b/i.test(desc)) return false;
+        // "5 min voor pauze"/"5 min before interval" telt niet als echte pauze.
+        if (/(^|\b)(5|vijf)\s*(min(uten)?|mins?)?\s*(voor|before)\b/i.test(desc)) return false;
+        return true;
+    }
+
+    /** Yesplan gebruikt vaak twee regels voor één pauze: "pauze (start)" / "pauze (stop)" — die stop-regel telt niet mee als tweede pauze. */
+    isPauseScheduleStopRow(item) {
+        const desc = String(item?.description || '').trim().toLowerCase();
+        if (!desc || !this.isActualPauseScheduleRow(item)) return false;
+        if (/\(\s*stop\s*\)/i.test(desc)) return true;
+        if (/\(\s*eind(e)?\s*\)/i.test(desc) && /\bpauze\b/i.test(desc)) return true;
+        if (/\beinde\s+pauze\b/i.test(desc) || /\bpauze\s+einde\b/i.test(desc)) return true;
+        if (/\binterval\s*\(\s*end\s*\)/i.test(desc) || /\(\s*end\s*\)/i.test(desc)) return true;
+        return false;
+    }
+
+    /** Eerste kloktijd uit het time-veld (bij "15:50 – 16:10" alleen start). */
+    tijdschemaItemFirstClockMinutes(item) {
+        const raw = String(item?.time || '').trim();
+        if (!raw) return null;
+        const first = raw.split(/[–—-]/)[0].trim();
+        return this.tijdschemaTimeStringToMinutes(first);
+    }
+
+    /**
+     * Aantal pauzes = aantal pauze-intervallen in Yesplan (niet: aantal regels met "pauze").
+     * - Eén regel met van–tot in het tijdveld = 1 pauze.
+     * - Twee regels start/stop = 1 pauze (stop telt niet mee als extra pauze).
+     */
+    countPauzesInSchedule(scheduleData) {
+        if (!scheduleData || !scheduleData.length) return 0;
+        let count = 0;
+        for (const block of scheduleData) {
+            for (const it of block.items || []) {
+                if (!this.isActualPauseScheduleRow(it)) continue;
+                const tStr = String(it.time || '');
+                if (this.tijdschemaTimeRangeToDurationMinutes(tStr) != null) {
+                    count += 1;
+                    continue;
+                }
+                if (this.isPauseScheduleStopRow(it)) continue;
+                count += 1;
+            }
+        }
+        return count;
+    }
+
+    detectPauzeInSchedule(scheduleData) {
+        return this.countPauzesInSchedule(scheduleData) > 0;
+    }
+
+    getVoorstellingTimerStepIds(pauseCount) {
+        const pauses = Math.max(0, Number(pauseCount) || 0);
+        const steps = ['deuren_open', 'vijf_voor_aanvang', 'aanvang'];
+        for (let p = 1; p <= pauses; p++) {
+            steps.push(p === 1 ? 'vijf_voor_pauze' : `vijf_voor_pauze_${p}`);
+            steps.push(p === 1 ? 'pauze' : `pauze_${p}`);
+            const nextAct = p + 1;
+            steps.push(nextAct === 2 ? 'vijf_voor_tweede_deel' : `vijf_voor_aanvang_act_${nextAct}`);
+            steps.push(nextAct === 2 ? 'aanvang_tweede_deel' : `aanvang_act_${nextAct}`);
+        }
+        steps.push('vijf_voor_einde', 'einde');
+        return steps;
+    }
+
+    /**
+     * Effectieve stapvolgorde: optioneel aangepaste lijst per slot + vrije knoppen (custom_*),
+     * met ontbrekende standaardstappen uit het Yesplan-schema automatisch achteraan.
+     */
+    getVoorstellingTimerStepsForSlot(slotId, pauseCount) {
+        const defaultSteps = this.getVoorstellingTimerStepIds(pauseCount);
+        const defaultSet = new Set(defaultSteps);
+        const st = this.ensureVoorstellingSlotState(slotId);
+        const custom = st.customStepOrder;
+        if (!Array.isArray(custom) || custom.length === 0) {
+            return [...defaultSteps];
+        }
+        const isCustom = (id) => typeof id === 'string' && id.startsWith('custom_');
+        const out = [];
+        const seenBuiltin = new Set();
+        for (const id of custom) {
+            if (isCustom(id)) {
+                out.push(id);
+                continue;
+            }
+            if (defaultSet.has(id) && !seenBuiltin.has(id)) {
+                out.push(id);
+                seenBuiltin.add(id);
+            }
+        }
+        for (const id of defaultSteps) {
+            if (!seenBuiltin.has(id)) out.push(id);
+        }
+        return out;
+    }
+
+    getActOrdinalLabel(n) {
+        const nr = Math.max(1, Number(n) || 1);
+        if (this.locale === 'en') {
+            if (nr % 100 >= 11 && nr % 100 <= 13) return `${nr}th`;
+            if (nr % 10 === 1) return `${nr}st`;
+            if (nr % 10 === 2) return `${nr}nd`;
+            if (nr % 10 === 3) return `${nr}rd`;
+            return `${nr}th`;
+        }
+        return `${nr}e`;
+    }
+
+    /**
+     * @param {string} stepId
+     * @param {number} [pauseCount] Aantal pauzes in het tijdschema. Bij 1 geen "… 1" achter pauze; bij 2+ wel nummering.
+     * @param {string} [slotId] Voor labels van vrije knoppen (custom_*).
+     */
+    getVoorstellingTimerStepLabel(stepId, pauseCount, slotId) {
+        if (typeof stepId === 'string' && stepId.startsWith('custom_') && slotId) {
+            const lab = this.ensureVoorstellingSlotState(slotId).customLabels?.[stepId];
+            if (lab && String(lab).trim()) return String(lab).trim();
+            return this.locale === 'en' ? 'Custom step' : 'Vrije stap';
+        }
+
+        const totalPauses = pauseCount == null ? 1 : Math.max(0, Number(pauseCount) || 0);
+        const showPauseNum = totalPauses >= 2;
+
+        if (stepId === 'deuren_open' || stepId === 'vijf_voor_einde' || stepId === 'einde') {
+            return this.t(`voorstellingTimer.steps.${stepId}`);
+        }
+        if (stepId === 'vijf_voor_aanvang') {
+            const ord = this.getActOrdinalLabel(1);
+            return this.locale === 'en' ? `5 min before start ${ord} act` : `5 min voor aanvang ${ord} acte`;
+        }
+        if (stepId === 'aanvang') {
+            const ord = this.getActOrdinalLabel(1);
+            return this.locale === 'en' ? `Start ${ord} act` : `Aanvang ${ord} acte`;
+        }
+
+        let m = stepId.match(/^vijf_voor_pauze_(\d+)$/);
+        if (stepId === 'vijf_voor_pauze' || m) {
+            const pauseNr = m ? parseInt(m[1], 10) : 1;
+            if (!showPauseNum) {
+                return this.locale === 'en' ? '5 min before interval' : '5 min voor pauze';
+            }
+            return this.locale === 'en' ? `5 min before break ${pauseNr}` : `5 min voor pauze ${pauseNr}`;
+        }
+        m = stepId.match(/^pauze_(\d+)$/);
+        if (stepId === 'pauze' || m) {
+            const pauseNr = m ? parseInt(m[1], 10) : 1;
+            if (!showPauseNum) {
+                return this.locale === 'en' ? 'Interval' : 'Pauze';
+            }
+            return this.locale === 'en' ? `Break ${pauseNr}` : `Pauze ${pauseNr}`;
+        }
+
+        m = stepId.match(/^vijf_voor_aanvang_act_(\d+)$/);
+        if (stepId === 'vijf_voor_tweede_deel' || m) {
+            const actNr = m ? parseInt(m[1], 10) : 2;
+            const ord = this.getActOrdinalLabel(actNr);
+            return this.locale === 'en' ? `5 min before start ${ord} act` : `5 min voor aanvang ${ord} acte`;
+        }
+        m = stepId.match(/^aanvang_act_(\d+)$/);
+        if (stepId === 'aanvang_tweede_deel' || m) {
+            const actNr = m ? parseInt(m[1], 10) : 2;
+            const ord = this.getActOrdinalLabel(actNr);
+            return this.locale === 'en' ? `Start ${ord} act` : `Aanvang ${ord} acte`;
+        }
+
+        return this.t(`voorstellingTimer.steps.${stepId}`);
+    }
+
+    /**
+     * Na “Deuren open” mag hooguit één eerdere stap in de keten ontbreken om deze index nog te kunnen tikken
+     * (overslaan van één tussenstap, daarna weer verder).
+     */
+    isVoorstellingStepReachable(index, steps, marks) {
+        if (index === 0) return true;
+        if (!marks[steps[0]]) return false;
+        if (index === 1) return true;
+        let missing = 0;
+        for (let j = 1; j <= index - 1; j++) {
+            if (!marks[steps[j]]) missing++;
+        }
+        return missing <= 1;
+    }
+
+    /** Eerste tijd uit een tijdschema-regel (bv. "19:30" of "19:30 – 22:00") → minuten sinds middernacht. */
+    tijdschemaTimeStringToMinutes(timeStr) {
+        if (!timeStr || typeof timeStr !== 'string') return null;
+        const part = timeStr.split(/[\s–—-]/)[0].trim();
+        const m = part.match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?$/);
+        return m ? parseInt(m[1], 10) * 60 + parseInt(m[2], 10) : null;
+    }
+
+    /** Duur (in minuten) uit een timerange zoals "20:15 - 20:35". */
+    tijdschemaTimeRangeToDurationMinutes(timeStr) {
+        if (!timeStr || typeof timeStr !== 'string') return null;
+        const m = timeStr.match(/(\d{1,2}:\d{2})(?::\d{2})?\s*[–—-]\s*(\d{1,2}:\d{2})(?::\d{2})?/);
+        if (!m) return null;
+        const start = this.tijdschemaTimeStringToMinutes(m[1]);
+        const end = this.tijdschemaTimeStringToMinutes(m[2]);
+        if (start == null || end == null) return null;
+        let diff = end - start;
+        if (diff < 0) diff += 24 * 60;
+        if (diff < 1 || diff > 240) return null;
+        return diff;
+    }
+
+    /** Pauzeduur uit Yesplan: regel met tijdsrange, anders verschil tussen start- en stopregel. */
+    getPauseDurationMinutesFromSchedule(scheduleData) {
+        if (!scheduleData?.length) return null;
+        for (const block of scheduleData) {
+            for (const it of block.items || []) {
+                if (!this.isActualPauseScheduleRow(it)) continue;
+                const mins = this.tijdschemaTimeRangeToDurationMinutes(String(it.time || ''));
+                if (mins != null) return mins;
+            }
+        }
+        for (const block of scheduleData) {
+            const items = [...(block.items || [])].sort(
+                (a, b) =>
+                    (this.normalizeShowDayMinutes(this.tijdschemaItemFirstClockMinutes(a)) ?? 0) -
+                    (this.normalizeShowDayMinutes(this.tijdschemaItemFirstClockMinutes(b)) ?? 0)
+            );
+            let startMin = null;
+            for (const it of items) {
+                if (!this.isActualPauseScheduleRow(it)) continue;
+                if (this.tijdschemaTimeRangeToDurationMinutes(String(it.time || '')) != null) continue;
+                const m = this.tijdschemaItemFirstClockMinutes(it);
+                if (m == null) continue;
+                if (this.isPauseScheduleStopRow(it)) {
+                    if (startMin != null) {
+                        let diff = m - startMin;
+                        if (diff < 0) diff += 24 * 60;
+                        if (diff >= 1 && diff <= 240) return diff;
+                    }
+                    startMin = null;
+                    continue;
+                }
+                startMin = m;
+            }
+        }
+        return null;
+    }
+
+    /** Vroegste tijd in een Yesplan-blok (min over alle regels met tijd). */
+    getTijdschemaBlockEarliestMinutes(block) {
+        const items = block?.items || [];
+        let min = Infinity;
+        for (const it of items) {
+            const t = this.tijdschemaTimeStringToMinutes(it.time);
+            const normalized = this.normalizeShowDayMinutes(t);
+            if (normalized != null && normalized < min) min = normalized;
+        }
+        return Number.isFinite(min) ? min : null;
+    }
+
+    /**
+     * Yesplan-speelanker: start van voorstelling/concert/show (niet stop/einde).
+     * Veel schema's gebruiken "Concert (start)" i.p.v. "Voorstelling (start)".
+     */
+    isPerformanceAnchorScheduleRow(it) {
+        const desc = String(it?.description || '').trim().toLowerCase();
+        if (!desc) return false;
+        if (/\(\s*stop\s*\)/.test(desc)) return false;
+        if (/\b(einde|eind)\s+(voorstelling|concert|show)\b/.test(desc)) return false;
+        if (/\b(voorstelling|concert|show|musical|cabaret|voorstellin)\b/.test(desc)) {
+            if (/\(\s*start\s*\)/.test(desc)) return true;
+            if (/\bstart\b/.test(desc) && !/\b(voor|before)\b/.test(desc)) return true;
+            if (!/\(\s*stop\s*\)/.test(desc) && !/\bpauze\b/.test(desc)) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Regels die voor dagdeel-classificatie niet meetellen (aankomst/opbouw vóór de voorstelling).
+     * Voorstelling/pauze/einde tellen wél mee.
+     */
+    isPrepTijdschemaRowForSlotClassification(it) {
+        const d = String(it.description || '').toLowerCase();
+        if (this.isPerformanceAnchorScheduleRow(it)) return false;
+        if (/\b(pauze|einde|interval|tussenpauze)\b/.test(d)) return false;
+        return /\b(aankomst|opbouw|soundcheck|techniek|grime|kap|briefing|preek|kleed|garderobe|overstaan|huistechniek|aanwezig|besichtiging|repetitie)\b/.test(d);
+    }
+
+    /**
+     * Tijd waarop we het dagdeel bepalen: liefst de vroegste speelanker (voorstelling/concert start),
+     * anders vroegste niet-prep-regel (zodat 14:30 start niet als "ochtend" door 10:30 aankomst valt).
+     */
+    getTijdschemaBlockClassificationMinutes(block) {
+        const items = block?.items || [];
+        let performanceMin = Infinity;
+        let nonPrepMin = Infinity;
+        for (const it of items) {
+            const m = this.normalizeShowDayMinutes(this.tijdschemaTimeStringToMinutes(it.time));
+            if (m == null) continue;
+            if (this.isPerformanceAnchorScheduleRow(it) && m < performanceMin) performanceMin = m;
+            if (!this.isPrepTijdschemaRowForSlotClassification(it) && m < nonPrepMin) nonPrepMin = m;
+        }
+        if (Number.isFinite(performanceMin)) return performanceMin;
+        if (Number.isFinite(nonPrepMin)) return nonPrepMin;
+        return this.getTijdschemaBlockEarliestMinutes(block);
+    }
+
+    /**
+     * Dagdeel uit vroegste tijd in het schema: vóór 12:00 ochtend, 12:00–16:59 middag, vanaf 17:00 avond.
+     */
+    classifyDayPartFromMinutes(mins) {
+        mins = this.normalizeShowDayMinutes(mins);
+        if (mins == null) return 'middag';
+        if (mins >= 24 * 60) return 'avond';
+        const middagStart = 12 * 60;
+        const avondStart = 17 * 60;
+        if (mins < middagStart) return 'ochtend';
+        if (mins < avondStart) return 'middag';
+        return 'avond';
+    }
+
+    getTimerSlotLabel(slotId) {
+        const key = { ochtend: 'slotOchtend', middag: 'slotMiddag', avond: 'slotAvond', alledag: 'slotAlledag' }[slotId] || 'slotAlledag';
+        return this.t(`voorstellingTimer.${key}`);
+    }
+
+    /**
+     * Naam van de voorstelling voor de timer-kop: eerst detailcontext (home/zoeken), anders titels uit het geladen tijdschema.
+     */
+    getVoorstellingTimerEventDisplayName() {
+        const ctx = this.detailContext;
+        if (ctx && typeof ctx === 'object') {
+            const fromCtx = String(ctx.eventName || ctx.productionName || ctx.groupName || '').trim();
+            if (fromCtx) return fromCtx;
+        }
+        const data = this.tijdschemaScheduleData;
+        if (!Array.isArray(data) || !data.length) return '';
+        const titles = [];
+        const seen = new Set();
+        for (const block of data) {
+            const t = String(block?.eventTitle || '').trim();
+            if (!t) continue;
+            const k = t.toLowerCase();
+            if (seen.has(k)) continue;
+            seen.add(k);
+            titles.push(t);
+        }
+        if (titles.length === 0) return '';
+        if (titles.length === 1) return titles[0];
+        return titles.join(' · ');
+    }
+
+    updateVoorstellingTimerCardTitle() {
+        const part = document.getElementById('voorstellingTimerTitleEventPart');
+        const nameEl = document.getElementById('voorstellingTimerTitleEventName');
+        if (!part || !nameEl) return;
+        const name = this.getVoorstellingTimerEventDisplayName();
+        if (!name) {
+            part.hidden = true;
+            nameEl.textContent = '';
+            return;
+        }
+        nameEl.textContent = name;
+        part.hidden = false;
+    }
+
+    getVoorstellingTimerTimelineEntries() {
+        const sessions = Array.isArray(this._timerSessions) ? this._timerSessions : [];
+        const entries = [];
+        for (const { slotId, scheduleData } of sessions) {
+            const slotLabel = this.getTimerSlotLabel(slotId);
+            const pauseCount = this.countPauzesInSchedule(scheduleData);
+            const st = this.ensureVoorstellingSlotState(slotId);
+            const marks = st?.marks || {};
+            for (const [stepId, wallIso] of Object.entries(marks)) {
+                if (!wallIso) continue;
+                entries.push({
+                    type: 'mark',
+                    slotId,
+                    slotLabel,
+                    stepId,
+                    stepLabel: this.getVoorstellingTimerStepLabel(stepId, pauseCount, slotId),
+                    wallIso: String(wallIso)
+                });
+            }
+            const remarks = Array.isArray(st?.remarks) ? st.remarks : [];
+            for (const r of remarks) {
+                if (!r?.stepId || !r?.wallIso || !r?.text) continue;
+                entries.push({
+                    type: 'remark',
+                    slotId,
+                    slotLabel,
+                    stepId: r.stepId,
+                    stepLabel: this.getVoorstellingTimerStepLabel(r.stepId, pauseCount, slotId),
+                    wallIso: String(r.wallIso),
+                    text: String(r.text)
+                });
+            }
+        }
+        entries.sort((a, b) => {
+            const ta = Date.parse(a.wallIso || '') || 0;
+            const tb = Date.parse(b.wallIso || '') || 0;
+            if (ta !== tb) return ta - tb;
+            if (a.type === b.type) return 0;
+            return a.type === 'mark' ? -1 : 1;
+        });
+        return entries;
+    }
+
+    getVoorstellingTimerExportSummary(slotId) {
+        if (!slotId) return { acts: [], pauseTotalMs: null, totalWithPausesMs: null };
+        const sess = (this._timerSessions || []).find((s) => s.slotId === slotId);
+        const scheduleData = sess?.scheduleData || [];
+        const pauseCount = this.countPauzesInSchedule(scheduleData);
+        const steps = this.getVoorstellingTimerStepsForSlot(slotId, pauseCount);
+        const marks = this.ensureVoorstellingSlotState(slotId).marks || {};
+        const parseIso = (v) => {
+            const t = Date.parse(v || '');
+            return Number.isFinite(t) ? t : null;
         };
-        const sorted = [...scheduleData].sort((a, b) => {
-            const minA = Math.min(...(a.items || []).map((it) => timeToMinutes(it.time || it.description)));
-            const minB = Math.min(...(b.items || []).map((it) => timeToMinutes(it.time || it.description)));
-            return minA - minB;
+
+        const actStartDefs = [];
+        for (const id of steps) {
+            if (id === 'aanvang' || id === 'aanvang_tweede_deel' || /^aanvang_act_\d+$/.test(id)) {
+                const actNum = this.getActNumberFromTimerStepId(id);
+                actStartDefs.push({ id, actNum, startMs: parseIso(marks[id]) });
+            }
+        }
+
+        const acts = [];
+        for (const def of actStartDefs) {
+            if (def.startMs == null) continue;
+            const pauseId = def.actNum === 1 ? 'pauze' : `pauze_${def.actNum}`;
+            const nextActId = def.actNum === 1 ? 'aanvang_tweede_deel' : `aanvang_act_${def.actNum + 1}`;
+            const candidates = [parseIso(marks[pauseId]), parseIso(marks[nextActId]), parseIso(marks.einde)].filter(
+                (t) => t != null && t > def.startMs
+            );
+            if (!candidates.length) continue;
+            const endMs = Math.min(...candidates);
+            acts.push({ actNum: def.actNum, ms: Math.max(0, endMs - def.startMs) });
+        }
+
+        let pauseTotalMs = 0;
+        let hasPause = false;
+        const pauseSlots = Math.max(1, pauseCount || 0);
+        for (let i = 1; i <= pauseSlots; i++) {
+            const pauseId = i === 1 ? 'pauze' : `pauze_${i}`;
+            const resumeId = i === 1 ? 'aanvang_tweede_deel' : `aanvang_act_${i + 1}`;
+            const p0 = parseIso(marks[pauseId]);
+            const p1 = parseIso(marks[resumeId]);
+            if (p0 == null || p1 == null || p1 <= p0) continue;
+            hasPause = true;
+            pauseTotalMs += p1 - p0;
+        }
+
+        const startTotal = parseIso(marks.aanvang);
+        const endTotal = parseIso(marks.einde);
+        const totalWithPausesMs =
+            startTotal != null && endTotal != null && endTotal > startTotal ? endTotal - startTotal : null;
+
+        return {
+            acts: acts.sort((a, b) => a.actNum - b.actNum),
+            pauseTotalMs: hasPause ? pauseTotalMs : null,
+            totalWithPausesMs
+        };
+    }
+
+    extractClockMinutesFromText(text) {
+        const s = String(text || '');
+        const out = [];
+        const re = /(^|[^0-9])([01]?\d|2[0-3]):([0-5]\d)(?!\d)/g;
+        let m;
+        while ((m = re.exec(s)) !== null) {
+            const hh = parseInt(m[2], 10);
+            const mm = parseInt(m[3], 10);
+            out.push(hh * 60 + mm);
+        }
+        return out;
+    }
+
+    /**
+     * Theaterdag loopt vaak na middernacht door (bv. 00:30 afbouw).
+     * Die tijden behandelen we als "volgende blok" zodat ze ná avond komen.
+     */
+    normalizeShowDayMinutes(mins) {
+        if (mins == null || !Number.isFinite(mins)) return null;
+        const NIGHT_FOLLOW_THRESHOLD_MINUTES = 6 * 60;
+        return mins < NIGHT_FOLLOW_THRESHOLD_MINUTES ? mins + 24 * 60 : mins;
+    }
+
+    getVoorstellingTimerSlotWindowMinutes(slotId) {
+        const sess = (this._timerSessions || []).find((s) => s.slotId === slotId);
+        const times = [];
+        for (const block of sess?.scheduleData || []) {
+            for (const item of block.items || []) {
+                const t = String(item?.time || '');
+                if (t) times.push(...this.extractClockMinutesFromText(t));
+            }
+        }
+        if (times.length >= 2) {
+            const normalizedTimes = times
+                .map((m) => this.normalizeShowDayMinutes(m))
+                .filter((m) => m != null);
+            if (normalizedTimes.length >= 2) {
+            // Iets ruimer dan alleen schema-items; personeel start/stop vaak net buiten het schema.
+            const pad = 120;
+                return {
+                    start: Math.max(0, Math.min(...normalizedTimes) - pad),
+                    end: Math.min(48 * 60, Math.max(...normalizedTimes) + pad)
+                };
+            }
+        }
+        if (slotId === 'ochtend') return { start: 0, end: 12 * 60 };
+        if (slotId === 'middag') return { start: 12 * 60, end: 17 * 60 };
+        if (slotId === 'avond') return { start: 17 * 60, end: 24 * 60 };
+        return { start: 0, end: 24 * 60 };
+    }
+
+    getVoorstellingTimerExportContextInfo(slotId) {
+        const venueId = this.getPrimarySelectedVenueId();
+        const venueName = this.getVenueNameById(venueId) || this.t('venue.unknownVenue');
+        const uren = this.data?.uurwerk?.data || {};
+        const slotWindow = this.getVoorstellingTimerSlotWindowMinutes(slotId);
+
+        const parsePersonnelEntries = (arr) => {
+            const rows = [];
+            const seen = new Set();
+            for (const entry of arr || []) {
+                const s = String(entry || '').trim();
+                if (!s) continue;
+                if (s.toUpperCase().includes('VRIJWILLIGER') || s.toUpperCase().includes('VOLUNTEER')) continue;
+                const parts = s.split(/\s+[-–—]\s+/).map((p) => p.trim()).filter(Boolean);
+                let name = parts.length >= 2 ? parts[parts.length - 2] : s;
+                if (!/^[A-Za-z\u00C0-\u024F][A-Za-z\u00C0-\u024F'\- ]{1,60}$/.test(name)) name = s;
+                if (name.split(/\s+/).length > 8) continue;
+                const mins = this.extractClockMinutesFromText(s);
+                let start = null;
+                let end = null;
+                if (mins.length >= 2) {
+                    start = mins[0];
+                    end = mins[mins.length - 1];
+                    if (end < start) end += 24 * 60;
+                }
+                const key = `${name.toLowerCase()}|${start ?? ''}|${end ?? ''}`;
+                if (seen.has(key)) continue;
+                seen.add(key);
+                rows.push({ name, start, end });
+            }
+            return rows;
+        };
+
+        const pickForSlot = (arr) => {
+            const rows = parsePersonnelEntries(arr);
+            const picked = rows.filter((r) => {
+                if (r.start == null || r.end == null) return false;
+                const a0 = slotWindow.start;
+                const a1 = slotWindow.end;
+                const b0 = r.start;
+                const b1 = r.end;
+                return Math.max(a0, b0) < Math.min(a1, b1);
+            });
+            if (picked.length) return picked.map((r) => r.name);
+            // Fallback: geen overlap gevonden -> toon alle bekende namen i.p.v. leeg (ook mét tijd).
+            return rows.map((r) => r.name);
+        };
+
+        return {
+            venueName,
+            techCrew: pickForSlot(uren.techniek),
+            horecaCrew: pickForSlot(uren.horeca),
+            frontOfficeCrew: pickForSlot(uren.frontOffice)
+        };
+    }
+
+    updateVoorstellingTimerExportButtonState() {
+        const btn = document.getElementById('voorstellingTimerExportBtn');
+        if (!btn) return;
+        const hasEntries = this.getVoorstellingTimerTimelineEntries().length > 0;
+        btn.disabled = !hasEntries;
+    }
+
+    openVoorstellingTimerExportWindow() {
+        const rows = this.getVoorstellingTimerTimelineEntries();
+        if (!rows.length) {
+            this.showError('yesplan', this.t('voorstellingTimer.exportNoData'));
+            return;
+        }
+        const sessions = Array.isArray(this._timerSessions) ? this._timerSessions : [];
+        const locale = this.locale === 'en' ? 'en-GB' : 'nl-NL';
+        const date = this.selectedDate || new Date();
+        date.setHours(0, 0, 0, 0);
+        const dateLabel = date.toLocaleDateString(locale, {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        const printedAt = new Date().toLocaleString(locale, {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+            hourCycle: 'h23'
+        });
+        const escape = (s) => this.escapeHtml(String(s || ''));
+        const titleSuffix = this.getVoorstellingTimerEventDisplayName();
+        const title = titleSuffix
+            ? `${this.t('voorstellingTimer.exportHeading')} | ${titleSuffix}`
+            : this.t('voorstellingTimer.exportHeading');
+        const fallbackSlotId = sessions[0]?.slotId || null;
+        const groupedRows = new Map();
+        for (const row of rows) {
+            const sid = row.slotId || fallbackSlotId || 'alledag';
+            if (!groupedRows.has(sid)) groupedRows.set(sid, []);
+            groupedRows.get(sid).push(row);
+        }
+        const sectionOrder = sessions.length
+            ? sessions.map((s) => s.slotId).filter((sid) => groupedRows.has(sid))
+            : Array.from(groupedRows.keys());
+        const buildListHtml = (slotRows) =>
+            slotRows
+                .map((row) => {
+                const clock = this.formatVoorstellingMarkTime(row.wallIso);
+                if (row.type === 'remark') {
+                    return `<div class="timer-export-row timer-export-row--remark">
+                        <div class="timer-export-time">${escape(clock)}</div>
+                        <div class="timer-export-content">
+                            <div class="timer-export-line"><strong>${escape(this.t('voorstellingTimer.exportRemark'))}:</strong> ${escape(row.text)}</div>
+                            <div class="timer-export-meta">${escape(row.stepLabel)}</div>
+                        </div>
+                    </div>`;
+                }
+                return `<div class="timer-export-row">
+                    <div class="timer-export-time">${escape(clock)}</div>
+                    <div class="timer-export-content">
+                        <div class="timer-export-line"><strong>${escape(this.t('voorstellingTimer.exportStep'))}:</strong> ${escape(row.stepLabel)}</div>
+                    </div>
+                </div>`;
+            })
+            .join('');
+        const sectionsHtml = sectionOrder
+            .map((slotId, idx) => {
+                const slotRows = groupedRows.get(slotId) || [];
+                if (!slotRows.length) return '';
+                const summary = this.getVoorstellingTimerExportSummary(slotId);
+                const summaryItems = [];
+                summary.acts.forEach((a) => {
+                    const actLabel = this.locale === 'en' ? `Act ${a.actNum}` : `${this.getActOrdinalLabel(a.actNum)} acte`;
+                    summaryItems.push({
+                        label: actLabel,
+                        value: this.formatStopwatchMs(a.ms)
+                    });
+                });
+                if (summary.pauseTotalMs != null) {
+                    summaryItems.push({
+                        label: this.t('voorstellingTimer.exportPauseTotal'),
+                        value: this.formatStopwatchMs(summary.pauseTotalMs)
+                    });
+                }
+                if (summary.totalWithPausesMs != null) {
+                    summaryItems.push({
+                        label: this.t('voorstellingTimer.exportTotalWithPauses'),
+                        value: this.formatStopwatchMs(summary.totalWithPausesMs)
+                    });
+                }
+                const summaryHtml = summaryItems.length
+                    ? `<section class="timer-export-summary">
+                        <h2>${escape(this.t('voorstellingTimer.exportSubtotals'))}</h2>
+                        ${summaryItems
+                            .map(
+                                (it) =>
+                                    `<div class="timer-export-summary-row"><span>${escape(it.label)}</span><strong>${escape(it.value)}</strong></div>`
+                            )
+                            .join('')}
+                    </section>`
+                    : '';
+                const sessionTitle = escape(this.getTimerSlotLabel(slotId));
+                const pageClass = idx > 0 ? ' timer-export-page--new' : '';
+                const ctx = this.getVoorstellingTimerExportContextInfo(slotId);
+                const infoHtml = `<section class="timer-export-context">
+                    <div class="timer-export-context-row"><strong>${escape(this.t('voorstellingTimer.exportVenue'))}:</strong> <span>${escape(ctx.venueName)}</span></div>
+                    <div class="timer-export-context-row"><strong>${escape(this.t('voorstellingTimer.exportTechCrew'))}:</strong> <span>${escape(ctx.techCrew.length ? ctx.techCrew.join(', ') : '—')}</span></div>
+                    <div class="timer-export-context-row"><strong>${escape(this.t('voorstellingTimer.exportHorecaCrew'))}:</strong> <span>${escape(ctx.horecaCrew.length ? ctx.horecaCrew.join(', ') : '—')}</span></div>
+                    <div class="timer-export-context-row"><strong>${escape(this.t('voorstellingTimer.exportFrontOfficeCrew'))}:</strong> <span>${escape(ctx.frontOfficeCrew.length ? ctx.frontOfficeCrew.join(', ') : '—')}</span></div>
+                </section>`;
+                return `<section class="timer-export-page${pageClass}">
+                    <div class="timer-export-page-head">
+                        <h1>${escape(title)}</h1>
+                        <div class="sub">${escape(dateLabel)}</div>
+                    </div>
+                    <h2 class="timer-export-session-title">${sessionTitle}</h2>
+                    ${infoHtml}
+                    ${summaryHtml}
+                    ${buildListHtml(slotRows)}
+                </section>`;
+            })
+            .join('');
+        const printBtnLabel = this.locale === 'en' ? 'Print' : 'Printen';
+        const closeBtnLabel = this.locale === 'en' ? 'Close' : 'Sluiten';
+        const html = `<!DOCTYPE html><html lang="${this.locale}"><head><meta charset="UTF-8"><title>${escape(title)}</title>
+        <style>
+            @page { size: A4; margin: 14mm; }
+            body { font-family: Inter, sans-serif; color:#111; background:#fff; margin:0; }
+            .sheet { width: 100%; max-width: 190mm; margin: 0 auto; }
+            .head { border-bottom: 2px solid #111; padding-bottom: 8px; margin-bottom: 14px; }
+            .head h1 { margin:0 0 4px 0; font-size: 20px; }
+            .head .sub { color:#444; font-size: 13px; margin-top: 2px; }
+            .timer-export-page-head { border-bottom: 2px solid #111; padding-bottom: 8px; margin-bottom: 14px; display:none; }
+            .timer-export-page-head h1 { margin:0 0 4px 0; font-size: 20px; }
+            .timer-export-page-head .sub { color:#444; font-size: 13px; margin-top: 2px; }
+            .timer-export-page { margin-bottom: 14px; }
+            .timer-export-page--new { page-break-before: always; }
+            .timer-export-session-title { margin: 0 0 10px 0; font-size: 16px; }
+            .timer-export-context { border: 1px solid #e5e7eb; border-radius: 8px; padding: 8px 10px; margin: 0 0 10px 0; }
+            .timer-export-context-row { font-size: 12px; line-height: 1.35; margin: 2px 0; }
+            .timer-export-summary { border: 1px solid #d1d5db; border-radius: 8px; padding: 10px 12px; margin: 0 0 14px 0; }
+            .timer-export-summary h2 { margin:0 0 8px 0; font-size: 14px; }
+            .timer-export-summary-row { display:flex; justify-content: space-between; gap: 12px; padding: 2px 0; font-size: 13px; }
+            .timer-export-summary-row strong { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+            .actions { margin: 0 0 14px 0; display:flex; gap:10px; }
+            .actions button { padding: 8px 14px; border-radius: 7px; border: none; color: #fff; cursor: pointer; }
+            .actions .print { background: #4f46e5; }
+            .actions .close { background: #6b7280; }
+            .timer-export-row { display:grid; grid-template-columns: 78px 1fr; gap: 10px; border-bottom: 1px solid #e5e7eb; padding: 6px 0; }
+            .timer-export-row--remark { margin-left: 18px; border-left: 2px solid #c7d2fe; padding-left: 10px; }
+            .timer-export-time { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color:#1f2937; }
+            .timer-export-line { font-size: 13px; line-height: 1.4; }
+            .timer-export-meta { font-size: 11px; color:#6b7280; margin-top: 2px; }
+            .footer { margin-top: 14px; padding-top: 6px; border-top: 1px solid #d1d5db; font-size: 11px; color: #6b7280; text-align: right; }
+            @media print { .actions { display:none !important; } body { margin:0; } .footer { position: fixed; left: 0; right: 0; bottom: 0; border-top: none; } .timer-export-page-head { display:block; } .timer-export-page:first-of-type .timer-export-page-head { display:none; } }
+        </style></head><body>
+            <div class="sheet">
+                <div class="head">
+                    <h1>${escape(title)}</h1>
+                    <div class="sub">${escape(dateLabel)}</div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="print" onclick="window.print();">${escape(printBtnLabel)}</button>
+                    <button type="button" class="close" onclick="window.close();">${escape(closeBtnLabel)}</button>
+                </div>
+                ${sectionsHtml}
+                <div class="footer">${escape(this.t('voorstellingTimer.exportPrintedAt', { time: printedAt }))}</div>
+            </div>
+        </body></html>`;
+        const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+        const blobUrl = URL.createObjectURL(blob);
+        const printWin = window.open(blobUrl, '_blank', 'noopener,noreferrer');
+        URL.revokeObjectURL(blobUrl);
+        if (printWin) printWin.focus();
+    }
+
+    /**
+     * Verdeelt tijdschema-blokken in ochtend / middag / avond op basis van speeltijd (voorstelling),
+     * niet op vroege aankomst-/opbouwregels.
+     */
+    buildTimerDaySessions(scheduleData) {
+        if (!scheduleData?.length) return [];
+        const buckets = { ochtend: [], middag: [], avond: [] };
+        for (const block of scheduleData) {
+            if (!block.items?.length) continue;
+            let em = this.getTijdschemaBlockClassificationMinutes(block);
+            if (em == null) em = 14 * 60;
+            const part = this.classifyDayPartFromMinutes(em);
+            buckets[part].push(block);
+        }
+        const order = ['ochtend', 'middag', 'avond'];
+        const sessions = [];
+        for (const slotId of order) {
+            const blocks = buckets[slotId];
+            if (!blocks.length) continue;
+            blocks.sort(
+                (a, b) =>
+                    (this.getTijdschemaBlockClassificationMinutes(a) ?? 0) -
+                    (this.getTijdschemaBlockClassificationMinutes(b) ?? 0)
+            );
+            sessions.push({ slotId, scheduleData: blocks });
+        }
+        if (!sessions.length && scheduleData.length) {
+            return [{ slotId: 'alledag', scheduleData: [...scheduleData] }];
+        }
+        return sessions;
+    }
+
+    /**
+     * Zelfde zaal-id als bij klik op een event op home: eerst Yesplan-location, dan venueIds,
+     * altijd laten matchen met {@link #availableVenues} (vaak "org:locationId") zodat de zaalkiezer geen "Onbekende zaal" toont.
+     */
+    getCanonicalVenueId(rawId, orgHint = '') {
+        if (rawId === undefined || rawId === null) return null;
+        const s = String(rawId).trim();
+        if (!s) return null;
+        const venues = Array.isArray(this.availableVenues) ? this.availableVenues : [];
+        if (!venues.length) return s;
+        const exact = venues.find((v) => String(v.id) === s);
+        if (exact) return String(exact.id);
+        const org = String(orgHint || '').trim();
+        if (org && !s.includes(':')) {
+            const prefixed = `${org}:${s}`;
+            const hitPref = venues.find((v) => String(v.id) === prefixed);
+            if (hitPref) return String(hitPref.id);
+        }
+        const suffix = s.split(':').pop();
+        const bySuffix = venues.find((v) => String(v.id).split(':').pop() === suffix);
+        if (bySuffix) return String(bySuffix.id);
+        return s;
+    }
+
+    getEventVenueSelectionId(event) {
+        if (!event) return null;
+        const org =
+            event._organizationId !== undefined && event._organizationId !== null
+                ? String(event._organizationId).trim()
+                : '';
+
+        const loc0 = event.rawEvent?.locations?.[0];
+        if (loc0?.id != null) {
+            const id = this.getCanonicalVenueId(loc0.id, org);
+            if (id) return id;
+        }
+        if (Array.isArray(event.venueIds) && event.venueIds[0] != null) {
+            const id = this.getCanonicalVenueId(event.venueIds[0], org);
+            if (id) return id;
+        }
+        return null;
+    }
+
+    getEventCalendarDateString(event) {
+        if (!event?.startDate) return null;
+        const d = new Date(event.startDate);
+        if (Number.isNaN(d.getTime())) return null;
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${y}-${m}-${day}`;
+    }
+
+    buildDetailContextFromEvent(event) {
+        if (!event) return null;
+        const production = event.rawEvent?.production;
+        const productionId =
+            production && (production.id ?? production.uuid) != null ? String(production.id ?? production.uuid) : '';
+        const productionName =
+            production && typeof production === 'object'
+                ? production.name || production.title || ''
+                : typeof production === 'string'
+                  ? production
+                  : '';
+        const group = event.rawEvent?.group;
+        const groupId = group && (group.id ?? group.uuid) != null ? String(group.id ?? group.uuid) : '';
+        const groupName =
+            group && typeof group === 'object' ? group.name || group.title || '' : typeof group === 'string' ? group : '';
+        const eventNameVal = event.name || event.title || '';
+        const eventId = event.id != null ? String(event.id) : '';
+        return productionId || productionName || groupId || groupName || eventNameVal || eventId
+            ? { productionId, productionName, groupId, groupName, eventName: eventNameVal, eventId }
+            : null;
+    }
+
+    filterTimerPickerEventsList(rawList) {
+        const targetDay = this.getDateRange().start;
+        let events = (rawList || []).filter((ev) => this.getEventCalendarDateString(ev) === targetDay);
+        const seen = new Set();
+        events = events.filter((ev) => {
+            const id = ev.id != null ? String(ev.id) : `${this.getEventCalendarDateString(ev)}-${ev.title || ''}`;
+            if (seen.has(id)) return false;
+            seen.add(id);
+            return true;
+        });
+        if (this.hideCancelledEvents) {
+            events = events.filter((ev) => {
+                const status = ev.status?.toLowerCase() || '';
+                const statusName =
+                    typeof ev.status === 'object' && ev.status?.name ? ev.status.name.toLowerCase() : '';
+                const isCancelled =
+                    status.includes('geannuleerd') ||
+                    status.includes('cancelled') ||
+                    status.includes('canceled') ||
+                    statusName.includes('geannuleerd') ||
+                    statusName.includes('cancelled') ||
+                    statusName.includes('canceled');
+                return !isCancelled;
+            });
+        }
+        events.sort((a, b) => this.sortEventByDefault(a, b));
+        return events;
+    }
+
+    closeTimerPickPerformanceModal() {
+        const modal = document.getElementById('timerPickPerformanceModal');
+        if (modal) {
+            modal.classList.remove('show');
+            modal.setAttribute('aria-hidden', 'true');
+        }
+        if (this._timerPickEscHandler) {
+            document.removeEventListener('keydown', this._timerPickEscHandler);
+            this._timerPickEscHandler = null;
+        }
+    }
+
+    async openTimerPickPerformanceModal() {
+        if (!window.electronAPI?.getYesplanData) return;
+        const modal = document.getElementById('timerPickPerformanceModal');
+        const body = document.getElementById('timerPickPerformanceBody');
+        const heading = document.getElementById('timerPickPerformanceHeading');
+        if (!modal || !body) return;
+
+        this.closeTimerPickPerformanceModal();
+        const escHandler = (e) => {
+            if (e.key === 'Escape') this.closeTimerPickPerformanceModal();
+        };
+        this._timerPickEscHandler = escHandler;
+        document.addEventListener('keydown', escHandler);
+
+        if (heading) {
+            heading.innerHTML = `<i class="fas fa-stopwatch"></i> ${this.escapeHtml(this.t('voorstellingTimer.pickPerformanceHeading'))}`;
+        }
+        body.innerHTML = `<div class="timer-pick-performance-loading">${this.escapeHtml(this.t('voorstellingTimer.pickPerformanceLoading'))}</div>`;
+        modal.classList.add('show');
+        modal.setAttribute('aria-hidden', 'false');
+
+        const { start, end } = this.getDateRange();
+        try {
+            const result = await window.electronAPI.getYesplanData({
+                startDate: start,
+                endDate: end,
+                venueId: undefined,
+                skipCache: true
+            });
+            if (!result?.success || !Array.isArray(result.data)) {
+                body.innerHTML = `<div class="timer-pick-performance-empty">${this.escapeHtml(this.t('voorstellingTimer.pickPerformanceLoadError'))}</div>`;
+                return;
+            }
+            const events = this.filterTimerPickerEventsList(result.data);
+            if (events.length === 0) {
+                body.innerHTML = `<p class="timer-pick-performance-empty">${this.escapeHtml(this.t('voorstellingTimer.pickPerformanceEmpty'))}</p>`;
+                return;
+            }
+            const sub = this.escapeHtml(this.t('voorstellingTimer.pickPerformanceSub'));
+            const rows = events
+                .map((ev, idx) => {
+                    const title = this.escapeHtml(ev.title || ev.name || '—');
+                    let timeRange = '';
+                    if (ev.scheduleStartTime && ev.scheduleEndTime) {
+                        timeRange = `${this.escapeHtml(ev.scheduleStartTime)} – ${this.escapeHtml(ev.scheduleEndTime)}`;
+                    } else {
+                        const st = ev.startDate ? this.formatTime(ev.startDate) : '—';
+                        const en = ev.endDate ? this.formatTime(ev.endDate) : '—';
+                        timeRange = `${this.escapeHtml(st)} – ${this.escapeHtml(en)}`;
+                    }
+                    const venue = ev.venue && ev.venue !== 'Onbekend' ? this.escapeHtml(String(ev.venue)) : '';
+                    const metaParts = [timeRange, venue].filter(Boolean);
+                    const meta = metaParts.join(' · ');
+                    return `<button type="button" class="timer-pick-performance-item" data-timer-pick-index="${idx}">
+                        <p class="timer-pick-performance-item-title">${title}</p>
+                        <p class="timer-pick-performance-item-meta">${meta}</p>
+                    </button>`;
+                })
+                .join('');
+            body.innerHTML = `<p style="color:#94a3b8;font-size:0.88rem;margin:0 0 0.75rem 0;">${sub}</p><div class="timer-pick-performance-list">${rows}</div>`;
+            body.querySelectorAll('[data-timer-pick-index]').forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    const i = parseInt(btn.getAttribute('data-timer-pick-index'), 10);
+                    if (!Number.isNaN(i) && events[i]) void this.onTimerPerformancePicked(events[i]);
+                });
+            });
+        } catch (e) {
+            console.error(e);
+            body.innerHTML = `<div class="timer-pick-performance-empty">${this.escapeHtml(this.t('voorstellingTimer.pickPerformanceLoadError'))}</div>`;
+        }
+    }
+
+    async onTimerPerformancePicked(event) {
+        this.closeTimerPickPerformanceModal();
+        const venueId = this.getEventVenueSelectionId(event);
+        // Zelfde dag als de agenda (niet event.startDate → UTC/ISO); anders wijkt de timer-opslagsleutel af van een normale navigatie.
+        const dateStr = this.getDateRange().start;
+        if (!venueId) {
+            this.showError('yesplan', this.t('voorstellingTimer.pickPerformanceLoadError'));
+            return;
+        }
+        this.detailContext = this.buildDetailContextFromEvent(event);
+        await this.selectVenueAndDate(venueId, dateStr);
+        // Timer heeft detail-data nodig (incl. tijdschema), maar zonder zichtbare tussenstap naar detail view.
+        const originalView = this.currentView;
+        this.currentView = 'detail';
+        await this.loadAllData({ forceRefresh: true });
+        this.currentView = originalView;
+        this.refreshVoorstellingTimerChrome();
+        if (this.canOpenVoorstellingTimer()) {
+            await this.showVoorstellingTimerView();
+        } else {
+            this.showError('yesplan', this.t('voorstellingTimer.notAvailable'));
+        }
+    }
+
+    refreshVoorstellingTimerChrome() {
+        this.updateShowModeHeaderChrome();
+        this.updateVoorstellingTimerExportButtonState();
+        const btn = document.getElementById('voorstellingTimerBtn');
+        const card = document.getElementById('tijdschemaCard');
+        const open = this.canOpenVoorstellingTimer();
+        const showBtn = this.isShowModeEnabled();
+        if (btn) {
+            if (showBtn) {
+                btn.style.display = '';
+                btn.disabled = false;
+                if (open) {
+                    btn.title = this.t('nav.voorstellingTimer');
+                    btn.classList.remove('btn--muted');
+                } else {
+                    btn.title = this.t('voorstellingTimer.pickPerformanceHint');
+                    btn.classList.add('btn--muted');
+                }
+            } else {
+                btn.style.display = 'none';
+                btn.disabled = true;
+                btn.classList.remove('btn--muted');
+            }
+        }
+        if (card) {
+            if (open) {
+                card.classList.add('tijdschema-card--clickable');
+                card.title = this.t('nav.voorstellingTimer');
+            } else {
+                card.classList.remove('tijdschema-card--clickable');
+                card.removeAttribute('title');
+            }
+        }
+        if (this.currentView === 'voorstellingTimer' && !open) {
+            void this.showDetailView(false, false);
+        } else if (this.currentView === 'voorstellingTimer' && open) {
+            void this.renderVoorstellingTimerUI().catch(() => {});
+        }
+    }
+
+    hideVoorstellingTimerShell() {
+        if (this._voorstellingTimerEditingSlotId) {
+            this.cancelTimerColumnEdit();
+        }
+        this.stopVoorstellingTimerClockLoop();
+        const w = document.getElementById('voorstellingTimerWrapper');
+        if (w) w.style.display = 'none';
+        document.getElementById('voorstellingTimerBtn')?.classList.remove('active');
+        document.body.classList.remove('voorstelling-timer-active');
+    }
+
+    hideLuminexShell() {
+        const w = document.getElementById('luminexViewWrapper');
+        if (w) w.style.display = 'none';
+        document.getElementById('luminexNavBtn')?.classList.remove('active');
+        document.body.classList.remove('luminex-view-active');
+    }
+
+    hideOscMonitorShell() {
+        const w = document.getElementById('oscMonitorWrapper');
+        if (w) w.style.display = 'none';
+        document.getElementById('oscMonitorNavBtn')?.classList.remove('active');
+        document.body.classList.remove('osc-monitor-active');
+    }
+
+    hideTrekkenlijstenShell() {
+        this.stopTrekkenlijstSyncPoll();
+        const w = document.getElementById('trekkenlijstenWrapper');
+        if (w) w.style.display = 'none';
+        document.getElementById('trekkenlijstenNavBtn')?.classList.remove('active');
+        document.body.classList.remove('trekkenlijsten-active');
+    }
+
+    isDefaultTrekkenlijstVenue(venueId, venueName) {
+        const name = String(venueName || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        const code = String(venueName || venueId || '').toUpperCase().split(/[,\s(]/)[0].trim();
+        return name.includes('payzaal') || name === 'pay' || /\bpay\b/.test(name) || code === 'WTPY';
+    }
+
+    getVenueOrderIndex(venueName) {
+        const savedOrder = this.getVenueOrder();
+        const u = String(venueName || '').toUpperCase();
+        let idx = savedOrder.findIndex((o) => u === o);
+        if (idx !== -1) return idx;
+        for (const o of [...savedOrder].sort((x, y) => y.length - x.length)) {
+            if (u.startsWith(o)) return savedOrder.indexOf(o);
+        }
+        return Number.MAX_SAFE_INTEGER;
+    }
+
+    findTrekkenlijstVenues() {
+        const venues = Array.isArray(this.availableVenues) ? this.availableVenues : [];
+        if (!venues.length) return [];
+
+        const saved = this.config?.app?.venueResourceOptions || {};
+        const hasExplicit = venues.some((v) => typeof saved[String(v.id)]?.trekkenlijsten === 'boolean');
+        let marked = venues.filter((v) => saved[String(v.id)]?.trekkenlijsten === true);
+
+        if (!marked.length && !hasExplicit) {
+            // Migratie: eerder opgeslagen als trekkenlijstVenueId / trekkenlijstVenueIds
+            const ids = Array.isArray(this.config?.app?.trekkenlijstVenueIds)
+                ? this.config.app.trekkenlijstVenueIds.map((id) => String(id))
+                : [];
+            const legacyId = String(this.config?.app?.trekkenlijstVenueId || '').trim();
+            if (legacyId && !ids.includes(legacyId)) ids.push(legacyId);
+            if (ids.length) {
+                marked = venues.filter((v) => ids.includes(String(v.id)));
+            }
+        }
+
+        if (!marked.length && !hasExplicit) {
+            // Fallback voor bestaande installaties: Payzaal / WTPY
+            marked = venues.filter((v) => this.isDefaultTrekkenlijstVenue(v.id, v.name));
+        }
+
+        marked.sort((a, b) => this.getVenueOrderIndex(a.name) - this.getVenueOrderIndex(b.name)
+            || String(a.name || '').localeCompare(String(b.name || '')));
+        return marked;
+    }
+
+    findTrekkenlijstVenue() {
+        return this.findTrekkenlijstVenues()[0] || null;
+    }
+
+    getTrekkenlijstVenueLabel(venues) {
+        const list = Array.isArray(venues) ? venues.filter(Boolean) : (venues ? [venues] : []);
+        if (!list.length) return '—';
+        return list
+            .map((v) => this.getVenueDisplayName(v) || v.name || v.shortName || String(v.id || '—'))
+            .join(', ');
+    }
+
+    /** @deprecated */
+    findPayzaalVenue() {
+        return this.findTrekkenlijstVenue();
+    }
+
+    isTrekkenlijstEvent(event) {
+        if (Array.isArray(event?.trekkenlijstDocuments) && event.trekkenlijstDocuments.length > 0) return true;
+        if (event?.hasTrekkenlijst === true) return true;
+        return false;
+    }
+
+    trekkenlijstDocLabel(doc) {
+        if (!doc?.url) return doc?.name || '';
+        const urlParts = String(doc.url).split('/');
+        const fileName = urlParts[urlParts.length - 1] || doc.name || 'Document';
+        const decoded = decodeURIComponent(fileName).replace(/%20/g, ' ');
+        return decoded.endsWith('.pdf') ? decoded.slice(0, -4) : decoded;
+    }
+
+    formatTrekkenlijstDate(value) {
+        if (!value) return '—';
+        const d = value instanceof Date ? value : new Date(value);
+        if (Number.isNaN(d.getTime())) {
+            const s = String(value);
+            // Yesplan date: dd-mm-yyyy
+            const m = s.match(/^(\d{2})-(\d{2})-(\d{4})/);
+            if (m) return `${m[1]}-${m[2]}-${m[3]}`;
+            return s;
+        }
+        const locale = this.locale === 'en' ? 'en-GB' : 'nl-NL';
+        return d.toLocaleDateString(locale, { day: '2-digit', month: '2-digit', year: 'numeric' });
+    }
+
+    formatTrekkenlijstTime(event) {
+        const raw =
+            event?.startTime ||
+            event?.time ||
+            event?.start ||
+            (typeof event?.startDate === 'string' && event.startDate.includes('T') ? event.startDate : null);
+        if (!raw) return '—';
+        if (typeof raw === 'string' && /^\d{1,2}:\d{2}/.test(raw)) return raw.slice(0, 5);
+        const d = new Date(raw);
+        if (Number.isNaN(d.getTime())) return '—';
+        const locale = this.locale === 'en' ? 'en-GB' : 'nl-NL';
+        return d.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit', hour12: false });
+    }
+
+    renderTrekkenlijstenList() {
+        const list = document.getElementById('trekkenlijstenList');
+        const meta = document.getElementById('trekkenlijstenMeta');
+        if (!list || !meta) return;
+
+        if (this._trekkenlijstenLoading) {
+            meta.textContent = this.t('trekkenlijsten.loading');
+            list.innerHTML = `<div class="trekkenlijsten-empty">${this.escapeHtml(this.t('trekkenlijsten.loading'))}</div>`;
+            return;
+        }
+
+        const items = Array.isArray(this._trekkenlijstenItems) ? this._trekkenlijstenItems : [];
+        const syncOn = this.isTrekkenlijstSyncEnabled();
+        const venueLabel = this.getTrekkenlijstVenueLabel(this._trekkenlijstVenues);
+        if (!items.length) {
+            meta.textContent = this.t('trekkenlijsten.empty', { venue: venueLabel });
+            list.innerHTML = `<div class="trekkenlijsten-empty">${this.escapeHtml(this.t('trekkenlijsten.empty'))}</div>`;
+            return;
+        }
+
+        meta.textContent = syncOn
+            ? this.t('trekkenlijsten.metaCount', { n: items.length })
+            : `${this.t('trekkenlijsten.metaCount', { n: items.length })} · ${this.t('trekkenlijsten.syncLoginHint')}`;
+
+        list.innerHTML = items.map((item) => {
+            const docHtml = item.docUrl
+                ? `<a href="#" class="rider-link trekkenlijsten-entry-doc" data-rider-url="${this.escapeHtml(String(item.docUrl))}" title="${this.escapeHtml(item.docLabel || '')}">` +
+                  `<i class="fas fa-file-pdf" aria-hidden="true"></i> ${this.escapeHtml(item.docLabel || 'PDF')}` +
+                  `</a>`
+                : '';
+            const disabledAttr = syncOn ? '' : ' disabled';
+            const commentVal = this.escapeHtml(item.comment || '');
+            return (
+                `<div class="trekkenlijsten-entry${item.verwerkt ? ' trekkenlijsten-entry--done' : ''}" role="listitem" data-sync-key="${this.escapeHtml(String(item.syncKey || ''))}">` +
+                `<div class="trekkenlijsten-entry-main">` +
+                `<span class="trekkenlijsten-entry-date">${this.escapeHtml(item.dateLabel)}</span>` +
+                `<span class="trekkenlijsten-entry-time">${this.escapeHtml(item.timeLabel)}</span>` +
+                `<span class="trekkenlijsten-entry-title">${this.escapeHtml(item.title)}` +
+                (item.venueLabel && (this._trekkenlijstVenues || []).length > 1
+                    ? ` <span class="trekkenlijsten-entry-venue">${this.escapeHtml(item.venueLabel)}</span>`
+                    : '') +
+                `</span>` +
+                (docHtml ? `<span class="trekkenlijsten-entry-doc-wrap">${docHtml}</span>` : '') +
+                `</div>` +
+                `<div class="trekkenlijsten-entry-actions">` +
+                `<label class="trekkenlijsten-verwerkt-label">` +
+                `<input type="checkbox" class="trekkenlijsten-verwerkt-cb" data-sync-key="${this.escapeHtml(String(item.syncKey || ''))}"${item.verwerkt ? ' checked' : ''}${disabledAttr}>` +
+                `<span>${this.escapeHtml(this.t('trekkenlijsten.verwerkt'))}</span>` +
+                `</label>` +
+                `<textarea class="trekkenlijsten-comment-input" rows="2" data-sync-key="${this.escapeHtml(String(item.syncKey || ''))}" placeholder="${this.escapeHtml(this.t('trekkenlijsten.commentPlaceholder'))}"${disabledAttr}>${commentVal}</textarea>` +
+                `</div>` +
+                `</div>`
+            );
+        }).join('');
+        this.setupRiderLinkHandlers(list);
+        this.setupTrekkenlijstenListHandlers(list);
+    }
+
+    async loadTrekkenlijsten(opts = {}) {
+        const forceRefresh = !!(opts && opts.forceRefresh);
+        if (!window.electronAPI?.getYesplanData) {
+            this._trekkenlijstenItems = [];
+            this.renderTrekkenlijstenList();
+            return;
+        }
+        this._trekkenlijstenLoading = true;
+        this.renderTrekkenlijstenList();
+
+        try {
+            const trekVenues = this.findTrekkenlijstVenues();
+            this._trekkenlijstVenues = trekVenues;
+            this._trekkenlijstVenue = trekVenues[0] || null;
+            if (!trekVenues.length) {
+                this._trekkenlijstenItems = [];
+                this._trekkenlijstenLoading = false;
+                const meta = document.getElementById('trekkenlijstenMeta');
+                const list = document.getElementById('trekkenlijstenList');
+                if (meta) meta.textContent = this.t('trekkenlijsten.venueMissing');
+                if (list) {
+                    list.innerHTML = `<div class="trekkenlijsten-empty">${this.escapeHtml(this.t('trekkenlijsten.venueMissing'))}</div>`;
+                }
+                return;
+            }
+
+            const start = new Date();
+            start.setHours(0, 0, 0, 0);
+            const end = new Date(start);
+            end.setDate(end.getDate() + 120);
+            const toYmd = (d) => {
+                const y = d.getFullYear();
+                const m = String(d.getMonth() + 1).padStart(2, '0');
+                const day = String(d.getDate()).padStart(2, '0');
+                return `${y}-${m}-${day}`;
+            };
+            const range = {
+                startDate: toYmd(start),
+                endDate: toYmd(end),
+                skipCache: forceRefresh
+            };
+
+            const results = await Promise.all(
+                trekVenues.map((venue) => window.electronAPI.getYesplanData({
+                    ...range,
+                    venueId: String(venue.id)
+                }))
+            );
+
+            const venueById = new Map(trekVenues.map((v) => [String(v.id), v]));
+            const events = [];
+            let firstError = null;
+            for (const result of results) {
+                if (result && result.success === false && !firstError) {
+                    firstError = result.error || '?';
+                }
+                if (Array.isArray(result?.data)) events.push(...result.data);
+            }
+
+            const now = Date.now();
+            const seen = new Set();
+            const mapped = events
+                .filter((e) => this.isTrekkenlijstEvent(e))
+                .map((e) => {
+                    const startRaw = e.startDate || e.date || e.start || null;
+                    const startTs = startRaw ? new Date(startRaw).getTime() : NaN;
+                    const docs = Array.isArray(e.trekkenlijstDocuments) ? e.trekkenlijstDocuments : [];
+                    const firstDoc = docs[0] || null;
+                    const orgId = e._organizationId || 1;
+                    const syncKey = `${orgId}:${e.id}`;
+                    const venueIds = Array.isArray(e.venueIds) ? e.venueIds.map(String) : [];
+                    const matchedVenue = venueIds
+                        .map((vid) => venueById.get(vid))
+                        .find(Boolean)
+                        || trekVenues[0]
+                        || null;
+                    return {
+                        id: e.id,
+                        orgId,
+                        syncKey,
+                        venueId: matchedVenue ? String(matchedVenue.id) : null,
+                        venueLabel: matchedVenue ? this.getTrekkenlijstVenueLabel([matchedVenue]) : '',
+                        title: e.title || e.name || e.productionName || e.performer || '—',
+                        dateLabel: this.formatTrekkenlijstDate(startRaw),
+                        timeLabel: this.formatTrekkenlijstTime(e),
+                        eventDateRaw: startRaw ? String(startRaw).slice(0, 10) : null,
+                        docUrl: firstDoc?.url || null,
+                        docLabel: firstDoc ? this.trekkenlijstDocLabel(firstDoc) : '',
+                        verwerkt: false,
+                        comment: '',
+                        syncUpdatedAt: null,
+                        sortTs: Number.isFinite(startTs) ? startTs : Number.MAX_SAFE_INTEGER
+                    };
+                })
+                .filter((item) => {
+                    if (item.sortTs < now - (6 * 60 * 60 * 1000)) return false;
+                    if (seen.has(item.syncKey)) return false;
+                    seen.add(item.syncKey);
+                    return true;
+                })
+                .sort((a, b) => a.sortTs - b.sortTs)
+                .slice(0, 20);
+
+            this._trekkenlijstenItems = mapped;
+            await this.refreshTrekkenlijstSyncFromServer(true);
+            if (firstError) {
+                const meta = document.getElementById('trekkenlijstenMeta');
+                if (meta) meta.textContent = this.t('trekkenlijsten.loadError', { msg: firstError });
+            }
+        } catch (e) {
+            this._trekkenlijstenItems = [];
+            const meta = document.getElementById('trekkenlijstenMeta');
+            if (meta) meta.textContent = this.t('trekkenlijsten.loadError', { msg: e.message || String(e) });
+        } finally {
+            this._trekkenlijstenLoading = false;
+            this.renderTrekkenlijstenList();
+        }
+    }
+
+    async showTrekkenlijstenView() {
+        if (!this.isShowModeEnabled()) return;
+        if (this.currentView === 'trekkenlijsten') {
+            await this.showHomeView(false);
+            return;
+        }
+        this.pushHistorySnapshotIfNeeded('trekkenlijsten');
+        this.previousView = this.currentView;
+        this.currentView = 'trekkenlijsten';
+        this.hideVoorstellingTimerShell();
+        this.hideLuminexShell();
+        this.hideOscMonitorShell();
+
+        const weekWrapper = document.getElementById('weekViewWrapper');
+        const homeContainer = document.getElementById('homeViewContainer');
+        const detailWrapper = document.getElementById('detailViewWrapper');
+        const timerWrapper = document.getElementById('voorstellingTimerWrapper');
+        const luminexWrapper = document.getElementById('luminexViewWrapper');
+        const oscWrapper = document.getElementById('oscMonitorWrapper');
+        const trekWrapper = document.getElementById('trekkenlijstenWrapper');
+        const homeStatus = document.getElementById('homeViewStatus');
+        if (weekWrapper) weekWrapper.style.display = 'none';
+        if (homeContainer) homeContainer.style.display = 'none';
+        if (detailWrapper) detailWrapper.style.display = 'none';
+        if (timerWrapper) timerWrapper.style.display = 'none';
+        if (luminexWrapper) luminexWrapper.style.display = 'none';
+        if (oscWrapper) oscWrapper.style.display = 'none';
+        if (trekWrapper) trekWrapper.style.display = 'block';
+        if (homeStatus) homeStatus.style.display = 'none';
+
+        document.getElementById('weekBtn')?.classList.remove('active');
+        document.getElementById('homeBtn')?.classList.remove('active');
+        document.getElementById('voorstellingTimerBtn')?.classList.remove('active');
+        document.getElementById('luminexNavBtn')?.classList.remove('active');
+        document.getElementById('oscMonitorNavBtn')?.classList.remove('active');
+        document.getElementById('trekkenlijstenNavBtn')?.classList.add('active');
+
+        document.body.classList.remove('home-view-active');
+        document.body.classList.remove('week-view-active');
+        document.body.classList.remove('voorstelling-timer-active');
+        document.body.classList.remove('luminex-view-active');
+        document.body.classList.remove('osc-monitor-active');
+        document.body.classList.add('trekkenlijsten-active');
+
+        const techOverviewBtn = document.getElementById('techOverviewBtn');
+        if (techOverviewBtn) techOverviewBtn.style.display = 'none';
+
+        const dateSelector = document.querySelector('.date-selector');
+        const venueSelector = document.querySelector('.venue-selector');
+        if (dateSelector) dateSelector.style.display = 'none';
+        if (venueSelector) venueSelector.style.display = 'none';
+
+        this.updateBackButtonVisibility();
+        await this.loadTrekkenlijsten();
+        this.startTrekkenlijstSyncPoll();
+    }
+
+    addOscMonitorEntry(payload) {
+        const now = new Date();
+        const locale = this.locale === 'en' ? 'en-GB' : 'nl-NL';
+        const stamp = now.toLocaleTimeString(locale, { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const slotId = String(payload?.slotId || 'onbekend').trim() || 'onbekend';
+        const stepId = String(payload?.stepId || 'onbekend').trim() || 'onbekend';
+        this._oscMonitorEntries.unshift({ stamp, slotId, stepId });
+        if (this._oscMonitorEntries.length > this._oscMonitorMaxEntries) {
+            this._oscMonitorEntries.length = this._oscMonitorMaxEntries;
+        }
+        if (this.currentView === 'oscMonitor') this.renderOscMonitorEntries();
+    }
+
+    renderOscMonitorEntries() {
+        const list = document.getElementById('oscMonitorList');
+        const meta = document.getElementById('oscMonitorMeta');
+        if (!list || !meta) return;
+        if (!this._oscMonitorEntries.length) {
+            list.innerHTML = '<div class="osc-monitor-empty">Nog geen OSC timer-triggers ontvangen.</div>';
+            this.updateOscMonitorListenMeta();
+            return;
+        }
+        list.innerHTML = this._oscMonitorEntries.map((entry) => (
+            `<div class="osc-monitor-entry">` +
+            `<span class="osc-monitor-entry-time">${this.escapeHtml(entry.stamp)}</span>` +
+            `<span class="osc-monitor-entry-slot">${this.escapeHtml(entry.slotId)}</span>` +
+            `<span class="osc-monitor-entry-step">${this.escapeHtml(entry.stepId)}</span>` +
+            `</div>`
+        )).join('');
+        this.updateOscMonitorListenMeta();
+    }
+
+    getOscMonitorListenHost() {
+        const routing = this.config?.app?.networkRouting || {};
+        const iface = String(routing.oscInterface || 'auto').trim();
+        if (iface && iface !== 'auto') return iface;
+        return '127.0.0.1';
+    }
+
+    updateOscMonitorListenMeta() {
+        const meta = document.getElementById('oscMonitorMeta');
+        if (!meta) return;
+        const listen = `udp://${this.getOscMonitorListenHost()}:3955`;
+        const count = this._oscMonitorEntries.length;
+        if (!count) {
+            meta.textContent = `Luistert op ${listen} · wachten op berichten…`;
+            return;
+        }
+        meta.textContent = `${count} bericht(en) · ${listen} · nieuwste bovenaan`;
+    }
+
+    async saveOscMonitorNetworkInterface(selected) {
+        if (!window.electronAPI?.getConfig || !window.electronAPI?.saveConfig) return;
+        const value = String(selected || 'auto').trim() || 'auto';
+        try {
+            const appCfg = await window.electronAPI.getConfig('app') || {};
+            const networkRouting = {
+                ...(appCfg.networkRouting || {}),
+                ...(this.config.app?.networkRouting || {}),
+                oscInterface: value
+            };
+            const result = await window.electronAPI.saveConfig('app', { ...appCfg, networkRouting });
+            if (!result?.success) return;
+            this.config.app = { ...(this.config.app || {}), networkRouting };
+            const settingsSel = document.getElementById('networkOscInterface');
+            if (settingsSel) {
+                settingsSel.value = value;
+                if (![...settingsSel.options].some((o) => o.value === value)) settingsSel.value = 'auto';
+            }
+            this.updateOscMonitorListenMeta();
+        } catch (_) {
+            /* ignore */
+        }
+    }
+
+    syncOscMonitorInterfaceSelect() {
+        const sel = document.getElementById('oscMonitorInterface');
+        if (!sel) return;
+        const value = String(this.config?.app?.networkRouting?.oscInterface || 'auto').trim() || 'auto';
+        if ([...sel.options].some((o) => o.value === value)) sel.value = value;
+        else sel.value = 'auto';
+        const wrap = document.querySelector('.osc-monitor-iface-wrap');
+        if (wrap) wrap.hidden = typeof window.electronAPI?.getNetworkInterfaces !== 'function';
+    }
+
+    refreshLuminexChrome() {
+        const lumNav = document.getElementById('luminexNavBtn');
+        if (lumNav) lumNav.title = this.t('nav.luminex');
+    }
+
+    _resizeLuminexViewerFrame() {
+        const wrap = document.getElementById('luminexViewWrapper');
+        const frame = document.getElementById('luminexViewerFrame');
+        if (!wrap || !frame || wrap.style.display === 'none') return;
+        const inner = wrap.closest('.main-workspace-inner') || wrap.parentElement;
+        const main = document.querySelector('.main-content');
+        const wrapTop = wrap.getBoundingClientRect().top;
+        const bottomEdge = (inner || main || document.body).getBoundingClientRect().bottom;
+        const availableH = Math.floor(bottomEdge - wrapTop);
+        const w = Math.max(320, Math.floor(wrap.clientWidth || wrap.getBoundingClientRect().width));
+        const h = Math.max(480, availableH);
+        frame.style.width = `${w}px`;
+        frame.style.height = `${h}px`;
+    }
+
+    async ensureLuminexViewerFrame() {
+        const frame = document.getElementById('luminexViewerFrame');
+        const errEl = document.getElementById('luminexViewerError');
+        if (!frame || !window.electronAPI?.ensureLuminexViewer) return;
+        try {
+            const result = await window.electronAPI.ensureLuminexViewer();
+            if (!result?.success || !result.url) {
+                if (errEl) {
+                    errEl.hidden = false;
+                    errEl.textContent = result?.error || 'Lichtsignaal viewer kon niet starten.';
+                }
+                return;
+            }
+            if (errEl) {
+                errEl.hidden = true;
+                errEl.textContent = '';
+            }
+            const current = frame.getAttribute('src') || '';
+            if (current !== result.url) {
+                frame.setAttribute('src', result.url);
+            }
+            if (!frame.dataset.boundResize) {
+                frame.dataset.boundResize = '1';
+                frame.addEventListener('dom-ready', () => this._resizeLuminexViewerFrame());
+            }
+            requestAnimationFrame(() => this._resizeLuminexViewerFrame());
+            if (!this._luminexViewerResizeBound) {
+                this._luminexViewerResizeBound = true;
+                window.addEventListener('resize', () => this._resizeLuminexViewerFrame());
+            }
+        } catch (err) {
+            console.error('Luminex viewer laden mislukt:', err);
+            if (errEl) {
+                errEl.hidden = false;
+                errEl.textContent = err?.message || String(err);
+            }
+        }
+    }
+
+    async showLuminexView() {
+        if (this.currentView === 'luminex') {
+            await this.showHomeView(false);
+            return;
+        }
+        this.pushHistorySnapshotIfNeeded('luminex');
+        this.previousView = this.currentView;
+        this.currentView = 'luminex';
+        this.hideVoorstellingTimerShell();
+        this.hideOscMonitorShell();
+        this.hideTrekkenlijstenShell();
+
+        const weekWrapper = document.getElementById('weekViewWrapper');
+        const homeContainer = document.getElementById('homeViewContainer');
+        const detailWrapper = document.getElementById('detailViewWrapper');
+        const luminexWrapper = document.getElementById('luminexViewWrapper');
+        const homeStatus = document.getElementById('homeViewStatus');
+        if (weekWrapper) weekWrapper.style.display = 'none';
+        if (homeContainer) homeContainer.style.display = 'none';
+        if (detailWrapper) detailWrapper.style.display = 'none';
+        if (luminexWrapper) luminexWrapper.style.display = 'flex';
+        if (homeStatus) homeStatus.style.display = 'none';
+
+        document.getElementById('weekBtn')?.classList.remove('active');
+        document.getElementById('homeBtn')?.classList.remove('active');
+        document.getElementById('voorstellingTimerBtn')?.classList.remove('active');
+        document.getElementById('trekkenlijstenNavBtn')?.classList.remove('active');
+        document.getElementById('oscMonitorNavBtn')?.classList.remove('active');
+        document.getElementById('luminexNavBtn')?.classList.add('active');
+
+        document.body.classList.remove('home-view-active');
+        document.body.classList.remove('week-view-active');
+        document.body.classList.remove('voorstelling-timer-active');
+        document.body.classList.remove('trekkenlijsten-active');
+        document.body.classList.remove('osc-monitor-active');
+        document.body.classList.add('luminex-view-active');
+
+        const techOverviewBtn = document.getElementById('techOverviewBtn');
+        if (techOverviewBtn) techOverviewBtn.style.display = 'none';
+
+        const dateSelector = document.querySelector('.date-selector');
+        const venueSelector = document.querySelector('.venue-selector');
+        if (dateSelector) dateSelector.style.display = 'none';
+        if (venueSelector) venueSelector.style.display = 'none';
+
+        await this.ensureLuminexViewerFrame();
+        this.refreshLuminexChrome();
+        this.updateBackButtonVisibility();
+        requestAnimationFrame(() => {
+            this._resizeLuminexViewerFrame();
+            requestAnimationFrame(() => this._resizeLuminexViewerFrame());
+        });
+    }
+
+    async showOscMonitorView() {
+        if (!this.isShowModeEnabled()) return;
+        if (this.currentView === 'oscMonitor') {
+            await this.showHomeView(false);
+            return;
+        }
+        this.pushHistorySnapshotIfNeeded('oscMonitor');
+        this.previousView = this.currentView;
+        this.currentView = 'oscMonitor';
+        this.hideVoorstellingTimerShell();
+        this.hideLuminexShell();
+        this.hideTrekkenlijstenShell();
+
+        const weekWrapper = document.getElementById('weekViewWrapper');
+        const homeContainer = document.getElementById('homeViewContainer');
+        const detailWrapper = document.getElementById('detailViewWrapper');
+        const timerWrapper = document.getElementById('voorstellingTimerWrapper');
+        const luminexWrapper = document.getElementById('luminexViewWrapper');
+        const trekWrapper = document.getElementById('trekkenlijstenWrapper');
+        const oscWrapper = document.getElementById('oscMonitorWrapper');
+        const homeStatus = document.getElementById('homeViewStatus');
+        if (weekWrapper) weekWrapper.style.display = 'none';
+        if (homeContainer) homeContainer.style.display = 'none';
+        if (detailWrapper) detailWrapper.style.display = 'none';
+        if (timerWrapper) timerWrapper.style.display = 'none';
+        if (luminexWrapper) luminexWrapper.style.display = 'none';
+        if (trekWrapper) trekWrapper.style.display = 'none';
+        if (oscWrapper) oscWrapper.style.display = 'block';
+        if (homeStatus) homeStatus.style.display = 'none';
+
+        document.getElementById('weekBtn')?.classList.remove('active');
+        document.getElementById('homeBtn')?.classList.remove('active');
+        document.getElementById('voorstellingTimerBtn')?.classList.remove('active');
+        document.getElementById('luminexNavBtn')?.classList.remove('active');
+        document.getElementById('trekkenlijstenNavBtn')?.classList.remove('active');
+        document.getElementById('oscMonitorNavBtn')?.classList.add('active');
+
+        document.body.classList.remove('home-view-active');
+        document.body.classList.remove('week-view-active');
+        document.body.classList.remove('voorstelling-timer-active');
+        document.body.classList.remove('luminex-view-active');
+        document.body.classList.remove('trekkenlijsten-active');
+        document.body.classList.add('osc-monitor-active');
+
+        const techOverviewBtn = document.getElementById('techOverviewBtn');
+        if (techOverviewBtn) techOverviewBtn.style.display = 'none';
+
+        const dateSelector = document.querySelector('.date-selector');
+        const venueSelector = document.querySelector('.venue-selector');
+        if (dateSelector) dateSelector.style.display = 'none';
+        if (venueSelector) venueSelector.style.display = 'none';
+
+        await this.refreshNetworkInterfaceOptions();
+        this.syncOscMonitorInterfaceSelect();
+        this.renderOscMonitorEntries();
+        this.updateBackButtonVisibility();
+    }
+
+    stopVoorstellingTimerClockLoop() {
+        if (this._voorstellingTimerClockInterval) {
+            clearInterval(this._voorstellingTimerClockInterval);
+            this._voorstellingTimerClockInterval = null;
+        }
+        this.stopVoorstellingTimerSyncPoll();
+    }
+
+    createEmptyVoorstellingSlotState() {
+        return {
+            running: false,
+            accumulatedMs: 0,
+            runStartedAt: null,
+            marks: Object.create(null),
+            markElapsedMs: Object.create(null),
+            remarks: [],
+            pauseDurationMinutes: 20,
+            pauseCountdownEndAt: null,
+            customStepOrder: null,
+            customLabels: Object.create(null)
+        };
+    }
+
+    isUnsafeObjectKey(value) {
+        const key = String(value || '').trim();
+        return key === '__proto__' || key === 'prototype' || key === 'constructor';
+    }
+
+    ensureVoorstellingSlotState(slotId) {
+        if (this.isUnsafeObjectKey(slotId)) return this.createEmptyVoorstellingSlotState();
+        if (!this.voorstellingTimerBySlot[slotId]) {
+            this.voorstellingTimerBySlot[slotId] = this.createEmptyVoorstellingSlotState();
+        } else {
+            const st = this.voorstellingTimerBySlot[slotId];
+            if (st.pauseDurationMinutes == null || Number.isNaN(Number(st.pauseDurationMinutes))) st.pauseDurationMinutes = 20;
+            if (st.pauseCountdownEndAt === undefined) st.pauseCountdownEndAt = null;
+            if (!st.markElapsedMs || typeof st.markElapsedMs !== 'object') st.markElapsedMs = Object.create(null);
+            if (!Array.isArray(st.remarks)) st.remarks = [];
+            if (!st.customLabels || typeof st.customLabels !== 'object') st.customLabels = Object.create(null);
+            if (st.customStepOrder === undefined) st.customStepOrder = null;
+        }
+        return this.voorstellingTimerBySlot[slotId];
+    }
+
+    pruneVoorstellingSlotState(activeSlotIds) {
+        const keep = new Set(activeSlotIds);
+        Object.keys(this.voorstellingTimerBySlot).forEach((k) => {
+            if (this.isUnsafeObjectKey(k) || !keep.has(k)) delete this.voorstellingTimerBySlot[k];
+        });
+    }
+
+    /**
+     * Unieke sleutel voor opgeslagen timer-marks: lokale datum + zaal + gesorteerde Yesplan-event-ids uit het tijdschema.
+     */
+    getVoorstellingTimerStorageKey() {
+        const d = this.selectedDate instanceof Date ? new Date(this.selectedDate) : new Date();
+        d.setHours(0, 0, 0, 0);
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        const dateStr = `${y}-${m}-${day}`;
+        const venue =
+            Array.isArray(this.selectedVenues) && this.selectedVenues.length
+                ? String(this.selectedVenues[0])
+                : '';
+        const evIds = (this.tijdschemaScheduleData || [])
+            .map((x) => x && x.eventId)
+            .filter((id) => id != null && id !== '')
+            .map(String)
+            .sort();
+        const evKey = evIds.length ? evIds.join(',') : 'no-event';
+        return `${dateStr}|${venue}|${evKey}`;
+    }
+
+    normalizeShiftHappensApiBase(raw) {
+        let t = String(raw || '').trim();
+        if (!t) return '';
+        if (!/^https?:\/\//i.test(t)) t = `http://${t}`;
+        try {
+            const u = new URL(t);
+            const host = u.hostname.toLowerCase();
+            if (host.indexOf('yesplan') !== -1) return '';
+            const p = (u.pathname || '').toLowerCase();
+            if (p.indexOf('zaalplattegrond') !== -1 || p.indexOf('uitvoeringinfo') !== -1) return '';
+            const pathPart = u.pathname === '/' ? '' : u.pathname.replace(/\/$/, '');
+            return u.origin + pathPart;
+        } catch {
+            return '';
+        }
+    }
+
+    getCloudflareAccessHeaders() {
+        const id = String(
+            this.config?.app?.cloudflareAccessClientId
+            || localStorage.getItem('SHIFT_HAPPENS_ACCESS_CLIENT_ID')
+            || ''
+        ).trim();
+        // Secret nooit in localStorage (CodeQL clear-text storage); alleen in-memory config.
+        const secret = String(this.config?.app?.cloudflareAccessClientSecret || '').trim();
+        if (!id || !secret) return {};
+        return {
+            'CF-Access-Client-Id': id,
+            'CF-Access-Client-Secret': secret
+        };
+    }
+
+    getShiftAuthToken() {
+        return String(
+            this.config?.app?.shiftAuthToken
+            || localStorage.getItem('SHIFT_HAPPENS_AUTH_TOKEN')
+            || ''
+        ).trim();
+    }
+
+    getShiftClientLabel() {
+        if (window.__SHIFT_HAPPENS_MOBILE__) return 'iphone';
+        if (window.electronAPI && !window.__SHIFT_HAPPENS_MOBILE__) return 'desktop';
+        return 'web';
+    }
+
+    syncShiftAuthToStorage() {
+        const token = String(this.config?.app?.shiftAuthToken || '').trim();
+        if (token) localStorage.setItem('SHIFT_HAPPENS_AUTH_TOKEN', token);
+        else localStorage.removeItem('SHIFT_HAPPENS_AUTH_TOKEN');
+    }
+
+    syncCloudflareAccessToStorage() {
+        const id = String(this.config?.app?.cloudflareAccessClientId || '').trim();
+        const secret = String(this.config?.app?.cloudflareAccessClientSecret || '').trim();
+        if (id) localStorage.setItem('SHIFT_HAPPENS_ACCESS_CLIENT_ID', id);
+        else localStorage.removeItem('SHIFT_HAPPENS_ACCESS_CLIENT_ID');
+        // Verwijder eventuele oude clear-text secret uit localStorage.
+        localStorage.removeItem('SHIFT_HAPPENS_ACCESS_CLIENT_SECRET');
+        if (typeof window.__SHIFT_SET_CF_ACCESS_SECRET__ === 'function') {
+            window.__SHIFT_SET_CF_ACCESS_SECRET__(secret);
+        }
+    }
+
+    fetchShiftHappensApi(url, options = {}) {
+        const headers = {
+            ...this.getCloudflareAccessHeaders(),
+            'X-Shift-Client': this.getShiftClientLabel(),
+            'X-Shift-View': String(this.currentView || 'home'),
+            ...(options.headers || {})
+        };
+        const token = this.getShiftAuthToken();
+        if (token) headers.Authorization = `Bearer ${token}`;
+        return fetch(url, { ...options, headers });
+    }
+
+    startShiftPresenceHeartbeat() {
+        this.stopShiftPresenceHeartbeat();
+        if (!this.getShiftAuthToken()) return;
+        const ping = () => { void this.pingShiftPresence(); };
+        ping();
+        this._shiftPresenceInterval = setInterval(ping, 10000);
+    }
+
+    stopShiftPresenceHeartbeat() {
+        if (this._shiftPresenceInterval) {
+            clearInterval(this._shiftPresenceInterval);
+            this._shiftPresenceInterval = null;
+        }
+    }
+
+    async loginShiftServer(email, password) {
+        const raw = String(document.getElementById('shiftServerBaseUrlInput')?.value || '').trim();
+        let base = this.normalizeShiftHappensApiBase(raw);
+        if (!base && window.__SHIFT_HAPPENS_MOBILE__) {
+            base = this.getShiftHappensApiBase();
+        }
+        if (!base) throw new Error('Vul eerst een server-URL in.');
+        const r = await fetch(`${base.replace(/\/$/, '')}/api/auth/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Shift-Client': this.getShiftClientLabel(),
+                ...this.getCloudflareAccessHeaders()
+            },
+            body: JSON.stringify({ email, password })
+        });
+        const j = await r.json().catch(() => ({}));
+        if (!r.ok || !j?.success || !j.token) {
+            throw new Error(j?.error === 'INVALID_CREDENTIALS' ? 'Onjuist e-mailadress of wachtwoord.' : (j?.error || 'Inloggen mislukt'));
+        }
+        if (!this.config.app) this.config.app = {};
+        this.config.app.shiftAuthToken = j.token;
+        this.config.app.shiftAuthEmail = j.user?.email || email;
+        this.config.app.shiftServerBaseUrl = base;
+        if (window.electronAPI?.saveConfig) {
+            await window.electronAPI.saveConfig('app', {
+                ...this.config.app,
+                shiftAuthToken: j.token,
+                shiftAuthEmail: j.user?.email || email,
+                shiftServerBaseUrl: base
+            });
+        }
+        this.syncShiftAuthToStorage();
+        await this.pingShiftPresence();
+        this.startShiftPresenceHeartbeat();
+        this.updateShiftAuthPasswordField();
+        void this.refreshApiServerStatus();
+        return j;
+    }
+
+    async logoutShiftServer() {
+        this.stopShiftPresenceHeartbeat();
+        if (!this.config.app) this.config.app = {};
+        delete this.config.app.shiftAuthToken;
+        if (window.electronAPI?.saveConfig) {
+            const next = { ...this.config.app };
+            delete next.shiftAuthToken;
+            await window.electronAPI.saveConfig('app', next);
+        }
+        localStorage.removeItem('SHIFT_HAPPENS_AUTH_TOKEN');
+        const pwd = document.getElementById('shiftAuthPasswordInput');
+        if (pwd) {
+            pwd.value = '';
+            pwd.placeholder = '';
+        }
+        this.updateShiftAuthPasswordField();
+        await this.refreshShiftAuthStatusLine();
+        this.updateShiftAuthPasswordField();
+        await this.refreshTimerSyncStatusLine();
+        void this.refreshApiServerStatus();
+    }
+
+    updateShiftAuthPasswordField() {
+        const el = document.getElementById('shiftAuthPasswordInput');
+        if (!el) return;
+        el.type = 'password';
+        if (this.getShiftAuthToken() && !String(el.value || '').length) {
+            el.placeholder = '••••••••';
+        } else if (!this.getShiftAuthToken()) {
+            el.placeholder = '';
+        }
+    }
+
+    async refreshShiftAuthStatusLine() {
+        const el = document.getElementById('shiftAuthStatusLine');
+        if (!el) return;
+        const token = this.getShiftAuthToken();
+        let base = this.resolveShiftServerBaseUrl();
+        if (!base && window.__SHIFT_HAPPENS_MOBILE__) base = this.getShiftHappensApiBase();
+        if (!token) {
+            el.textContent = base ? 'Niet ingelogd.' : 'Vul server-URL in en log in.';
+            this.updateShiftAuthPasswordField();
+            return;
+        }
+        const email = this.config?.app?.shiftAuthEmail || '';
+        if (!base) {
+            el.textContent = email ? `Ingelogd als ${email}.` : 'Ingelogd.';
+            this.updateShiftAuthPasswordField();
+            return;
+        }
+        try {
+            const r = await this.fetchShiftHappensApi(`${base.replace(/\/$/, '')}/api/health`);
+            const j = await r.json().catch(() => ({}));
+            if (r.ok && j?.ok) {
+                el.textContent = email ? `Verbonden als ${email}.` : 'Verbonden met server.';
+            } else if (r.status === 401) {
+                el.textContent = 'Sessie verlopen — opnieuw inloggen.';
+            } else {
+                el.textContent = email ? `Ingelogd als ${email}, server niet bereikbaar.` : 'Server niet bereikbaar.';
+            }
+        } catch {
+            el.textContent = email ? `Ingelogd als ${email}, server niet bereikbaar.` : 'Server niet bereikbaar.';
+        }
+        this.updateShiftAuthPasswordField();
+    }
+
+    /** Timer sync volgt automatisch op Shift-server login (geen aparte schakelaar). */
+    isTimerSyncEnabled() {
+        return !!(this.getShiftAuthToken() && this.getShiftServerBaseUrl());
+    }
+
+    /** Centrale Shift-server URL (sync, login, gedeelde functies). */
+    getShiftServerBaseUrl() {
+        const fromConfig = String(
+            this.config?.app?.shiftServerBaseUrl
+            || this.config?.app?.timerSyncBaseUrl
+            || ''
+        ).trim();
+        let raw = fromConfig;
+        if (!raw && window.__SHIFT_HAPPENS_MOBILE__) {
+            raw = window.SHIFT_HAPPENS_API_BASE || localStorage.getItem('SHIFT_HAPPENS_API_BASE') || '';
+        }
+        return this.normalizeShiftHappensApiBase(raw);
+    }
+
+    /** URL uit formulierveld of opgeslagen config (voor pings/status). */
+    resolveShiftServerBaseUrl() {
+        const fromInput = this.normalizeShiftHappensApiBase(
+            String(document.getElementById('shiftServerBaseUrlInput')?.value || '').trim()
+        );
+        if (fromInput) return fromInput;
+        return this.getShiftServerBaseUrl();
+    }
+
+    getTimerSyncBaseUrl() {
+        if (!this.isTimerSyncEnabled()) return '';
+        return this.getShiftServerBaseUrl();
+    }
+
+    async fetchTimerSyncSnapshot(key) {
+        const base = this.getTimerSyncBaseUrl();
+        if (!base || !key) return null;
+        try {
+            const url = `${base.replace(/\/$/, '')}/api/voorstelling-timer/snapshot/${encodeURIComponent(key)}`;
+            const r = await this.fetchShiftHappensApi(url);
+            if (!r.ok) return null;
+            const j = await r.json();
+            if (!j?.success || !j.slots) return null;
+            return { slots: j.slots, updatedAt: j.updatedAt || null };
+        } catch (e) {
+            console.warn('Timer sync ophalen mislukt:', e);
+            return null;
+        }
+    }
+
+    async pushTimerSyncSnapshot({ key, slots, updatedAt, baseUpdatedAt }) {
+        const base = this.getTimerSyncBaseUrl();
+        if (!base || !key) return { ok: false };
+        try {
+            const url = `${base.replace(/\/$/, '')}/api/voorstelling-timer/snapshot`;
+            const r = await this.fetchShiftHappensApi(url, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ key, slots, updatedAt, baseUpdatedAt: baseUpdatedAt || null })
+            });
+            const j = await r.json().catch(() => ({}));
+            if (r.status === 409 && j?.conflict) {
+                return { ok: false, conflict: true, slots: j.slots, updatedAt: j.updatedAt };
+            }
+            if (!r.ok || !j?.success) return { ok: false };
+            return { ok: true, updatedAt: j.updatedAt || updatedAt };
+        } catch (e) {
+            console.warn('Timer sync pushen mislukt:', e);
+            return { ok: false };
+        }
+    }
+
+    isTrekkenlijstSyncEnabled() {
+        return !!(this.getShiftAuthToken() && this.getShiftServerBaseUrl());
+    }
+
+    getTrekkenlijstSyncBaseUrl() {
+        if (!this.isTrekkenlijstSyncEnabled()) return '';
+        return this.getShiftServerBaseUrl();
+    }
+
+    mergeTrekkenlijstSyncStateIntoItems() {
+        const state = this._trekkenlijstSyncState || {};
+        for (const item of this._trekkenlijstenItems || []) {
+            const s = state[item.syncKey];
+            if (s) {
+                item.verwerkt = !!s.verwerkt;
+                item.comment = s.comment || '';
+                item.syncUpdatedAt = s.updatedAt || null;
+                item.verwerktBy = s.verwerktBy || null;
+                item.commentBy = s.commentBy || null;
+            }
+        }
+    }
+
+    async fetchTrekkenlijstSyncItems() {
+        const base = this.getTrekkenlijstSyncBaseUrl();
+        if (!base) return null;
+        try {
+            const url = `${base.replace(/\/$/, '')}/api/trekkenlijst/items`;
+            const r = await this.fetchShiftHappensApi(url, { cache: 'no-store' });
+            if (!r.ok) return null;
+            const j = await r.json();
+            if (!j?.success || !j.items) return null;
+            return j.items;
+        } catch (e) {
+            console.warn('Trekkenlijst sync ophalen mislukt:', e);
+            return null;
+        }
+    }
+
+    async pushTrekkenlijstSyncItem(payload) {
+        const base = this.getTrekkenlijstSyncBaseUrl();
+        if (!base || !payload?.key) return { ok: false };
+        try {
+            const url = `${base.replace(/\/$/, '')}/api/trekkenlijst/item`;
+            const r = await this.fetchShiftHappensApi(url, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const j = await r.json().catch(() => ({}));
+            if (r.status === 409 && j?.conflict) {
+                return { ok: false, conflict: true, item: j.item, updatedAt: j.item?.updatedAt || null };
+            }
+            if (!r.ok || !j?.success) return { ok: false };
+            return { ok: true, item: j.item || null, updatedAt: j.updatedAt || null };
+        } catch (e) {
+            console.warn('Trekkenlijst sync pushen mislukt:', e);
+            return { ok: false };
+        }
+    }
+
+    async refreshTrekkenlijstSyncFromServer(forceMerge = false) {
+        if (!this.isTrekkenlijstSyncEnabled()) return;
+        const items = await this.fetchTrekkenlijstSyncItems();
+        if (!items) return;
+        const knownKeys = new Set((this._trekkenlijstenItems || []).map((i) => i.syncKey));
+        let changed = forceMerge;
+        for (const [key, val] of Object.entries(items)) {
+            if (!knownKeys.has(key)) continue;
+            const prev = this._trekkenlijstSyncState[key];
+            const prevTs = Date.parse(prev?.updatedAt || '') || 0;
+            const nextTs = Date.parse(val?.updatedAt || '') || 0;
+            if (!prev || nextTs > prevTs) {
+                this._trekkenlijstSyncState[key] = val;
+                changed = true;
+            }
+        }
+        if (changed) {
+            this.mergeTrekkenlijstSyncStateIntoItems();
+            if (this.currentView === 'trekkenlijsten') this.renderTrekkenlijstenList();
+        }
+    }
+
+    schedulePersistTrekkenlijstItem(syncKey) {
+        this._trekkenlijstPendingSaveKey = syncKey;
+        if (this._trekkenlijstPersistTimer) clearTimeout(this._trekkenlijstPersistTimer);
+        this._trekkenlijstPersistTimer = setTimeout(() => {
+            this._trekkenlijstPersistTimer = null;
+            const key = this._trekkenlijstPendingSaveKey;
+            this._trekkenlijstPendingSaveKey = null;
+            if (key) void this.persistTrekkenlijstItemNow(key);
+        }, 700);
+    }
+
+    async persistTrekkenlijstItemNow(syncKey) {
+        if (!this.isTrekkenlijstSyncEnabled()) return;
+        const item = (this._trekkenlijstenItems || []).find((i) => i.syncKey === syncKey);
+        if (!item) return;
+        const result = await this.pushTrekkenlijstSyncItem({
+            key: syncKey,
+            title: item.title,
+            eventDate: item.eventDateRaw || null,
+            verwerkt: !!item.verwerkt,
+            comment: item.comment || '',
+            baseUpdatedAt: item.syncUpdatedAt || null
+        });
+        if (result.ok) {
+            if (result.item) {
+                this._trekkenlijstSyncState[syncKey] = result.item;
+                item.verwerkt = !!result.item.verwerkt;
+                item.comment = result.item.comment || '';
+                item.syncUpdatedAt = result.item.updatedAt || result.updatedAt || null;
+                item.verwerktBy = result.item.verwerktBy || null;
+                item.commentBy = result.item.commentBy || null;
+            } else if (result.updatedAt) {
+                item.syncUpdatedAt = result.updatedAt;
+            }
+            return;
+        }
+        if (result.conflict && result.item) {
+            this._trekkenlijstSyncState[syncKey] = result.item;
+            this.mergeTrekkenlijstSyncStateIntoItems();
+            if (this.currentView === 'trekkenlijsten') this.renderTrekkenlijstenList();
+        }
+    }
+
+    startTrekkenlijstSyncPoll() {
+        this.stopTrekkenlijstSyncPoll();
+        if (!this.isTrekkenlijstSyncEnabled()) return;
+        this._trekkenlijstSyncPollInterval = setInterval(() => {
+            if (this.currentView !== 'trekkenlijsten') return;
+            if (this._trekkenlijstPersistTimer) return;
+            void this.refreshTrekkenlijstSyncFromServer();
+        }, 4000);
+    }
+
+    stopTrekkenlijstSyncPoll() {
+        if (this._trekkenlijstSyncPollInterval) {
+            clearInterval(this._trekkenlijstSyncPollInterval);
+            this._trekkenlijstSyncPollInterval = null;
+        }
+        if (this._trekkenlijstPersistTimer) {
+            clearTimeout(this._trekkenlijstPersistTimer);
+            this._trekkenlijstPersistTimer = null;
+        }
+    }
+
+    setupTrekkenlijstenListHandlers(list) {
+        if (!list || list._trekkenHandlersBound) return;
+        list._trekkenHandlersBound = true;
+        list.addEventListener('change', (e) => {
+            const cb = e.target.closest('.trekkenlijsten-verwerkt-cb');
+            if (!cb) return;
+            const key = cb.dataset.syncKey;
+            const item = (this._trekkenlijstenItems || []).find((i) => i.syncKey === key);
+            if (!item) return;
+            item.verwerkt = cb.checked;
+            const row = cb.closest('.trekkenlijsten-entry');
+            if (row) row.classList.toggle('trekkenlijsten-entry--done', cb.checked);
+            if (!this.isTrekkenlijstSyncEnabled()) return;
+            void this.persistTrekkenlijstItemNow(key);
+        });
+        list.addEventListener('input', (e) => {
+            const ta = e.target.closest('.trekkenlijsten-comment-input');
+            if (!ta) return;
+            const key = ta.dataset.syncKey;
+            const item = (this._trekkenlijstenItems || []).find((i) => i.syncKey === key);
+            if (!item) return;
+            item.comment = ta.value;
+            if (!this.isTrekkenlijstSyncEnabled()) return;
+            this.schedulePersistTrekkenlijstItem(key);
+        });
+    }
+
+    pickNewerTimerSnapshot(a, b) {
+        if (!a?.slots) return b?.slots ? b : null;
+        if (!b?.slots) return a;
+        const ta = Date.parse(a.updatedAt || '') || 0;
+        const tb = Date.parse(b.updatedAt || '') || 0;
+        return tb >= ta ? b : a;
+    }
+
+    applyVoorstellingTimerSnapToSessions(sessions, snap) {
+        if (!snap?.slots) return;
+        for (const { slotId, scheduleData: sessSched } of sessions) {
+            if (this.isUnsafeObjectKey(slotId)) continue;
+            const saved = snap.slots[slotId];
+            if (!saved || typeof saved !== 'object') {
+                this.recalculateVoorstellingTimerFromMarks(slotId);
+                continue;
+            }
+            const pauseCount = this.countPauzesInSchedule(sessSched);
+            const st = this.ensureVoorstellingSlotState(slotId);
+            if (Array.isArray(saved.customStepOrder) && saved.customStepOrder.length) {
+                st.customStepOrder = saved.customStepOrder.filter(
+                    (id) => typeof id === 'string' && id.length > 0 && !this.isUnsafeObjectKey(id)
+                );
+            }
+            if (saved.customLabels && typeof saved.customLabels === 'object') {
+                const nextLabels = Object.create(null);
+                Object.entries(saved.customLabels).forEach(([k, v]) => {
+                    if (this.isUnsafeObjectKey(k)) return;
+                    nextLabels[k] = String(v || '').trim();
+                });
+                st.customLabels = nextLabels;
+            }
+            if (Array.isArray(saved.remarks)) {
+                st.remarks = saved.remarks
+                    .filter((r) => r && typeof r === 'object')
+                    .map((r) => ({
+                        id: typeof r.id === 'string' && r.id ? r.id : `remark_${Math.random().toString(36).slice(2, 10)}`,
+                        stepId: typeof r.stepId === 'string' ? r.stepId : '',
+                        wallIso: typeof r.wallIso === 'string' ? r.wallIso : '',
+                        text: String(r.text || '').trim()
+                    }))
+                    .filter((r) => r.stepId && r.wallIso && r.text);
+            }
+            if (!saved.marks || typeof saved.marks !== 'object') {
+                this.recalculateVoorstellingTimerFromMarks(slotId);
+                continue;
+            }
+            const validSteps = new Set(this.getVoorstellingTimerStepsForSlot(slotId, pauseCount));
+            st.marks = Object.create(null);
+            for (const [stepId, iso] of Object.entries(saved.marks)) {
+                if (!validSteps.has(stepId) || typeof iso !== 'string') continue;
+                st.marks[stepId] = iso;
+            }
+            this.recalculateVoorstellingTimerFromMarks(slotId);
+        }
+    }
+
+    buildVoorstellingTimerSlotsPayload(sessions) {
+        const slots = {};
+        let any = false;
+        for (const { slotId } of sessions) {
+            if (this.isUnsafeObjectKey(slotId)) continue;
+            const st = this.voorstellingTimerBySlot[slotId];
+            const marks = st?.marks;
+            const hasMarks = marks && Object.keys(marks).length > 0;
+            const remarks = Array.isArray(st?.remarks) ? st.remarks : [];
+            const hasRemarks = remarks.length > 0;
+            const hasLayout =
+                (Array.isArray(st?.customStepOrder) && st.customStepOrder.length > 0) ||
+                (st?.customLabels && Object.keys(st.customLabels).length > 0);
+            if (!hasMarks && !hasLayout && !hasRemarks) continue;
+            const payload = { marks: hasMarks ? { ...marks } : {} };
+            if (Array.isArray(st.customStepOrder) && st.customStepOrder.length) {
+                payload.customStepOrder = [...st.customStepOrder];
+            }
+            if (st.customLabels && Object.keys(st.customLabels).length) {
+                const safeLabels = Object.create(null);
+                Object.entries(st.customLabels).forEach(([k, v]) => {
+                    if (this.isUnsafeObjectKey(k)) return;
+                    safeLabels[k] = String(v || '').trim();
+                });
+                if (Object.keys(safeLabels).length) payload.customLabels = safeLabels;
+            }
+            if (hasRemarks) {
+                payload.remarks = remarks
+                    .map((r) => ({
+                        id: String(r?.id || ''),
+                        stepId: String(r?.stepId || ''),
+                        wallIso: String(r?.wallIso || ''),
+                        text: String(r?.text || '').trim()
+                    }))
+                    .filter((r) => r.id && r.stepId && r.wallIso && r.text);
+            }
+            slots[slotId] = payload;
+            any = true;
+        }
+        return { slots, any };
+    }
+
+    pruneVoorstellingTimerSnapshotKeys(snapshots) {
+        const maxAgeMs = 120 * 86400000;
+        const cutoff = Date.now() - maxAgeMs;
+        const out = { ...snapshots };
+        for (const k of Object.keys(out)) {
+            const datePart = k.split('|')[0];
+            const t = Date.parse(`${datePart}T12:00:00`);
+            if (Number.isFinite(t) && t < cutoff) delete out[k];
+        }
+        const keys = Object.keys(out);
+        const maxKeys = 200;
+        if (keys.length <= maxKeys) return out;
+        const scored = keys.map((k) => ({
+            k,
+            u: Date.parse(out[k]?.updatedAt || '') || 0
+        }));
+        scored.sort((a, b) => b.u - a.u);
+        const drop = scored.slice(maxKeys);
+        for (const { k } of drop) delete out[k];
+        return out;
+    }
+
+    async mergeVoorstellingTimerSnapshotFromStorage(sessions) {
+        /** Eerst alles leeg: anders blijven marks van gisteren/andere dag staan als er geen snapshot is. */
+        for (const { slotId } of sessions) {
+            if (this.isUnsafeObjectKey(slotId)) continue;
+            this.voorstellingTimerBySlot[slotId] = this.createEmptyVoorstellingSlotState();
+        }
+
+        const recalcAll = () => {
+            for (const { slotId } of sessions) {
+                if (this.isUnsafeObjectKey(slotId)) continue;
+                this.recalculateVoorstellingTimerFromMarks(slotId);
+            }
+        };
+
+        const key = this.getVoorstellingTimerStorageKey();
+        if (!key) {
+            recalcAll();
+            return;
+        }
+
+        let localSnap = null;
+        if (window.electronAPI?.getConfig) {
+            try {
+                const raw = await window.electronAPI.getConfig('voorstellingTimer');
+                const snap = raw?.snapshots?.[key];
+                if (snap?.slots) localSnap = { slots: snap.slots, updatedAt: snap.updatedAt || null };
+            } catch (e) {
+                console.warn('Voorstelling timer lokaal laden mislukt:', e);
+            }
+        }
+
+        let serverSnap = null;
+        if (this.isTimerSyncEnabled() && this.getTimerSyncBaseUrl()) {
+            serverSnap = await this.fetchTimerSyncSnapshot(key);
+        }
+
+        const chosen = this.pickNewerTimerSnapshot(localSnap, serverSnap);
+        if (!chosen?.slots) {
+            this._voorstellingTimerSyncKnownUpdatedAt = null;
+            recalcAll();
+            return;
+        }
+
+        try {
+            this.applyVoorstellingTimerSnapToSessions(sessions, chosen);
+            this._voorstellingTimerSyncKnownUpdatedAt = chosen.updatedAt || null;
+
+            // Als server nieuwer was dan lokaal: lokaal bijwerken zodat offline hetzelfde blijft.
+            if (
+                serverSnap?.updatedAt &&
+                (!localSnap?.updatedAt || (Date.parse(serverSnap.updatedAt) || 0) > (Date.parse(localSnap.updatedAt) || 0)) &&
+                window.electronAPI?.getConfig &&
+                window.electronAPI?.saveConfig
+            ) {
+                const prev = await window.electronAPI.getConfig('voorstellingTimer');
+                const base = { ...(prev?.snapshots || {}) };
+                base[key] = { slots: serverSnap.slots, updatedAt: serverSnap.updatedAt };
+                await window.electronAPI.saveConfig('voorstellingTimer', {
+                    snapshots: this.pruneVoorstellingTimerSnapshotKeys(base)
+                });
+            }
+        } catch (e) {
+            console.warn('Voorstelling timer snapshot laden mislukt:', e);
+            for (const { slotId } of sessions) {
+                if (this.isUnsafeObjectKey(slotId)) continue;
+                this.voorstellingTimerBySlot[slotId] = this.createEmptyVoorstellingSlotState();
+                this.recalculateVoorstellingTimerFromMarks(slotId);
+            }
+        }
+    }
+
+    schedulePersistVoorstellingTimerSnapshot() {
+        if (this._voorstellingTimerPersistTimer) clearTimeout(this._voorstellingTimerPersistTimer);
+        this._voorstellingTimerPersistTimer = setTimeout(() => {
+            this._voorstellingTimerPersistTimer = null;
+            void this.persistVoorstellingTimerSnapshotNow();
+        }, 450);
+    }
+
+    async persistVoorstellingTimerSnapshotNow() {
+        if (!window.electronAPI?.getConfig || !window.electronAPI?.saveConfig) return;
+        if (!this.tijdschemaScheduleData?.length) return;
+        const key = this.getVoorstellingTimerStorageKey();
+        const sessions = this.buildTimerDaySessions(this.tijdschemaScheduleData);
+        const { slots, any } = this.buildVoorstellingTimerSlotsPayload(sessions);
+        const updatedAt = new Date().toISOString();
+        const baseUpdatedAt = this._voorstellingTimerSyncKnownUpdatedAt || null;
+        try {
+            const prev = await window.electronAPI.getConfig('voorstellingTimer');
+            const base = { ...(prev?.snapshots || {}) };
+            if (!any) {
+                delete base[key];
+            } else {
+                base[key] = { slots, updatedAt };
+            }
+            const snapshots = this.pruneVoorstellingTimerSnapshotKeys(base);
+            await window.electronAPI.saveConfig('voorstellingTimer', { snapshots });
+            this._voorstellingTimerSyncKnownUpdatedAt = any ? updatedAt : null;
+
+            if (this.isTimerSyncEnabled() && this.getTimerSyncBaseUrl()) {
+                if (!any) {
+                    // Geen dedicated delete-endpoint; lege dag blijft lokaal gewist.
+                    return;
+                }
+                const push = await this.pushTimerSyncSnapshot({ key, slots, updatedAt, baseUpdatedAt });
+                if (push.ok) {
+                    this._voorstellingTimerSyncKnownUpdatedAt = push.updatedAt || updatedAt;
+                } else if (push.conflict && push.slots) {
+                    this.applyVoorstellingTimerSnapToSessions(sessions, {
+                        slots: push.slots,
+                        updatedAt: push.updatedAt
+                    });
+                    this._voorstellingTimerSyncKnownUpdatedAt = push.updatedAt || null;
+                    if (this.currentView === 'voorstellingTimer') {
+                        void this.renderVoorstellingTimerUI().catch(() => {});
+                    }
+                }
+            }
+        } catch (e) {
+            console.warn('Voorstelling timer snapshot opslaan mislukt:', e);
+        }
+    }
+
+    startVoorstellingTimerSyncPoll() {
+        this.stopVoorstellingTimerSyncPoll();
+        if (!this.isTimerSyncEnabled() || !this.getTimerSyncBaseUrl()) return;
+        const tick = async () => {
+            if (this.currentView !== 'voorstellingTimer') return;
+            if (this._voorstellingTimerPersistTimer) return;
+            const key = this.getVoorstellingTimerStorageKey();
+            if (!key || !this.tijdschemaScheduleData?.length) return;
+            const serverSnap = await this.fetchTimerSyncSnapshot(key);
+            if (!serverSnap?.updatedAt || !serverSnap.slots) return;
+            const knownTs = Date.parse(this._voorstellingTimerSyncKnownUpdatedAt || '') || 0;
+            const serverTs = Date.parse(serverSnap.updatedAt) || 0;
+            if (serverTs <= knownTs) return;
+            const sessions = this.buildTimerDaySessions(this.tijdschemaScheduleData);
+            this.applyVoorstellingTimerSnapToSessions(sessions, serverSnap);
+            this._voorstellingTimerSyncKnownUpdatedAt = serverSnap.updatedAt;
+            void this.renderVoorstellingTimerUI().catch(() => {});
+        };
+        this._voorstellingTimerSyncPollInterval = setInterval(() => {
+            void tick();
+        }, 4000);
+    }
+
+    stopVoorstellingTimerSyncPoll() {
+        if (this._voorstellingTimerSyncPollInterval) {
+            clearInterval(this._voorstellingTimerSyncPollInterval);
+            this._voorstellingTimerSyncPollInterval = null;
+        }
+    }
+
+    startVoorstellingTimerClockLoop() {
+        this.stopVoorstellingTimerClockLoop();
+        const tick = () => {
+            const wallEl = document.getElementById('voorstellingWallClock');
+            if (wallEl) {
+                const now = this.getNowDate();
+                const locale = this.locale === 'en' ? 'en-GB' : 'nl-NL';
+                wallEl.textContent = now.toLocaleTimeString(locale, this.wallClockTimeFormatOptions());
+            }
+            this.updateVoorstellingTimezoneDisplay();
+            (this._timerSessions || []).forEach(({ slotId }) => {
+                const swEl = document.querySelector(`[data-slot-stopwatch="${slotId}"]`);
+                if (swEl) {
+                    swEl.textContent = this.formatStopwatchMs(this.getVoorstellingStopwatchMs(slotId));
+                }
+            });
+            this.updateVoorstellingAuxiliaryClock();
+        };
+        tick();
+        this._voorstellingTimerClockInterval = setInterval(tick, 250);
+    }
+
+    /** Kloktijd waarop de pauze voorbij is (lokale tijd). */
+    formatPauseEndWallClock(endAtMs) {
+        return new Date(endAtMs).toLocaleTimeString(this.locale === 'en' ? 'en-GB' : 'nl-NL', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+            timeZone: this.getEffectiveTimeZone()
+        });
+    }
+
+    /** Resterende pauze als mm:ss (of h:mm:ss bij >1 uur) — o.a. boven naast de klok. */
+    formatPauseCountdownRemaining(endAtMs) {
+        const sec = Math.max(0, Math.ceil((endAtMs - Date.now()) / 1000));
+        const h = Math.floor(sec / 3600);
+        const m = Math.floor((sec % 3600) / 60);
+        const s = sec % 60;
+        if (h > 0) return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+
+    /** Na afloop geplande pauze: optellen vanaf het moment dat de timer op 0 stond (tot aanvang volgende acte). */
+    formatPauseOvertimeSincePlannedEnd(endAtMs) {
+        const sec = Math.max(0, Math.floor((Date.now() - endAtMs) / 1000));
+        const h = Math.floor(sec / 3600);
+        const m = Math.floor((sec % 3600) / 60);
+        const s = sec % 60;
+        const core =
+            h > 0
+                ? `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
+                : `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        return `+${core}`;
+    }
+
+    /** Weergave in het linker pauzeblok vóór start van de aftelling: totale pauzelengte als mm:ss (uit Yesplan-duur). */
+    formatPauseDurationIdleDisplay(minutes) {
+        const m = Math.max(1, Math.min(240, Number(minutes) || 20));
+        const totalSec = m * 60;
+        const h = Math.floor(totalSec / 3600);
+        const mm = Math.floor((totalSec % 3600) / 60);
+        const s = totalSec % 60;
+        if (h > 0) return `${h}:${String(mm).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        return `${String(mm).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+
+    getSystemTimeZone() {
+        try {
+            return String(Intl.DateTimeFormat().resolvedOptions().timeZone || '').trim();
+        } catch (_) {
+            return 'UTC';
+        }
+    }
+
+    getAvailableTimeZones() {
+        try {
+            if (typeof Intl.supportedValuesOf === 'function') {
+                const list = Intl.supportedValuesOf('timeZone');
+                if (Array.isArray(list) && list.length) return list;
+            }
+        } catch (_) {
+            /* ignore */
+        }
+        return ['UTC', 'Europe/Amsterdam', 'Europe/Brussels', 'Europe/London', 'America/New_York'];
+    }
+
+    async resolveAutoTimeZoneByInternet() {
+        if (!navigator.onLine) return this.getSystemTimeZone();
+        try {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 1800);
+            const res = await fetch('https://worldtimeapi.org/api/ip', { cache: 'no-store', signal: controller.signal });
+            clearTimeout(timeout);
+            if (!res.ok) return this.getSystemTimeZone();
+            const data = await res.json();
+            const tz = String(data?.timezone || '').trim();
+            if (!tz) return this.getSystemTimeZone();
+            if (this.getAvailableTimeZones().includes(tz)) return tz;
+            return this.getSystemTimeZone();
+        } catch (_) {
+            return this.getSystemTimeZone();
+        }
+    }
+
+    async refreshEffectiveTimeZone() {
+        const appCfg = this.config?.app || {};
+        const mode = appCfg.timezoneMode === 'manual' ? 'manual' : 'auto';
+        const manualTz = String(appCfg.manualTimeZone || '').trim();
+        if (mode === 'manual' && manualTz) {
+            this._effectiveTimeZone = manualTz;
+            return this._effectiveTimeZone;
+        }
+        this._effectiveTimeZone = await this.resolveAutoTimeZoneByInternet();
+        return this._effectiveTimeZone;
+    }
+
+    getEffectiveTimeZone() {
+        if (this._effectiveTimeZone && String(this._effectiveTimeZone).trim()) return this._effectiveTimeZone;
+        return this.getSystemTimeZone();
+    }
+
+    getManualClockOffsetMs() {
+        const sec = Number(this.config?.app?.manualClockOffsetSeconds || 0);
+        return Number.isFinite(sec) ? sec * 1000 : 0;
+    }
+
+    getNowDate() {
+        const mode = this.config?.app?.timezoneMode === 'manual' ? 'manual' : 'auto';
+        if (mode !== 'manual') return new Date();
+        return new Date(Date.now() + this.getManualClockOffsetMs());
+    }
+
+    refreshManualTimeInputFromSelectedTimezone() {
+        const input = document.getElementById('manualTimeInput');
+        const tzSelect = document.getElementById('timezoneManualSelect');
+        if (!input) return;
+        const tz = String(tzSelect?.value || this.getEffectiveTimeZone() || this.getSystemTimeZone());
+        input.value = this.formatTimeForInputFromDate(new Date(), tz);
+        input.dataset.userEdited = '0';
+    }
+
+    formatTimeForInputFromDate(date, timeZone) {
+        const locale = 'en-GB';
+        const parts = new Intl.DateTimeFormat(locale, {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+            hourCycle: 'h23',
+            timeZone
+        }).formatToParts(date);
+        const get = (type) => (parts.find((p) => p.type === type)?.value || '00').padStart(2, '0');
+        return `${get('hour')}:${get('minute')}:${get('second')}`;
+    }
+
+    computeManualClockOffsetSeconds(targetClock, timeZone) {
+        const m = String(targetClock || '').trim().match(/^(\d{2}):(\d{2})(?::(\d{2}))?$/);
+        if (!m) return 0;
+        const targetSeconds = Number(m[1]) * 3600 + Number(m[2]) * 60 + Number(m[3] || 0);
+        const now = new Date();
+        const nowParts = new Intl.DateTimeFormat('en-GB', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+            hourCycle: 'h23',
+            timeZone
+        }).formatToParts(now);
+        const get = (type) => Number(nowParts.find((p) => p.type === type)?.value || 0);
+        const currentSeconds = get('hour') * 3600 + get('minute') * 60 + get('second');
+        let diff = targetSeconds - currentSeconds;
+        if (diff > 12 * 3600) diff -= 24 * 3600;
+        if (diff < -12 * 3600) diff += 24 * 3600;
+        return diff;
+    }
+
+    updateTimezoneManualVisibility() {
+        const modeEl = document.getElementById('timezoneModeSelect');
+        const manualGroup = document.getElementById('timezoneManualGroup');
+        const manualTimeGroup = document.getElementById('manualTimeGroup');
+        if (!modeEl || !manualGroup) return;
+        const showManual = modeEl.value === 'manual';
+        const tzSel = document.getElementById('timezoneManualSelect');
+        const timeInp = document.getElementById('manualTimeInput');
+        const dim = showManual ? '1' : '0.55';
+        const pe = showManual ? '' : 'none';
+        manualGroup.style.opacity = dim;
+        manualGroup.style.pointerEvents = pe;
+        if (manualTimeGroup) {
+            manualTimeGroup.style.opacity = dim;
+            manualTimeGroup.style.pointerEvents = pe;
+        }
+        if (tzSel) tzSel.disabled = !showManual;
+        if (timeInp) timeInp.disabled = !showManual;
+    }
+
+    handleTimezoneModeChanged() {
+        const modeEl = document.getElementById('timezoneModeSelect');
+        const tzSel = document.getElementById('timezoneManualSelect');
+        const timeInp = document.getElementById('manualTimeInput');
+        if (!modeEl) return;
+        if (modeEl.value !== 'manual') {
+            if (tzSel) tzSel.value = this.getSystemTimeZone();
+            this.refreshManualTimeInputFromSelectedTimezone();
+            if (timeInp) timeInp.dataset.userEdited = '0';
+        } else if (timeInp && !timeInp.value) {
+            this.refreshManualTimeInputFromSelectedTimezone();
+        }
+        this.updateTimezoneManualVisibility();
+    }
+
+    /** IANA-zone en afkorting (bijv. Europe/Amsterdam - CET). */
+    formatLocalTimezoneDisplay() {
+        const locale = this.locale === 'en' ? 'en-GB' : 'nl-NL';
+        const iana = this.getEffectiveTimeZone();
+        if (!iana) return '—';
+        const pretty = iana.replace(/_/g, ' ');
+        try {
+            const parts = new Intl.DateTimeFormat(locale, { timeZone: iana, timeZoneName: 'short' }).formatToParts(
+                new Date()
+            );
+            let abbr = parts.find((p) => p.type === 'timeZoneName')?.value?.trim() || '';
+            if (abbr) {
+                abbr = abbr.toUpperCase();
+                return `${pretty} - ${abbr}`;
+            }
+        } catch (e) {
+            /* ignore */
+        }
+        return pretty;
+    }
+
+    updateVoorstellingTimezoneDisplay() {
+        const el = document.getElementById('voorstellingTimezoneDisplay');
+        if (!el) return;
+        el.textContent = this.formatLocalTimezoneDisplay();
+    }
+
+    commitPauseDurationInput(inp) {
+        const sid = inp?.getAttribute?.('data-slot-pause-duration');
+        if (!sid) return;
+        let v = parseInt(String(inp.value).replace(/\D/g, ''), 10);
+        if (Number.isNaN(v)) v = 20;
+        v = Math.max(1, Math.min(240, v));
+        inp.value = String(v);
+        const st = this.ensureVoorstellingSlotState(sid);
+        st.pauseDurationMinutes = v;
+        if (st.pauseCountdownEndAt && Date.now() < st.pauseCountdownEndAt) {
+            st.pauseCountdownEndAt = Date.now() + v * 60 * 1000;
+        }
+        this.updateVoorstellingAuxiliaryClock();
+    }
+
+    /**
+     * Tweede klok naast de muurklok: modus afhankelijk van fase (aftellen tot 1e acte, pauze, acttimer, totale speelduur).
+     * Primaire sessie = laatste kolom in de timer (meestal avond).
+     */
+    updateVoorstellingAuxiliaryClock() {
+        const topWrap = document.getElementById('voorstellingPauseCountdownTopWrap');
+        const topEl = document.getElementById('voorstellingPauseCountdownTop');
+        const labelEl = document.getElementById('voorstellingAuxClockLabel');
+        if (!topWrap || !topEl) return;
+
+        const sessions = this._timerSessions || [];
+        if (!sessions.length) {
+            topWrap.style.display = 'none';
+            topWrap.setAttribute('hidden', '');
+            topEl.classList.remove('voorstelling-pause-countdown--overtime');
+            return;
+        }
+
+        const avondSession = sessions.find((s) => s.slotId === 'avond');
+        const primarySlotId = (avondSession || sessions[sessions.length - 1]).slotId;
+        const state = this.getVoorstellingAuxiliaryClockState(primarySlotId);
+
+        topWrap.style.display = '';
+        topWrap.removeAttribute('hidden');
+
+        const setLabel = (key, params) => {
+            if (labelEl) {
+                labelEl.textContent = params ? this.t(`voorstellingTimer.${key}`, params) : this.t(`voorstellingTimer.${key}`);
+            }
+        };
+
+        if (state.kind === 'empty') {
+            topEl.textContent = '—';
+            setLabel('auxClockNoAnchor');
+            topEl.classList.remove('voorstelling-pause-countdown--overtime');
+            return;
+        }
+
+        if (state.kind === 'pause') {
+            setLabel('auxClockPauseRemaining');
+            if (!state.overtime) {
+                topEl.textContent = this.formatPauseCountdownRemaining(state.endAt);
+                topEl.classList.remove('voorstelling-pause-countdown--overtime');
+            } else {
+                topEl.textContent = this.formatPauseOvertimeSincePlannedEnd(state.endAt);
+                topEl.classList.add('voorstelling-pause-countdown--overtime');
+            }
+            return;
+        }
+
+        if (state.kind === 'preAct1') {
+            setLabel('auxClockUntilFirstAct');
+            const target = state.targetMs;
+            const now = Date.now();
+            if (now < target) {
+                topEl.textContent = this.formatPauseCountdownRemaining(target);
+                topEl.classList.remove('voorstelling-pause-countdown--overtime');
+            } else {
+                topEl.textContent = this.formatPauseOvertimeSincePlannedEnd(target);
+                topEl.classList.add('voorstelling-pause-countdown--overtime');
+            }
+            return;
+        }
+
+        if (state.kind === 'totalFrozen') {
+            setLabel('auxClockTotalFinal');
+            topEl.textContent = this.formatStopwatchMs(state.ms);
+            topEl.classList.remove('voorstelling-pause-countdown--overtime');
+            return;
+        }
+
+        if (state.kind === 'totalRunning') {
+            setLabel('auxClockTotalRunning');
+            topEl.textContent = this.formatStopwatchMs(state.ms);
+            topEl.classList.remove('voorstelling-pause-countdown--overtime');
+            return;
+        }
+
+        if (state.kind === 'act') {
+            const ord = this.getActOrdinalLabel(state.actNum);
+            setLabel('auxClockActTimer', { act: ord });
+            topEl.textContent = this.formatStopwatchMs(state.ms);
+            topEl.classList.remove('voorstelling-pause-countdown--overtime');
+            return;
+        }
+
+        setLabel('auxClockNoAnchor');
+        topEl.textContent = '—';
+        topEl.classList.remove('voorstelling-pause-countdown--overtime');
+    }
+
+    getVoorstellingStopwatchMs(slotId) {
+        const s = this.ensureVoorstellingSlotState(slotId);
+        if (!s.running) return s.accumulatedMs || 0;
+        return (s.accumulatedMs || 0) + (Date.now() - (s.runStartedAt || Date.now()));
+    }
+
+    formatStopwatchMs(ms) {
+        const total = Math.max(0, Math.floor(ms / 1000));
+        const h = Math.floor(total / 3600);
+        const m = Math.floor((total % 3600) / 60);
+        const sec = total % 60;
+        return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+    }
+
+    voorstellingStopwatchStart(slotId) {
+        const s = this.ensureVoorstellingSlotState(slotId);
+        if (s.running) return;
+        s.running = true;
+        s.runStartedAt = Date.now();
+    }
+
+    voorstellingStopwatchPause(slotId) {
+        const s = this.ensureVoorstellingSlotState(slotId);
+        if (!s.running) return;
+        s.accumulatedMs = (s.accumulatedMs || 0) + (Date.now() - (s.runStartedAt || Date.now()));
+        s.running = false;
+        s.runStartedAt = null;
+    }
+
+    /** Stopwatch op 0 en opnieuw laten lopen (bij vervangen van “Deuren open”). */
+    voorstellingStopwatchResetAndStart(slotId) {
+        const s = this.ensureVoorstellingSlotState(slotId);
+        s.accumulatedMs = 0;
+        s.running = true;
+        s.runStartedAt = Date.now();
+    }
+
+    voorstellingTimerApplyStepSideEffects(stepId, slotId) {
+        if (stepId === 'deuren_open') {
+            this.voorstellingStopwatchStart(slotId);
+        } else if (stepId === 'vijf_voor_tweede_deel') {
+            this.voorstellingStopwatchStart(slotId);
+        } else if (stepId === 'einde') {
+            this.voorstellingStopwatchPause(slotId);
+        }
+    }
+
+    getSessionScheduleDataForSlot(slotId) {
+        const sess = (this._timerSessions || []).find((s) => s.slotId === slotId);
+        if (sess?.scheduleData?.length) return sess.scheduleData;
+        const data = this.tijdschemaScheduleData;
+        if (!data?.length) return null;
+        const built = this.buildTimerDaySessions(data);
+        const m = built.find((s) => s.slotId === slotId);
+        return m?.scheduleData?.length ? m.scheduleData : null;
+    }
+
+    /** Middel van de geselecteerde kalenderdag → epoch-ms voor een gegeven tijd (lokaal). */
+    scheduleDayWallClockMsFromMinutes(minutesSinceMidnight) {
+        const n = Number(minutesSinceMidnight);
+        if (!Number.isFinite(n)) return null;
+        const raw = this.selectedDate instanceof Date ? this.selectedDate : new Date();
+        const d = new Date(raw.getFullYear(), raw.getMonth(), raw.getDate(), 0, 0, 0, 0);
+        d.setHours(Math.floor(n / 60), n % 60, 0, 0);
+        return d.getTime();
+    }
+
+    /** Vroegste Yesplan-classificatietijd over alle blokken (≈ geplande start van de voorstelling / 1e acte). */
+    getScheduleEarliestClassificationMinutes(scheduleData) {
+        let best = null;
+        for (const block of scheduleData || []) {
+            const m = this.getTijdschemaBlockClassificationMinutes(block);
+            if (m != null && (best == null || m < best)) best = m;
+        }
+        return best;
+    }
+
+    /** Laatst gemarkeerde aanvang-stap (act 1 / 2 / 3 / …). */
+    getLatestMarkedActStartStepId(steps, marks) {
+        if (!marks || !steps?.length) return null;
+        let chosen = null;
+        for (const id of steps) {
+            if (id === 'aanvang' || id === 'aanvang_tweede_deel' || /^aanvang_act_\d+$/.test(id)) {
+                if (marks[id]) chosen = id;
+            }
+        }
+        return chosen;
+    }
+
+    /** Actenummer bij een aanvang-stap-id (1-based). */
+    getActNumberFromTimerStepId(stepId) {
+        if (stepId === 'aanvang') return 1;
+        if (stepId === 'aanvang_tweede_deel') return 2;
+        const m = typeof stepId === 'string' ? stepId.match(/^aanvang_act_(\d+)$/) : null;
+        return m ? parseInt(m[1], 10) : 1;
+    }
+
+    /**
+     * Na de laatste acte: vanaf “5 min einde” (of einde is de eerstvolgende stap) tonen we de totale speelduur t.o.v. 1e aanvang.
+     */
+    isScheduleFinalePhase(steps, marks, nextIdx) {
+        if (!steps?.length || !marks) return false;
+        const ei = steps.indexOf('einde');
+        if (marks.vijf_voor_einde) return true;
+        if (ei >= 0 && nextIdx === ei) {
+            const actIds = steps.filter(
+                (id) => id === 'aanvang' || id === 'aanvang_tweede_deel' || /^aanvang_act_\d+$/.test(id)
+            );
+            const lastActId = actIds[actIds.length - 1];
+            if (lastActId && marks[lastActId] && !marks.einde) return true;
+        }
+        return false;
+    }
+
+    getVoorstellingAuxiliaryClockState(slotId) {
+        const sched = this.getSessionScheduleDataForSlot(slotId);
+        const now = Date.now();
+        if (!sched?.length) return { kind: 'empty' };
+        const pauseCount = this.countPauzesInSchedule(sched);
+        const steps = this.getVoorstellingTimerStepsForSlot(slotId, pauseCount);
+        const st = this.ensureVoorstellingSlotState(slotId);
+        const marks = st.marks || {};
+
+        let nextIdx = -1;
+        for (let i = 0; i < steps.length; i++) {
+            if (!marks[steps[i]]) {
+                nextIdx = i;
+                break;
+            }
+        }
+
+        const endAt = st.pauseCountdownEndAt;
+        const inPause = endAt != null && Number.isFinite(endAt);
+        if (inPause) {
+            return { kind: 'pause', endAt, overtime: now >= endAt };
+        }
+
+        if (!marks.aanvang) {
+            const firstMin = this.getScheduleEarliestClassificationMinutes(sched);
+            const targetMs = firstMin != null ? this.scheduleDayWallClockMsFromMinutes(firstMin) : null;
+            if (targetMs != null) {
+                return { kind: 'preAct1', targetMs };
+            }
+            return { kind: 'noAnchor' };
+        }
+
+        if (marks.einde) {
+            const t0 = Date.parse(marks.aanvang);
+            const t1 = Date.parse(marks.einde);
+            if (Number.isFinite(t0) && Number.isFinite(t1)) {
+                return { kind: 'totalFrozen', ms: Math.max(0, t1 - t0) };
+            }
+            return { kind: 'noAnchor' };
+        }
+
+        const actStartId = this.getLatestMarkedActStartStepId(steps, marks);
+        if (actStartId && marks[actStartId]) {
+            const t = Date.parse(marks[actStartId]);
+            if (Number.isFinite(t)) {
+                return {
+                    kind: 'act',
+                    ms: Math.max(0, now - t),
+                    actNum: this.getActNumberFromTimerStepId(actStartId)
+                };
+            }
+        }
+
+        if (this.isScheduleFinalePhase(steps, marks, nextIdx) && marks.aanvang) {
+            const t0 = Date.parse(marks.aanvang);
+            if (Number.isFinite(t0)) {
+                return { kind: 'totalRunning', ms: Math.max(0, now - t0) };
+            }
+        }
+
+        return { kind: 'noAnchor' };
+    }
+
+    /** Zelfde opties als muurklok — voorkomt afwijking t.o.v. getoonde timestamps. */
+    wallClockTimeFormatOptions() {
+        return {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+            hourCycle: 'h23',
+            timeZone: this.getEffectiveTimeZone()
+        };
+    }
+
+    canApplyVoorstellingStep(stepId, slotId) {
+        if (!this.isShowModeEnabled()) return false;
+        const sched = this.getSessionScheduleDataForSlot(slotId);
+        if (!sched?.length) return false;
+        const pauseCount = this.countPauzesInSchedule(sched);
+        const steps = this.getVoorstellingTimerStepsForSlot(slotId, pauseCount);
+        if (!steps.includes(stepId)) return false;
+        const idx = steps.indexOf(stepId);
+        const marks = this.ensureVoorstellingSlotState(slotId).marks || {};
+        if (marks[stepId]) return true;
+        return this.isVoorstellingStepReachable(idx, steps, marks);
+    }
+
+    recalculateVoorstellingTimerFromMarks(slotId) {
+        const st = this.ensureVoorstellingSlotState(slotId);
+        const sched = this.getSessionScheduleDataForSlot(slotId);
+        if (!sched?.length) return;
+        const pauseCount = this.countPauzesInSchedule(sched);
+        const steps = this.getVoorstellingTimerStepsForSlot(slotId, pauseCount);
+        let running = false;
+        let runStartedAt = null;
+        let accumulated = 0;
+        let previousMarkedAt = null;
+        const recalculatedElapsedByStep = {};
+
+        steps.forEach((id) => {
+            const iso = st.marks?.[id];
+            if (!iso) return;
+            const atMs = Date.parse(iso);
+            if (!Number.isFinite(atMs)) return;
+
+            const elapsedSincePrevious =
+                previousMarkedAt == null ? 0 : Math.max(0, atMs - previousMarkedAt);
+            recalculatedElapsedByStep[id] = elapsedSincePrevious;
+            previousMarkedAt = atMs;
+
+            // Stopwatch start opnieuw na elke stap; bij "einde" stopt hij.
+            if (id === 'einde') {
+                running = false;
+                runStartedAt = null;
+                accumulated = 0;
+            } else {
+                running = true;
+                runStartedAt = atMs;
+                accumulated = 0;
+            }
         });
 
-        const escape = (v) => String(v || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-        const singleEvent = sorted.length === 1; // Eventnaam staat in mastertitel
+        /* Lopend segment: verstreken tijd = Date.now() - runStartedAt (zie getVoorstellingStopwatchMs).
+         * accumulatedMs hier niet vullen met diezelfde duur — anders dubbelt de weergave. */
+        if (running && runStartedAt != null) {
+            accumulated = 0;
+        }
+        st.accumulatedMs = Math.max(0, accumulated);
+        st.running = running;
+        st.runStartedAt = running ? runStartedAt : null;
+        st.markElapsedMs = recalculatedElapsedByStep;
 
-        const html = sorted.map(({ eventTitle, items }) => {
-            const sortedItems = [...(items || [])].sort((a, b) => timeToMinutes(a.time || a.description) - timeToMinutes(b.time || b.description));
-            const rows = sortedItems.map((it) => {
-                const time = it.time ? `<span class="tijdschema-time">${escape(it.time)}</span>` : '';
-                const desc = it.description ? `<span class="tijdschema-desc">${escape(it.description)}</span>` : '';
-                return `<div class="tijdschema-row">${time}${time && desc ? ' ' : ''}${desc}</div>`;
-            }).join('');
-            const header = !singleEvent && eventTitle ? `<div class="tijdschema-event-header"><i class="fas fa-calendar-alt"></i> ${escape(eventTitle)}</div>` : '';
-            return `${header}<div class="tijdschema-items">${rows}</div>`;
-        }).join('');
+        const mins = Math.max(1, Math.min(240, Number(st.pauseDurationMinutes) || 20));
+        st.pauseDurationMinutes = mins;
+        st.pauseCountdownEndAt = null;
+        let activePauseStartMs = null;
+        for (let p = 1; p <= pauseCount; p++) {
+            const pauseId = p === 1 ? 'pauze' : `pauze_${p}`;
+            const resumeAct = p + 1;
+            const resumeId = resumeAct === 2 ? 'aanvang_tweede_deel' : `aanvang_act_${resumeAct}`;
+            const pauseMs = Date.parse(st.marks?.[pauseId] || '');
+            if (!Number.isFinite(pauseMs)) continue;
+            if (st.marks?.[resumeId] || st.marks?.einde) continue;
+            if (activePauseStartMs == null || pauseMs > activePauseStartMs) activePauseStartMs = pauseMs;
+        }
+        if (activePauseStartMs != null) {
+            st.pauseCountdownEndAt = activePauseStartMs + mins * 60 * 1000;
+        }
+    }
 
-        container.innerHTML = `<div class="tijdschema-list">${html}</div>`;
+    applyVoorstellingTimerMark(stepId, { replace = false, slotId, wallIso = null } = {}) {
+        if (this._voorstellingTimerEditingSlotId) return;
+        if (!slotId || !this.canApplyVoorstellingStep(stepId, slotId)) return;
+        const st = this.ensureVoorstellingSlotState(slotId);
+        st.marks[stepId] = wallIso && typeof wallIso === 'string' ? wallIso : new Date().toISOString();
+        this.recalculateVoorstellingTimerFromMarks(slotId);
+
+        void this.renderVoorstellingTimerUI({ skipStorageMerge: true })
+            .then(() => this.schedulePersistVoorstellingTimerSnapshot())
+            .catch(() => {});
+    }
+
+    /** Waarde voor time-input (lokale tijd, inclusief seconden). */
+    toDatetimeLocalValue(d) {
+        const pad = (n) => String(n).padStart(2, '0');
+        return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    }
+
+    openVoorstellingTimerReplaceModal(stepId, slotId, pressedIso) {
+        return new Promise((resolve) => {
+            const sched = this.getSessionScheduleDataForSlot(slotId);
+            const pauseCount = sched?.length ? this.countPauzesInSchedule(sched) : 0;
+            const stepLabel = this.getVoorstellingTimerStepLabel(stepId, pauseCount, slotId);
+            const slotLabel = this.getTimerSlotLabel(slotId);
+            const st = this.ensureVoorstellingSlotState(slotId);
+            const prevIso = st.marks?.[stepId];
+            const prevClock = prevIso ? this.formatVoorstellingMarkTime(prevIso) : '—';
+            const prevMs = typeof st.markElapsedMs?.[stepId] === 'number' ? st.markElapsedMs[stepId] : null;
+            const prevElapsed = prevMs != null ? this.formatStopwatchMs(prevMs) : '—';
+            const prevLine = this.escapeHtml(
+                this.t('voorstellingTimer.replacePreviousRegistration', { clock: prevClock, elapsed: prevElapsed })
+            );
+
+            const modal = document.createElement('div');
+            modal.className = 'modal show';
+            modal.setAttribute('role', 'dialog');
+            modal.setAttribute('aria-modal', 'true');
+            modal.setAttribute('aria-labelledby', 'voorstellingTimerReplaceHeading');
+            const title = this.escapeHtml(this.t('voorstellingTimer.replaceTitle'));
+            const body = this.escapeHtml(this.t('voorstellingTimer.replaceBody', { step: stepLabel, slot: slotLabel }));
+            const cancelTxt = this.escapeHtml(this.t('voorstellingTimer.replaceCancel'));
+            const confirmTxt = this.escapeHtml(this.t('voorstellingTimer.replaceConfirm'));
+            const resetTxt = this.escapeHtml(this.t('voorstellingTimer.replaceReset'));
+            const addRemarkTxt = this.escapeHtml(this.t('voorstellingTimer.replaceAddRemark'));
+            const lblClock = this.escapeHtml(this.t('voorstellingTimer.replaceCorrectClockLabel'));
+            const hintClock = this.escapeHtml(this.t('voorstellingTimer.replaceCorrectClockHint'));
+            const lblRemark = this.escapeHtml(this.t('voorstellingTimer.replaceRemarkLabel'));
+            const remarkPlaceholder = this.escapeHtml(this.t('voorstellingTimer.replaceRemarkPlaceholder'));
+            const now = new Date();
+            const clockDefault = this.toDatetimeLocalValue(now);
+
+            modal.innerHTML = `
+                <div class="modal-content voorstelling-timer-replace-modal" style="max-width: 480px;">
+                    <div class="modal-header">
+                        <h2 id="voorstellingTimerReplaceHeading">${title}</h2>
+                        <button type="button" class="modal-close" data-vtr-close aria-label="${cancelTxt}"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <p style="margin:0 0 0.85rem 0; color:#cbd5e0; line-height:1.5;">${body}</p>
+                        <p class="voorstelling-timer-replace-prev" style="margin:0 0 1rem 0; font-size:0.88rem; color:#94a3b8;">${prevLine}</p>
+                        <div class="voorstelling-timer-replace-fields">
+                            <label class="voorstelling-timer-replace-label">
+                                <span>${lblRemark}</span>
+                                <textarea class="voorstelling-timer-replace-input" data-vtr-remark placeholder="${remarkPlaceholder}" rows="3"></textarea>
+                            </label>
+                            <div class="voorstelling-timer-replace-actions">
+                                <button type="button" class="btn btn-secondary" data-vtr-remark-btn>${addRemarkTxt}</button>
+                            </div>
+                            <label class="voorstelling-timer-replace-label">
+                                <span>${lblClock}</span>
+                                <input type="time" step="1" class="voorstelling-timer-replace-input" data-vtr-clock value="${clockDefault}" />
+                            </label>
+                            <p class="voorstelling-timer-replace-hint">${hintClock}</p>
+                            <div class="voorstelling-timer-replace-actions voorstelling-timer-replace-actions--final">
+                                <button type="button" class="btn btn-secondary" data-vtr-cancel>${cancelTxt}</button>
+                                <button type="button" class="btn btn-danger" data-vtr-reset>${resetTxt}</button>
+                                <button type="button" class="btn btn-primary" data-vtr-confirm>${confirmTxt}</button>
+                            </div>
+                        </div>
+                        <p class="voorstelling-timer-replace-error" data-vtr-err style="display:none;margin:0.75rem 0 0 0;color:#fca5a5;font-size:0.9rem;"></p>
+                    </div>
+                </div>`;
+
+            const errEl = modal.querySelector('[data-vtr-err]');
+            const showErr = (msg) => {
+                if (errEl) {
+                    errEl.textContent = msg;
+                    errEl.style.display = msg ? 'block' : 'none';
+                }
+            };
+
+            const cleanup = (val) => {
+                document.removeEventListener('keydown', onKey);
+                if (modal.parentNode) modal.parentNode.removeChild(modal);
+                resolve(val);
+            };
+            const onKey = (e) => {
+                if (e.key === 'Escape') cleanup(false);
+            };
+            document.addEventListener('keydown', onKey);
+
+            const onConfirm = () => {
+                showErr('');
+                const clockInp = modal.querySelector('[data-vtr-clock]');
+                const rawClock = clockInp?.value?.trim() || '';
+                const m = rawClock.match(/^(\d{2}):(\d{2})(?::(\d{2}))?$/);
+                if (!m) {
+                    showErr(this.t('voorstellingTimer.replaceInvalidClock'));
+                    return;
+                }
+                const base = prevIso ? new Date(prevIso) : new Date();
+                base.setHours(parseInt(m[1], 10), parseInt(m[2], 10), parseInt(m[3] || '0', 10), 0);
+                cleanup({ type: 'replace', wallIso: base.toISOString() });
+            };
+
+            const onRemark = () => {
+                showErr('');
+                const remarkInp = modal.querySelector('[data-vtr-remark]');
+                const text = String(remarkInp?.value || '').trim();
+                if (!text) {
+                    showErr(this.t('voorstellingTimer.replaceEmptyRemark'));
+                    remarkInp?.focus();
+                    return;
+                }
+                cleanup({ type: 'remark', wallIso: pressedIso || new Date().toISOString(), text });
+            };
+
+            modal.querySelector('[data-vtr-cancel]')?.addEventListener('click', () => cleanup(false));
+            modal.querySelector('[data-vtr-close]')?.addEventListener('click', () => cleanup(false));
+            modal.querySelector('[data-vtr-reset]')?.addEventListener('click', () => cleanup({ type: 'reset' }));
+            modal.querySelector('[data-vtr-confirm]')?.addEventListener('click', onConfirm);
+            modal.querySelector('[data-vtr-remark-btn]')?.addEventListener('click', onRemark);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) cleanup(false);
+            });
+
+            document.body.appendChild(modal);
+            modal.querySelector('[data-vtr-remark]')?.focus();
+        });
+    }
+
+    addVoorstellingTimerRemark(stepId, slotId, text, wallIso) {
+        if (!slotId || !stepId) return;
+        const st = this.ensureVoorstellingSlotState(slotId);
+        const cleanText = String(text || '').trim();
+        if (!cleanText) return;
+        if (!Array.isArray(st.remarks)) st.remarks = [];
+        st.remarks.push({
+            id: `remark_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 9)}`,
+            stepId,
+            wallIso: wallIso && typeof wallIso === 'string' ? wallIso : new Date().toISOString(),
+            text: cleanText
+        });
+        st.remarks.sort((a, b) => Date.parse(a.wallIso || '') - Date.parse(b.wallIso || ''));
+        void this.renderVoorstellingTimerUI({ skipStorageMerge: true })
+            .then(() => this.schedulePersistVoorstellingTimerSnapshot())
+            .catch(() => {});
+    }
+
+    openVoorstellingTimerRemarkEditModal(slotId, remarkId) {
+        return new Promise((resolve) => {
+            const st = this.ensureVoorstellingSlotState(slotId);
+            const remarks = Array.isArray(st.remarks) ? st.remarks : [];
+            const remark = remarks.find((r) => r?.id === remarkId);
+            if (!remark) {
+                resolve(null);
+                return;
+            }
+            const cancelTxt = this.escapeHtml(this.t('voorstellingTimer.replaceCancel'));
+            const saveTxt = this.escapeHtml(this.t('voorstellingTimer.remarkSave'));
+            const delTxt = this.escapeHtml(this.t('voorstellingTimer.remarkDelete'));
+            const title = this.escapeHtml(this.t('voorstellingTimer.remarkEditTitle'));
+            const lblClock = this.escapeHtml(this.t('voorstellingTimer.replaceCorrectClockLabel'));
+            const lblRemark = this.escapeHtml(this.t('voorstellingTimer.replaceRemarkLabel'));
+            const hintClock = this.escapeHtml(this.t('voorstellingTimer.replaceCorrectClockHint'));
+            const remarkPlaceholder = this.escapeHtml(this.t('voorstellingTimer.replaceRemarkPlaceholder'));
+            const remarkDate = new Date(remark.wallIso || '');
+            const clockDefault = this.toDatetimeLocalValue(Number.isNaN(remarkDate.getTime()) ? new Date() : remarkDate);
+
+            const modal = document.createElement('div');
+            modal.className = 'modal show';
+            modal.setAttribute('role', 'dialog');
+            modal.setAttribute('aria-modal', 'true');
+            modal.setAttribute('aria-labelledby', 'voorstellingTimerRemarkEditHeading');
+            modal.innerHTML = `
+                <div class="modal-content voorstelling-timer-replace-modal" style="max-width: 480px;">
+                    <div class="modal-header">
+                        <h2 id="voorstellingTimerRemarkEditHeading">${title}</h2>
+                        <button type="button" class="modal-close" data-vtr-close aria-label="${cancelTxt}"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="voorstelling-timer-replace-fields">
+                            <label class="voorstelling-timer-replace-label">
+                                <span>${lblRemark}</span>
+                                <textarea class="voorstelling-timer-replace-input" data-vtr-remark placeholder="${remarkPlaceholder}" rows="3">${this.escapeHtml(remark.text || '')}</textarea>
+                            </label>
+                            <label class="voorstelling-timer-replace-label">
+                                <span>${lblClock}</span>
+                                <input type="time" step="1" class="voorstelling-timer-replace-input" data-vtr-clock value="${clockDefault}" />
+                            </label>
+                            <p class="voorstelling-timer-replace-hint">${hintClock}</p>
+                            <div class="voorstelling-timer-replace-actions voorstelling-timer-replace-actions--final">
+                                <button type="button" class="btn btn-secondary" data-vtr-cancel>${cancelTxt}</button>
+                                <button type="button" class="btn btn-danger" data-vtr-delete>${delTxt}</button>
+                                <button type="button" class="btn btn-primary" data-vtr-save>${saveTxt}</button>
+                            </div>
+                        </div>
+                        <p class="voorstelling-timer-replace-error" data-vtr-err style="display:none;margin:0.75rem 0 0 0;color:#fca5a5;font-size:0.9rem;"></p>
+                    </div>
+                </div>`;
+
+            const errEl = modal.querySelector('[data-vtr-err]');
+            const showErr = (msg) => {
+                if (errEl) {
+                    errEl.textContent = msg || '';
+                    errEl.style.display = msg ? 'block' : 'none';
+                }
+            };
+            const cleanup = (val) => {
+                document.removeEventListener('keydown', onKey);
+                if (modal.parentNode) modal.parentNode.removeChild(modal);
+                resolve(val);
+            };
+            const onKey = (e) => {
+                if (e.key === 'Escape') cleanup(false);
+            };
+            document.addEventListener('keydown', onKey);
+
+            const onSave = () => {
+                showErr('');
+                const text = String(modal.querySelector('[data-vtr-remark]')?.value || '').trim();
+                if (!text) {
+                    showErr(this.t('voorstellingTimer.replaceEmptyRemark'));
+                    modal.querySelector('[data-vtr-remark]')?.focus();
+                    return;
+                }
+                const rawClock = String(modal.querySelector('[data-vtr-clock]')?.value || '').trim();
+                const m = rawClock.match(/^(\d{2}):(\d{2})(?::(\d{2}))?$/);
+                if (!m) {
+                    showErr(this.t('voorstellingTimer.replaceInvalidClock'));
+                    modal.querySelector('[data-vtr-clock]')?.focus();
+                    return;
+                }
+                const base = new Date(remark.wallIso || new Date().toISOString());
+                base.setHours(parseInt(m[1], 10), parseInt(m[2], 10), parseInt(m[3] || '0', 10), 0);
+                cleanup({ type: 'save', text, wallIso: base.toISOString() });
+            };
+
+            modal.querySelector('[data-vtr-cancel]')?.addEventListener('click', () => cleanup(false));
+            modal.querySelector('[data-vtr-close]')?.addEventListener('click', () => cleanup(false));
+            modal.querySelector('[data-vtr-delete]')?.addEventListener('click', () => cleanup({ type: 'delete' }));
+            modal.querySelector('[data-vtr-save]')?.addEventListener('click', onSave);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) cleanup(false);
+            });
+            document.body.appendChild(modal);
+            modal.querySelector('[data-vtr-remark]')?.focus();
+        });
+    }
+
+    async editVoorstellingTimerRemark(slotId, remarkId) {
+        const result = await this.openVoorstellingTimerRemarkEditModal(slotId, remarkId);
+        if (!result) return;
+        const st = this.ensureVoorstellingSlotState(slotId);
+        if (!Array.isArray(st.remarks)) return;
+        const idx = st.remarks.findIndex((r) => r?.id === remarkId);
+        if (idx < 0) return;
+        if (result.type === 'delete') {
+            st.remarks.splice(idx, 1);
+        } else if (result.type === 'save') {
+            st.remarks[idx] = {
+                ...st.remarks[idx],
+                wallIso: result.wallIso,
+                text: result.text
+            };
+            st.remarks.sort((a, b) => Date.parse(a.wallIso || '') - Date.parse(b.wallIso || ''));
+        } else {
+            return;
+        }
+        void this.renderVoorstellingTimerUI({ skipStorageMerge: true })
+            .then(() => this.schedulePersistVoorstellingTimerSnapshot())
+            .catch(() => {});
+    }
+
+    async handleVoorstellingTimerStepClick(stepId, slotId) {
+        if (!this.canApplyVoorstellingStep(stepId, slotId)) return;
+        const marks = this.ensureVoorstellingSlotState(slotId).marks || {};
+        const had = !!marks[stepId];
+        if (had) {
+            const pressedIso = new Date().toISOString();
+            const correction = await this.openVoorstellingTimerReplaceModal(stepId, slotId, pressedIso);
+            if (!correction) return;
+            if (correction.type === 'remark') {
+                this.addVoorstellingTimerRemark(stepId, slotId, correction.text, correction.wallIso);
+                return;
+            }
+            if (correction.type === 'replace') {
+                this.applyVoorstellingTimerMark(stepId, {
+                    replace: true,
+                    slotId,
+                    wallIso: correction.wallIso
+                });
+            } else if (correction.type === 'reset') {
+                const st = this.ensureVoorstellingSlotState(slotId);
+                if (st?.marks && Object.prototype.hasOwnProperty.call(st.marks, stepId)) {
+                    delete st.marks[stepId];
+                }
+                if (st?.markElapsedMs && Object.prototype.hasOwnProperty.call(st.markElapsedMs, stepId)) {
+                    delete st.markElapsedMs[stepId];
+                }
+                if (st?.elapsedByStep && Object.prototype.hasOwnProperty.call(st.elapsedByStep, stepId)) {
+                    delete st.elapsedByStep[stepId];
+                }
+                this.recalculateVoorstellingTimerFromMarks(slotId);
+                void this.renderVoorstellingTimerUI({ skipStorageMerge: true })
+                    .then(() => this.schedulePersistVoorstellingTimerSnapshot())
+                    .catch(() => {});
+            }
+        } else {
+            this.applyVoorstellingTimerMark(stepId, { replace: false, slotId });
+        }
+    }
+
+    handleVoorstellingTimerSpacebarShortcut(e) {
+        if (e.defaultPrevented) return;
+        if (e.key !== ' ' && e.code !== 'Space' && e.key !== 'Spacebar') return;
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        if (this.currentView !== 'voorstellingTimer') return;
+        if (this._voorstellingTimerEditingSlotId) return;
+
+        const target = e.target;
+        if (target && (target.isContentEditable || /^(INPUT|TEXTAREA|SELECT|BUTTON)$/i.test(target.tagName))) return;
+        if (document.querySelector('.modal.show')) return;
+
+        const nextBtn = document.querySelector(
+            '#voorstellingTimerSessionsRow .voorstelling-timer-step-btn--next:not(:disabled)'
+        );
+        if (!nextBtn) return;
+        e.preventDefault();
+        nextBtn.click();
+    }
+
+    /** Externe trigger (OSC / Stream Deck / Companion): alleen eerste markering; geen vervang-modal. */
+    triggerVoorstellingTimerStepFromOsc(slotId, stepId) {
+        if (this._voorstellingTimerEditingSlotId) return;
+        if (!this.canApplyVoorstellingStep(stepId, slotId)) return;
+        const marks = this.ensureVoorstellingSlotState(slotId).marks || {};
+        if (marks[stepId]) return;
+        this.applyVoorstellingTimerMark(stepId, { replace: false, slotId });
+    }
+
+    formatVoorstellingMarkTime(iso) {
+        if (!iso) return '—';
+        const locale = this.locale === 'en' ? 'en-GB' : 'nl-NL';
+        return new Date(iso).toLocaleTimeString(locale, this.wallClockTimeFormatOptions());
+    }
+
+    beginTimerColumnEdit(slotId) {
+        const sess = (this._timerSessions || []).find((s) => s.slotId === slotId);
+        if (!sess) return;
+        if (this._voorstellingTimerEditingSlotId && this._voorstellingTimerEditingSlotId !== slotId) {
+            this._timerColumnEditBackup = null;
+            this._voorstellingTimerEditingSlotId = null;
+            this.schedulePersistVoorstellingTimerSnapshot();
+        }
+        const pauseCount = this.countPauzesInSchedule(sess.scheduleData);
+        const st = this.ensureVoorstellingSlotState(slotId);
+        const prevOrder = st.customStepOrder?.length ? [...st.customStepOrder] : null;
+        const prevLabels = Object.create(null);
+        Object.entries(st.customLabels || {}).forEach(([k, v]) => {
+            if (this.isUnsafeObjectKey(k)) return;
+            prevLabels[k] = String(v || '').trim();
+        });
+        if (!st.customStepOrder?.length) {
+            st.customStepOrder = [...this.getVoorstellingTimerStepsForSlot(slotId, pauseCount)];
+        }
+        if (!st.customLabels || typeof st.customLabels !== 'object') st.customLabels = Object.create(null);
+        this._timerColumnEditBackup = { slotId, order: prevOrder, labels: prevLabels };
+        this._voorstellingTimerEditingSlotId = slotId;
+        void this.renderVoorstellingTimerUI({ skipStorageMerge: true });
+    }
+
+    cancelTimerColumnEdit() {
+        if (this._timerColumnEditBackup) {
+            const { slotId, order, labels } = this._timerColumnEditBackup;
+            const st = this.ensureVoorstellingSlotState(slotId);
+            st.customStepOrder = order ? [...order] : null;
+            const nextLabels = Object.create(null);
+            Object.entries(labels || {}).forEach(([k, v]) => {
+                if (this.isUnsafeObjectKey(k)) return;
+                nextLabels[k] = String(v || '').trim();
+            });
+            st.customLabels = nextLabels;
+        }
+        this._timerColumnEditBackup = null;
+        this._voorstellingTimerEditingSlotId = null;
+        void this.renderVoorstellingTimerUI({ skipStorageMerge: true });
+    }
+
+    saveTimerColumnEdit() {
+        this._timerColumnEditBackup = null;
+        this._voorstellingTimerEditingSlotId = null;
+        const sessions = this._timerSessions || [];
+        for (const { slotId } of sessions) {
+            this.recalculateVoorstellingTimerFromMarks(slotId);
+        }
+        this.schedulePersistVoorstellingTimerSnapshot();
+        void this.renderVoorstellingTimerUI({ skipStorageMerge: true });
+    }
+
+    moveTimerStepInColumn(slotId, index, delta) {
+        const sess = (this._timerSessions || []).find((s) => s.slotId === slotId);
+        if (!sess) return;
+        const pauseCount = this.countPauzesInSchedule(sess.scheduleData);
+        const steps = [...this.getVoorstellingTimerStepsForSlot(slotId, pauseCount)];
+        const j = index + delta;
+        if (j < 0 || j >= steps.length) return;
+        const t = steps[index];
+        steps[index] = steps[j];
+        steps[j] = t;
+        this.ensureVoorstellingSlotState(slotId).customStepOrder = steps;
+        void this.renderVoorstellingTimerUI({ skipStorageMerge: true });
+    }
+
+    reorderTimerStepByDrag(slotId, fromIndex, toIndex) {
+        if (fromIndex === toIndex) return;
+        const sess = (this._timerSessions || []).find((s) => s.slotId === slotId);
+        if (!sess) return;
+        const pauseCount = this.countPauzesInSchedule(sess.scheduleData);
+        const steps = [...this.getVoorstellingTimerStepsForSlot(slotId, pauseCount)];
+        if (fromIndex < 0 || fromIndex >= steps.length || toIndex < 0 || toIndex >= steps.length) return;
+        const [item] = steps.splice(fromIndex, 1);
+        steps.splice(toIndex, 0, item);
+        this.ensureVoorstellingSlotState(slotId).customStepOrder = steps.filter((id) => !this.isUnsafeObjectKey(id));
+        void this.renderVoorstellingTimerUI({ skipStorageMerge: true });
+    }
+
+    ensureVoorstellingTimerStepDragListeners(sessionsRow) {
+        if (!sessionsRow || this._timerDragListenersAttached) return;
+        this._timerDragListenersAttached = true;
+        sessionsRow.addEventListener('dragstart', (e) => {
+            const h = e.target.closest('[data-timer-drag-handle]');
+            if (!h) return;
+            const slotId = h.getAttribute('data-slot-id');
+            const fromIndex = parseInt(h.getAttribute('data-step-index'), 10);
+            if (!slotId || !Number.isFinite(fromIndex)) return;
+            try {
+                e.dataTransfer.setData('application/json', JSON.stringify({ slotId, fromIndex }));
+            } catch (_) {
+                e.dataTransfer.setData('text/plain', `${slotId}|${fromIndex}`);
+            }
+            e.dataTransfer.effectAllowed = 'move';
+            h.closest('[data-timer-step-row]')?.classList.add('voorstelling-timer-step--dragging');
+        });
+        sessionsRow.addEventListener('dragend', () => {
+            sessionsRow.querySelectorAll('.voorstelling-timer-step--dragging').forEach((el) => {
+                el.classList.remove('voorstelling-timer-step--dragging');
+            });
+            sessionsRow.querySelectorAll('.voorstelling-timer-step--drop-hover').forEach((el) => {
+                el.classList.remove('voorstelling-timer-step--drop-hover');
+            });
+            this._timerDragHoverRow = null;
+        });
+        sessionsRow.addEventListener('dragover', (e) => {
+            const row = e.target.closest('[data-timer-step-row]');
+            if (!row) return;
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            if (this._timerDragHoverRow && this._timerDragHoverRow !== row) {
+                this._timerDragHoverRow.classList.remove('voorstelling-timer-step--drop-hover');
+            }
+            this._timerDragHoverRow = row;
+            row.classList.add('voorstelling-timer-step--drop-hover');
+        });
+        sessionsRow.addEventListener('drop', (e) => {
+            const row = e.target.closest('[data-timer-step-row]');
+            if (!row) return;
+            e.preventDefault();
+            let payload = null;
+            try {
+                const raw = e.dataTransfer.getData('application/json');
+                if (raw) payload = JSON.parse(raw);
+            } catch (_) {
+                /* ignore */
+            }
+            if (!payload) {
+                const fallback = e.dataTransfer.getData('text/plain');
+                const parts = String(fallback || '').split('|');
+                if (parts.length >= 2) {
+                    payload = { slotId: parts[0], fromIndex: parseInt(parts[1], 10) };
+                }
+            }
+            if (!payload || payload.slotId == null || !Number.isFinite(payload.fromIndex)) return;
+            const toIndex = parseInt(row.getAttribute('data-step-index'), 10);
+            if (!Number.isFinite(toIndex)) return;
+            this.reorderTimerStepByDrag(payload.slotId, payload.fromIndex, toIndex);
+            sessionsRow.querySelectorAll('.voorstelling-timer-step--drop-hover').forEach((el) => {
+                el.classList.remove('voorstelling-timer-step--drop-hover');
+            });
+            this._timerDragHoverRow = null;
+        });
+    }
+
+    removeTimerStepFromColumn(slotId, stepId) {
+        if (typeof stepId !== 'string' || !stepId.startsWith('custom_')) return;
+        if (this.isUnsafeObjectKey(slotId) || this.isUnsafeObjectKey(stepId)) return;
+        const sess = (this._timerSessions || []).find((s) => s.slotId === slotId);
+        if (!sess) return;
+        const pauseCount = this.countPauzesInSchedule(sess.scheduleData);
+        const steps = this.getVoorstellingTimerStepsForSlot(slotId, pauseCount).filter((id) => id !== stepId);
+        const st = this.ensureVoorstellingSlotState(slotId);
+        st.customStepOrder = steps.filter((id) => !this.isUnsafeObjectKey(id));
+        delete st.customLabels[stepId];
+        delete st.marks[stepId];
+        if (st.markElapsedMs && stepId in st.markElapsedMs) delete st.markElapsedMs[stepId];
+        if (Array.isArray(st.remarks)) {
+            st.remarks = st.remarks.filter((r) => r?.stepId !== stepId);
+        }
+        this.recalculateVoorstellingTimerFromMarks(slotId);
+        void this.renderVoorstellingTimerUI({ skipStorageMerge: true });
+    }
+
+    /**
+     * Vraagt label voor een vrije knop. Geen window.prompt — die werkt in Electron niet betrouwbaar.
+     */
+    openVoorstellingTimerCustomStepModal() {
+        return new Promise((resolve) => {
+            const title = this.escapeHtml(this.t('voorstellingTimer.columnEditAddCustomModalTitle'));
+            const lbl = this.escapeHtml(this.t('voorstellingTimer.columnEditPromptLabel'));
+            const cancelTxt = this.escapeHtml(this.t('voorstellingTimer.columnEditCancel'));
+            const okTxt = this.escapeHtml(this.t('voorstellingTimer.columnEditConfirmAdd'));
+
+            const modal = document.createElement('div');
+            modal.className = 'modal show';
+            modal.setAttribute('role', 'dialog');
+            modal.setAttribute('aria-modal', 'true');
+            modal.setAttribute('aria-labelledby', 'voorstellingTimerCustomStepHeading');
+            modal.innerHTML = `
+                <div class="modal-content voorstelling-timer-custom-step-modal" style="max-width: 440px;">
+                    <div class="modal-header">
+                        <h2 id="voorstellingTimerCustomStepHeading">${title}</h2>
+                        <button type="button" class="modal-close" data-csc-close aria-label="${cancelTxt}"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <label class="voorstelling-timer-custom-step-label">
+                            <span>${lbl}</span>
+                            <input type="text" class="voorstelling-timer-custom-step-input" data-csc-input autocomplete="off" />
+                        </label>
+                        <p class="voorstelling-timer-custom-step-err" data-csc-err style="display:none;margin:0.5rem 0 0 0;color:#fca5a5;font-size:0.9rem;"></p>
+                    </div>
+                    <div class="modal-footer voorstelling-timer-custom-step-footer">
+                        <button type="button" class="btn btn-secondary" data-csc-cancel>${cancelTxt}</button>
+                        <button type="button" class="btn btn-primary" data-csc-ok>${okTxt}</button>
+                    </div>
+                </div>`;
+
+            const cleanup = (val) => {
+                document.removeEventListener('keydown', onKey);
+                if (modal.parentNode) modal.parentNode.removeChild(modal);
+                resolve(val);
+            };
+
+            const onKey = (e) => {
+                if (e.key === 'Escape') cleanup(null);
+            };
+            document.addEventListener('keydown', onKey);
+
+            const inp = modal.querySelector('[data-csc-input]');
+            const errEl = modal.querySelector('[data-csc-err]');
+            const showErr = (msg) => {
+                if (errEl) {
+                    errEl.textContent = msg || '';
+                    errEl.style.display = msg ? 'block' : 'none';
+                }
+            };
+
+            const submit = () => {
+                showErr('');
+                const v = String(inp?.value || '').trim();
+                if (!v) {
+                    showErr(this.t('voorstellingTimer.columnEditEmptyLabel'));
+                    inp?.focus();
+                    return;
+                }
+                cleanup(v);
+            };
+
+            modal.querySelector('[data-csc-close]')?.addEventListener('click', () => cleanup(null));
+            modal.querySelector('[data-csc-cancel]')?.addEventListener('click', () => cleanup(null));
+            modal.querySelector('[data-csc-ok]')?.addEventListener('click', submit);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) cleanup(null);
+            });
+            inp?.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    submit();
+                }
+            });
+
+            document.body.appendChild(modal);
+            requestAnimationFrame(() => {
+                inp?.focus();
+            });
+        });
+    }
+
+    addCustomTimerStepToColumn(slotId) {
+        void this.openVoorstellingTimerCustomStepModal().then((label) => {
+            if (!label || !String(label).trim()) return;
+            const sess = (this._timerSessions || []).find((s) => s.slotId === slotId);
+            if (!sess) return;
+            const pauseCount = this.countPauzesInSchedule(sess.scheduleData);
+            const st = this.ensureVoorstellingSlotState(slotId);
+            const cur = [...this.getVoorstellingTimerStepsForSlot(slotId, pauseCount)];
+            const id = `custom_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 9)}`;
+            st.customLabels[id] = String(label).trim();
+            cur.push(id);
+            st.customStepOrder = cur;
+            void this.renderVoorstellingTimerUI({ skipStorageMerge: true });
+        });
+    }
+
+    async renderVoorstellingTimerUI(options = {}) {
+        const skipStorageMerge = options.skipStorageMerge === true;
+        const schemaEl = document.getElementById('voorstellingTimerTijdschema');
+        const sessionsRow = document.getElementById('voorstellingTimerSessionsRow');
+        try {
+        if (!schemaEl || !sessionsRow) return;
+
+        const data = this.tijdschemaScheduleData;
+        if (!data || !data.length) {
+            schemaEl.innerHTML = `<div class="info-message">${this.escapeHtml(this.t('voorstellingTimer.noSchedule'))}</div>`;
+            sessionsRow.innerHTML = '';
+            this._timerSessions = [];
+            return;
+        }
+
+        schemaEl.innerHTML = this.buildTijdschemaListHtml(data);
+
+        const sessions = this.buildTimerDaySessions(data);
+        this._timerSessions = sessions;
+        this.pruneVoorstellingSlotState(sessions.map((s) => s.slotId));
+        sessions.forEach(({ slotId }) => this.ensureVoorstellingSlotState(slotId));
+        if (!skipStorageMerge) {
+            const storageKey = this.getVoorstellingTimerStorageKey();
+            if (this._voorstellingTimerLastMergedKey !== storageKey) {
+                await this.mergeVoorstellingTimerSnapshotFromStorage(sessions);
+                this._voorstellingTimerLastMergedKey = storageKey;
+            }
+        }
+
+        const n = sessions.length;
+        sessionsRow.style.setProperty('--timer-cols', String(Math.max(1, n)));
+
+        sessionsRow.innerHTML = sessions
+            .map((session) => {
+                const { slotId, scheduleData: sessSched } = session;
+                const pauseCount = this.countPauzesInSchedule(sessSched);
+                const steps = this.getVoorstellingTimerStepsForSlot(slotId, pauseCount);
+                const marks = this.ensureVoorstellingSlotState(slotId).marks || {};
+                const isEditing = this._voorstellingTimerEditingSlotId === slotId;
+
+                let nextIdx = -1;
+                for (let i = 0; i < steps.length; i++) {
+                    if (!marks[steps[i]]) {
+                        nextIdx = i;
+                        break;
+                    }
+                }
+
+                /** Laatst gemarkeerde stap = huidige positie; daar hoort de live stopwatch bij, niet bij de volgende open stap. */
+                let currentIdx = -1;
+                for (let i = 0; i < steps.length; i++) {
+                    if (marks[steps[i]]) currentIdx = i;
+                }
+
+                const slotTitle = this.escapeHtml(this.getTimerSlotLabel(slotId));
+                const stSlot = this.ensureVoorstellingSlotState(slotId);
+                const derivedPauseMinutes = this.getPauseDurationMinutesFromSchedule(sessSched);
+                if (derivedPauseMinutes != null) stSlot.pauseDurationMinutes = derivedPauseMinutes;
+                const rawRemarks = Array.isArray(stSlot.remarks) ? stSlot.remarks : [];
+                const remarksByStep = new Map();
+                for (const r of rawRemarks) {
+                    if (!r?.id || !r?.stepId || !r?.wallIso || !String(r.text || '').trim()) continue;
+                    if (!remarksByStep.has(r.stepId)) remarksByStep.set(r.stepId, []);
+                    remarksByStep.get(r.stepId).push(r);
+                }
+                for (const arr of remarksByStep.values()) {
+                    arr.sort((a, b) => (Date.parse(a.wallIso || '') || 0) - (Date.parse(b.wallIso || '') || 0));
+                }
+
+                const stepRows = steps.map((id, index) => {
+                        const label = this.getVoorstellingTimerStepLabel(id, pauseCount, slotId);
+                        const done = !!marks[id];
+                        const reachable = this.isVoorstellingStepReachable(index, steps, marks);
+                        const enabled = done || reachable;
+                        const isNext = enabled && !done && index === nextIdx;
+                        let cls = 'voorstelling-timer-step-btn';
+                        if (done) cls += ' voorstelling-timer-step-btn--done';
+                        if (isNext) cls += ' voorstelling-timer-step-btn--next';
+                        const num = index + 1;
+                        const timeStr = this.escapeHtml(this.formatVoorstellingMarkTime(marks[id]));
+                        /** Segment i→i+1 hoort bij stap i (timestamp daar); duur staat in markElapsedMs van de *volgende* stap. */
+                        const nextIdInChain = index + 1 < steps.length ? steps[index + 1] : null;
+                        const segmentFrozenMs =
+                            nextIdInChain &&
+                            marks[id] &&
+                            marks[nextIdInChain] &&
+                            typeof stSlot.markElapsedMs?.[nextIdInChain] === 'number'
+                                ? stSlot.markElapsedMs[nextIdInChain]
+                                : null;
+                        const check = done ? '<i class="fas fa-check voorstelling-timer-step-check"></i>' : '';
+                        /** Live segment op laatst getikte stap; volgende knop staat nog open. Geen live op einde (totaal loopt daar vast). */
+                        const showLiveStopwatch =
+                            currentIdx === index && id !== 'einde' && nextIdx > index;
+                        const hasMark = !!marks[id];
+                        if (hasMark && showLiveStopwatch) cls += ' voorstelling-timer-step-btn--live';
+
+                        let timesRowHtml = '';
+                        if (hasMark && showLiveStopwatch) {
+                            timesRowHtml = `<span class="voorstelling-timer-step-btn-times">
+                            <span class="voorstelling-timer-step-btn-time voorstelling-timer-step-btn-time--pressed${done ? '' : ' voorstelling-timer-step-btn-time--pending'}">${timeStr}</span>
+                            <span class="voorstelling-timer-step-btn-timed voorstelling-timer-step-btn-timed--live voorstelling-timer-step-btn-live-sw voorstelling-stopwatch voorstelling-stopwatch--inline" data-slot-stopwatch="${this.escapeHtml(slotId)}" aria-live="polite">${this.formatStopwatchMs(this.getVoorstellingStopwatchMs(slotId))}</span>
+                        </span>`;
+                        } else if (segmentFrozenMs != null) {
+                            timesRowHtml = `<span class="voorstelling-timer-step-btn-times">
+                            <span class="voorstelling-timer-step-btn-time voorstelling-timer-step-btn-time--pressed${done ? '' : ' voorstelling-timer-step-btn-time--pending'}">${timeStr}</span>
+                            <span class="voorstelling-timer-step-btn-timed voorstelling-timer-step-btn-timed--segment">${this.escapeHtml(this.formatStopwatchMs(segmentFrozenMs))}</span>
+                        </span>`;
+                        } else if (hasMark) {
+                            timesRowHtml = `<span class="voorstelling-timer-step-btn-times voorstelling-timer-step-btn-times--stamp-only">
+                            <span class="voorstelling-timer-step-btn-time voorstelling-timer-step-btn-time--pressed${done ? '' : ' voorstelling-timer-step-btn-time--pending'}">${timeStr}</span>
+                        </span>`;
+                        } else {
+                            /* Zelfde tweede regel als na tik (tijd + stopwatch-kolom), onzichtbaar — voorkomt groei per klik. */
+                            timesRowHtml = `<span class="voorstelling-timer-step-btn-times voorstelling-timer-step-btn-times--reserve" aria-hidden="true">
+                            <span class="voorstelling-timer-step-btn-time voorstelling-timer-step-btn-time--pending">00:00:00</span>
+                            <span class="voorstelling-timer-step-btn-timed voorstelling-stopwatch--inline">00:00:00</span>
+                        </span>`;
+                        }
+                        const liveAttr = showLiveStopwatch ? ' aria-current="step"' : '';
+                        const btnLocked = isEditing || !enabled;
+                        const stepRowClass = `voorstelling-timer-step${isEditing ? ' voorstelling-timer-step--edit-mode' : ''}`;
+                        const stepRowAttrs = isEditing
+                            ? ` data-timer-step-row data-step-index="${index}" data-slot-id="${this.escapeHtml(slotId)}"`
+                            : '';
+                        const leadHtml = isEditing
+                            ? `<div class="voorstelling-timer-step-lead" title="${this.escapeHtml(this.t('voorstellingTimer.columnEditDrag'))}">
+                            <span class="voorstelling-timer-step-num voorstelling-timer-step-num--in-lead">${num}</span>
+                            <div class="voorstelling-timer-step-drag-handle" draggable="true" data-timer-drag-handle data-step-index="${index}" data-slot-id="${this.escapeHtml(slotId)}" aria-grabbed="false"><i class="fas fa-grip-vertical" aria-hidden="true"></i></div>
+                        </div>`
+                            : '';
+                        const removeHtml =
+                            isEditing && typeof id === 'string' && id.startsWith('custom_')
+                                ? `<button type="button" class="voorstelling-timer-step-remove" data-step-remove="${this.escapeHtml(id)}" data-slot-id="${this.escapeHtml(slotId)}" title="${this.escapeHtml(this.t('voorstellingTimer.columnEditRemove'))}"><i class="fas fa-times"></i></button>`
+                                : isEditing
+                                  ? '<span class="voorstelling-timer-step-remove-spacer" aria-hidden="true"></span>'
+                                  : '';
+                        const stepHtml = `
+                <div class="${stepRowClass}"${stepRowAttrs}>
+                    ${isEditing ? leadHtml : `<span class="voorstelling-timer-step-num">${num}</span>`}
+                    <button type="button" class="${cls}" data-step-id="${id}" data-slot-id="${this.escapeHtml(slotId)}"${liveAttr} ${btnLocked ? 'disabled' : ''}>
+                        <span class="voorstelling-timer-step-btn-inner">
+                            <span class="voorstelling-timer-step-btn-title">${check}<span class="voorstelling-timer-step-btn-title-text">${this.escapeHtml(label)}</span></span>
+                            ${timesRowHtml}
+                        </span>
+                    </button>
+                    ${removeHtml}
+                </div>`;
+                        if (isEditing) return { kind: 'step', html: stepHtml };
+                        const linkedRemarks = remarksByStep.get(id) || [];
+                        if (!linkedRemarks.length) return { kind: 'step', html: stepHtml };
+                        const remarksHtml = linkedRemarks
+                            .map((r) => {
+                                const rid = this.escapeHtml(r.id);
+                                const txt = this.escapeHtml(r.text);
+                                const timeLabel = this.escapeHtml(this.formatVoorstellingMarkTime(r.wallIso));
+                                return `
+                <div class="voorstelling-timer-remark-row" data-remark-edit="${rid}" data-slot-id="${this.escapeHtml(slotId)}">
+                    <span class="voorstelling-timer-remark-indent" aria-hidden="true"></span>
+                    <button type="button" class="voorstelling-timer-remark-btn" title="${timeLabel} · ${txt}">
+                        <span class="voorstelling-timer-remark-time">${timeLabel}</span>
+                        <span class="voorstelling-timer-remark-text">${txt}</span>
+                    </button>
+                </div>`;
+                            })
+                            .join('');
+                        return {
+                            kind: 'step',
+                            html: `${stepHtml}${remarksHtml}`
+                        };
+                    });
+                const buttonsHtml = stepRows.map((row) => row.html).join('');
+
+                const titleBlock = isEditing
+                    ? `<h4 class="voorstelling-timer-session-title"><span class="voorstelling-timer-session-title-text">${slotTitle}</span></h4>`
+                    : `<h4 class="voorstelling-timer-session-title"><button type="button" class="voorstelling-timer-session-title-btn" data-slot-begin-edit="${this.escapeHtml(slotId)}">${slotTitle}</button></h4>`;
+
+                const editBarHtml = isEditing
+                    ? `<div class="voorstelling-timer-session-edit-bar">
+                    <div class="voorstelling-timer-session-edit-actions">
+                        <div class="voorstelling-timer-session-add-step-wrap">
+                            <div class="voorstelling-timer-session-add-step-aligner" aria-hidden="true"></div>
+                            <button type="button" class="voorstelling-timer-step-btn voorstelling-timer-session-add-step" data-slot-add-custom="${this.escapeHtml(slotId)}">
+                                <span class="voorstelling-timer-step-btn-inner">
+                                    <span class="voorstelling-timer-step-btn-title">
+                                        <i class="fas fa-plus voorstelling-timer-session-add-step-plus" aria-hidden="true"></i>
+                                        <span class="voorstelling-timer-step-btn-title-text">${this.escapeHtml(this.t('voorstellingTimer.columnEditAddCustom'))}</span>
+                                    </span>
+                                </span>
+                            </button>
+                            <span class="voorstelling-timer-step-remove-spacer" aria-hidden="true"></span>
+                        </div>
+                        <div class="voorstelling-timer-session-edit-row voorstelling-timer-session-edit-row--primary">
+                            <button type="button" class="btn btn-secondary voorstelling-timer-session-edit-btn" data-slot-edit-cancel>${this.escapeHtml(this.t('voorstellingTimer.columnEditCancel'))}</button>
+                            <button type="button" class="btn btn-primary voorstelling-timer-session-edit-btn" data-slot-edit-save>${this.escapeHtml(this.t('voorstellingTimer.columnEditSave'))}</button>
+                        </div>
+                    </div>
+                </div>`
+                    : '';
+
+                return `
+            <section class="voorstelling-timer-session${isEditing ? ' voorstelling-timer-session--editing' : ''}" data-slot-id="${this.escapeHtml(slotId)}" aria-label="${slotTitle}">
+                ${titleBlock}
+                <div class="voorstelling-timer-buttons">${buttonsHtml}</div>
+                ${editBarHtml}
+            </section>`;
+            })
+            .join('');
+
+        sessionsRow.querySelectorAll('[data-step-id][data-slot-id]').forEach((b) => {
+            b.addEventListener('click', async () => {
+                if (this._voorstellingTimerEditingSlotId) return;
+                const id = b.getAttribute('data-step-id');
+                const sid = b.getAttribute('data-slot-id');
+                if (id && sid) await this.handleVoorstellingTimerStepClick(id, sid);
+            });
+        });
+
+        sessionsRow.querySelectorAll('[data-slot-begin-edit]').forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const sid = btn.getAttribute('data-slot-begin-edit');
+                if (sid) this.beginTimerColumnEdit(sid);
+            });
+        });
+        sessionsRow.querySelectorAll('[data-slot-edit-cancel]').forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.cancelTimerColumnEdit();
+            });
+        });
+        sessionsRow.querySelectorAll('[data-slot-edit-save]').forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.saveTimerColumnEdit();
+            });
+        });
+        sessionsRow.querySelectorAll('[data-slot-add-custom]').forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const sid = btn.getAttribute('data-slot-add-custom');
+                if (sid) this.addCustomTimerStepToColumn(sid);
+            });
+        });
+        sessionsRow.querySelectorAll('[data-step-remove]').forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const sid = btn.getAttribute('data-slot-id');
+                const rid = btn.getAttribute('data-step-remove');
+                if (sid && rid) this.removeTimerStepFromColumn(sid, rid);
+            });
+        });
+        sessionsRow.querySelectorAll('[data-remark-edit][data-slot-id]').forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const sid = btn.getAttribute('data-slot-id');
+                const rid = btn.getAttribute('data-remark-edit');
+                if (sid && rid) {
+                    void this.editVoorstellingTimerRemark(sid, rid);
+                }
+            });
+        });
+
+        this.ensureVoorstellingTimerStepDragListeners(sessionsRow);
+
+        this.updateVoorstellingAuxiliaryClock();
+        } finally {
+            this.updateVoorstellingTimerCardTitle();
+            this.updateVoorstellingTimerExportButtonState();
+        }
+    }
+
+    async showVoorstellingTimerView() {
+        if (!this.canOpenVoorstellingTimer()) {
+            return;
+        }
+        this.pushHistorySnapshotIfNeeded('voorstellingTimer');
+        this.previousView = this.currentView;
+        this.currentView = 'voorstellingTimer';
+        this.hideLuminexShell();
+        this.hideOscMonitorShell();
+        this.hideTrekkenlijstenShell();
+
+        const weekWrapper = document.getElementById('weekViewWrapper');
+        const homeContainer = document.getElementById('homeViewContainer');
+        const detailWrapper = document.getElementById('detailViewWrapper');
+        const homeStatus = document.getElementById('homeViewStatus');
+        if (weekWrapper) weekWrapper.style.display = 'none';
+        if (homeContainer) homeContainer.style.display = 'none';
+        if (detailWrapper) detailWrapper.style.display = 'none';
+        if (homeStatus) homeStatus.style.display = 'none';
+
+        const timerWrap = document.getElementById('voorstellingTimerWrapper');
+        if (timerWrap) timerWrap.style.display = 'block';
+
+        document.body.classList.remove('home-view-active');
+        document.body.classList.remove('week-view-active');
+        document.body.classList.remove('trekkenlijsten-active');
+        document.body.classList.remove('luminex-view-active');
+        document.body.classList.remove('osc-monitor-active');
+        document.body.classList.add('voorstelling-timer-active');
+
+        document.getElementById('weekBtn')?.classList.remove('active');
+        document.getElementById('homeBtn')?.classList.remove('active');
+        document.getElementById('trekkenlijstenNavBtn')?.classList.remove('active');
+        document.getElementById('luminexNavBtn')?.classList.remove('active');
+        document.getElementById('oscMonitorNavBtn')?.classList.remove('active');
+        document.getElementById('voorstellingTimerBtn')?.classList.add('active');
+
+        const techOverviewBtn = document.getElementById('techOverviewBtn');
+        if (techOverviewBtn) techOverviewBtn.style.display = 'none';
+
+        const dateSelector = document.querySelector('.date-selector');
+        const venueSelector = document.querySelector('.venue-selector');
+        if (dateSelector) {
+            dateSelector.style.display = 'flex';
+            dateSelector.style.visibility = 'visible';
+        }
+        if (venueSelector) {
+            venueSelector.style.display = 'block';
+            venueSelector.style.visibility = 'visible';
+        }
+
+        await this.renderVoorstellingTimerUI();
+        this.startVoorstellingTimerClockLoop();
+        this.startVoorstellingTimerSyncPoll();
+        this.updateBackButtonVisibility();
     }
 
     /**
@@ -3863,7 +8885,13 @@ class TheaterDashboard {
         if (!dateString) return 'Onbekend';
         try {
             const date = new Date(dateString);
-            return date.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+            const locale = this.locale === 'en' ? 'en-GB' : 'nl-NL';
+            return date.toLocaleTimeString(locale, {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false,
+                timeZone: this.getEffectiveTimeZone()
+            });
         } catch (e) {
             return 'Onbekend';
         }
@@ -4033,9 +9061,9 @@ class TheaterDashboard {
             const eventVenueId = event._organizationId && event.venueIds?.[0] ? `${event._organizationId}:${event.venueIds[0]}` : event.venueIds?.[0];
             const { showBalletvloer, showVleugel, showOrkestbak } = this.getBalletvloerVleugelDisplay(event.venue, eventVenueId);
             const parts = [];
-            if (showBalletvloer) parts.push(`Balletvloer: ${event.balletvloerExplicit ? (event.hasBalletvloer ? this.t('resources.ja') : this.t('resources.nee')) : this.t('resources.nietBekend')}`);
-            if (showVleugel) parts.push(`Vleugel: ${event.vleugelExplicit ? (event.hasVleugel ? this.t('resources.ja') : this.t('resources.nee')) : this.t('resources.nietBekend')}`);
-            if (showOrkestbak) parts.push(`Orkestbak: ${(event.orkestbakExplicit || event.orkestbakValue) ? (event.orkestbakValue || (event.hasOrkestbak ? this.t('resources.ja') : this.t('resources.nee'))) : this.t('resources.nietBekend')}`);
+            if (this.shouldShowTechnicalPartForEvent(event, 'balletvloer', showBalletvloer)) parts.push(`Balletvloer: ${event.balletvloerExplicit ? (event.hasBalletvloer ? this.t('resources.ja') : this.t('resources.nee')) : this.t('resources.nietBekend')}`);
+            if (this.shouldShowTechnicalPartForEvent(event, 'vleugel', showVleugel)) parts.push(`Vleugel: ${event.vleugelExplicit ? (event.hasVleugel ? this.t('resources.ja') : this.t('resources.nee')) : this.t('resources.nietBekend')}`);
+            if (this.shouldShowTechnicalPartForEvent(event, 'orkestbak', showOrkestbak)) parts.push(`Orkestbak: ${(event.orkestbakExplicit || event.orkestbakValue) ? (event.orkestbakValue || (event.hasOrkestbak ? this.t('resources.ja') : this.t('resources.nee'))) : this.t('resources.nietBekend')}`);
             const resourcesLine = parts.length ? parts.join(' · ') : '';
             const materials = (event.technicalMaterialResources || []).map(m => escape(m)).join(', ');
             const docs = (event.technicalListDocuments || []).map(doc => {
@@ -4111,7 +9139,7 @@ class TheaterDashboard {
             return;
         }
         const urenInfo = data.data;
-        const hasAny = (urenInfo.techniek?.length || 0) + (urenInfo.horeca?.length || 0) + (urenInfo.frontOffice?.length || 0) > 0;
+        const hasAny = Object.values(urenInfo || {}).some((v) => Array.isArray(v) && v.length > 0);
         if (!hasAny) {
             container.innerHTML = noPlanningMsg;
             return;
@@ -4175,6 +9203,9 @@ class TheaterDashboard {
             if (!s) return true;
             const lower = s.toLowerCase();
             const hasTime = /\b\d{1,2}:\d{2}\b/.test(s);
+            const isStatusOnly = /^(yes|no|on|off|ja|nee|true|false|nvt|n\.v\.t\.)$/i.test(s);
+            if (isStatusOnly) return true;
+            if (/^[a-z0-9_\s]+[:\-]\s*(yes|no|on|off|ja|nee|true|false)\s*$/i.test(lower)) return true;
             const blockedPhrases = [
                 'opmerkingen techniek',
                 'verder hebben we nodig',
@@ -4198,12 +9229,35 @@ class TheaterDashboard {
             return false;
         };
 
+        const isLikelyPersonName = (value) => {
+            const raw = String(value || '').trim();
+            if (!raw) return false;
+            if (raw.length > 60) return false;
+            if (/[0-9]/.test(raw)) return false;
+            if (/[,:;()[\]{}]/.test(raw)) return false;
+            if (/\b\d{1,2}:\d{2}\b/.test(raw)) return false;
+            const tokens = raw.split(/\s+/).filter(Boolean);
+            if (tokens.length < 1 || tokens.length > 4) return false;
+            const lowerJoin = tokens.join(' ').toLowerCase();
+            if (/\b(stage|show|soundcheck|doors|curfew|start|stop|set\s?up|setup|changeover|diner)\b/i.test(lowerJoin)) return false;
+
+            const particles = new Set(['de', 'den', 'der', 'van', 'von', 'ten', 'ter', 'la', 'le', 'du']);
+            const isNameToken = (token) => {
+                const t = token.replace(/[.'-]/g, '');
+                if (!t) return false;
+                if (particles.has(t.toLowerCase())) return true;
+                if (/^[A-Z]{2,4}$/.test(t)) return true; // DJ, FOH, etc.
+                return /^[A-ZÀ-ÖØ-Ý][a-zà-öø-ÿ]+$/.test(t);
+            };
+            return tokens.every(isNameToken);
+        };
+
         const isLikelySimplePersonnelRaw = (raw) => {
             const s = String(raw || '').trim();
             if (!s) return false;
             if (isClearlyNonPersonnelText(s)) return false;
-            // Eenvoudige personeelsregel: 1-4 woorden, letters/spaties/koppeltekens/apostrof.
-            return /^[A-Za-z\u00C0-\u024F][A-Za-z\u00C0-\u024F'\- ]{1,60}$/.test(s) && s.split(/\s+/).length <= 4;
+            // Alleen korte waarden die echt op een persoonsnaam lijken.
+            return isLikelyPersonName(s);
         };
 
         const toDisplayNameTimePairs = (entries) => {
@@ -4246,22 +9300,49 @@ class TheaterDashboard {
             );
         };
 
-        const techniek = (urenInfo.techniek || []).filter(entry => {
-            const entryUpper = String(entry || '').toUpperCase();
-            if (isTechnicalRemarksLine(entry)) return false;
-            return !entryUpper.includes('VRIJWILLIGER') && !entryUpper.includes('VOLUNTEER');
-        });
-        const techniekDisplay = toDisplayNameTimePairs(techniek);
-        const horeca = (urenInfo.horeca || []).filter(entry => {
-            const entryUpper = String(entry).toUpperCase();
-            return !entryUpper.includes('VRIJWILLIGER') && !entryUpper.includes('VOLUNTEER');
-        });
-        const frontOffice = (urenInfo.frontOffice || []).filter(entry => {
-            const entryUpper = String(entry).toUpperCase();
-            return !entryUpper.includes('VRIJWILLIGER') && !entryUpper.includes('VOLUNTEER');
-        });
-        const horecaDisplay = toDisplayNameTimePairs(horeca);
-        const frontOfficeDisplay = toDisplayNameTimePairs(frontOffice);
+        const normalizeCategoryKey = (key) => String(key || '').trim();
+        const getCategoryLabel = (key) => {
+            if (key === 'techniek') return this.t('personnel.techniek');
+            if (key === 'horeca') return this.t('personnel.horeca');
+            if (key === 'frontOffice') return this.t('personnel.frontOffice');
+            if (key === 'nostradamus') return 'Nostradamus';
+            const k = String(key || '').replace(/[_-]+/g, ' ').trim();
+            if (!k) return 'Overig';
+            return k.charAt(0).toUpperCase() + k.slice(1);
+        };
+        const categoryOrderRank = (key) => {
+            if (key === 'techniek') return 0;
+            if (key === 'horeca') return 1;
+            if (key === 'frontOffice') return 2;
+            if (key === 'nostradamus') return 3;
+            return 10;
+        };
+        const categoryEntries = Object.entries(urenInfo || {})
+            .filter(([, entries]) => Array.isArray(entries))
+            .map(([key, entries]) => {
+                const filtered = entries.filter((entry) => {
+                    const entryUpper = String(entry || '').toUpperCase();
+                    if (isTechnicalRemarksLine(entry)) return false;
+                    return !entryUpper.includes('VRIJWILLIGER') && !entryUpper.includes('VOLUNTEER');
+                });
+                return {
+                    key: normalizeCategoryKey(key),
+                    label: getCategoryLabel(key),
+                    display: toDisplayNameTimePairs(filtered)
+                };
+            })
+            .filter((c) => c.display.length > 0)
+            .sort((a, b) => {
+                const r = categoryOrderRank(a.key) - categoryOrderRank(b.key);
+                if (r !== 0) return r;
+                return a.label.localeCompare(b.label, this.locale === 'en' ? 'en' : 'nl', { sensitivity: 'base' });
+            });
+        if (!categoryEntries.length) {
+            container.innerHTML = noPlanningMsg;
+            return;
+        }
+        const validFilter = this.personnelCategoryFilter && (this.personnelCategoryFilter === 'all' || categoryEntries.some((c) => c.key === this.personnelCategoryFilter));
+        if (!validFilter) this.personnelCategoryFilter = 'all';
 
         const escInline = (text) => String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
         const renderPersonnelRows = (pairs) => {
@@ -4273,51 +9354,195 @@ class TheaterDashboard {
                 return `<div style="padding: 0.5rem; background: #1a202c; border-radius: 4px; font-size: 0.85rem; color: #a0aec0;">${escInline(text)}</div>`;
             }).join('');
         };
-
+        const buildNostradamusGroups = (pairs) => {
+            const groups = new Map();
+            const pushUnique = (role, person) => {
+                const r = String(role || '').trim() || 'Overig';
+                const p = String(person || '').trim();
+                if (!p) return;
+                const arr = groups.get(r) || [];
+                if (!arr.some((x) => x.toLowerCase() === p.toLowerCase())) arr.push(p);
+                groups.set(r, arr);
+            };
+            pairs.forEach((pair) => {
+                const text = String(pair?.time ? `${pair.name} – ${pair.time}` : pair?.name || '').trim();
+                if (!text) return;
+                const parts = text.split('|').map((x) => x.trim()).filter(Boolean);
+                if (parts.length >= 2) {
+                    pushUnique(parts[0], parts[1]);
+                    return;
+                }
+                pushUnique('Overig', text);
+            });
+            return [...groups.entries()];
+        };
+        const renderNostradamusByRole = (groups) => {
+            if (!groups.length) return renderPersonnelRows([]);
+            const filter = this.nostradamusRoleFilter || 'all';
+            const visibleGroups = filter === 'all'
+                ? groups
+                : groups.filter(([role]) => String(role) === filter);
+            if (!visibleGroups.length) return renderPersonnelRows([]);
+            return visibleGroups.map(([role, names]) => `
+                <div style="padding: 0.6rem; background: rgba(15, 23, 42, 0.45); border: 1px solid #334155; border-radius: 8px;">
+                    <div style="font-size: 0.9rem; color: #c7d2fe; font-weight: 600; margin-bottom: 0.4rem;">${escInline(role)}</div>
+                    <div style="display:flex; flex-direction:column; gap:0.35rem;">
+                        ${names.map((n) => `<div style="padding: 0.45rem 0.55rem; background: #1a202c; border-radius: 6px; font-size: 0.84rem; color: #a0aec0;">${escInline(n)}</div>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+        };
+        const filterButtonsHtml = [
+            `<button type="button" class="personnel-filter-btn${this.personnelCategoryFilter === 'all' ? ' active' : ''}" data-personnel-filter="all">Alles</button>`,
+            ...categoryEntries.map((c) => `<button type="button" class="personnel-filter-btn${this.personnelCategoryFilter === c.key ? ' active' : ''}" data-personnel-filter="${this.escapeHtml(c.key)}">${this.escapeHtml(c.label)}</button>`)
+        ].join('');
+        const nostradamusEntry = categoryEntries.find((c) => c.key === 'nostradamus');
+        const nostradamusGroups = nostradamusEntry ? buildNostradamusGroups(nostradamusEntry.display) : [];
+        const nostradamusRoleOptionsRaw = nostradamusGroups.map(([role]) => String(role)).filter(Boolean);
+        const nostradamusRoleOptions = this.getOrderedNostradamusRoles(nostradamusRoleOptionsRaw);
+        if (this.nostradamusRoleFilter !== 'all' && !nostradamusRoleOptions.includes(this.nostradamusRoleFilter)) {
+            this.nostradamusRoleFilter = 'all';
+        }
+        const showRoleFilterRow = nostradamusRoleOptions.length > 1 &&
+            (this.personnelCategoryFilter === 'all' || this.personnelCategoryFilter === 'nostradamus');
+        const roleFilterButtonsHtml = showRoleFilterRow
+            ? [
+                `<button type="button" class="personnel-filter-btn${this.nostradamusRoleFilter === 'all' ? ' active' : ''}" data-nostradamus-role="all">Alle functies</button>`,
+                ...nostradamusRoleOptions.map((role) => `<button type="button" class="personnel-filter-btn personnel-filter-btn--draggable${this.nostradamusRoleFilter === role ? ' active' : ''}" data-nostradamus-role="${this.escapeHtml(role)}" data-nostradamus-role-draggable="${this.escapeHtml(role)}" draggable="true">${this.escapeHtml(role)}</button>`)
+            ].join('')
+            : '';
+        const filterRowsHiddenStyle = this.personnelFiltersCollapsed ? 'display:none;' : '';
+        const blocksHtml = categoryEntries.map((c) => `
+                <div class="data-item personnel-category-block" data-personnel-cat="${this.escapeHtml(c.key)}" style="margin-bottom: 1.5rem;${this.personnelCategoryFilter !== 'all' && this.personnelCategoryFilter !== c.key ? ' display:none;' : ''}">
+                    <h4 style="margin-bottom: 0.75rem; color: #e2e8f0; font-size: 1rem; font-weight: 600;">
+                        ${this.escapeHtml(c.label)}
+                    </h4>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        ${c.key === 'nostradamus' ? renderNostradamusByRole(nostradamusGroups) : renderPersonnelRows(c.display)}
+                    </div>
+                </div>
+        `).join('');
         container.innerHTML = `
             <div class="shifts-list">
-                <div class="data-item" style="margin-bottom: 1.5rem;">
-                    <h4 style="margin-bottom: 0.75rem; color: #e2e8f0; font-size: 1rem; font-weight: 600;">
-                        ${this.t('personnel.techniek')}
-                    </h4>
-                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                        ${renderPersonnelRows(techniekDisplay)}
+                <div class="data-item" data-personnel-filter-row="category" style="margin-bottom: 1rem; ${filterRowsHiddenStyle}">
+                    <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                        ${filterButtonsHtml}
                     </div>
                 </div>
-                <div class="data-item" style="margin-bottom: 1.5rem;">
-                    <h4 style="margin-bottom: 0.75rem; color: #e2e8f0; font-size: 1rem; font-weight: 600;">
-                        ${this.t('personnel.horeca')}
-                    </h4>
-                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                        ${renderPersonnelRows(horecaDisplay)}
+                ${showRoleFilterRow ? `
+                <div class="data-item" data-personnel-filter-row="role" style="margin-bottom: 1rem; ${filterRowsHiddenStyle}">
+                    <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
+                        ${roleFilterButtonsHtml}
                     </div>
-                </div>
-                <div class="data-item" style="margin-bottom: 1.5rem;">
-                    <h4 style="margin-bottom: 0.75rem; color: #e2e8f0; font-size: 1rem; font-weight: 600;">
-                        ${this.t('personnel.frontOffice')}
-                    </h4>
-                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                        ${renderPersonnelRows(frontOfficeDisplay)}
-                    </div>
-                </div>
+                </div>` : ''}
+                ${blocksHtml}
             </div>
         `;
+        this.updatePersonnelFilterToggleState();
+        container.querySelectorAll('[data-personnel-filter]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const next = String(btn.dataset.personnelFilter || 'all');
+                this.personnelCategoryFilter = next || 'all';
+                this.updateUurwerkDisplay({ success: true, data: urenInfo, timestamp: new Date().toISOString() });
+            });
+        });
+        container.querySelectorAll('[data-nostradamus-role]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                if (this._nostradamusRoleDragMoved) {
+                    this._nostradamusRoleDragMoved = false;
+                    return;
+                }
+                const role = String(btn.getAttribute('data-nostradamus-role') || 'all');
+                this.nostradamusRoleFilter = role || 'all';
+                this.updateUurwerkDisplay({ success: true, data: urenInfo, timestamp: new Date().toISOString() });
+            });
+        });
+        const draggableRoleButtons = Array.from(container.querySelectorAll('[data-nostradamus-role-draggable]'));
+        draggableRoleButtons.forEach((btn) => {
+            btn.addEventListener('dragstart', (e) => {
+                const role = String(btn.getAttribute('data-nostradamus-role-draggable') || '').trim();
+                if (!role) return;
+                this._nostradamusRoleDragMoved = false;
+                btn.classList.add('personnel-filter-btn--dragging');
+                e.dataTransfer?.setData('text/plain', role);
+                if (e.dataTransfer) e.dataTransfer.effectAllowed = 'move';
+            });
+            btn.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
+            });
+            btn.addEventListener('drop', async (e) => {
+                e.preventDefault();
+                const sourceRole = String(e.dataTransfer?.getData('text/plain') || '').trim();
+                const targetRole = String(btn.getAttribute('data-nostradamus-role-draggable') || '').trim();
+                if (!sourceRole || !targetRole || sourceRole === targetRole) return;
+                const nextOrder = [...nostradamusRoleOptions];
+                const from = nextOrder.indexOf(sourceRole);
+                const to = nextOrder.indexOf(targetRole);
+                if (from < 0 || to < 0) return;
+                nextOrder.splice(from, 1);
+                nextOrder.splice(to, 0, sourceRole);
+                this._nostradamusRoleDragMoved = true;
+                await this.saveNostradamusRoleOrder(nextOrder);
+                this.updateUurwerkDisplay({ success: true, data: urenInfo, timestamp: new Date().toISOString() });
+            });
+            btn.addEventListener('dragend', () => {
+                btn.classList.remove('personnel-filter-btn--dragging');
+                setTimeout(() => { this._nostradamusRoleDragMoved = false; }, 0);
+            });
+        });
     }
 
     /**
      * Itix / tickets: basis-URL uit instellingen + Yesplan-event-id voor zaalplattegrond-link.
      * baseURL zonder slash aan het einde; er wordt /{eventId} toegevoegd.
      */
-    getItixSeatingPlanUrl(eventId) {
-        if (typeof window !== 'undefined' && typeof window.buildItixSeatingPlanUrl === 'function') {
-            return window.buildItixSeatingPlanUrl(this.config?.itix?.baseURL, eventId);
+    getItixSeatingPlanBaseURLForOrg(orgId) {
+        const orgNum = orgId === 2 ? 2 : 1;
+        const legacy = String(this.config?.itix?.baseURL || '').trim();
+        if (orgNum === 2) return String(this.config?.itix?.baseURL2 || '').trim();
+        return String(this.config?.itix?.baseURL1 || legacy || '').trim();
+    }
+
+    getVenueOrgFromId(venueId) {
+        const raw = String(venueId || '').trim();
+        if (!raw) return 1;
+        if (raw.includes(':')) {
+            const orgPart = raw.split(':')[0];
+            return String(orgPart).trim() === '2' ? 2 : 1;
         }
-        const base = String(this.config?.itix?.baseURL || '').trim().replace(/\/+$/, '');
+        const venues = Array.isArray(this.availableVenues) ? this.availableVenues : [];
+        const exact = venues.find((v) => String(v.id || '').trim() === raw);
+        if (exact?._organizationId != null) {
+            return String(exact._organizationId).trim() === '2' ? 2 : 1;
+        }
+        const bySuffix = venues.find((v) => String(v.id || '').split(':').pop() === raw);
+        if (bySuffix?._organizationId != null) {
+            return String(bySuffix._organizationId).trim() === '2' ? 2 : 1;
+        }
+        // Fallback: als deze sessie op org 2 staat en venues geen _organizationId dragen,
+        // behandel ongeprefixte ids als org 2.
+        const activeOrg = this.config?.app?.activeYesplanOrg;
+        if (activeOrg === 2) return 2;
+        return 1;
+    }
+
+    hasItixBaseURLForVenue(venueId) {
+        const orgNum = this.getVenueOrgFromId(venueId);
+        return !!this.getItixSeatingPlanBaseURLForOrg(orgNum);
+    }
+
+    getItixSeatingPlanUrl(eventId, orgId = 1) {
+        const baseURL = this.getItixSeatingPlanBaseURLForOrg(orgId);
+        if (typeof window !== 'undefined' && typeof window.buildItixSeatingPlanUrl === 'function') {
+            return window.buildItixSeatingPlanUrl(baseURL, eventId);
+        }
+        const base = String(baseURL || '').trim().replace(/\/+$/, '');
         if (!base || eventId == null || eventId === '') return '';
         return `${base}/${encodeURIComponent(String(eventId))}`;
     }
 
-    async updateItixDisplay(data, reservationsData = null) {
+    async updateItixDisplay(data) {
         const container = document.getElementById('itixContent');
         
         if (!container) {
@@ -4331,18 +9556,13 @@ class TheaterDashboard {
         // Zelfde volgorde als Yesplan-kaart: zaalvolgorde (instellingen), binnen zaal op starttijd — geen willekeurige API-volgorde.
         const yesplanEvents = [...yesplanEventsRaw].sort((a, b) => this.sortEventByDefault(a, b));
         
-        // Haal reserveringen op
-        const reservations = (reservationsData && reservationsData.success && reservationsData.data) 
-            ? reservationsData.data 
-            : (this.data.reservations && this.data.reservations.success && this.data.reservations.data) 
-                ? this.data.reservations.data 
-                : [];
         const escapeInline = (value) => String(value || '')
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;')
             .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#039;');
+            .replace(/'/g, '&#039;')
+            .replace(/\\/g, '&#92;');
         
         // Als er Yesplan verkoopdata is, toon die (met reserveringen uit Yesplan).
         if (yesplanEvents.length > 0) {
@@ -4376,9 +9596,7 @@ class TheaterDashboard {
                         const capacity = event.capacity || 0;
                         const reserved = event.ticketsReserved || 0;
                         
-                        // Haal reserveringen voor dit evenement op
-                        const eventReservations = reservations.filter(r => r.eventId === event.id);
-                        const reservedCount = reserved || eventReservations.reduce((sum, r) => sum + (r.tickets || 1), 0);
+                        const reservedCount = reserved;
                         const gasten = event.aantalGasten || 0;
                         const totaal = sold + reservedCount + gasten;
                         
@@ -4396,12 +9614,12 @@ class TheaterDashboard {
                         const showSeatingPlan = displayOptions?.showZaalplattegrond !== false;
                         let seatingPlanBlock = '';
                         if (showSeatingPlan) {
-                            let seatingPlanHtml;
+                            const eventOrgId = event?._organizationId === 2 ? 2 : 1;
                             if (seatingPlanId) {
-                                const seatingPlanUrl = this.getItixSeatingPlanUrl(seatingPlanId);
+                                const seatingPlanUrl = this.getItixSeatingPlanUrl(seatingPlanId, eventOrgId);
                                 if (seatingPlanUrl) {
                                     const escapedPlanUrl = escapeInline(seatingPlanUrl);
-                                    seatingPlanHtml = `
+                                    const seatingPlanHtml = `
                                     <a href="#" class="rider-link"
                                        data-rider-url="${escapedPlanUrl}"
                                        style="color: #818cf8; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(129, 140, 248, 0.1); border-radius: 4px; transition: all 0.2s; cursor: pointer;">
@@ -4409,20 +9627,16 @@ class TheaterDashboard {
                                         <span>${this.escapeHtml(this.t('cards.openSeatingPlan'))}</span>
                                     </a>
                                 `;
-                                } else {
-                                    seatingPlanHtml = `<p style="color: #718096; font-size: 0.9rem; margin: 0;">${this.escapeHtml(this.t('messages.seatingPlanNoBase'))}</p>`;
+                                    seatingPlanBlock = `
+                                        <div>
+                                            <h4 style="margin-bottom: 0.5rem; margin-top: 0; color: #e2e8f0; font-size: 1rem; font-weight: 600;">
+                                                ${this.escapeHtml(this.t('cards.seatingPlan'))}
+                                            </h4>
+                                            ${seatingPlanHtml}
+                                        </div>
+                                    `;
                                 }
-                            } else {
-                                seatingPlanHtml = `<p style="color: #718096; font-size: 0.9rem; margin: 0;">${this.escapeHtml(this.t('messages.seatingPlanUnavailable'))}</p>`;
                             }
-                            seatingPlanBlock = `
-                                <div>
-                                    <h4 style="margin-bottom: 0.5rem; margin-top: 0; color: #e2e8f0; font-size: 1rem; font-weight: 600;">
-                                        ${this.escapeHtml(this.t('cards.seatingPlan'))}
-                                    </h4>
-                                    ${seatingPlanHtml}
-                                </div>
-                            `;
                         }
                         
                         return `
@@ -4463,22 +9677,6 @@ class TheaterDashboard {
                         `;
                     }))}
                 </div>
-                ${reservations.length > 0 && !yesplanEvents.some(e => reservations.some(r => r.eventId === e.id)) ? `
-                <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 2px solid #e2e8f0;">
-                    <h4 style="margin-bottom: 0.75rem; color: #e2e8f0;"><i class="fas fa-bookmark"></i> Reserveringen</h4>
-                    <div class="events-list">
-                        ${reservations.map(res => `
-                            <div class="data-item">
-                                <h4>${res.eventName}</h4>
-                                <p><strong>${res.customerName || 'Onbekend'}</strong> - ${res.tickets || 1} ticket(s)</p>
-                                ${res.customerEmail ? `<p style="font-size: 0.85rem; color: #718096;"><i class="fas fa-envelope"></i> ${res.customerEmail}</p>` : ''}
-                                ${res.formattedDate ? `<p style="font-size: 0.85rem; color: #718096;"><i class="fas fa-calendar"></i> ${res.formattedDate}</p>` : ''}
-                                ${res.notes ? `<p style="font-size: 0.85rem; color: #718096; font-style: italic;">${res.notes}</p>` : ''}
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-                ` : ''}
             `;
             this.setupRiderLinkHandlers(container);
             return;
@@ -4532,7 +9730,9 @@ class TheaterDashboard {
         // Update status bij wijziging van internetverbinding
         window.addEventListener('online', () => {
             this.isOnline = true;
-            // Status wordt automatisch geüpdatet bij volgende data load
+            if (window.__SHIFT_HAPPENS_MOBILE__ || this.getShiftServerBaseUrl() || this.getShiftAuthToken()) {
+            void this.refreshApiServerStatus();
+        }
         });
         
         window.addEventListener('offline', () => {
@@ -4549,9 +9749,72 @@ class TheaterDashboard {
     }
     
     updateAllCardsOffline() {
-        ['yesplan'].forEach(system => {
-            this.statusBySystem[system] = 'offline';
-        });
+        this.statusBySystem.yesplan = 'offline';
+        if (this.getShiftHappensApiBase()) {
+            this.statusBySystem.apiServer = 'offline';
+        }
+        this.updateMasterStatus();
+    }
+
+    /**
+     * Zelfde normalisatie als api-mobile.js (Shift Happens API-basis-URL).
+     */
+    getShiftHappensApiBase() {
+        if (window.__SHIFT_HAPPENS_MOBILE__) {
+            const raw = window.SHIFT_HAPPENS_API_BASE || localStorage.getItem('SHIFT_HAPPENS_API_BASE') || '';
+            return this.normalizeShiftHappensApiBase(raw);
+        }
+        return this.resolveShiftServerBaseUrl();
+    }
+
+    async pingShiftPresence() {
+        const base = this.resolveShiftServerBaseUrl();
+        if (!base || !this.getShiftAuthToken()) return false;
+        try {
+            const r = await this.fetchShiftHappensApi(`${base.replace(/\/$/, '')}/api/auth/presence`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ client: this.getShiftClientLabel(), view: this.currentView || 'home' })
+            });
+            if (!r.ok) {
+                console.warn('Presence ping HTTP', r.status, base);
+            }
+            return r.ok;
+        } catch (e) {
+            console.warn('Presence ping mislukt:', e);
+            return false;
+        }
+    }
+
+    async refreshApiServerStatus() {
+        const base = this.getShiftHappensApiBase();
+        if (!base) {
+            this.statusBySystem.apiServer = null;
+            this.updateMasterStatus();
+            return;
+        }
+        if (!this.isOnline) {
+            this.statusBySystem.apiServer = 'offline';
+            this.updateMasterStatus();
+            return;
+        }
+        try {
+            const url = `${base.replace(/\/$/, '')}/api/health`;
+            const ctrl = new AbortController();
+            const t = setTimeout(() => ctrl.abort(), 8000);
+            const r = await this.fetchShiftHappensApi(url, { method: 'GET', cache: 'no-store', signal: ctrl.signal });
+            clearTimeout(t);
+            let j = {};
+            try {
+                j = await r.json();
+            } catch {
+                /* ignore */
+            }
+            const authed = !j?.authRequired || !!this.getShiftAuthToken();
+            this.statusBySystem.apiServer = r.ok && j && j.ok === true && authed ? 'online' : 'offline';
+        } catch {
+            this.statusBySystem.apiServer = 'offline';
+        }
         this.updateMasterStatus();
     }
     
@@ -4564,10 +9827,15 @@ class TheaterDashboard {
     }
 
     updateMasterStatus() {
-        const statuses = Object.values(this.statusBySystem || {}).filter(Boolean);
-        const onlineCount = statuses.filter(s => s === 'online').length;
-        const aggregate = statuses.length === 0 ? 'offline'
-            : onlineCount === statuses.length ? 'online'
+        const sb = this.statusBySystem || {};
+        const parts = [];
+        if (sb.yesplan) parts.push(sb.yesplan);
+        if (this.getShiftHappensApiBase() && sb.apiServer) {
+            parts.push(sb.apiServer);
+        }
+        const onlineCount = parts.filter((s) => s === 'online').length;
+        const aggregate = parts.length === 0 ? 'offline'
+            : onlineCount === parts.length ? 'online'
             : onlineCount === 0 ? 'offline'
             : 'deels'; // Tussenstand: een deel werkt
 
@@ -4594,18 +9862,45 @@ class TheaterDashboard {
         if (!popover || !content) return;
         if (this._closeStatusPopover) this._closeStatusPopover();
 
-        const systems = [
-            { id: 'yesplan', label: 'Yesplan' }
-        ];
-
-        let html = '';
-        for (const { id, label } of systems) {
-            const status = this.statusBySystem?.[id] || null;
+        const renderContent = () => {
+            const systems = [{ id: 'yesplan', label: 'Yesplan' }];
+            if (this.getShiftHappensApiBase()) {
+                systems.push({
+                    id: 'apiServer',
+                    label: window.__SHIFT_HAPPENS_MOBILE__ ? this.t('status.apiServerLabel') : 'Shift-server'
+                });
+            }
+            let html = '';
+            for (const { id, label } of systems) {
+                if (id === 'apiServer') {
+                    const base = this.getShiftHappensApiBase();
+                    if (!base) {
+                        html += `<div class="status-popover-row"><span class="status-dot neutral"></span><span class="status-label">${label}</span><span class="status-value" style="color:#718096">${this.t('status.apiServerNotSet')}</span></div>`;
+                    } else {
+                        const st = this.statusBySystem?.apiServer;
+                        const value = st === 'online'
+                            ? this.t('status.online')
+                            : st === 'offline'
+                                ? this.t('status.offline')
+                                : '–';
+                        const dotClass = st === 'online' ? 'online' : st === 'offline' ? 'offline' : 'neutral';
+                        const color = st === 'online' ? '#48bb78' : st === 'offline' ? '#f56565' : '#718096';
+                        html += `<div class="status-popover-row"><span class="status-dot ${dotClass}"></span><span class="status-label">${label}</span><span class="status-value" style="color:${color}">${value}</span></div>`;
+                    }
+                    continue;
+                }
+                const status = this.statusBySystem?.[id] || null;
                 const value = status === 'online' ? this.t('status.online') : status ? this.t('status.offline') : '–';
-            const dotClass = status === 'online' ? 'online' : 'offline';
-            html += `<div class="status-popover-row"><span class="status-dot ${dotClass}"></span><span class="status-label">${label}</span><span class="status-value" style="color:${status === 'online' ? '#48bb78' : status ? '#f56565' : '#718096'}">${value}</span></div>`;
-        }
-        content.innerHTML = html;
+                const dotClass = status === 'online' ? 'online' : 'offline';
+                html += `<div class="status-popover-row"><span class="status-dot ${dotClass}"></span><span class="status-label">${label}</span><span class="status-value" style="color:${status === 'online' ? '#48bb78' : status ? '#f56565' : '#718096'}">${value}</span></div>`;
+            }
+            content.innerHTML = html;
+        };
+        renderContent();
+        void this.refreshApiServerStatus().then(() => {
+            const p = document.getElementById('statusPopover');
+            if (p && p.style.display === 'block') renderContent();
+        });
 
         const placePopover = () => {
             const margin = 12;
@@ -4676,15 +9971,37 @@ class TheaterDashboard {
 
     showError(system, message) {
         const container = document.getElementById(`${system}Content`);
-        container.innerHTML = `<div class="info-message">${message}</div>`;
+        if (!container) return;
+        container.innerHTML = `<div class="info-message">${this.escapeHtml(message)}</div>`;
     }
 
     calculateTotalRevenue(events) {
         return events.reduce((total, event) => total + (event.revenue || 0), 0).toFixed(0);
     }
 
-    openSettings() {
+    async openSettings() {
+        const timezoneModeSelect = document.getElementById('timezoneModeSelect');
+        if (timezoneModeSelect && !timezoneModeSelect.dataset.boundTzMode) {
+            timezoneModeSelect.addEventListener('change', () => this.handleTimezoneModeChanged());
+            timezoneModeSelect.dataset.boundTzMode = '1';
+        }
+        const timezoneManualSelect = document.getElementById('timezoneManualSelect');
+        if (timezoneManualSelect && !timezoneManualSelect.dataset.boundTzPick) {
+            timezoneManualSelect.addEventListener('change', () => {
+                this.refreshManualTimeInputFromSelectedTimezone();
+            });
+            timezoneManualSelect.dataset.boundTzPick = '1';
+        }
+        const manualTimeInput = document.getElementById('manualTimeInput');
+        if (manualTimeInput && !manualTimeInput.dataset.boundManualTime) {
+            manualTimeInput.addEventListener('input', () => {
+                manualTimeInput.dataset.userEdited = '1';
+            });
+            manualTimeInput.dataset.boundManualTime = '1';
+        }
+        await this.refreshNetworkInterfaceOptions();
         this.populateSettingsForm();
+        this.bindOrgNameLabelListeners();
         this.setupSettingsNavigation();
         this.activateSettingsPage(this.settingsPageKey || 'app-config');
         const modal = document.getElementById('settingsModal');
@@ -4726,24 +10043,31 @@ class TheaterDashboard {
                 key: 'app-config',
                 title: this.locale === 'en' ? 'App Configuration' : 'App configuratie',
                 selectors: [
-                    '#themeSelect', '#languageSelect', '#touchscreenModeCheckbox',
-                    '#activeYesplanOrg',
-                    '#yesplanOrgName', '#yesplanBaseURL', '#yesplanApiKey',
-                    '#yesplanOrgName2', '#yesplanBaseURL2', '#yesplanApiKey2',
+                    '#themeSelect', '#languageSelect', '#timezoneModeSelect', '#timezoneManualSelect', '#touchscreenModeCheckbox', '#showModeCheckbox',
                     '#privaBaseURL', '#privaApiKey', '#privaSystemId',
                     '#apiServerSection',
                     '.loadVenuesBtn'
                 ]
             },
             {
+                key: 'io',
+                title: this.locale === 'en' ? 'In/Out' : 'In/Uit',
+                selectors: ['#networkInternetInterface', '#networkLuminexSacnInterface', '#networkOscInterface']
+            },
+            {
                 key: 'yesplan',
                 title: this.locale === 'en' ? 'Yesplan Settings' : 'Yesplan instellingen',
-                selectors: ['#venueOrderList', '#resetVenueOrder', '#venueResourceOptionsList']
+                selectors: [
+                    '#activeYesplanOrg',
+                    '#yesplanOrgName', '#yesplanOrgShortName', '#yesplanBaseURL', '#yesplanApiKey',
+                    '#yesplanOrgName2', '#yesplanOrgShortName2', '#yesplanBaseURL2', '#yesplanApiKey2',
+                    '#venueOrderList', '#resetVenueOrder', '#venueResourceOptionsList'
+                ]
             },
             {
                 key: 'itix',
                 title: this.locale === 'en' ? 'Itix Settings' : 'Itix instellingen',
-                selectors: ['#itixBaseURL']
+                selectors: ['#itixBaseURL1', '#itixBaseURL2']
             },
             {
                 key: 'about',
@@ -4786,10 +10110,13 @@ class TheaterDashboard {
             if (sectionEl.id === 'apiServerSection') return 'app-config';
             if (sectionEl.id === 'desktopUpdateSection') return 'app-config'; // updates horen bij app-configuratie
             if (sectionEl.querySelector('#themeSelect') || sectionEl.querySelector('#touchscreenModeCheckbox')) return 'app-config';
-            if (sectionEl.querySelector('#yesplanBaseURL') || sectionEl.querySelector('#yesplanBaseURL2') || sectionEl.querySelector('#activeYesplanOrg')) return 'app-config';
+            if (sectionEl.querySelector('#networkInternetInterface') || sectionEl.querySelector('#networkOscInterface') || sectionEl.querySelector('#networkLuminexSacnInterface')) return 'io';
+            if (sectionEl.querySelector('#shiftServerBaseUrlInput')) return 'io';
+            if (sectionEl.querySelector('#masterModeEnabledCheckbox')) return 'io';
+            if (sectionEl.querySelector('#yesplanBaseURL') || sectionEl.querySelector('#yesplanBaseURL2') || sectionEl.querySelector('#activeYesplanOrg')) return 'yesplan';
             if (sectionEl.querySelector('#privaBaseURL')) return 'app-config';
             if (sectionEl.querySelector('#venueOrderList') || sectionEl.querySelector('#venueResourceOptionsList')) return 'yesplan';
-            if (sectionEl.querySelector('#itixBaseURL')) return 'itix';
+            if (sectionEl.querySelector('#itixBaseURL1') || sectionEl.querySelector('#itixBaseURL2')) return 'itix';
             if (sectionEl.querySelector('h3')?.textContent?.toLowerCase().includes('over deze app')) return 'about';
             return null;
         };
@@ -4810,6 +10137,7 @@ class TheaterDashboard {
         if (Array.isArray(this.settingsPageSections.yesplan)) {
             this.settingsPageSections.yesplan.sort((a, b) => {
                 const rank = (section) => {
+                    if (section.querySelector('#activeYesplanOrg')) return -1;
                     if (section.querySelector('#venueResourceOptionsList')) return 0;
                     if (section.querySelector('#venueOrderList')) return 1;
                     return 2;
@@ -4818,10 +10146,33 @@ class TheaterDashboard {
             });
         }
 
+        // Gewenste volgorde binnen App-config tab:
+        // overige app-instellingen, daarna updates, en master-mode als laatste.
+        if (Array.isArray(this.settingsPageSections['app-config'])) {
+            this.settingsPageSections['app-config'].sort((a, b) => {
+                const rank = (section) => {
+                    if (section.querySelector('#masterModeEnabledCheckbox')) return 2;
+                    if (section.id === 'desktopUpdateSection') return 1;
+                    return 0;
+                };
+                return rank(a) - rank(b);
+            });
+        }
+
+        // Gewenste volgorde binnen In/Uit-tab:
+        // netwerkinterfaces eerst, master mode helemaal onderaan.
+        if (Array.isArray(this.settingsPageSections.io)) {
+            this.settingsPageSections.io.sort((a, b) => {
+                const rank = (section) => (section.querySelector('#masterModeEnabledCheckbox') ? 1 : 0);
+                return rank(a) - rank(b);
+            });
+        }
+
         // Zet de fysieke sectievolgorde in het formulier gelijk aan de tab-volgorde en subvolgorde.
         if (settingsForm) {
             const desired = [
                 ...(this.settingsPageSections['app-config'] || []),
+                ...(this.settingsPageSections['io'] || []),
                 ...(this.settingsPageSections['yesplan'] || []),
                 ...(this.settingsPageSections['itix'] || []),
                 ...(this.settingsPageSections['about'] || [])
@@ -4864,7 +10215,11 @@ class TheaterDashboard {
 
         if (this.settingsPageSections) {
             Object.values(this.settingsPageSections).flat().forEach((section) => {
-                const shouldShow = section.dataset.settingsPage === pageKey;
+                let shouldShow = section.dataset.settingsPage === pageKey;
+                // Master mode hoort uitsluitend bij In/Uit-tab.
+                if (section.querySelector('#masterModeEnabledCheckbox')) {
+                    shouldShow = pageKey === 'io';
+                }
                 section.style.display = shouldShow ? (section.dataset.settingsOriginalDisplay || '') : 'none';
             });
         }
@@ -4887,14 +10242,140 @@ class TheaterDashboard {
     getOrgDisplayName(orgNum) {
         const config = orgNum === 2 ? this.config.yesplan2 : this.config.yesplan;
         const name = config?.name?.trim();
-        return name || this.t('settings.orgN', { n: orgNum });
+        const shortName = config?.shortName?.trim();
+        if (name) return name;
+        if (shortName) return shortName;
+        return this.t('settings.orgN', { n: orgNum });
+    }
+
+    getOrgLabelForSettings(orgNum) {
+        const nameId = orgNum === 2 ? 'yesplanOrgName2' : 'yesplanOrgName';
+        const shortNameId = orgNum === 2 ? 'yesplanOrgShortName2' : 'yesplanOrgShortName';
+        const nameFromForm = document.getElementById(nameId)?.value?.trim();
+        const shortFromForm = document.getElementById(shortNameId)?.value?.trim();
+        if (nameFromForm) return nameFromForm;
+        if (shortFromForm) return shortFromForm;
+        return this.getOrgDisplayName(orgNum);
+    }
+
+    updateOrgDependentSettingsLabels() {
+        const label1 = document.getElementById('itixBaseURLLabel1');
+        const label2 = document.getElementById('itixBaseURLLabel2');
+        if (label1) label1.textContent = this.t('settings.itixBaseURLOrg', { org: this.getOrgLabelForSettings(1) });
+        if (label2) label2.textContent = this.t('settings.itixBaseURLOrg', { org: this.getOrgLabelForSettings(2) });
+
+        const activeOrgSelect = document.getElementById('activeYesplanOrg');
+        if (activeOrgSelect) {
+            const current = activeOrgSelect.value;
+            const opt1 = activeOrgSelect.querySelector('option[value="1"]');
+            const opt2 = activeOrgSelect.querySelector('option[value="2"]');
+            if (opt1) opt1.textContent = this.getOrgLabelForSettings(1);
+            if (opt2) opt2.textContent = this.getOrgLabelForSettings(2);
+            if ([...activeOrgSelect.options].some((o) => o.value === current)) activeOrgSelect.value = current;
+        }
+    }
+
+    bindOrgNameLabelListeners() {
+        if (this.orgNameLabelListenersBound) return;
+        ['yesplanOrgName', 'yesplanOrgShortName', 'yesplanOrgName2', 'yesplanOrgShortName2'].forEach((id) => {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('input', () => this.updateOrgDependentSettingsLabels());
+        });
+        this.orgNameLabelListenersBound = true;
+    }
+
+    getVenueDisplayName(venue) {
+        const fallback = this.t('venue.venueId', { id: venue?.id });
+        const rawName = String(venue?.name || '').trim() || fallback;
+        const orgRaw = venue?._organizationId ?? (String(venue?.id || '').includes(':') ? String(venue.id).split(':')[0] : '');
+        let orgNum = String(orgRaw).trim() === '2' ? 2 : (String(orgRaw).trim() === '1' ? 1 : null);
+        if (!orgNum) {
+            const trailingMatch = /\s*\(([^)]*)\)\s*$/.exec(rawName);
+            const trailing = String(trailingMatch?.[1] || '').trim().toLowerCase();
+            const cfg1 = this.config?.yesplan || {};
+            const cfg2 = this.config?.yesplan2 || {};
+            const org1Names = [cfg1.shortName, cfg1.name, 'org 1', 'organisatie 1', 'organisation 1']
+                .map((v) => String(v || '').trim().toLowerCase())
+                .filter(Boolean);
+            const org2Names = [cfg2.shortName, cfg2.name, 'org 2', 'organisatie 2', 'organisation 2']
+                .map((v) => String(v || '').trim().toLowerCase())
+                .filter(Boolean);
+            if (org1Names.includes(trailing)) orgNum = 1;
+            if (org2Names.includes(trailing)) orgNum = 2;
+        }
+        if (!orgNum) return rawName;
+
+        const orgLabel = this.getOrgDisplayName(orgNum);
+        const orgConfig = orgNum === 2 ? this.config?.yesplan2 : this.config?.yesplan;
+        const orgFullName = String(orgConfig?.name || '').trim();
+        const orgShortName = String(orgConfig?.shortName || '').trim();
+        const trailingMatch = /\s*\(([^)]*)\)\s*$/.exec(rawName);
+        let baseName = rawName;
+        if (trailingMatch) {
+            const trailing = String(trailingMatch[1] || '').trim().toLowerCase();
+            const known = [orgLabel, orgFullName, orgShortName, `org ${orgNum}`, `organisatie ${orgNum}`, `organisation ${orgNum}`]
+                .map((v) => String(v || '').trim().toLowerCase())
+                .filter(Boolean);
+            // In multi-org dropdowns willen we altijd een compacte, uniforme suffix.
+            // Daarom vervangen we elke bestaande "(...)" suffix door de gekozen org-label.
+            if (known.includes(trailing) || trailing.length > 0) {
+                baseName = rawName.slice(0, trailingMatch.index).trim();
+            }
+        }
+        return `${baseName} (${orgLabel})`;
     }
 
     escapeHtml(str) {
-        return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+        return String(str || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;')
+            .replace(/\\/g, '&#92;');
+    }
+
+    formatNetworkInterfaceLabel(iface) {
+        if (!iface || typeof iface !== 'object') return '';
+        const name = String(iface.name || '').trim();
+        const address = String(iface.address || '').trim();
+        if (name && address) return `${name} (${address})`;
+        return name || address;
+    }
+
+    async refreshNetworkInterfaceOptions() {
+        const ids = ['networkInternetInterface', 'networkLuminexSacnInterface', 'networkOscInterface', 'oscMonitorInterface'];
+        const selects = ids
+            .map((id) => document.getElementById(id))
+            .filter(Boolean);
+        if (!selects.length) return;
+
+        let interfaces = [];
+        try {
+            const res = await window.electronAPI?.getNetworkInterfaces?.();
+            if (res?.success && Array.isArray(res.data)) interfaces = res.data;
+        } catch (_) {
+            interfaces = [];
+        }
+
+        const autoLabel = this.t('settings.interfaceAuto');
+        const options = [`<option value="auto">${this.escapeHtml(autoLabel)}</option>`];
+        for (const iface of interfaces) {
+            const value = String(iface.address || '').trim();
+            const label = this.formatNetworkInterfaceLabel(iface);
+            if (!value || !label) continue;
+            options.push(`<option value="${this.escapeHtml(value)}">${this.escapeHtml(label)}</option>`);
+        }
+        const html = options.join('');
+        selects.forEach((sel) => {
+            const prev = String(sel.value || '').trim();
+            sel.innerHTML = html;
+            if (prev && [...sel.options].some((o) => o.value === prev)) sel.value = prev;
+        });
     }
 
     populateSettingsForm() {
+        this.enforceUpdateAndMasterSectionOrder();
         // Actieve Yesplan organisatie - dynamisch vullen met ingevoerde namen
         const activeOrgSelect = document.getElementById('activeYesplanOrg');
         if (activeOrgSelect) {
@@ -4910,13 +10391,17 @@ class TheaterDashboard {
         }
         // Yesplan organisatie 1
         document.getElementById('yesplanOrgName').value = this.config.yesplan?.name || '';
+        const yesplanOrgShortNameEl = document.getElementById('yesplanOrgShortName');
+        if (yesplanOrgShortNameEl) yesplanOrgShortNameEl.value = this.config.yesplan?.shortName || '';
         document.getElementById('yesplanBaseURL').value = this.config.yesplan?.baseURL || '';
         document.getElementById('yesplanApiKey').value = this.config.yesplan?.apiKey || '';
         // Yesplan organisatie 2
         const url2El = document.getElementById('yesplanBaseURL2');
         const key2El = document.getElementById('yesplanApiKey2');
         const name2El = document.getElementById('yesplanOrgName2');
+        const shortName2El = document.getElementById('yesplanOrgShortName2');
         if (name2El) name2El.value = this.config.yesplan2?.name || '';
+        if (shortName2El) shortName2El.value = this.config.yesplan2?.shortName || '';
         if (url2El) url2El.value = this.config.yesplan2?.baseURL || '';
         if (key2El) key2El.value = this.config.yesplan2?.apiKey || '';
 
@@ -4925,8 +10410,12 @@ class TheaterDashboard {
         document.getElementById('privaApiKey').value = this.config.priva?.apiKey || '';
         document.getElementById('privaSystemId').value = this.config.priva?.systemId || '';
 
-        const itixBaseEl = document.getElementById('itixBaseURL');
-        if (itixBaseEl) itixBaseEl.value = this.config.itix?.baseURL || '';
+        const itixBaseEl1 = document.getElementById('itixBaseURL1');
+        const itixBaseEl2 = document.getElementById('itixBaseURL2');
+        const legacyItixBase = this.config.itix?.baseURL || '';
+        if (itixBaseEl1) itixBaseEl1.value = this.config.itix?.baseURL1 || legacyItixBase;
+        if (itixBaseEl2) itixBaseEl2.value = this.config.itix?.baseURL2 || '';
+        this.updateOrgDependentSettingsLabels();
 
         // Thema
         const themeSelect = document.getElementById('themeSelect');
@@ -4938,11 +10427,103 @@ class TheaterDashboard {
         if (languageSelect) {
             languageSelect.value = this.config.app?.language || 'nl';
         }
+        const timezoneManualSelect = document.getElementById('timezoneManualSelect');
+        if (timezoneManualSelect) {
+            const timeZones = this.getAvailableTimeZones();
+            timezoneManualSelect.innerHTML = timeZones
+                .map((tz) => `<option value="${this.escapeHtml(tz)}">${this.escapeHtml(tz.replace(/_/g, ' '))}</option>`)
+                .join('');
+            const manualZone = String(this.config.app?.manualTimeZone || this.getSystemTimeZone());
+            timezoneManualSelect.value = timeZones.includes(manualZone) ? manualZone : this.getSystemTimeZone();
+        }
+        const timezoneModeSelect = document.getElementById('timezoneModeSelect');
+        if (timezoneModeSelect) {
+            timezoneModeSelect.value = this.config.app?.timezoneMode === 'manual' ? 'manual' : 'auto';
+        }
+        const manualTimeInput = document.getElementById('manualTimeInput');
+        if (manualTimeInput) {
+            this.refreshManualTimeInputFromSelectedTimezone();
+        }
+        this.updateTimezoneManualVisibility();
         // Touchscreen-modus
         const touchscreenModeCheckbox = document.getElementById('touchscreenModeCheckbox');
         if (touchscreenModeCheckbox) {
             touchscreenModeCheckbox.checked = !!this.config.app?.touchscreenMode;
         }
+        const showModeCheckbox = document.getElementById('showModeCheckbox');
+        if (showModeCheckbox) {
+            showModeCheckbox.checked = this.config.app?.showMode !== false;
+        }
+        const masterModeEnabledCheckbox = document.getElementById('masterModeEnabledCheckbox');
+        if (masterModeEnabledCheckbox) {
+            masterModeEnabledCheckbox.checked = this.config.app?.masterModeEnabled === true;
+        }
+        const shiftServerBaseUrlInput = document.getElementById('shiftServerBaseUrlInput');
+        if (shiftServerBaseUrlInput) {
+            shiftServerBaseUrlInput.value = String(
+                this.config.app?.shiftServerBaseUrl || this.config.app?.timerSyncBaseUrl || ''
+            );
+            const urlRow = shiftServerBaseUrlInput.closest('.form-row');
+            if (urlRow) urlRow.style.display = window.__SHIFT_HAPPENS_MOBILE__ ? 'none' : '';
+        }
+        const shiftAuthEmailInput = document.getElementById('shiftAuthEmailInput');
+        if (shiftAuthEmailInput) {
+            shiftAuthEmailInput.value = String(this.config.app?.shiftAuthEmail || '');
+        }
+        const shiftAuthPasswordInput = document.getElementById('shiftAuthPasswordInput');
+        if (shiftAuthPasswordInput) {
+            shiftAuthPasswordInput.value = '';
+            this.updateShiftAuthPasswordField();
+            shiftAuthPasswordInput.addEventListener('focus', () => {
+                if (this.getShiftAuthToken() && !shiftAuthPasswordInput.value) {
+                    shiftAuthPasswordInput.placeholder = '';
+                }
+            }, { once: false });
+        }
+        void this.refreshShiftAuthStatusLine();
+        if (this.getShiftAuthToken()) this.startShiftPresenceHeartbeat();
+        const masterModeNameInput = document.getElementById('masterModeNameInput');
+        if (masterModeNameInput) {
+            masterModeNameInput.value = String(this.config.app?.masterModeName || '');
+        }
+        const masterModePortInput = document.getElementById('masterModePortInput');
+        if (masterModePortInput) {
+            masterModePortInput.value = String(this.config.app?.masterModePort || 3847);
+        }
+        const unlockInput = document.getElementById('masterModeUnlockPassword');
+        if (unlockInput) unlockInput.value = '';
+        this.updateMasterModeInputState();
+        this.refreshMasterModeStatusLine().catch(() => {
+            /* ignore */
+        });
+        const routing = this.config.app?.networkRouting || {};
+        const networkInternetInterface = document.getElementById('networkInternetInterface');
+        if (networkInternetInterface) {
+            networkInternetInterface.value = String(routing.internetInterface || 'auto');
+            if (![...networkInternetInterface.options].some((o) => o.value === networkInternetInterface.value)) {
+                networkInternetInterface.value = 'auto';
+            }
+        }
+        const networkLuminexSacnInterface = document.getElementById('networkLuminexSacnInterface');
+        if (networkLuminexSacnInterface) {
+            const combined = String(
+                routing.luminexInterface
+                || routing.sacnInterface
+                || 'auto'
+            );
+            networkLuminexSacnInterface.value = combined;
+            if (![...networkLuminexSacnInterface.options].some((o) => o.value === networkLuminexSacnInterface.value)) {
+                networkLuminexSacnInterface.value = 'auto';
+            }
+        }
+        const networkOscInterface = document.getElementById('networkOscInterface');
+        if (networkOscInterface) {
+            networkOscInterface.value = String(routing.oscInterface || 'auto');
+            if (![...networkOscInterface.options].some((o) => o.value === networkOscInterface.value)) {
+                networkOscInterface.value = 'auto';
+            }
+        }
+        this.syncOscMonitorInterfaceSelect();
 
         // API-server URL (alleen op iPhone/web)
         const apiServerSection = document.getElementById('apiServerSection');
@@ -4962,8 +10543,62 @@ class TheaterDashboard {
 
         // Zaalvolgorde
         this.populateVenueOrderSettings();
+        if (this.data?.yesplan?.data?.length) this.updateYesplanVenueTechOptionsFromEvents(this.data.yesplan.data);
         // Technische opties per zaal
         this.populateVenueResourceOptionsSettings();
+    }
+
+    enforceUpdateAndMasterSectionOrder() {
+        const settingsForm = document.getElementById('settingsForm');
+        const updatesSection = document.getElementById('desktopUpdateSection');
+        if (!settingsForm || !updatesSection) return;
+        if (updatesSection.parentElement !== settingsForm) return;
+        // Legacy helper: updates-sectie onderaan in formulier houden.
+        // Master-mode positie wordt via tab-indeling en io-sortering bepaald.
+        settingsForm.appendChild(updatesSection);
+    }
+
+    async refreshMasterModeStatusLine() {
+        const resultEl = document.getElementById('masterModeDiscoveryResult');
+        if (!resultEl) return;
+        if (!window.electronAPI?.getMasterModeStatus) {
+            resultEl.textContent = '';
+            return;
+        }
+        try {
+            const res = await window.electronAPI.getMasterModeStatus();
+            const status = res?.status;
+            if (!res?.success || !status) {
+                resultEl.textContent = '';
+                return;
+            }
+            if (status.enabled) {
+                const firstIp = Array.isArray(status.addresses) && status.addresses.length > 0 ? status.addresses[0] : '0.0.0.0';
+                resultEl.textContent = `Deze app is master op ${firstIp}:${status.port}`;
+                return;
+            }
+            resultEl.textContent = 'Master mode staat uit op dit apparaat.';
+        } catch (_) {
+            resultEl.textContent = '';
+        }
+    }
+
+    async refreshTimerSyncStatusLine() {
+        // Timer sync volgt Shift-login; geen aparte statusregel meer.
+    }
+
+    updateMasterModeInputState() {
+        const enabled = document.getElementById('masterModeEnabledCheckbox')?.checked === true;
+        const nameInput = document.getElementById('masterModeNameInput');
+        const portInput = document.getElementById('masterModePortInput');
+        const discoverBtn = document.getElementById('discoverMasterBtn');
+        const passwordInput = document.getElementById('masterModeUnlockPassword');
+
+        if (nameInput) nameInput.disabled = !enabled;
+        if (portInput) portInput.disabled = !enabled;
+        if (discoverBtn) discoverBtn.disabled = !enabled;
+        // Wachtwoordveld blijft bewust altijd actief, ook wanneer master mode uit staat.
+        if (passwordInput) passwordInput.disabled = false;
     }
 
     getDefaultVenueOrder() {
@@ -5063,7 +10698,7 @@ class TheaterDashboard {
             const eyeTitle = isHidden ? this.t('settings.showVenue') : this.t('settings.hideVenue');
             item.innerHTML = `
                 <i class="fas fa-grip-vertical venue-order-drag" aria-hidden="true"></i>
-                <span class="venue-order-name">${venue.name || this.t('venue.venueId', { id: venue.id })}</span>
+                <span class="venue-order-name">${this.getVenueDisplayName(venue)}</span>
                 <button type="button" class="venue-order-eye" data-venue-id="${venue.id}" title="${eyeTitle}" aria-label="${eyeTitle}">
                     <i class="fas ${eyeIcon}"></i>
                 </button>
@@ -5083,57 +10718,133 @@ class TheaterDashboard {
         this.setupVenueOrderDragAndDrop(container);
     }
 
+
+    mergeYesplanVenueTechOptionsFromVenues(venues) {
+        if (!Array.isArray(venues)) return;
+        for (const venue of venues) {
+            const id = String(venue?.id || '').trim();
+            if (!id) continue;
+            const opts = venue?.yesplanTechOptions;
+            if (!opts || typeof opts !== 'object') continue;
+            const cur = this.yesplanVenueTechOptionsCache[id] || { balletvloer: false, vleugel: false, orkestbak: false };
+            if (opts.balletvloer) cur.balletvloer = true;
+            if (opts.vleugel) cur.vleugel = true;
+            if (opts.orkestbak) cur.orkestbak = true;
+            this.yesplanVenueTechOptionsCache[id] = cur;
+        }
+    }
+
+    updateYesplanVenueTechOptionsFromEvents(events) {
+        if (!Array.isArray(events) || !events.length) return;
+        for (const event of events) {
+            const venueIds = Array.isArray(event?.venueIds) ? event.venueIds : [];
+            const fields = event?.yesplanTechOptionFields;
+            const opts = fields && typeof fields === 'object'
+                ? {
+                    balletvloer: !!fields.balletvloer,
+                    vleugel: !!fields.vleugel,
+                    orkestbak: !!fields.orkestbak
+                }
+                : {
+                    balletvloer: !!(event?.balletvloerExplicit || event?.hasBalletvloer),
+                    vleugel: !!(event?.vleugelExplicit || event?.hasVleugel),
+                    orkestbak: !!(event?.orkestbakExplicit || event?.hasOrkestbak || event?.orkestbakValue)
+                };
+            if (Array.isArray(event?.resources)) {
+                for (const r of event.resources) {
+                    const lower = String(r || '').toLowerCase();
+                    if (lower.includes('balletvloer') || lower.includes('ballet')) opts.balletvloer = true;
+                    if (lower.includes('vleugel') || lower.includes('piano')) opts.vleugel = true;
+                    if (lower.includes('orkestbak')) opts.orkestbak = true;
+                }
+            }
+            if (!opts.balletvloer && !opts.vleugel && !opts.orkestbak) continue;
+            for (const vid of venueIds) {
+                const id = String(vid || '').trim();
+                if (!id) continue;
+                const cur = this.yesplanVenueTechOptionsCache[id] || { balletvloer: false, vleugel: false, orkestbak: false };
+                if (opts.balletvloer) cur.balletvloer = true;
+                if (opts.vleugel) cur.vleugel = true;
+                if (opts.orkestbak) cur.orkestbak = true;
+                this.yesplanVenueTechOptionsCache[id] = cur;
+            }
+        }
+    }
+
+    getYesplanDetectedVenueTechOptions(venueId, venueName) {
+        const id = String(venueId || '').trim();
+        const fromCache = id ? this.yesplanVenueTechOptionsCache[id] : null;
+        const venue = id && Array.isArray(this.availableVenues)
+            ? this.availableVenues.find((v) => String(v.id) === id)
+            : null;
+        const fromVenue = venue?.yesplanTechOptions;
+        const out = {
+            balletvloer: !!(fromCache?.balletvloer || fromVenue?.balletvloer),
+            vleugel: !!(fromCache?.vleugel || fromVenue?.vleugel),
+            orkestbak: !!(fromCache?.orkestbak || fromVenue?.orkestbak)
+        };
+        if (out.balletvloer || out.vleugel || out.orkestbak) return out;
+        const v = String(venueName || venue?.name || '').toUpperCase();
+        const code = String(v.split(/[,\s(]/)[0] || '').trim();
+        if (['WTPY', 'MCGZ', 'DKW'].includes(code)) return { balletvloer: true, vleugel: true, orkestbak: true };
+        if (code === 'MCKZ') return { balletvloer: false, vleugel: true, orkestbak: true };
+        return out;
+    }
+
     populateVenueResourceOptionsSettings() {
         const container = document.getElementById('venueResourceOptionsList');
         if (!container || !this.availableVenues || !Array.isArray(this.availableVenues)) {
-            container.innerHTML = `<p style="color: #a0aec0; font-size: 0.875rem;">${this.t('messages.loadVenuesFirst')}</p>`;
+            if (container) {
+                container.innerHTML = `<p style="color: #a0aec0; font-size: 0.875rem;">${this.t('messages.loadVenuesFirst')}</p>`;
+            }
             return;
         }
         const saved = this.config.app?.venueResourceOptions || {};
-        const savedOrder = this.getVenueOrder();
+        const trekVenueIds = new Set(this.findTrekkenlijstVenues().map((v) => String(v.id)));
         const venues = [...this.availableVenues].sort((a, b) => {
-            const getIndex = (n) => {
-                const u = String(n || '').toUpperCase();
-                const idx = savedOrder.findIndex(o => u === o);
-                if (idx !== -1) return idx;
-                for (const o of [...savedOrder].sort((x, y) => y.length - x.length)) {
-                    if (u.startsWith(o)) return savedOrder.indexOf(o);
-                }
-                return -1;
-            };
-            const iA = getIndex(a.name), iB = getIndex(b.name);
-            if (iA !== -1 && iB !== -1) return iA - iB;
-            if (iA !== -1) return -1;
-            if (iB !== -1) return 1;
+            const iA = this.getVenueOrderIndex(a.name);
+            const iB = this.getVenueOrderIndex(b.name);
+            if (iA !== iB) return iA - iB;
             return (a.name || '').localeCompare(b.name || '');
         });
         container.innerHTML = '';
-        venues.forEach(venue => {
+        const anyItix = venues.some((venue) => this.hasItixBaseURLForVenue(String(venue.id)));
+        venues.forEach((venue) => {
             const id = String(venue.id);
-            let v = saved[id];
-            if (!v) {
-                // Eerste installatie / geen lokale instellingen voor deze zaal:
-                // start met alle vinkjes uit. Bij updates met bestaande data blijft saved[id] leidend.
-                v = {
-                    balletvloer: false,
-                    vleugel: false,
-                    orkestbak: false,
-                    zaalplattegrond: false
-                };
-            }
+            const detected = this.getYesplanDetectedVenueTechOptions(id, venue.name);
+            const v = saved[id] || {};
+            const balletvloer = v.balletvloer != null ? !!v.balletvloer : !!detected.balletvloer;
+            const vleugel = v.vleugel != null ? !!v.vleugel : !!detected.vleugel;
+            const orkestbak = v.orkestbak != null ? !!v.orkestbak : !!detected.orkestbak;
+            const showZaalplattegrond = this.hasItixBaseURLForVenue(id);
+            const zaalplattegrond = showZaalplattegrond
+                ? (v.zaalplattegrond != null ? !!v.zaalplattegrond : true)
+                : false;
+            const trekkenlijsten = v.trekkenlijsten != null
+                ? !!v.trekkenlijsten
+                : trekVenueIds.has(id);
+
+            const zaalplattegrondHtml = showZaalplattegrond
+                ? `<label class="venue-resource-opt"><input type="checkbox" data-venue-id="${this.escapeHtml(id)}" data-option="zaalplattegrond" ${zaalplattegrond ? 'checked' : ''}> Zaalplattegrond</label>`
+                : (anyItix
+                    ? `<span class="venue-resource-opt venue-resource-opt--placeholder" aria-hidden="true"></span>`
+                    : '');
+
             const item = document.createElement('div');
             item.className = 'venue-resource-options-item';
             item.innerHTML = `
-                <span class="venue-resource-name">${this.escapeHtml(venue.name || this.t('venue.venueId', { id }))}</span>
+                <span class="venue-resource-name">${this.escapeHtml(this.getVenueDisplayName(venue))}</span>
                 <div class="venue-resource-checkboxes">
-                    <label><input type="checkbox" data-venue-id="${this.escapeHtml(id)}" data-option="balletvloer" ${v.balletvloer ? 'checked' : ''}> ${this.t('settings.balletvloer')}</label>
-                    <label><input type="checkbox" data-venue-id="${this.escapeHtml(id)}" data-option="vleugel" ${v.vleugel ? 'checked' : ''}> ${this.t('settings.vleugel')}</label>
-                    <label><input type="checkbox" data-venue-id="${this.escapeHtml(id)}" data-option="orkestbak" ${v.orkestbak ? 'checked' : ''}> ${this.t('settings.orkestbak')}</label>
-                    <label><input type="checkbox" data-venue-id="${this.escapeHtml(id)}" data-option="zaalplattegrond" ${v.zaalplattegrond !== false ? 'checked' : ''}> Zaalplattegrond</label>
+                    <label class="venue-resource-opt"><input type="checkbox" data-venue-id="${this.escapeHtml(id)}" data-option="balletvloer" ${balletvloer ? 'checked' : ''}> ${this.t('settings.balletvloer')}</label>
+                    <label class="venue-resource-opt"><input type="checkbox" data-venue-id="${this.escapeHtml(id)}" data-option="vleugel" ${vleugel ? 'checked' : ''}> ${this.t('settings.vleugel')}</label>
+                    <label class="venue-resource-opt"><input type="checkbox" data-venue-id="${this.escapeHtml(id)}" data-option="orkestbak" ${orkestbak ? 'checked' : ''}> ${this.t('settings.orkestbak')}</label>
+                    ${zaalplattegrondHtml}
+                    <label class="venue-resource-opt"><input type="checkbox" data-venue-id="${this.escapeHtml(id)}" data-option="trekkenlijsten" ${trekkenlijsten ? 'checked' : ''}> ${this.t('settings.trekkenlijstenVenue')}</label>
                 </div>
             `;
             container.appendChild(item);
         });
+        container.classList.toggle('venue-resource-options-list--with-plattegrond', anyItix);
     }
 
     setupVenueOrderDragAndDrop(container) {
@@ -5210,19 +10921,31 @@ class TheaterDashboard {
 
         try {
             // Bewaar huidige schermcontext zodat Opslaan de gebruiker niet naar een andere zaal/view duwt.
-            const preservedSelectedVenues = Array.isArray(this.selectedVenues) ? [...this.selectedVenues] : [];
+            const currentActiveOrg = this.config?.app?.activeYesplanOrg;
+            const requestedActiveOrgRaw = document.getElementById('activeYesplanOrg')?.value;
+            const requestedActiveOrg = requestedActiveOrgRaw === 'both'
+                ? 'both'
+                : (parseInt(requestedActiveOrgRaw, 10) || 1);
+            const didSwitchActiveOrg = String(currentActiveOrg ?? '1') !== String(requestedActiveOrg);
+            const preservedSelectedVenues = didSwitchActiveOrg
+                ? []
+                : (Array.isArray(this.selectedVenues) ? [...this.selectedVenues] : []);
             const preservedSelectedDate = this.selectedDate ? new Date(this.selectedDate) : new Date();
             const preservedCurrentView = this.currentView;
             const preservedDetailContext = this.detailContext ? { ...this.detailContext } : null;
 
             const configs = {
+                _timezoneMode: document.getElementById('timezoneModeSelect')?.value === 'manual' ? 'manual' : 'auto',
+                _manualTimeZone: document.getElementById('timezoneManualSelect')?.value || this.getSystemTimeZone(),
                 yesplan: {
                     name: document.getElementById('yesplanOrgName').value.trim(),
+                    shortName: document.getElementById('yesplanOrgShortName')?.value.trim() || '',
                     baseURL: document.getElementById('yesplanBaseURL').value,
                     apiKey: document.getElementById('yesplanApiKey').value
                 },
                 yesplan2: {
                     name: document.getElementById('yesplanOrgName2').value.trim(),
+                    shortName: document.getElementById('yesplanOrgShortName2')?.value.trim() || '',
                     baseURL: document.getElementById('yesplanBaseURL2').value,
                     apiKey: document.getElementById('yesplanApiKey2').value
                 },
@@ -5230,14 +10953,55 @@ class TheaterDashboard {
                     ...this.config.app,
                     theme: document.getElementById('themeSelect').value,
                     language: document.getElementById('languageSelect')?.value || 'nl',
+                    timezoneMode: undefined,
+                    manualTimeZone: undefined,
+                    manualClockOffsetSeconds: 0,
                     touchscreenMode: document.getElementById('touchscreenModeCheckbox')?.checked ?? false,
+                    showMode: document.getElementById('showModeCheckbox')?.checked !== false,
+                    masterModeEnabled: document.getElementById('masterModeEnabledCheckbox')?.checked === true,
+                    masterModeName: String(document.getElementById('masterModeNameInput')?.value || '').trim(),
+                    masterModePort: (() => {
+                        const n = parseInt(document.getElementById('masterModePortInput')?.value || '3847', 10);
+                        return Number.isFinite(n) && n > 0 && n <= 65535 ? n : 3847;
+                    })(),
+                    timerSyncEnabled: !!(this.getShiftAuthToken() && (
+                        this.getShiftServerBaseUrl()
+                        || this.normalizeShiftHappensApiBase(String(document.getElementById('shiftServerBaseUrlInput')?.value || '').trim())
+                    )),
+                    shiftServerBaseUrl: (() => {
+                        const raw = String(document.getElementById('shiftServerBaseUrlInput')?.value || '').trim();
+                        if (!raw) return '';
+                        return this.normalizeShiftHappensApiBase(raw);
+                    })(),
+                    shiftAuthEmail: String(document.getElementById('shiftAuthEmailInput')?.value || '').trim(),
+                    shiftAuthToken: this.config.app?.shiftAuthToken || '',
+                    networkRouting: {
+                        ...(this.config.app?.networkRouting || {}),
+                        internetInterface: document.getElementById('networkInternetInterface')?.value || 'auto',
+                        luminexInterface: document.getElementById('networkLuminexSacnInterface')?.value || 'auto',
+                        sacnInterface: document.getElementById('networkLuminexSacnInterface')?.value || 'auto',
+                        oscInterface: document.getElementById('networkOscInterface')?.value || 'auto'
+                    },
                     activeYesplanOrg: (() => {
-                        const v = document.getElementById('activeYesplanOrg').value;
+                        const v = requestedActiveOrgRaw;
                         return v === 'both' ? 'both' : (parseInt(v, 10) || 1);
                     })(),
                     selectedVenues: preservedSelectedVenues,
                     selectedVenue: preservedSelectedVenues.length === 1 ? preservedSelectedVenues[0] : null,
                     selectedDate: preservedSelectedDate.toISOString(),
+                    trekkenlijstVenueIds: (() => {
+                        const list = document.getElementById('venueResourceOptionsList');
+                        if (!list) return [];
+                        return Array.from(list.querySelectorAll('input[data-option="trekkenlijsten"]:checked'))
+                            .map((cb) => String(cb.dataset.venueId || '').trim())
+                            .filter(Boolean);
+                    })(),
+                    trekkenlijstVenueId: (() => {
+                        // Backwards compatible: eerste gekozen zaal
+                        const list = document.getElementById('venueResourceOptionsList');
+                        const checked = list?.querySelector('input[data-option="trekkenlijsten"]:checked');
+                        return checked?.dataset?.venueId ? String(checked.dataset.venueId) : null;
+                    })(),
                     venueResourceOptions: (() => {
                         const opts = {};
                         const list = document.getElementById('venueResourceOptionsList');
@@ -5259,15 +11023,50 @@ class TheaterDashboard {
                     systemId: document.getElementById('privaSystemId').value
                 },
                 itix: {
-                    baseURL: (document.getElementById('itixBaseURL')?.value || '').trim()
+                    baseURL1: (document.getElementById('itixBaseURL1')?.value || '').trim(),
+                    baseURL2: (document.getElementById('itixBaseURL2')?.value || '').trim()
                 }
             };
+            const manualClockInput = String(document.getElementById('manualTimeInput')?.value || '').trim();
+            const manualInputWasEdited = document.getElementById('manualTimeInput')?.dataset.userEdited === '1';
+            const manualOffsetSeconds =
+                configs._timezoneMode === 'manual' && manualInputWasEdited
+                    ? this.computeManualClockOffsetSeconds(manualClockInput, configs._manualTimeZone)
+                    : 0;
+            configs.app.timezoneMode = configs._timezoneMode;
+            configs.app.manualTimeZone = configs._manualTimeZone;
+            configs.app.manualClockOffsetSeconds = manualOffsetSeconds;
+            delete configs._timezoneMode;
+            delete configs._manualTimeZone;
+
+            if (configs.app.masterModeEnabled && window.electronAPI?.unlockMasterMode) {
+                let mustUnlock = this.config.app?.masterModeEnabled !== true;
+                if (window.electronAPI?.getMasterModeStatus) {
+                    try {
+                        const st = await window.electronAPI.getMasterModeStatus();
+                        // Als master nog niet draait, dan altijd unlock afdwingen.
+                        mustUnlock = !st?.status?.enabled;
+                    } catch (_) {
+                        // fallback op config-state hierboven
+                    }
+                }
+                if (mustUnlock) {
+                    const pwd = String(document.getElementById('masterModeUnlockPassword')?.value || '').trim();
+                    if (!pwd) {
+                        throw new Error('Vul eerst het ontgrendelwachtwoord in om Master mode in te schakelen.');
+                    }
+                    const unlockRes = await window.electronAPI.unlockMasterMode(pwd);
+                    if (!unlockRes?.success) {
+                        throw new Error('Master mode ontgrendelen mislukt: onjuist wachtwoord.');
+                    }
+                }
+            }
 
             // Sla app-instellingen eerst op zodat UI-vinkjes/thema altijd persistenteren,
             // ook als secure storage voor API keys op dit apparaat niet beschikbaar is.
             const appSaveResult = await window.electronAPI.saveConfig('app', configs.app);
             if (!appSaveResult?.success) {
-                throw new Error(this.t('errors.settingsSave'));
+                throw new Error(appSaveResult?.message || this.t('errors.settingsSave'));
             }
 
             // Opslaan van overige configuraties (best effort per systeem)
@@ -5331,12 +11130,12 @@ class TheaterDashboard {
             this.applyTheme(theme);
             const language = document.getElementById('languageSelect')?.value || 'nl';
             this.applyLanguage(language);
+            await this.refreshEffectiveTimeZone();
             this.applyTouchscreenMode(document.getElementById('touchscreenModeCheckbox')?.checked ?? false);
             
             // Zalen opnieuw laden als Yesplan configuratie is gewijzigd
             await this.loadVenues(); // Header dropdown zalen
-            // loadVenues kan selections opschonen; forceer bewaarde keuze terug zolang die nog bestaat.
-            this.selectedVenues = preservedSelectedVenues;
+            // Gebruik de opgeschoonde selectie uit loadVenues (geen oude, mogelijk ongeldige zaal terugduwen).
             const hiddenSelect = document.getElementById('venueSelect');
             if (hiddenSelect) hiddenSelect.value = this.selectedVenues.length === 1 ? this.selectedVenues[0] : '';
             this.updateVenueSelectorDisplay();
@@ -5352,9 +11151,14 @@ class TheaterDashboard {
                 this.showError('settings', Array.from(new Set(saveWarnings)).join(' '));
             }
             this.showSuccess(this.t('settings.saved'));
+            await this.refreshMasterModeStatusLine();
+            await this.refreshTimerSyncStatusLine();
+            if (this.currentView === 'voorstellingTimer') {
+                this.startVoorstellingTimerSyncPoll();
+            }
         } catch (error) {
             console.error('Instellingen opslaan fout:', error);
-            this.showError('settings', error?.message || this.t('errors.settingsSave'));
+            this.showError('settings', this.escapeHtml(error?.message || this.t('errors.settingsSave')));
         }
     }
 
@@ -5422,12 +11226,22 @@ class TheaterDashboard {
         if (homeBtn) homeBtn.title = this.t('nav.home');
         const weekBtn = document.getElementById('weekBtn');
         if (weekBtn) weekBtn.title = this.t('nav.weekView');
+        const luminexNavBtn = document.getElementById('luminexNavBtn');
+        if (luminexNavBtn) luminexNavBtn.title = this.t('nav.luminex');
+        const trekkenlijstenNavBtn = document.getElementById('trekkenlijstenNavBtn');
+        if (trekkenlijstenNavBtn) trekkenlijstenNavBtn.title = this.t('nav.trekkenlijsten');
+        const oscMonitorNavBtn = document.getElementById('oscMonitorNavBtn');
+        if (oscMonitorNavBtn) oscMonitorNavBtn.title = 'OSC Monitor';
+        this.refreshVoorstellingTimerChrome();
+        this.refreshLuminexChrome();
         const techOverviewBtn = document.getElementById('techOverviewBtn');
         if (techOverviewBtn) techOverviewBtn.title = this.t('nav.techOverviewTitle');
         const refreshBtn = document.getElementById('refreshBtn');
         if (refreshBtn) refreshBtn.title = this.t('nav.refresh');
         const settingsBtn = document.getElementById('settingsBtn');
         if (settingsBtn) settingsBtn.title = this.t('settings.title');
+        const voorstellingTimerExportBtn = document.getElementById('voorstellingTimerExportBtn');
+        if (voorstellingTimerExportBtn) voorstellingTimerExportBtn.title = this.t('voorstellingTimer.exportTitle');
         const weekStatus = document.getElementById('weekViewStatus');
         if (weekStatus) weekStatus.title = this.t('status.clickForStatus');
         const homeStatus = document.getElementById('homeViewStatus');
@@ -5437,6 +11251,8 @@ class TheaterDashboard {
         this.updateWeekHeaderSummary(this.weekEventCount || 0);
         this.updateDateDisplay();
         this.updateDateTimeDisplay();
+        this.updateVoorstellingTimezoneDisplay();
+        this.updateOrgDependentSettingsLabels();
     }
 
     async testConnection(system) {
@@ -5494,8 +11310,10 @@ class TheaterDashboard {
         try {
             const current = this.config[configKey] || {};
             const nameId = orgNum === 2 ? 'yesplanOrgName2' : 'yesplanOrgName';
+            const shortNameId = orgNum === 2 ? 'yesplanOrgShortName2' : 'yesplanOrgShortName';
             const name = document.getElementById(nameId)?.value?.trim() || current.name;
-            const saveResult = await window.electronAPI.saveConfig(configKey, { ...current, name, baseURL, apiKey });
+            const shortName = document.getElementById(shortNameId)?.value?.trim() || current.shortName || '';
+            const saveResult = await window.electronAPI.saveConfig(configKey, { ...current, name, shortName, baseURL, apiKey });
             if (!saveResult?.success) {
                 const msg = saveResult?.error === 'SECURE_STORAGE_UNAVAILABLE'
                     ? this.t('messages.secureStorageUnavailable')
@@ -5535,8 +11353,10 @@ class TheaterDashboard {
 
             if (result.success && result.data && result.data.length > 0) {
                 this.availableVenues = result.data;
+                this.mergeYesplanVenueTechOptionsFromVenues(this.availableVenues);
                 this.populateVenueSelector();
                 this.populateVenueOrderSettings();
+                this.populateVenueResourceOptionsSettings();
                 if (showLoading) this.showSuccess(this.t('messages.venuesLoaded', { n: result.data.length }));
             } else {
                 if (showLoading) alert('Geen zalen gevonden. Controleer je API instellingen.');
@@ -5596,7 +11416,7 @@ class TheaterDashboard {
             banner.addEventListener('click', async () => {
                 const phase = banner.dataset.phase;
                 if (phase === 'manual-download' && window.electronAPI?.openExternal) {
-                    await window.electronAPI.openExternal('https://github.com/Deurklink-WT/theater-dashboard/releases/latest');
+                    await window.electronAPI.openExternal('https://github.com/example-org/theater-dashboard/releases/latest');
                     return;
                 }
                 if (phase === 'downloaded' && window.electronAPI.quitAndInstallUpdate) {
@@ -5752,10 +11572,25 @@ class TheaterDashboard {
     getBalletvloerVleugelDisplay(venueName, venueId) {
         const opts = this.getVenueResourceOptions(venueId, venueName);
         if (opts) return opts;
-        const v = String(venueName || '').toUpperCase();
-        if (/WTPY|MCGZ|DKW/.test(v)) return { showBalletvloer: true, showVleugel: true, showOrkestbak: true, showZaalplattegrond: true };
-        if (/MCKZ/.test(v)) return { showBalletvloer: false, showVleugel: true, showOrkestbak: true, showZaalplattegrond: true };
-        return { showBalletvloer: false, showVleugel: false, showOrkestbak: false, showZaalplattegrond: true };
+        const detected = this.getYesplanDetectedVenueTechOptions(venueId, venueName);
+        const canShowSeating = this.hasItixBaseURLForVenue(venueId);
+        return {
+            showBalletvloer: !!detected.balletvloer,
+            showVleugel: !!detected.vleugel,
+            showOrkestbak: !!detected.orkestbak,
+            showZaalplattegrond: canShowSeating
+        };
+    }
+
+    shouldShowTechnicalPartForEvent(event, partKey, enabledByVenue) {
+        if (!enabledByVenue || !event) return false;
+        if (partKey === 'balletvloer') return !!event.hasBalletvloer;
+        if (partKey === 'vleugel') return !!event.hasVleugel;
+        if (partKey === 'orkestbak') {
+            const ov = String(event.orkestbakValue || '').trim().toLowerCase();
+            return !!event.hasOrkestbak || ov === 'ja' || ov === 'yes' || ov === 'open';
+        }
+        return false;
     }
 
     getVenueResourceOptions(venueId, venueName) {
@@ -5766,7 +11601,7 @@ class TheaterDashboard {
             showBalletvloer: !!opts.balletvloer,
             showVleugel: !!opts.vleugel,
             showOrkestbak: !!opts.orkestbak,
-            showZaalplattegrond: opts.zaalplattegrond !== false
+            showZaalplattegrond: this.hasItixBaseURLForVenue(venueId) ? (opts.zaalplattegrond !== false) : false
         } : null;
 
         if (venueId) {
@@ -5814,10 +11649,11 @@ class TheaterDashboard {
 
     getVenueNameById(venueId) {
         if (!venueId) return null;
+        const canonicalId = this.getCanonicalVenueId(venueId);
         
         // Zoek in beschikbare zalen
-        const venue = this.availableVenues.find(v => String(v.id) === String(venueId));
-        if (venue) return venue.name;
+        const venue = this.availableVenues.find(v => String(v.id) === String(canonicalId));
+        if (venue) return this.getVenueDisplayName(venue);
         
         // Probeer de naam uit de events te halen
         if (this.data.yesplan && this.data.yesplan.data && this.data.yesplan.data.length > 0) {

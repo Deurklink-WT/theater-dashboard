@@ -1,0 +1,12 @@
+services:
+  shift-happens-api:
+    build: .
+    container_name: shift-happens-api
+    restart: unless-stopped
+    ports:
+      - "3847:3847"
+    environment:
+      PORT: "3847"
+      SHIFT_HAPPENS_CONFIG_DIR: /data
+    volumes:
+      - ./data:/data

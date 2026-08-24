@@ -32,6 +32,7 @@ Gebruik workflow **`Release macOS Signed`** (`.github/workflows/release-mac-sign
 
 1. **Jij bouwt** een nieuwe versie (`npm run build:win` / `build:mac` / `build:pi`).
 2. **Jij publiceert** op **GitHub Releases** (zelfde repo als in `package.json` → `build.publish`).
+   - In de repo staan neutrale placeholders (`example-org` / `theater-dashboard`). Zet vóór een echte release `build.publish.owner`/`repo` goed, **of** gebruik `UPDATE_BASE_URL` naar je eigen HTTPS-feed.
 3. **Geïnstalleerde apps** controleren automatisch op updates en downloaden die op de achtergrond. Na download: bij **volgende app-afsluiting** wordt geïnstalleerd (`autoInstallOnAppQuit`).
 
 - In **development** (`npm start`) gebeurt er **geen** auto-update.
@@ -44,7 +45,7 @@ Dan werkt de standaard GitHub-feed in de app **niet** voor willekeurige eindgebr
 
 **Oplossingen:**
 
-- **Eigen update-URL (aanbevolen bij private repo):** host `latest.yml` + installers op een **HTTPS**-pad waar iedereen mag lezen (bijv. je eigen server, S3/R2, of een map op `huistechneut.nl`).  
+- **Eigen update-URL (aanbevolen bij private repo):** host `latest.yml` + installers op een **HTTPS**-pad waar iedereen mag lezen (bijv. je eigen server, S3/R2, of een publieke HTTPS-host).
   Start de app met:
   ```bash
   export UPDATE_BASE_URL="https://voorbeeld.nl/shift-happens-updates"
@@ -123,7 +124,7 @@ Upload na elke build bijvoorbeeld:
 
 ```bash
 cp "dist/Shift Happens-1.5.6-arm64.dmg" "/tmp/Shift-Happens-mac-arm64.dmg"
-gh release upload v1.5.6 "/tmp/Shift-Happens-mac-arm64.dmg" --repo Deurklink-WT/theater-dashboard --clobber
+gh release upload v1.5.6 "/tmp/Shift-Happens-mac-arm64.dmg" --repo OWNER/REPO --clobber
 ```
 
 Install-script met vaste naam:
@@ -134,18 +135,35 @@ STABLE_DMG_NAME="Shift-Happens-mac-arm64.dmg" ./scripts/install-mac-from-github.
 
 **Private repo:** anonieme `curl` naar die URL werkt niet; gebruik `gh` (ingelogd) of een token — het install-script gebruikt `gh` en volgt daarmee hetzelfde “latest”-gedrag.
 
-## Token in de app “inbakken” (build-time, bijv. v1.5.6)
+## Token in de app “inbakken” (alleen uitzondering)
 
-**Niet** in git: geen token in broncode committen.
+**Standaard:** er wordt **geen** GitHub-token in installers gezet.  
+`npm run inject-update-token` schrijft altijd een lege module, ook als `GH_TOKEN` gezet is.
 
-Wel kun je bij het **bouwen** van de installer een token uit de omgeving laten wegschrijven naar een gegenereerd bestand dat **wel** in de `.dmg` / `.exe` zit:
+Deze repo is **publiek**: auto-update via GitHub Releases werkt **zonder** token.
+
+Alleen als je bewust een private feed wilt en een token in de binary accepteert:
 
 ```bash
 export GH_TOKEN=ghp_xxx_readonly
+export ALLOW_BAKED_UPDATE_TOKEN=1
 npm run build:mac
 ```
 
-(`GITHUB_TOKEN` mag ook.) Script: `scripts/inject-update-token.js` → `src/generated/update-token.js` (staat in `.gitignore`).
+Script: `scripts/inject-update-token.js` → `src/generated/update-token.js` (staat in `.gitignore`).
 
-**Risico:** iedereen met de installer kan de token uit het pakket proberen te halen. Gebruik een **fine-grained** PAT met zo min mogelijk rechten, of liever **`UPDATE_BASE_URL`** naar een publieke HTTPS-map zonder GitHub-token in de app.
+**Risico:** iedereen met de installer kan de token uit het pakket proberen te halen. Liever **`UPDATE_BASE_URL`** naar een publieke HTTPS-map.
+
+## Belangrijk: bestandsnamen op GitHub Releases
+
+Workflows uploaden installers als `Shift.Happens-...` (punten i.p.v. spaties).  
+`latest*.yml` moet **dezelfde** namen bevatten, anders faalt de download (404) terwijl de update-check wél lukt.
+
+Gebruik vóór upload:
+
+```bash
+node scripts/fix-updater-yml-names.js dist/latest-mac.yml dist/latest-linux-arm64.yml
+```
+
+(Dit gebeurt automatisch in de release-workflows.)
 

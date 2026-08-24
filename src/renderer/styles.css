@@ -35,6 +35,97 @@ body {
     z-index: 1000;
 }
 
+/* Showmodus: duidelijke titelbalk (rood, witte tekst) — overschrijft thema-header */
+body.show-mode-active .header {
+    background: #b91c1c !important;
+    border-bottom-color: rgba(255, 255, 255, 0.2) !important;
+}
+body.show-mode-active .header-title,
+body.show-mode-active .header-title i,
+body.show-mode-active .header-title-text span,
+body.show-mode-active .header-datetime {
+    color: #ffffff !important;
+}
+body.show-mode-active .header .btn-secondary,
+body.show-mode-active .header .btn-icon-only {
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.62) !important;
+}
+body.show-mode-active .header .btn-secondary:hover,
+body.show-mode-active .header .btn-icon-only:hover {
+    background: rgba(255, 255, 255, 0.28) !important;
+    border-color: rgba(255, 255, 255, 0.8) !important;
+}
+body.show-mode-active .header .btn--muted {
+    opacity: 0.85;
+}
+body.show-mode-active .header .btn-back {
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+}
+body.show-mode-active .header .btn-back:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.28) !important;
+}
+body.show-mode-active .header .custom-select-trigger {
+    background: rgba(255, 255, 255, 0.12) !important;
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.35) !important;
+}
+body.show-mode-active .header .custom-select-trigger i {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+body.show-mode-active .header .update-banner {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.35) !important;
+}
+
+/* Modal: voorstelling kiezen voor timer */
+.timer-pick-performance-modal {
+    max-width: 520px;
+}
+.timer-pick-performance-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: min(60vh, 420px);
+    overflow-y: auto;
+}
+.timer-pick-performance-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    background: rgba(30, 41, 59, 0.6);
+    color: #e2e8f0;
+    cursor: pointer;
+    font: inherit;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+.timer-pick-performance-item:hover {
+    background: rgba(51, 65, 85, 0.75);
+    border-color: rgba(129, 140, 248, 0.5);
+}
+.timer-pick-performance-item-title {
+    font-weight: 600;
+    margin: 0 0 0.25rem 0;
+}
+.timer-pick-performance-item-meta {
+    font-size: 0.875rem;
+    color: #94a3b8;
+    margin: 0;
+}
+.timer-pick-performance-loading,
+.timer-pick-performance-empty {
+    color: #94a3b8;
+    text-align: center;
+    padding: 1.5rem 0.5rem;
+}
+
 /* macOS specifieke aanpassingen */
 @supports (-webkit-app-region: drag) {
     .header {
@@ -45,16 +136,28 @@ body {
 
 .header-content {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    flex-wrap: nowrap;
+    gap: 0.75rem 1rem;
     max-width: var(--layout-max-width);
     margin: 0 auto;
+}
+
+/* Vrije ruimte tussen titel+tijd en Terug: SHOWMODE exact in het midden daarvan */
+.header-show-mode-slot {
+    flex: 1 1 auto;
+    min-width: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* macOS: knoppen en titel niet draagbaar */
 @supports (-webkit-app-region: drag) {
     .header-actions,
     .header-title,
+    .header-show-mode-slot,
+    #backBtn,
     .update-banner,
     .venue-selector,
     .date-selector,
@@ -68,18 +171,35 @@ body {
 }
 
 .header-title {
+    flex: 1 1 auto;
+    min-width: 0;
     font-size: 1.5rem;
     font-weight: 600;
     color: #e2e8f0;
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .header-title-text {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+    align-items: flex-start;
+    min-width: 0;
+    overflow: hidden;
+}
+
+/* Bovenste regel: alleen appnaam (klok eronder); SHOWMODE zit in .header-show-mode-slot */
+.header-title-top {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.65rem 1rem;
+    min-width: 0;
 }
 
 .header-datetime {
@@ -87,6 +207,9 @@ body {
     font-weight: 400;
     color: #a0aec0;
     white-space: nowrap;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .header-logo {
@@ -106,7 +229,40 @@ body {
     height: 48px;
 }
 
+/* Alleen zichtbaar in showmodus — naast appnaam op dezelfde regel; ~2× eerdere grootte */
+.header-show-mode-label {
+    display: none;
+    align-items: center;
+    font-size: 1.44rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: #ffffff;
+    padding: 0.6rem 1.1rem;
+    border: 2px solid rgba(255, 255, 255, 0.55);
+    border-radius: 16px;
+    flex-shrink: 0;
+    line-height: 1.15;
+    white-space: nowrap;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+body.show-mode-active .header-show-mode-label {
+    display: inline-flex;
+}
+
+/* In showmodus altijd ruimte reserveren zodat datum/tijd niet over SHOWMODE schuift. */
+body.show-mode-active .header-show-mode-slot {
+    flex: 0 0 clamp(220px, 16vw, 320px);
+    min-width: 220px;
+}
+
+#backBtn {
+    flex: 0 0 auto;
+}
+
 .header-actions {
+    flex: 0 0 auto;
     display: flex;
     gap: 1rem;
     align-items: center;
@@ -254,8 +410,8 @@ body {
 
 /* Venue selector specifiek: forceer links uitlijning */
 .venue-selector .custom-select-options--grid {
-    right: unset !important;
-    left: 0 !important;
+    right: 0 !important;
+    left: auto !important;
     width: max-content !important;
     min-width: auto !important;
 }
@@ -277,17 +433,17 @@ body {
 
 /* Venue dropdown: toon opties als selectieknoppen */
 .custom-select-options--grid {
-    padding: 0.5rem;
+    padding: 0.35rem;
     display: none;
-    grid-template-columns: repeat(3, minmax(80px, 1fr));
-    gap: 0.5rem;
+    grid-template-columns: repeat(3, minmax(140px, 1fr));
+    gap: 0.35rem;
     justify-items: stretch;
     align-items: start;
     width: max-content !important;
     min-width: auto !important;
-    max-width: min(80vw, 520px) !important;
-    left: 0 !important;
-    right: unset !important;
+    max-width: min(98vw, 900px) !important;
+    left: auto !important;
+    right: 0 !important;
 }
 
 .custom-select.open .custom-select-options.custom-select-options--grid {
@@ -295,13 +451,18 @@ body {
 }
 
 .custom-select-options--grid .custom-select-option {
-    padding: 0.5rem 0.75rem;
+    padding: 0.4rem 0.65rem;
     border: 1px solid #4a5568;
     border-radius: 6px;
     background: #1f2937;
     white-space: nowrap;
-    justify-content: center;
-    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+    min-height: 36px;
+    font-size: 0.85rem;
+    justify-content: flex-start;
+    text-align: left;
 }
 
 .custom-select-options--grid .custom-select-option:hover {
@@ -338,6 +499,39 @@ body {
     font-weight: bold;
 }
 
+.personnel-filter-btn {
+    border: 1px solid #4a5568;
+    background: #1f2937;
+    color: #cbd5e0;
+    border-radius: 999px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.personnel-filter-btn:hover {
+    background: #2d3748;
+    border-color: #64748b;
+}
+
+.personnel-filter-btn.active {
+    background: #818cf8;
+    border-color: #818cf8;
+    color: #fff;
+}
+
+.personnel-filter-btn--draggable {
+    cursor: grab;
+}
+
+.personnel-filter-btn--draggable:active,
+.personnel-filter-btn--dragging {
+    cursor: grabbing;
+    opacity: 0.85;
+}
+
+
 /* Legacy select styling (hidden) */
 .venue-select {
     display: none;
@@ -365,6 +559,12 @@ body {
 .btn.active {
     background: #818cf8;
     color: white;
+}
+
+/* Timer-knop zichtbaar maar nog niet bruikbaar (detail + 1 zaal, voorwaarden niet gehaald) */
+.btn.btn-secondary.btn--muted {
+    opacity: 0.92;
+    box-shadow: inset 0 0 0 1px rgba(129, 140, 248, 0.45);
 }
 
 .btn-primary {
@@ -461,9 +661,165 @@ body {
 .main-content {
     flex: 1;
     padding: 2rem;
-    overflow-y: auto;
+    overflow: hidden;
     position: relative;
     z-index: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+/* Rail links (o.a. Luminex) + scrollbare inhoud */
+.main-workspace {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 0.75rem;
+    min-height: 0;
+    width: 100%;
+    max-width: var(--layout-max-width);
+    margin: 0 auto;
+}
+
+.nav-rail {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    height: auto;
+    padding: 0;
+    gap: 0.5rem;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    overflow: visible;
+}
+
+/* Showmode-knoppen rechtsboven, uitgelijnd met de grote card (geen aparte rail-card). */
+.nav-rail--end {
+    align-self: flex-start;
+    position: relative;
+    top: 0;
+    margin-top: 0;
+}
+
+body.show-mode-active .main-workspace {
+    align-items: flex-start;
+}
+
+/* Bovenkant eerste knop = bovenkant grote card / viewer-kader. */
+body.show-mode-active .nav-rail--end {
+    margin-top: 0;
+}
+
+/* Geen lege placeholder boven de eerste knop als de timer nog in de header staat. */
+#navRailTimerSlot:empty {
+    display: none;
+    width: 0;
+    height: 0;
+    min-height: 0;
+}
+
+body:not(.show-mode-active) .nav-rail--end {
+    display: none;
+}
+
+.nav-rail-btn {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    margin: 0;
+    aspect-ratio: 1 / 1;
+    padding: 0;
+    border-radius: 12px;
+    border: 1px solid rgba(129, 140, 248, 0.45);
+    background: rgba(74, 85, 104, 0.55);
+    color: #cbd5e0;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+#navRailTimerSlot #voorstellingTimerBtn.nav-rail-btn {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body.nav-rail-reorder-active .nav-rail {
+    box-shadow: none;
+}
+
+body.nav-rail-reorder-active .nav-rail-btn[id] {
+    position: relative;
+    cursor: grab;
+    box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.45);
+}
+
+body.nav-rail-reorder-active .nav-rail-btn[id]:active {
+    cursor: grabbing;
+}
+
+/* Subtiele drag-handle (3x2 stippen) alleen zichtbaar tijdens rangschikken. */
+body.nav-rail-reorder-active .nav-rail-btn[id]::after {
+    content: "";
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    width: 10px;
+    height: 8px;
+    border-radius: 2px;
+    background-image:
+        radial-gradient(circle, rgba(226, 232, 240, 0.8) 1px, transparent 1.2px),
+        radial-gradient(circle, rgba(226, 232, 240, 0.8) 1px, transparent 1.2px),
+        radial-gradient(circle, rgba(226, 232, 240, 0.8) 1px, transparent 1.2px),
+        radial-gradient(circle, rgba(226, 232, 240, 0.8) 1px, transparent 1.2px),
+        radial-gradient(circle, rgba(226, 232, 240, 0.8) 1px, transparent 1.2px),
+        radial-gradient(circle, rgba(226, 232, 240, 0.8) 1px, transparent 1.2px);
+    background-size: 4px 4px;
+    background-position: 0 0, 5px 0, 0 4px, 5px 4px, 0 8px, 5px 8px;
+    background-repeat: no-repeat;
+    opacity: 0.9;
+    pointer-events: none;
+}
+
+.nav-rail-btn--dragging {
+    opacity: 0.65;
+}
+
+.nav-rail-btn:hover {
+    background: rgba(74, 85, 104, 0.85);
+    border-color: #818cf8;
+    color: #e2e8f0;
+}
+
+.nav-rail-btn.active {
+    background: rgba(129, 140, 248, 0.35);
+    border-color: #818cf8;
+    color: #e0e7ff;
+    box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.4);
+}
+
+.nav-rail-timer-slot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+}
+
+.main-workspace-inner {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    overflow-y: auto;
 }
 
 /* macOS: zelfde padding-left als de header zodat cards uitlijnen met logo en knoppen */
@@ -512,6 +868,18 @@ body {
     gap: 2rem;
     max-width: var(--layout-max-width);
     margin: 0 auto;
+}
+
+/* Scroll-hardening: zorg dat alle hoofdviews kunnen krimpen binnen de scrollcontainer. */
+.dashboard-view-container,
+.detail-view-wrapper,
+.week-view-wrapper,
+.voorstelling-timer-wrapper,
+.trekkenlijsten-wrapper,
+.luminex-view-wrapper,
+.osc-monitor-wrapper {
+    min-width: 0;
+    min-height: 0;
 }
 
 /* Yesplan card volledige breedte wanneer "Alle zalen" is geselecteerd of in home view */
@@ -594,6 +962,11 @@ body.home-view-active .data-item.drag-over {
     transform: translateY(-2px);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
     border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* In showmode geen lift op hover, voorkomt dat de bovenrand visueel "verdwijnt" */
+body.show-mode-active .card:hover {
+    transform: none;
 }
 
 /* Card drag & drop */
@@ -791,6 +1164,10 @@ body.home-view-active .data-item.drag-over {
     background: #f56565;
 }
 
+.status-popover-row .status-dot.neutral {
+    background: #718096;
+}
+
 .status-popover-row .status-label {
     flex: 1;
 }
@@ -844,6 +1221,11 @@ body.home-view-active .events-list .data-item.drag-over {
     width: 100%;
     max-width: var(--layout-max-width);
     margin: 0 auto;
+}
+
+body.show-mode-active:not(.home-view-active):not(.week-view-active):not(.voorstelling-timer-active):not(.luminex-view-active):not(.osc-monitor-active):not(.trekkenlijsten-active) .detail-view-wrapper {
+    margin-left: auto;
+    margin-right: 0;
 }
 
 .detail-view-card {
@@ -1090,6 +1472,724 @@ body.week-view-active #techOverviewBtn {
     text-overflow: ellipsis;
 }
 
+.tijdschema-card--clickable .card-content {
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tijdschema-card--clickable .card-content:hover {
+    background: rgba(129, 140, 248, 0.08);
+    box-shadow: inset 0 0 0 1px rgba(129, 140, 248, 0.35);
+}
+
+/* Voorstelling timer scherm */
+.voorstelling-timer-wrapper {
+    max-width: 1620px;
+    margin: 0 auto;
+    padding: 0 1rem 1.5rem;
+}
+
+body.show-mode-active.voorstelling-timer-active .voorstelling-timer-wrapper {
+    margin-left: auto;
+    margin-right: 0;
+    padding-right: 0;
+}
+
+.voorstelling-timer-card-title {
+    flex-wrap: wrap;
+    row-gap: 0.15rem;
+}
+
+.voorstelling-timer-card-title-event {
+    display: inline;
+    font-weight: 500;
+    min-width: 0;
+}
+
+.voorstelling-timer-card-title-sep {
+    color: #64748b;
+    font-weight: 400;
+}
+
+.voorstelling-timer-card-title-event-name {
+    color: #cbd5e0;
+    font-weight: 500;
+    word-break: break-word;
+}
+
+.voorstelling-timer-card {
+    background: rgba(45, 55, 72, 0.85);
+    border: 1px solid rgba(74, 85, 104, 0.8);
+    border-radius: 12px;
+}
+
+.voorstelling-timer-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.voorstelling-timer-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+    gap: 1.25rem 1.5rem;
+    align-items: start;
+}
+
+@media (max-width: 900px) {
+    .voorstelling-timer-main {
+        grid-template-columns: 1fr;
+    }
+}
+
+.voorstelling-timer-col-heading {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #cbd5e0;
+}
+
+.voorstelling-timer-col-heading i {
+    color: #818cf8;
+    margin-right: 0.35rem;
+}
+
+.voorstelling-timer-col--schema {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    min-width: 0;
+}
+
+.voorstelling-timer-col--controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-width: 0;
+}
+
+.voorstelling-timer-wall-row {
+    display: flex;
+    justify-content: stretch;
+    align-items: stretch;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.voorstelling-timer-clock-block--wall {
+    flex: 1;
+    text-align: center;
+    min-width: min(100%, 12rem);
+}
+
+.voorstelling-timer-clock-block--pause {
+    flex: 1;
+    text-align: center;
+    min-width: min(100%, 12rem);
+}
+
+/** Tijdzone i.p.v. vaste label “Huidige tijd”; geen uppercase. */
+.voorstelling-timer-clock-label--tz {
+    text-transform: none;
+    letter-spacing: 0.02em;
+    font-size: clamp(0.72rem, 1.65vw, 0.88rem);
+    font-weight: 600;
+    color: #cbd5e0;
+    line-height: 1.3;
+    word-break: break-word;
+    hyphens: auto;
+}
+
+.voorstelling-pause-countdown--top {
+    color: #fde68a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.voorstelling-pause-countdown--top.voorstelling-pause-countdown--overtime {
+    color: #fb923c;
+}
+
+.voorstelling-timer-sessions-row {
+    display: grid;
+    grid-template-columns: repeat(var(--timer-cols, 1), minmax(0, 1fr));
+    gap: 1rem;
+    align-items: start;
+}
+
+@media (max-width: 1100px) {
+    .voorstelling-timer-sessions-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.voorstelling-timer-session {
+    background: rgba(31, 41, 55, 0.55);
+    border: 1px solid rgba(74, 85, 104, 0.55);
+    border-radius: 10px;
+    padding: 0.75rem 0.65rem 1rem;
+    min-width: 0;
+}
+
+.voorstelling-timer-session-title {
+    margin: 0 0 0.65rem 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #c7d2fe;
+    text-align: center;
+    letter-spacing: 0.02em;
+}
+
+.voorstelling-timer-session-title-btn {
+    display: inline-block;
+    width: 100%;
+    margin: 0;
+    padding: 0.35rem 0.5rem;
+    font: inherit;
+    font-weight: 700;
+    color: inherit;
+    text-align: center;
+    background: rgba(129, 140, 248, 0.12);
+    border: 1px solid rgba(129, 140, 248, 0.45);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.voorstelling-timer-session-title-btn:hover {
+    background: rgba(129, 140, 248, 0.22);
+    border-color: rgba(165, 180, 252, 0.65);
+}
+
+.voorstelling-timer-session-title-text {
+    display: block;
+    padding: 0.35rem 0.25rem;
+}
+
+.voorstelling-timer-session--editing {
+    box-shadow: inset 0 0 0 2px rgba(129, 140, 248, 0.55);
+}
+
+.voorstelling-timer-session-edit-bar {
+    margin-top: 0.85rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(74, 85, 104, 0.65);
+}
+
+.voorstelling-timer-session-edit-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem;
+}
+
+.voorstelling-timer-session-edit-row--primary {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    align-items: stretch;
+}
+
+.voorstelling-timer-session-edit-row--primary .btn {
+    width: 100%;
+    min-width: 0;
+}
+
+.voorstelling-timer-session-edit-btn {
+    font-size: 0.9rem;
+}
+
+/** Zelfde raster als een timerstap: sleepkolom + knop + verwijderkolom. */
+.voorstelling-timer-session-add-step-wrap {
+    display: flex;
+    align-items: stretch;
+    gap: 0.5rem;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.voorstelling-timer-session-add-step-aligner {
+    flex: 0 0 2.35rem;
+    min-width: 2.35rem;
+    box-sizing: border-box;
+}
+
+/** Zelfde basis als timerstap-knoppen; stippellijn = “toevoegen”. */
+.voorstelling-timer-session-add-step.voorstelling-timer-step-btn {
+    flex: 1;
+    min-width: 0;
+    width: auto;
+    justify-content: flex-start;
+    border-style: dashed;
+    border-color: rgba(129, 140, 248, 0.42);
+    background: rgba(55, 65, 81, 0.55);
+    color: #e2e8f0;
+}
+
+.voorstelling-timer-session-add-step.voorstelling-timer-step-btn:hover {
+    border-color: rgba(165, 180, 252, 0.65);
+    background: rgba(67, 76, 94, 0.85);
+    border-style: dashed;
+}
+
+.voorstelling-timer-session-add-step-plus {
+    color: #a5b4fc;
+    margin-right: 0.45rem;
+    font-size: 1rem;
+}
+
+.voorstelling-timer-step--edit-mode {
+    align-items: stretch;
+}
+
+/** Één kolom: stapnummer + sleep-handvat (geen aparte pijltjes). */
+.voorstelling-timer-step-lead {
+    flex: 0 0 2.35rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.15rem;
+    padding: 0.3rem 0.2rem;
+    background: rgba(31, 41, 55, 0.92);
+    border: 1px solid rgba(74, 85, 104, 0.55);
+    border-radius: 10px;
+    align-self: stretch;
+}
+
+.voorstelling-timer-step-num--in-lead {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #94a3b8;
+    line-height: 1;
+}
+
+.voorstelling-timer-step-lead .voorstelling-timer-step-drag-handle {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: unset;
+    padding: 0.15rem 0;
+    margin: 0;
+    color: #94a3b8;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+}
+
+.voorstelling-timer-step-lead .voorstelling-timer-step-drag-handle:hover {
+    color: #c7d2fe;
+    background: rgba(129, 140, 248, 0.12);
+}
+
+.voorstelling-timer-step-lead .voorstelling-timer-step-drag-handle:active {
+    cursor: grabbing;
+}
+
+.voorstelling-timer-step--dragging {
+    opacity: 0.55;
+}
+
+.voorstelling-timer-step--drop-hover {
+    outline: 2px solid rgba(129, 140, 248, 0.85);
+    outline-offset: 2px;
+    border-radius: 10px;
+}
+
+.voorstelling-timer-step-remove {
+    flex: 0 0 2.25rem;
+    align-self: stretch;
+    min-height: 2.5rem;
+    padding: 0;
+    font-size: 1rem;
+    color: #fca5a5;
+    background: rgba(127, 29, 29, 0.2);
+    border: 1px solid rgba(248, 113, 113, 0.35);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.voorstelling-timer-step-remove:hover {
+    background: rgba(127, 29, 29, 0.35);
+}
+
+.voorstelling-timer-step-remove-spacer {
+    flex: 0 0 2.25rem;
+    min-width: 2.25rem;
+}
+
+.voorstelling-timer-tijdschema {
+    background: rgba(31, 41, 55, 0.65);
+    border: 1px solid rgba(74, 85, 104, 0.6);
+    border-radius: 10px;
+    padding: 1rem 1.1rem;
+    max-height: min(70vh, 36rem);
+    overflow-y: auto;
+}
+
+.voorstelling-timer-tijdschema .tijdschema-list {
+    gap: 1rem;
+}
+
+.voorstelling-timer-clocks {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+@media (max-width: 640px) {
+    .voorstelling-timer-clocks {
+        grid-template-columns: 1fr;
+    }
+}
+
+.voorstelling-timer-clock-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.4rem;
+    background: rgba(31, 41, 55, 0.75);
+    border: 1px solid rgba(74, 85, 104, 0.65);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    text-align: center;
+}
+
+.voorstelling-timer-clock-label {
+    display: block;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #a0aec0;
+    margin: 0;
+}
+
+.voorstelling-wall-clock,
+.voorstelling-stopwatch {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 600;
+    color: #e2e8f0;
+    line-height: 1.2;
+}
+
+.voorstelling-stopwatch {
+    color: #a5b4fc;
+}
+
+.voorstelling-stopwatch--inline {
+    font-size: clamp(1rem, 1.8vw, 1.35rem);
+    line-height: 1.25;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.touchscreen-mode .voorstelling-stopwatch--inline {
+    font-size: 1.25rem;
+}
+
+.voorstelling-timer-step-btn-live-sw {
+    margin-top: 0;
+}
+
+.voorstelling-timer-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    width: 100%;
+    min-width: 0;
+}
+
+.voorstelling-timer-step {
+    display: flex;
+    align-items: stretch;
+    gap: 0.5rem;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.voorstelling-timer-remark-row {
+    display: flex;
+    align-items: stretch;
+    gap: 0.5rem;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.voorstelling-timer-remark-indent {
+    flex: 0 0 2.75rem;
+}
+
+.voorstelling-timer-remark-btn {
+    flex: 1;
+    min-height: 1.6rem;
+    margin-right: 2.75rem;
+    margin-left: 0.35rem;
+    border-radius: 9px;
+    border: 1px solid rgba(192, 132, 252, 0.4);
+    background: rgba(88, 28, 135, 0.22);
+    color: #ede9fe;
+    padding: 0.2rem 0.55rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    text-align: left;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.voorstelling-timer-remark-btn:hover {
+    border-color: rgba(216, 180, 254, 0.6);
+    background: rgba(88, 28, 135, 0.32);
+}
+
+.voorstelling-timer-remark-time {
+    flex: 0 0 auto;
+    font-size: 0.74rem;
+    color: #c4b5fd;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.voorstelling-timer-remark-text {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.82rem;
+    line-height: 1.2;
+    font-weight: 600;
+    color: #ede9fe;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.voorstelling-timer-step-num {
+    flex: 0 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #a0aec0;
+    background: rgba(31, 41, 55, 0.9);
+    border-radius: 8px;
+    border: 1px solid rgba(74, 85, 104, 0.5);
+}
+
+.voorstelling-timer-step-btn {
+    flex: 1;
+    min-width: 0;
+    min-height: 4.35rem;
+    padding: 0.55rem 0.85rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    border-radius: 10px;
+    border: 1px solid #4a5568;
+    background: #374151;
+    color: #e2e8f0;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, transform 0.08s;
+    text-align: left;
+}
+
+.voorstelling-timer-step-btn-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.4rem;
+    width: 100%;
+}
+
+.voorstelling-timer-step-btn-title {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-width: 0;
+    width: 100%;
+    line-height: 1.25;
+    text-align: left;
+}
+
+.voorstelling-timer-step-btn-title-text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.voorstelling-timer-step-btn-times {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem 1rem;
+    width: 100%;
+}
+
+.voorstelling-timer-step-btn-times--stamp-only {
+    justify-content: flex-start;
+}
+
+/* Onzichtbare maat van “na klik” zodat knopen niet hoger worden bij eerste tik. */
+.voorstelling-timer-step-btn-times--reserve {
+    visibility: hidden;
+    pointer-events: none;
+    user-select: none;
+}
+
+.voorstelling-timer-step-btn-time--pressed {
+    flex: 0 1 auto;
+    min-width: 0;
+}
+
+.voorstelling-timer-step-btn-timed {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    flex-shrink: 0;
+}
+
+.voorstelling-timer-step-btn-timed--segment {
+    color: #fde68a;
+}
+
+/* Lopende timer rechts: duidelijk ander dan de muurtijd links (#a5b4fc) */
+.voorstelling-timer-step-btn-timed--live.voorstelling-stopwatch {
+    color: #fbbf24;
+}
+
+.voorstelling-timer-step-check {
+    opacity: 0.9;
+    flex-shrink: 0;
+    font-size: 0.95rem;
+}
+
+.voorstelling-timer-step-btn-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem 0.5rem;
+}
+
+.voorstelling-timer-step-meta-sep {
+    color: #64748b;
+    font-weight: 500;
+    user-select: none;
+}
+
+.voorstelling-timer-step-btn-time {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #a5b4fc;
+    letter-spacing: 0.02em;
+}
+
+.voorstelling-timer-step-btn-elapsed {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fde68a;
+    letter-spacing: 0.02em;
+}
+
+.voorstelling-timer-step-btn-time--pending {
+    color: #718096;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.voorstelling-timer-step-btn:hover:not(:disabled) {
+    background: #4b5563;
+    border-color: #6b7280;
+}
+
+.voorstelling-timer-step-btn:active:not(:disabled) {
+    transform: scale(0.99);
+}
+
+.voorstelling-timer-step-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.voorstelling-timer-step-btn--done {
+    background: rgba(72, 187, 120, 0.2);
+    border-color: rgba(72, 187, 120, 0.55);
+    color: #9ae6b4;
+}
+
+.voorstelling-timer-step-btn--next {
+    box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.55);
+    border-color: #818cf8;
+}
+
+/* Stap waar de lopende tijd op staat (live stopwatch) — duidelijk t.o.v. afgetikte stappen. */
+.voorstelling-timer-step-btn--live {
+    z-index: 1;
+    border-color: #f59e0b;
+    box-shadow:
+        0 0 0 3px rgba(251, 191, 36, 0.7),
+        0 0 22px rgba(251, 191, 36, 0.22);
+    background: linear-gradient(
+        155deg,
+        rgba(55, 65, 81, 0.98) 0%,
+        rgba(80, 55, 28, 0.55) 42%,
+        rgba(72, 187, 120, 0.2) 100%
+    );
+    color: #ecfdf5;
+}
+
+.voorstelling-timer-step-btn--live .voorstelling-timer-step-btn-title-text {
+    font-weight: 700;
+}
+
+.voorstelling-timer-step-btn--live:hover:not(:disabled) {
+    border-color: #fbbf24;
+    box-shadow:
+        0 0 0 3px rgba(252, 211, 77, 0.75),
+        0 0 26px rgba(251, 191, 36, 0.28);
+    background: linear-gradient(
+        155deg,
+        rgba(75, 85, 99, 0.98) 0%,
+        rgba(95, 65, 32, 0.58) 42%,
+        rgba(72, 187, 120, 0.25) 100%
+    );
+}
+
+.touchscreen-mode .voorstelling-timer-step-btn {
+    min-height: 5rem;
+    font-size: 1.15rem;
+}
+
+.touchscreen-mode .voorstelling-timer-step-btn--live {
+    box-shadow:
+        0 0 0 4px rgba(251, 191, 36, 0.8),
+        0 0 28px rgba(251, 191, 36, 0.3);
+}
+
 .week-overview-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -1288,6 +2388,11 @@ body.week-view-active #techOverviewBtn {
     padding: 2rem;
 }
 
+/* Boven andere modals (bv. instellingen) */
+.modal.timer-pick-performance-modal-root {
+    z-index: 1002;
+}
+
 .modal.show {
     display: flex;
 }
@@ -1351,6 +2456,72 @@ body.week-view-active #techOverviewBtn {
     overflow-y: auto;
 }
 
+.voorstelling-timer-replace-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.voorstelling-timer-replace-label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #cbd5e0;
+}
+
+.voorstelling-timer-replace-input {
+    width: 100%;
+    max-width: 100%;
+    padding: 0.5rem 0.65rem;
+    font-size: 1rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    color: #e2e8f0;
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid rgba(99, 102, 241, 0.45);
+    border-radius: 8px;
+}
+
+.voorstelling-timer-replace-input:focus {
+    outline: none;
+    border-color: rgba(129, 140, 248, 0.85);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+textarea.voorstelling-timer-replace-input {
+    font-family: inherit;
+    resize: vertical;
+    min-height: 4.2rem;
+    line-height: 1.4;
+}
+
+.voorstelling-timer-replace-hint {
+    margin: 0 0 0.65rem 0;
+    font-size: 0.78rem;
+    color: #94a3b8;
+    line-height: 1.4;
+}
+
+.voorstelling-timer-replace-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0.15rem 0 0.4rem 0;
+}
+
+.voorstelling-timer-replace-actions .btn {
+    min-width: 11.5rem;
+}
+
+.voorstelling-timer-replace-actions--final {
+    gap: 0.6rem;
+}
+
+.voorstelling-timer-replace-actions--final .btn {
+    min-width: 0;
+    width: auto;
+}
+
 /* Print filter modal */
 .print-filter-hint {
     margin: 0 0 1rem 0;
@@ -1409,6 +2580,37 @@ body.week-view-active #techOverviewBtn {
     gap: 1rem;
 }
 
+.voorstelling-timer-custom-step-footer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-content: stretch;
+    align-items: stretch;
+}
+
+.voorstelling-timer-custom-step-footer .btn {
+    width: 100%;
+    min-width: 0;
+}
+
+.voorstelling-timer-custom-step-label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    font-size: 0.9rem;
+    color: #cbd5e0;
+}
+
+.voorstelling-timer-custom-step-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.55rem 0.75rem;
+    border-radius: 8px;
+    border: 1px solid rgba(74, 85, 104, 0.85);
+    background: rgba(17, 24, 39, 0.65);
+    color: #e2e8f0;
+    font-size: 1rem;
+}
+
 /* Settings Form */
 .settings-section {
     margin-bottom: 2rem;
@@ -1441,6 +2643,19 @@ body.week-view-active #techOverviewBtn {
 .form-row .form-group--half {
     flex: 1;
     margin-bottom: 0;
+}
+
+.form-row .form-group--full {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    margin-bottom: 0;
+}
+
+.form-row .form-group--full input,
+.form-input--wide {
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .form-group {
@@ -1493,6 +2708,15 @@ body.week-view-active #techOverviewBtn {
     box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2);
 }
 
+.form-group select:disabled,
+.form-select:disabled,
+.form-group input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: rgba(26, 32, 44, 0.65);
+    color: #a0aec0;
+}
+
 .form-group small {
     display: block;
     margin-top: 0.25rem;
@@ -1504,17 +2728,18 @@ body.week-view-active #techOverviewBtn {
 .venue-order-list {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    margin-top: 1rem;
+    gap: 0.35rem;
+    margin-top: 0.6rem;
 }
 
 .venue-order-item {
     display: flex;
     align-items: center;
-    padding: 0.75rem 1rem;
+    min-height: 34px;
+    padding: 0.38rem 0.65rem;
     background: #1a202c;
     border: 1px solid #4a5568;
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: move;
     transition: all 0.2s ease;
     user-select: none;
@@ -1539,62 +2764,132 @@ body.week-view-active #techOverviewBtn {
 .venue-order-item .venue-order-name {
     flex: 1;
     color: #e2e8f0;
-    font-size: 0.9rem;
+    font-size: 0.84rem;
+    line-height: 1.2;
 }
 
 .venue-order-item .venue-order-drag {
     color: #718096;
-    margin-right: 0.75rem;
+    margin-right: 0.5rem;
     cursor: grab;
+    font-size: 0.8rem;
 }
 
 .venue-order-item .venue-order-eye {
-    padding: 0.35rem 0.5rem;
+    width: 1.8rem;
+    height: 1.8rem;
+    padding: 0;
     background: transparent;
     border: none;
     border-radius: 4px;
     color: #718096;
     cursor: pointer;
     transition: color 0.15s, background 0.15s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+}
+
+/* In touchscreen-modus juist grotere tap targets behouden */
+body.touchscreen-mode .venue-order-list {
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+body.touchscreen-mode .venue-order-item {
+    min-height: 44px;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+}
+
+body.touchscreen-mode .venue-order-item .venue-order-name {
+    font-size: 0.9rem;
+    line-height: 1.3;
+}
+
+body.touchscreen-mode .venue-order-item .venue-order-drag {
+    margin-right: 0.75rem;
+    font-size: 0.9rem;
+}
+
+body.touchscreen-mode .venue-order-item .venue-order-eye {
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: 0.9rem;
 }
 
 /* Technische opties per zaal */
 .venue-resource-options-list {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.55rem;
 }
 
 .venue-resource-options-item {
     display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-    padding: 0.75rem 1rem;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.45rem;
+    padding: 0.65rem 0.85rem;
     background: #1a202c;
     border: 1px solid #4a5568;
     border-radius: 8px;
 }
 
 .venue-resource-options-item .venue-resource-name {
-    min-width: 140px;
+    min-width: 0;
     color: #e2e8f0;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
 }
 
 .venue-resource-options-item .venue-resource-checkboxes {
-    display: flex;
-    gap: 1.25rem;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.35rem 0.65rem;
+    align-items: center;
 }
 
-.venue-resource-options-item label {
+.venue-resource-options-list--with-plattegrond .venue-resource-checkboxes {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.venue-resource-options-item .venue-resource-opt {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.35rem;
     color: #a0aec0;
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     cursor: pointer;
     margin: 0;
+    min-width: 0;
+    line-height: 1.25;
+}
+
+.venue-resource-options-item .venue-resource-opt input {
+    flex: 0 0 auto;
+}
+
+.venue-resource-options-item .venue-resource-opt--placeholder {
+    visibility: hidden;
+    pointer-events: none;
+    min-height: 1.25rem;
+}
+
+#settingsModal .modal-content {
+    max-width: min(960px, calc(100vw - 2rem));
+}
+
+@media (max-width: 720px) {
+    .venue-resource-options-item .venue-resource-checkboxes,
+    .venue-resource-options-list--with-plattegrond .venue-resource-checkboxes {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .venue-resource-options-item .venue-resource-opt--placeholder {
+        display: none;
+    }
 }
 
 .venue-order-item .venue-order-eye:hover {
@@ -1737,8 +3032,25 @@ body.week-view-active #techOverviewBtn {
     }
     
     .header-content {
+        display: flex;
         flex-direction: column;
+        align-items: stretch;
         gap: 1rem;
+    }
+
+    .header-title,
+    .header-show-mode-slot,
+    #backBtn,
+    .header-actions {
+        width: 100%;
+    }
+
+    .header-show-mode-slot {
+        align-self: center;
+    }
+
+    #backBtn {
+        align-self: center;
     }
     
     .main-content {
@@ -2461,11 +3773,14 @@ body.touchscreen-mode .btn-back {
     padding: 0.6rem 1.2rem;
 }
 
-/* Header: datum-/zaalkiezer en actieknoppen */
+/* Header: datum-/zaalkiezer en actieknoppen (+ Terug staat buiten .header-actions) */
 body.touchscreen-mode .header-actions .btn,
 body.touchscreen-mode .header-actions button {
     min-height: 44px;
     min-width: 44px;
+}
+body.touchscreen-mode #backBtn {
+    min-height: 44px;
 }
 body.touchscreen-mode .custom-select-trigger {
     min-height: 44px;
@@ -2477,9 +3792,17 @@ body.touchscreen-mode .custom-select-option {
     padding: 0.85rem 1.25rem;
     font-size: 1rem;
 }
+body.touchscreen-mode .custom-select-options--grid {
+    padding: 0.5rem;
+    grid-template-columns: repeat(3, minmax(220px, 1fr));
+    gap: 0.5rem;
+    max-width: min(98vw, 1320px) !important;
+}
 body.touchscreen-mode .custom-select-options--grid .custom-select-option {
-    min-height: 44px;
-    padding: 0.75rem 1rem;
+    min-height: 56px;
+    padding: 0.9rem 1rem;
+    font-size: 1rem;
+    line-height: 1.3;
 }
 
 /* Filters: grotere checkboxes en tikgebied */
@@ -2609,4 +3932,1773 @@ body.touchscreen-mode .search-keyboard-row {
     max-width: min(520px, 55vw);
     white-space: normal;
     line-height: 1.25;
+}
+
+/* Showmodus: onderaan zodat dit thema-specifieke headerkleuren overschrijft */
+body.show-mode-active .header {
+    background: #b91c1c !important;
+    border-bottom-color: rgba(255, 255, 255, 0.2) !important;
+}
+body.show-mode-active .header-title i,
+body.show-mode-active .header-title-text span,
+body.show-mode-active .header-datetime {
+    color: #ffffff !important;
+}
+
+/* Luminex: embedded Lichtsignaal Flow Viewer — vult beschikbare hoogte */
+body.luminex-view-active .main-content {
+    padding-bottom: 0.25rem;
+    overflow: hidden;
+}
+
+body.luminex-view-active .main-workspace,
+body.show-mode-active.luminex-view-active .main-workspace {
+    flex: 1;
+    min-height: 0;
+    max-width: none;
+    width: 100%;
+    align-items: stretch;
+}
+
+body.luminex-view-active .main-workspace-inner {
+    flex: 1 1 auto;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+.luminex-view-wrapper {
+    max-width: none;
+    margin: 0;
+    width: 100%;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    height: 100%;
+    padding: 0;
+}
+
+body.luminex-view-active .luminex-view-wrapper {
+    height: 100%;
+    min-height: 0;
+}
+
+.luminex-viewer-error {
+    margin: 0 0 0.5rem;
+    padding: 0.65rem 0.85rem;
+    border-radius: 8px;
+    background: rgba(245, 101, 101, 0.12);
+    border: 1px solid rgba(245, 101, 101, 0.35);
+    color: #feb2b2;
+    font-size: 0.875rem;
+    flex: 0 0 auto;
+}
+
+.luminex-viewer-frame {
+    flex: 1 1 auto;
+    width: 100%;
+    min-height: 0;
+    height: 100%;
+    border: none;
+    border-radius: 8px;
+    background: #0f1419;
+    display: flex;
+}
+
+/* OSC Monitor: zelfde full-screen paneelstijl als Luminex viewer */
+body.osc-monitor-active .main-content {
+    padding-bottom: 0.25rem;
+    overflow: hidden;
+}
+
+body.osc-monitor-active .main-workspace {
+    flex: 1;
+    min-height: 0;
+    max-width: none;
+    width: 100%;
+    align-items: flex-start;
+}
+
+body.osc-monitor-active .main-workspace-inner {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.trekkenlijsten-wrapper {
+    width: 100%;
+    max-width: var(--layout-max-width);
+    margin: 0 auto;
+    padding: 0 1rem 1.5rem;
+}
+
+body.show-mode-active.trekkenlijsten-active .trekkenlijsten-wrapper {
+    margin-left: auto;
+    margin-right: 0;
+    padding-right: 0;
+}
+
+.trekkenlijsten-card {
+    width: 100%;
+}
+
+.trekkenlijsten-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.trekkenlijsten-meta {
+    color: #cbd5e0;
+    font-size: 0.9rem;
+}
+
+.trekkenlijsten-list {
+    border: 1px solid rgba(148, 163, 184, 0.28);
+    background: rgba(30, 41, 59, 0.45);
+    border-radius: 10px;
+    max-height: min(62vh, 640px);
+    overflow: auto;
+}
+
+.trekkenlijsten-empty {
+    padding: 1.25rem 1rem;
+    color: #94a3b8;
+    text-align: center;
+}
+
+.trekkenlijsten-entry {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    padding: 0.75rem 0.85rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+    font-size: 0.9rem;
+}
+
+.trekkenlijsten-entry--done {
+    background: rgba(34, 197, 94, 0.06);
+}
+
+.trekkenlijsten-entry-main {
+    display: grid;
+    grid-template-columns: 7.5rem 5.5rem minmax(0, 1fr) auto;
+    gap: 0.55rem;
+    align-items: baseline;
+}
+
+.trekkenlijsten-entry-actions {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.65rem;
+    align-items: start;
+    padding-left: 13rem;
+}
+
+.trekkenlijsten-verwerkt-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #cbd5e1;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+}
+
+.trekkenlijsten-verwerkt-label input {
+    width: 1rem;
+    height: 1rem;
+    accent-color: #818cf8;
+    cursor: pointer;
+}
+
+.trekkenlijsten-comment-input {
+    width: 100%;
+    min-height: 2.4rem;
+    resize: vertical;
+    border-radius: 8px;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    background: rgba(15, 23, 42, 0.55);
+    color: #e2e8f0;
+    padding: 0.45rem 0.55rem;
+    font: inherit;
+    line-height: 1.35;
+}
+
+.trekkenlijsten-comment-input:disabled,
+.trekkenlijsten-verwerkt-label input:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+@media (max-width: 900px) {
+    .trekkenlijsten-entry-main {
+        grid-template-columns: 1fr 1fr;
+    }
+    .trekkenlijsten-entry-actions {
+        padding-left: 0;
+        grid-template-columns: 1fr;
+    }
+}
+
+.trekkenlijsten-entry:last-child {
+    border-bottom: 0;
+}
+
+.trekkenlijsten-entry-date {
+    color: #a5b4fc;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.trekkenlijsten-entry-time {
+    color: #93c5fd;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.trekkenlijsten-entry-title {
+    color: #e2e8f0;
+    overflow-wrap: anywhere;
+}
+
+.trekkenlijsten-entry-venue {
+    display: inline-block;
+    margin-left: 0.4rem;
+    padding: 0.05rem 0.4rem;
+    border-radius: 999px;
+    background: rgba(148, 163, 184, 0.18);
+    color: #94a3b8;
+    font-size: 0.75rem;
+    font-weight: 500;
+    vertical-align: middle;
+}
+
+.trekkenlijsten-entry-doc-wrap {
+    justify-self: end;
+    white-space: nowrap;
+}
+
+.trekkenlijsten-entry-doc {
+    color: #818cf8;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.85rem;
+}
+
+.trekkenlijsten-entry-doc:hover {
+    text-decoration: underline;
+}
+
+.osc-monitor-wrapper {
+    --osc-bg: #0b0f14;
+    --osc-bg-2: #10161e;
+    --osc-card: #161e29;
+    --osc-card-2: #1c2634;
+    --osc-border: #263243;
+    --osc-text: #dce7f2;
+    --osc-muted: #8298ad;
+    --osc-accent: #4cc2ff;
+    --osc-good: #41d98d;
+    max-width: none;
+    margin: 0;
+    width: 100%;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding: 0;
+    background: var(--osc-bg);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+body.osc-monitor-active .osc-monitor-wrapper {
+    height: auto;
+}
+
+.osc-monitor-topbar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 16px;
+    background: var(--osc-bg-2);
+    border-bottom: 1px solid var(--osc-border);
+    flex: 0 0 auto;
+}
+
+.osc-monitor-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.osc-monitor-logo {
+    color: var(--osc-accent);
+    font-size: 22px;
+}
+
+.osc-monitor-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    color: var(--osc-text);
+}
+
+.osc-monitor-pill {
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--osc-good);
+    background: var(--osc-card-2);
+    border: 1px solid var(--osc-good);
+}
+
+.osc-monitor-meta {
+    margin: 0;
+    margin-left: auto;
+    color: var(--osc-muted);
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+}
+
+.osc-monitor-iface-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 0 1 auto;
+    min-width: 0;
+}
+
+.osc-monitor-iface-label {
+    font-size: 12px;
+    color: var(--osc-muted);
+    white-space: nowrap;
+}
+
+.osc-monitor-iface-select {
+    min-width: 11rem;
+    max-width: 18rem;
+    background: var(--osc-card);
+    border: 1px solid var(--osc-border);
+    color: var(--osc-text);
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 13px;
+    font-family: inherit;
+}
+
+.osc-monitor-iface-select:focus {
+    outline: none;
+    border-color: var(--osc-accent);
+}
+
+.osc-monitor-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 0 0 auto;
+}
+
+.osc-monitor-action-btn {
+    background: var(--osc-card-2);
+    color: var(--osc-text);
+    border: 1px solid var(--osc-border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.osc-monitor-action-btn:hover {
+    border-color: var(--osc-accent);
+}
+
+.osc-monitor-body {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    background: #0f1419;
+}
+
+.osc-monitor-table-head,
+.osc-monitor-entry {
+    display: grid;
+    grid-template-columns: 10rem 7rem 1fr;
+    gap: 0.75rem;
+    padding: 0.55rem 16px;
+    align-items: center;
+}
+
+.osc-monitor-table-head {
+    flex: 0 0 auto;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--osc-muted);
+    background: rgba(0, 0, 0, 0.18);
+    border-bottom: 1px solid var(--osc-border);
+}
+
+.osc-monitor-list {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    max-height: none;
+}
+
+.osc-monitor-entry {
+    border-bottom: 1px solid rgba(38, 50, 67, 0.85);
+    font-size: 13px;
+}
+
+.osc-monitor-entry:last-child {
+    border-bottom: 0;
+}
+
+.osc-monitor-entry:hover {
+    background: rgba(28, 38, 52, 0.55);
+}
+
+.osc-monitor-entry-time {
+    color: var(--osc-accent);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-variant-numeric: tabular-nums;
+}
+
+.osc-monitor-entry-slot {
+    color: #93c5fd;
+    font-weight: 600;
+}
+
+.osc-monitor-entry-step {
+    color: var(--osc-text);
+    overflow-wrap: anywhere;
+}
+
+.osc-monitor-empty {
+    padding: 2.5rem 16px;
+    text-align: center;
+    color: var(--osc-muted);
+    font-size: 13px;
+}
+
+.luminex-card {
+    min-height: 420px;
+}
+
+.luminex-card-header h3 {
+    margin-bottom: 0.35rem;
+}
+
+.luminex-card-subtitle {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #a0aec0;
+    font-weight: 400;
+    max-width: 52rem;
+    line-height: 1.45;
+}
+
+.luminex-card-content {
+    padding-top: 0.5rem;
+}
+
+.luminex-card-content--compact .luminex-card-lead {
+    margin: 0 0 1rem 0;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: #94a3b8;
+    max-width: 48rem;
+}
+
+.luminex-discovery--compact {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.luminex-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    margin-bottom: 0.75rem;
+    padding: 0.55rem 0.65rem;
+    background: rgba(15, 23, 42, 0.45);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    border-radius: 10px;
+}
+
+.luminex-engine-merge-hint {
+    margin: -0.15rem 0 0.7rem 0;
+    padding: 0 0.1rem;
+    font-size: 0.72rem;
+    line-height: 1.45;
+    color: #8b9cb0;
+    max-width: 48rem;
+}
+
+.luminex-toolbar--sacn {
+    align-items: center;
+}
+
+.luminex-toolbar-label {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.luminex-toolbar-slabel {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    margin-right: 0.25rem;
+}
+
+.luminex-routing-select--toolbar {
+    min-width: 12rem;
+    flex: 1 1 10rem;
+}
+
+.luminex-sacn-range--inline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    margin: 0;
+}
+
+.luminex-toolbar-status {
+    font-size: 0.8rem;
+    color: #a0aec0;
+    flex: 1 1 8rem;
+    min-width: 6rem;
+    margin: 0;
+}
+
+.luminex-toolbar .luminex-engine-status {
+    margin: 0;
+}
+
+.luminex-sacn-result-block {
+    margin: 0 0 0.55rem 0;
+    padding: 0.5rem 0.65rem;
+    max-width: 52rem;
+    border-radius: 8px;
+    background: rgba(15, 23, 42, 0.55);
+    border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.luminex-sacn-result-main {
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: #e2e8f0;
+    word-break: break-word;
+}
+
+.luminex-sacn-result-main--error {
+    color: #fca5a5;
+}
+
+.luminex-sacn-result-meta {
+    margin-top: 0.25rem;
+    font-size: 0.72rem;
+    line-height: 1.4;
+    color: #94a3b8;
+    word-break: break-word;
+}
+
+.luminex-sacn-warnings-line {
+    margin-top: 0.35rem;
+    font-size: 0.75rem;
+    line-height: 1.45;
+    color: #fbbf24;
+    word-break: break-word;
+}
+
+.luminex-sacn-explain {
+    margin: 0 0 0.65rem 0;
+    font-size: 0.72rem;
+    line-height: 1.45;
+    color: #8b9cb0;
+    max-width: 52rem;
+}
+
+.luminex-node-card--sacn-live.luminex-node-card--in {
+    border-color: rgba(129, 140, 248, 0.45);
+    background: rgba(255, 255, 255, 0.055);
+}
+
+.luminex-node-card--sacn-config-only.luminex-node-card--in {
+    opacity: 0.82;
+    border-color: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.025);
+}
+
+.luminex-sacn-scan-hint {
+    display: block;
+    font-size: 0.68rem;
+    font-style: italic;
+    color: #718096;
+    margin-top: 0.1rem;
+}
+
+.luminex-sacn-lan-only-hint {
+    display: block;
+    font-size: 0.68rem;
+    line-height: 1.3;
+    color: #6ee7b7;
+    margin-top: 0.15rem;
+}
+
+.luminex-node-card--from-lan-scan.luminex-node-card--in {
+    border-left-color: rgba(52, 211, 153, 0.55);
+}
+
+.luminex-card-content--compact .luminex-patch-block--canvas {
+    margin-top: 0.35rem;
+}
+
+.luminex-footer-actions {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.luminex-footer-actions-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.luminex-flow-reminder {
+    margin: 0 0 1.25rem 0;
+    padding: 0.65rem 0.9rem;
+    font-size: 0.88rem;
+    line-height: 1.45;
+    color: #c4cbd6;
+    background: rgba(99, 102, 241, 0.08);
+    border: 1px solid rgba(129, 140, 248, 0.2);
+    border-radius: 12px;
+    max-width: 42rem;
+}
+
+.luminex-flow-reminder--inline {
+    margin: 0.75rem 0 0.5rem;
+    padding: 0.4rem 0.65rem;
+    font-size: 0.8rem;
+    display: inline-block;
+    max-width: none;
+}
+
+.luminex-step {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.luminex-step:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+.luminex-step__head {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0.85rem;
+    margin-bottom: 0.85rem;
+}
+
+.luminex-step__badge {
+    flex-shrink: 0;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #f8fafc;
+    background: linear-gradient(145deg, rgba(129, 140, 248, 0.55), rgba(99, 102, 241, 0.35));
+    border: 1px solid rgba(165, 180, 252, 0.35);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.luminex-step--patch .luminex-step__badge {
+    background: linear-gradient(145deg, rgba(52, 211, 153, 0.45), rgba(16, 185, 129, 0.28));
+    border-color: rgba(110, 231, 183, 0.35);
+}
+
+.luminex-step__titles {
+    flex: 1;
+    min-width: 0;
+}
+
+.luminex-step__title {
+    margin: 0 0 0.35rem 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #f1f5f9;
+    letter-spacing: -0.02em;
+}
+
+.luminex-step__hint {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #94a3b8;
+    max-width: 44rem;
+}
+
+.luminex-step__body {
+    padding-left: 0.15rem;
+}
+
+@media (min-width: 520px) {
+    .luminex-step__body {
+        padding-left: 2.85rem;
+    }
+}
+
+.luminex-step2-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.85rem;
+}
+
+.luminex-engine-status,
+.luminex-step-status {
+    font-size: 0.85rem;
+    color: #a0aec0;
+    margin: 0.65rem 0 0 0;
+    min-height: 1.2em;
+}
+
+.luminex-sacn-lead {
+    margin: 0 0 0.25rem 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #e2e8f0;
+}
+
+.luminex-sacn-lead-hint {
+    margin: 0 0 0.65rem 0;
+    font-size: 0.82rem;
+    color: #94a3b8;
+    line-height: 1.45;
+    max-width: 40rem;
+}
+
+.luminex-sacn-scan-row {
+    margin-bottom: 0.35rem;
+}
+
+.luminex-patch-subtitle {
+    margin: 1rem 0 0.35rem 0;
+    font-size: 1rem;
+}
+
+.luminex-patch-subhint {
+    margin: 0 0 0.65rem 0;
+}
+
+.luminex-step .luminex-patch-block--canvas {
+    margin-top: 0.5rem;
+}
+
+.luminex-step3-footer {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.luminex-routing-footer-hint {
+    margin: 0;
+    font-size: 0.82rem;
+    color: #94a3b8;
+    line-height: 1.45;
+    max-width: 40rem;
+}
+
+.luminex-discovery {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.luminex-discovery-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.luminex-discovery-status {
+    font-size: 0.85rem;
+    color: #a0aec0;
+    flex: 1;
+    min-width: 12rem;
+}
+
+.luminex-discovery-target {
+    margin-bottom: 0.75rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.luminex-host-label {
+    display: block;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-bottom: 0.35rem;
+}
+
+.luminex-host-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+/* IP + Opslaan: invoer vult de rij, knop blijft rechts tegen de kaart */
+.luminex-host-row--save {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    flex-wrap: nowrap;
+}
+
+.luminex-host-row--save .luminex-host-input {
+    max-width: none;
+    min-width: 0;
+    width: 100%;
+}
+
+.luminex-save-host-btn {
+    flex-shrink: 0;
+}
+
+.luminex-host-input {
+    flex: 1;
+    min-width: 12rem;
+    max-width: 22rem;
+    padding: 0.45rem 0.65rem;
+    border-radius: 8px;
+    border: 1px solid rgba(129, 140, 248, 0.35);
+    background: rgba(26, 32, 44, 0.9);
+    color: #e2e8f0;
+    font-size: 0.9rem;
+}
+
+.luminex-device-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.luminex-device-item .luminex-device-pick {
+    width: 100%;
+    justify-content: flex-start;
+    text-align: left;
+}
+
+.luminex-section {
+    margin-bottom: 1.25rem;
+}
+
+.luminex-section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    margin: 0 0 0.35rem 0;
+}
+
+.luminex-section-hint {
+    font-size: 0.82rem;
+    color: #94a3b8;
+    line-height: 1.45;
+    margin: 0 0 0.75rem 0;
+    max-width: 48rem;
+}
+
+.luminex-section-title--friendly {
+    font-weight: 500;
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+    color: #f1f5f9;
+}
+
+.luminex-section-hint--friendly {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #a8b4c4;
+    max-width: 40rem;
+}
+
+.luminex-patch-block--canvas {
+    margin-top: 1.35rem;
+    padding-top: 0.25rem;
+}
+
+.luminex-sacn-range {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 0.65rem;
+}
+
+.luminex-sacn-range-label {
+    font-size: 0.85rem;
+    color: #a0aec0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.luminex-sacn-num {
+    width: 5rem;
+    padding: 0.35rem 0.5rem;
+    border-radius: 6px;
+    border: 1px solid rgba(129, 140, 248, 0.35);
+    background: rgba(26, 32, 44, 0.9);
+    color: #e2e8f0;
+}
+
+.luminex-sacn-list {
+    list-style: none;
+    margin: 0.5rem 0 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.luminex-sacn-item .luminex-sacn-pick {
+    width: 100%;
+    justify-content: flex-start;
+    text-align: left;
+}
+
+.luminex-routing-grid {
+    display: grid;
+    grid-template-columns: minmax(8rem, 12rem) 1fr;
+    gap: 0.5rem 1rem;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    max-width: 42rem;
+}
+
+.luminex-routing-label {
+    font-size: 0.85rem;
+    color: #a0aec0;
+}
+
+.luminex-routing-select {
+    width: 100%;
+    max-width: 28rem;
+    padding: 0.45rem 0.65rem;
+    border-radius: 8px;
+    border: 1px solid rgba(129, 140, 248, 0.35);
+    background: rgba(26, 32, 44, 0.95);
+    color: #e2e8f0;
+    font-size: 0.9rem;
+}
+
+.luminex-routing-num {
+    max-width: 8rem;
+}
+
+.luminex-routing-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.35rem;
+}
+
+.luminex-route-status {
+    font-size: 0.85rem;
+    color: #a0aec0;
+    margin: 0.5rem 0 0 0;
+}
+
+.luminex-host-label--pw {
+    margin-top: 0.65rem;
+}
+
+.luminex-matrix-root {
+    min-height: 380px;
+}
+
+.luminex-matrix-canvas {
+    position: relative;
+    min-height: 380px;
+    width: 100%;
+}
+
+.luminex-matrix-canvas--dynamic {
+    min-height: 420px;
+    padding: 1.35rem 1.25rem 1.5rem;
+    border-radius: 20px;
+    background-color: #23232f;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1.2px, transparent 1.2px);
+    background-size: 20px 20px;
+    background-position: 0 0;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.05),
+        0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.luminex-matrix-canvas--hub.luminex-matrix-canvas--dynamic {
+    padding: 0.85rem 0.5rem 1rem;
+}
+
+.luminex-matrix-canvas--free {
+    overflow: auto;
+}
+
+.luminex-matrix-free {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    pointer-events: none;
+}
+
+.luminex-matrix-drag-hint {
+    margin: 0 0 0.4rem 0;
+    font-size: 0.72rem;
+    line-height: 1.35;
+    color: #7c8c9f;
+    text-align: center;
+    pointer-events: none;
+}
+
+.luminex-matrix-free-legend {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding: 0 0.15rem;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #7c8c9f;
+    font-weight: 600;
+    pointer-events: none;
+    user-select: none;
+}
+
+.luminex-matrix-legend-t {
+    flex: 1;
+    text-align: center;
+}
+
+.luminex-matrix-legend-t[data-lum-col='in'] {
+    text-align: left;
+}
+
+.luminex-matrix-legend-t[data-lum-col='out'] {
+    text-align: right;
+}
+
+.luminex-matrix-free-nodes {
+    position: relative;
+    min-height: 360px;
+    min-width: 100%;
+}
+
+.luminex-matrix-node--free {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 2;
+    touch-action: none;
+    max-width: 11.5rem;
+    width: max-content;
+    pointer-events: auto;
+}
+
+/* Process engine: volledige naam + id tonen zonder af te knippen */
+.luminex-matrix-row--engine.luminex-matrix-node--free {
+    max-width: min(22rem, 96vw);
+    width: max-content;
+}
+
+.luminex-matrix-node--dragging {
+    z-index: 30;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+}
+
+.luminex-matrix-empty-node.luminex-matrix-node--free {
+    max-width: 16rem;
+}
+
+.luminex-matrix-svg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: auto;
+    z-index: 0;
+}
+
+/* Basis/flow niet klikbaar; hits wel (svg zelf blijft none zodat lege canvas niet blokkeert) */
+.luminex-matrix-svg .luminex-matrix-link--base,
+.luminex-matrix-svg .luminex-matrix-link--flow,
+.luminex-matrix-svg .luminex-matrix-link--preview,
+.luminex-matrix-svg .luminex-matrix-link--merge-sacn-orphan {
+    pointer-events: none;
+}
+
+.luminex-matrix-svg .luminex-matrix-link-hit {
+    pointer-events: stroke;
+}
+
+.luminex-matrix-columns {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2.5rem;
+    min-height: 380px;
+}
+
+.luminex-matrix-columns--hub {
+    justify-content: center;
+    gap: 0.75rem;
+    align-items: flex-start;
+}
+
+.luminex-matrix-col {
+    flex: 1;
+    max-width: 42%;
+}
+
+.luminex-matrix-canvas--dynamic .luminex-matrix-col-title {
+    font-size: 0.8125rem;
+    text-transform: none;
+    letter-spacing: 0.02em;
+    color: #b8c3d4;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.luminex-matrix-col-title {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #94a3b8;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+}
+
+.luminex-matrix-port-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.luminex-matrix-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.85rem;
+    min-height: 36px;
+}
+
+.luminex-matrix-row-label {
+    font-size: 0.875rem;
+    color: #e2e8f0;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.luminex-matrix-col--in .luminex-matrix-row-label {
+    text-align: left;
+}
+
+.luminex-matrix-col--out .luminex-matrix-row-label {
+    text-align: right;
+}
+
+.luminex-matrix-port {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.25), rgba(30, 35, 50, 0.95));
+    padding: 0;
+    flex-shrink: 0;
+    cursor: grab;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.luminex-matrix-port:active {
+    cursor: grabbing;
+}
+
+.luminex-matrix-port--sacn {
+    border-color: rgba(167, 180, 255, 0.85);
+    box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.2), 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.luminex-matrix-port--sacn:hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 0 4px rgba(129, 140, 248, 0.35), 0 4px 14px rgba(99, 102, 241, 0.25);
+}
+
+.luminex-matrix-port--out {
+    border-color: rgba(110, 231, 183, 0.85);
+    box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.15), 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.luminex-matrix-port--out:hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.35), 0 4px 14px rgba(16, 185, 129, 0.2);
+}
+
+.luminex-matrix-port:hover {
+    transform: scale(1.12);
+}
+
+/* Basislijn: bestaande patch-kleuren */
+.luminex-matrix-link--base {
+    fill: none;
+    stroke-width: 2.75;
+    stroke-linecap: round;
+    pointer-events: none;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.12));
+    opacity: 0.92;
+}
+
+/* Bewegende stippen = stroomrichting (bron → engine → uitgang; pad loopt M→C in die volgorde) */
+.luminex-matrix-link--flow {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.78);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    pointer-events: none;
+    stroke-dasharray: 4 18;
+    opacity: 0.88;
+    animation: luminex-matrix-flow 1.05s linear infinite;
+}
+
+@keyframes luminex-matrix-flow {
+    to {
+        stroke-dashoffset: -22;
+    }
+}
+
+.luminex-matrix-link--preview {
+    stroke: rgba(180, 190, 255, 0.85);
+    stroke-dasharray: 8 6;
+    opacity: 0.95;
+    filter: drop-shadow(0 0 6px rgba(129, 140, 248, 0.45));
+    animation: luminex-matrix-flow 0.85s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .luminex-matrix-link--flow,
+    .luminex-matrix-link--preview {
+        animation: none;
+    }
+    .luminex-matrix-link--flow {
+        stroke-dasharray: none;
+        opacity: 0.4;
+    }
+}
+
+.luminex-matrix-link-hit {
+    fill: none;
+    stroke: transparent;
+    stroke-width: 18;
+    pointer-events: stroke;
+    cursor: pointer;
+}
+
+.luminex-patch-block {
+    margin-top: 0;
+}
+
+.luminex-matrix-canvas--dynamic .luminex-matrix-col {
+    max-width: 47%;
+}
+
+.luminex-matrix-canvas--hub .luminex-matrix-col--in,
+.luminex-matrix-canvas--hub .luminex-matrix-col--out {
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 11.5rem;
+    width: min(11.5rem, 28vw);
+}
+
+.luminex-matrix-canvas--hub .luminex-matrix-col--engine {
+    flex: 0 0 auto;
+    max-width: 14rem;
+    min-width: 10rem;
+    width: min(14rem, 34vw);
+}
+
+.luminex-node-card {
+    align-items: stretch;
+    padding: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    gap: 0.65rem;
+}
+
+.luminex-node-card--in,
+.luminex-node-card--out {
+    padding: 0.65rem 0.85rem;
+    border-radius: 16px;
+    background: #2d2d3a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.luminex-matrix-canvas--hub .luminex-node-card--in,
+.luminex-matrix-canvas--hub .luminex-node-card--out {
+    padding: 0.4rem 0.45rem;
+    gap: 0.4rem;
+    border-radius: 12px;
+    background: #2d2d3a;
+}
+
+.luminex-node-card--in:hover,
+.luminex-node-card--out:hover {
+    background: #343444;
+    border-color: rgba(255, 255, 255, 0.16);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.28);
+}
+
+.luminex-node-card--in {
+    border-left: 3px solid rgba(129, 140, 248, 0.65);
+}
+
+.luminex-node-card--out {
+    border-right: 3px solid rgba(52, 211, 153, 0.55);
+}
+
+.luminex-node-card__body {
+    flex: 1;
+    min-width: 0;
+}
+
+.luminex-matrix-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 220px;
+    padding: 1.5rem 1rem;
+    text-align: center;
+}
+
+.luminex-matrix-empty-inner {
+    max-width: 18rem;
+}
+
+.luminex-matrix-empty-icon {
+    width: 3rem;
+    height: 3rem;
+    margin: 0 auto 1rem;
+    border-radius: 14px;
+    background: rgba(129, 140, 248, 0.12);
+    border: 1px dashed rgba(129, 140, 248, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #a5b4fc;
+    font-size: 1.25rem;
+    opacity: 0.9;
+}
+
+.luminex-matrix-empty-msg {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: #a8b4c4;
+}
+
+.luminex-matrix-row--sacn {
+    align-items: stretch;
+}
+
+.luminex-sacn-node {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 0;
+}
+
+/* Inkomende stream: pijl links van het icoon, richting rechts */
+.luminex-stream-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: rgba(165, 180, 252, 0.5);
+    font-size: 0.8rem;
+    line-height: 1;
+}
+
+.luminex-stream-arrow--in.luminex-stream-arrow--live {
+    color: rgba(196, 181, 253, 0.95);
+    filter: drop-shadow(0 0 5px rgba(129, 140, 248, 0.4));
+}
+
+/* Uitgaande stream: pijl rechts na het icoon (order 3 t.o.v. tekst/ico) */
+.luminex-stream-arrow--out {
+    order: 3;
+    margin-left: 0.15rem;
+    color: rgba(110, 231, 183, 0.72);
+}
+
+.luminex-sacn-icon-wrap {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 12px;
+    background: linear-gradient(145deg, rgba(129, 140, 248, 0.35), rgba(99, 102, 241, 0.15));
+    border: 1px solid rgba(165, 180, 252, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #e0e7ff;
+    flex-shrink: 0;
+    font-size: 1rem;
+}
+
+.luminex-sacn-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+    text-align: left;
+}
+
+.luminex-sacn-u {
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: #f8fafc;
+    letter-spacing: -0.02em;
+}
+
+.luminex-sacn-name,
+.luminex-sacn-ip {
+    font-size: 0.78rem;
+    color: #94a3b8;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.luminex-sacn-network {
+    font-size: 0.72rem;
+    color: #a5b4fc;
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+.luminex-sacn-merge-badge {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: #c4b5fd;
+    line-height: 1.35;
+    margin: 0.1rem 0 0.08rem;
+}
+
+.luminex-sacn-merge-htp-line {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: #94a3b8;
+    line-height: 1.35;
+    margin-top: 0.12rem;
+    letter-spacing: 0.01em;
+}
+
+/* merge-engine badge zit op de kaart; randkleur volgt sacn-merge-out (groen = uitgang) */
+
+.luminex-matrix-row--output-hidden {
+    display: none !important;
+}
+
+.luminex-show-all-outputs-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    color: #94a3b8;
+    margin: 0 0 0.75rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+.luminex-show-all-outputs-label input {
+    margin: 0;
+    accent-color: #6ee7b7;
+}
+
+.luminex-matrix-row--out {
+    flex-direction: row;
+}
+
+/* sACN-universe als uitgang na merge: zelfde volgorde als DMX-uit (poort links, icoon, pijl rechts) */
+.luminex-sacn-icon-wrap--out-merge {
+    border-color: rgba(167, 139, 250, 0.55);
+    background: linear-gradient(145deg, rgba(129, 140, 248, 0.38), rgba(52, 211, 153, 0.12));
+    box-shadow: 0 0 0 1px rgba(52, 211, 153, 0.12);
+}
+
+.luminex-out-node .luminex-sacn-icon-wrap--out-merge {
+    order: 2;
+}
+
+.luminex-sacn-merge-out-icon .fa-broadcast-tower {
+    transform: scaleX(-1);
+}
+
+.luminex-matrix-row--sacn-merge-layout {
+    flex-direction: row;
+    align-items: stretch;
+}
+
+.luminex-sacn-text--merge-out {
+    text-align: right;
+}
+
+.luminex-matrix-port--merge-echo {
+    border-color: rgba(110, 231, 183, 0.85);
+    box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.15), 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.luminex-node-card--sacn-merge-out {
+    border-color: rgba(110, 231, 183, 0.35);
+    background: #243d36;
+}
+
+.luminex-out-node {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+    min-width: 0;
+    justify-content: flex-end;
+    text-align: right;
+}
+
+.luminex-out-icon-wrap {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 12px;
+    background: linear-gradient(145deg, rgba(52, 211, 153, 0.3), rgba(16, 185, 129, 0.12));
+    border: 1px solid rgba(110, 231, 183, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #d1fae5;
+    flex-shrink: 0;
+    font-size: 1rem;
+    order: 2;
+}
+
+.luminex-out-icon-wrap--dmx {
+    border-radius: 10px;
+}
+
+.luminex-dmx-xlr-female {
+    display: block;
+    width: 1.08em;
+    height: 1.08em;
+    opacity: 0.98;
+}
+
+.luminex-out-text {
+    flex: 1;
+    min-width: 0;
+    order: 1;
+}
+
+.luminex-out-label-text {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #f1f5f9;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.luminex-matrix-row--engine {
+    align-items: stretch;
+}
+
+.luminex-node-card--engine {
+    padding: 0.4rem 0.35rem;
+    gap: 0.35rem;
+    border-radius: 12px;
+    background: #2d2d3a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    border-top: 3px solid rgba(251, 191, 36, 0.45);
+}
+
+.luminex-engine-node {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.45rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.luminex-engine-icon-wrap {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 10px;
+    background: linear-gradient(145deg, rgba(251, 191, 36, 0.35), rgba(245, 158, 11, 0.12));
+    border: 1px solid rgba(253, 224, 71, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fef3c7;
+    flex-shrink: 0;
+    font-size: 0.85rem;
+}
+
+.luminex-engine-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.05rem;
+    min-width: 0;
+    text-align: left;
+}
+
+.luminex-engine-text .luminex-engine-hub-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #94a3b8;
+    font-weight: 600;
+}
+
+.luminex-engine-text .luminex-engine-hub-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #f8fafc;
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+    line-height: 1.3;
+    word-break: break-word;
+}
+
+.luminex-matrix-port--engine-in,
+.luminex-matrix-port--engine-out {
+    pointer-events: none;
+    width: 18px;
+    height: 18px;
+    border-color: rgba(251, 191, 36, 0.75);
+    box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+}
+
+.luminex-matrix-canvas--hub .luminex-sacn-icon-wrap,
+.luminex-matrix-canvas--hub .luminex-out-icon-wrap {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 10px;
+    font-size: 0.85rem;
+}
+
+.luminex-matrix-canvas--hub .luminex-dmx-xlr-female {
+    width: 1em;
+    height: 1em;
+}
+
+.luminex-matrix-canvas--hub .luminex-stream-arrow {
+    font-size: 0.68rem;
+}
+
+.luminex-matrix-canvas--hub .luminex-sacn-u {
+    font-size: 0.82rem;
+}
+
+.luminex-matrix-canvas--hub .luminex-sacn-name,
+.luminex-matrix-canvas--hub .luminex-sacn-ip {
+    font-size: 0.68rem;
+}
+
+.luminex-matrix-canvas--hub .luminex-out-label-text {
+    font-size: 0.8rem;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    line-height: 1.25;
+}
+
+.luminex-routing-grid--engine {
+    max-width: 28rem;
 }

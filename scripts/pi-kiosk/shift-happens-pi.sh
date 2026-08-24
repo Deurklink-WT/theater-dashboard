@@ -17,7 +17,8 @@
 
 set -euo pipefail
 
-GITHUB_REPO="${GITHUB_REPO:-Deurklink-WT/theater-dashboard}"
+# Zet GITHUB_REPO=owner/repo in env of ~/.config/shift-happens/env
+GITHUB_REPO="${GITHUB_REPO:-example-org/theater-dashboard}"
 SCRIPT_NAME="$(basename "$0")"
 
 if [[ -n "${SHIFT_HAPPENS_HOME:-}" ]]; then
@@ -66,7 +67,7 @@ import sys
 import urllib.error
 import urllib.request
 
-repo = (os.environ.get("GITHUB_REPO") or "").strip() or "Deurklink-WT/theater-dashboard"
+repo = (os.environ.get("GITHUB_REPO") or "").strip() or "example-org/theater-dashboard"
 token = (os.environ.get("GH_TOKEN") or "").strip()
 api = f"https://api.github.com/repos/{repo}/releases/latest"
 req = urllib.request.Request(api)
