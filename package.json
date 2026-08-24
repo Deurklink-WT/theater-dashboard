@@ -1,6 +1,6 @@
 {
   "name": "theater-dashboard",
-  "version": "1.6.0-beta.0",
+  "version": "1.6.0-beta.1",
   "description": "Theater dashboard - integratie van Yesplan, Uurwerk, Itix en Priva systemen",
   "main": "src/main.js",
   "scripts": {
@@ -33,7 +33,7 @@
     "priva"
   ],
   "author": "PdV",
-  "homepage": "https://github.com/example-org/theater-dashboard#readme",
+  "homepage": "https://github.com/Deurklink-WT/theater-dashboard#readme",
   "license": "UNLICENSED",
   "devDependencies": {
     "@capacitor/cli": "^6.0.0",
@@ -158,20 +158,21 @@
     "publish": [
       {
         "provider": "github",
-        "owner": "example-org",
+        "owner": "Deurklink-WT",
         "repo": "theater-dashboard"
       }
     ]
   },
   "overrides": {
     "tar": "^7.5.12",
-    "@tootallnate/once": "^3.0.1"
+    "@tootallnate/once": "^3.0.1",
+    "uuid": "^11.1.1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/example-org/theater-dashboard.git"
+    "url": "https://github.com/Deurklink-WT/theater-dashboard.git"
   },
   "bugs": {
-    "url": "https://github.com/example-org/theater-dashboard/issues"
+    "url": "https://github.com/Deurklink-WT/theater-dashboard/issues"
   }
 }

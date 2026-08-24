@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-REPO="${REPO:-example-org/theater-dashboard}"
+REPO="${REPO:-Deurklink-WT/theater-dashboard}"
 TAG="${1:-latest}"
 
 SCRIPT_URL="https://raw.githubusercontent.com/${REPO}/main/scripts/install-mac-from-github.sh"

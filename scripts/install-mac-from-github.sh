@@ -12,7 +12,7 @@
 set -euo pipefail
 
 # Zet REPO=owner/repo (of gebruik placeholder alleen voor docs/tests).
-REPO="${REPO:-example-org/theater-dashboard}"
+REPO="${REPO:-Deurklink-WT/theater-dashboard}"
 APP_NAME="${APP_NAME:-Shift Happens}"
 TAG="${1:-latest}"
 
