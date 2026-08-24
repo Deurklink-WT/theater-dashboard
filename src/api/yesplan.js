@@ -412,6 +412,15 @@ class YesplanAPI {
             minimalEvent.technicalMaterialResources = technicalMaterialResources;
           }
 
+          try {
+            minimalEvent.trekkenlijstDocuments = this.extractTrekkenlijstDocuments(eventCustomData);
+            minimalEvent.hasTrekkenlijst = this.hasTrekkenlijst(eventCustomData);
+          } catch (error) {
+            safeLog('error', 'Error extracting trekkenlijst documents:', error);
+            minimalEvent.trekkenlijstDocuments = [];
+            minimalEvent.hasTrekkenlijst = false;
+          }
+
           calls += 1;
           // Kleine spacing om bursts op 429 te beperken.
           if (calls % 10 === 0) await this.sleep(200);
@@ -1666,6 +1675,159 @@ class YesplanAPI {
     return out;
   }
 
+  isTrekkenlijstContextLabel(s) {
+    const t = String(s || '').toLowerCase();
+    if (t.includes('technische lijst') || t.includes('technical list')) return false;
+    return t.includes('trekkenlijst') || t.includes('trekken lijst') || t.includes('fly cue') || t.includes('productie_trekkenlijst');
+  }
+
+  findTrekkenlijstGroup(eventCustomData) {
+    const root = eventCustomData?.data ?? eventCustomData?.customdata ?? eventCustomData;
+    if (!root || typeof root !== 'object') return null;
+
+    const matchGroup = (g) =>
+      g &&
+      (g.keyword === 'productie_trekkenlijst' ||
+        String(g.name || '').toUpperCase() === 'TREKKENLIJST' ||
+        this.isTrekkenlijstContextLabel(g.name) ||
+        this.isTrekkenlijstContextLabel(g.keyword) ||
+        this.isTrekkenlijstContextLabel(g.label));
+
+    const groups = root.groups || [];
+    const productieGroup = groups.find((g) =>
+      g.keyword === 'productie' ||
+      g.name === 'PRODUCTIE' ||
+      String(g.name || '').toLowerCase().includes('productie')
+    );
+    if (productieGroup?.children) {
+      const inProductie = productieGroup.children.find(matchGroup);
+      if (inProductie) return inProductie;
+    }
+    return groups.find(matchGroup) || null;
+  }
+
+  // Extract alle documenten uit TREKKENLIJST (sectie naast TECHNISCHE LIJST onder PRODUCTIE)
+  extractTrekkenlijstDocuments(eventCustomData) {
+    const root = eventCustomData?.data ?? eventCustomData?.customdata ?? eventCustomData;
+    if (!root || typeof root !== 'object') return [];
+
+    const out = [];
+    const seen = new Set();
+    const isTrekkenlijstContext = (s) => this.isTrekkenlijstContextLabel(s);
+
+    const isDocLike = (u) => {
+      const s = String(u || '');
+      return s.includes('/documents/') || s.endsWith('.pdf') || s.includes('/api/documents/');
+    };
+    const normalizeUrl = (u) => {
+      if (!u) return null;
+      let url = String(u).trim();
+      if (!url) return null;
+      if (url.startsWith('/') && this.baseURL && !url.startsWith('http')) url = this.baseURL + url;
+      if (url.startsWith('documents/') && this.baseURL) url = `${this.baseURL}/${url}`;
+      return isDocLike(url) ? url : null;
+    };
+    const pushDoc = (url, name, category, date, author) => {
+      const normalized = normalizeUrl(url);
+      if (!normalized) return;
+      const key = `${normalized}|${String(name || '')}`;
+      if (seen.has(key)) return;
+      seen.add(key);
+      out.push({
+        name: name || 'Document',
+        url: normalized,
+        type: 'application/pdf',
+        date: date || null,
+        author: author || null,
+        category: category || name || 'Document'
+      });
+    };
+
+    const walk = (obj, trekCtx = false, parentPath = '', depth = 0) => {
+      if (!obj || typeof obj !== 'object' || depth > 8) return;
+      if (Array.isArray(obj)) {
+        obj.forEach((v) => walk(v, trekCtx, parentPath, depth + 1));
+        return;
+      }
+
+      const name = String(obj.name || obj.label || obj.keyword || '').trim();
+      const path = parentPath ? `${parentPath}/${name.toLowerCase()}` : name.toLowerCase();
+      const nextCtx = trekCtx || isTrekkenlijstContext(name) || isTrekkenlijstContext(path);
+
+      const v = obj.value;
+      if (nextCtx) {
+        if (typeof v === 'string') pushDoc(v, name, name);
+        if (v && typeof v === 'object') {
+          pushDoc(
+            v.url || v.link || v.href || v.dataurl || v.document_url,
+            v.name || v.filename || v.originalname || name,
+            name,
+            v.date || v.created || v.updated,
+            v.author || v.username || v.created_by
+          );
+        }
+        pushDoc(
+          obj.url || obj.link || obj.href || obj.dataurl || obj.document_url,
+          name,
+          name,
+          obj.date || null,
+          obj.author || obj.username || null
+        );
+      }
+
+      (obj.children || []).forEach((c) => walk(c, nextCtx, path, depth + 1));
+      (obj.groups || []).forEach((g) => walk(g, nextCtx, path, depth + 1));
+      (obj.fields || []).forEach((f) => walk(f, nextCtx, path, depth + 1));
+      if (obj.customdata) walk(obj.customdata, nextCtx, path, depth + 1);
+      for (const [k, val] of Object.entries(obj)) {
+        if (['children', 'groups', 'fields', 'customdata', 'value'].includes(k)) continue;
+        if (val && typeof val === 'object') walk(val, nextCtx, path, depth + 1);
+      }
+    };
+
+    const trekGroup = this.findTrekkenlijstGroup(eventCustomData);
+    if (trekGroup) walk(trekGroup, true, 'trekkenlijst');
+    walk(root, false, '');
+    return out;
+  }
+
+  hasTrekkenlijst(eventCustomData) {
+    if (this.extractTrekkenlijstDocuments(eventCustomData).length > 0) return true;
+
+    const trekGroup = this.findTrekkenlijstGroup(eventCustomData);
+    if (!trekGroup) return false;
+
+    const toText = (v) => {
+      if (v == null) return '';
+      if (typeof v === 'string') return v.trim();
+      if (typeof v === 'number' || typeof v === 'boolean') return String(v);
+      if (typeof v === 'object') {
+        const direct = v.value ?? v.text ?? v.label ?? v.name ?? v.originalname ?? null;
+        if (typeof direct === 'string') return direct.trim();
+        if (direct != null && typeof direct !== 'object') return String(direct).trim();
+      }
+      return '';
+    };
+
+    const hasFilledValue = (obj, depth = 0) => {
+      if (!obj || typeof obj !== 'object' || depth > 8) return false;
+      if (Array.isArray(obj)) return obj.some((v) => hasFilledValue(v, depth + 1));
+
+      const text = toText(obj.value ?? obj);
+      if (text && text !== '-' && text.toLowerCase() !== 'nee' && text.toLowerCase() !== 'no') return true;
+
+      for (const child of obj.children || []) {
+        if (hasFilledValue(child, depth + 1)) return true;
+      }
+      for (const field of obj.fields || []) {
+        if (hasFilledValue(field, depth + 1)) return true;
+      }
+      return false;
+    };
+
+    return hasFilledValue(trekGroup);
+  }
+
   // Extract bijlage/rider informatie uit eventCustomData (oude functie, behouden voor backwards compatibility)
   extractRiderAttachment(eventCustomData) {
     if (!eventCustomData || !eventCustomData.groups) {
@@ -2910,12 +3072,73 @@ class YesplanAPI {
     }));
   }
 
+  /** Detecteer welke technische lijst-opties Yesplan kent (velddefinitie), los van ingevulde waarde. */
+  scanTechnischeLijstOptionFields(obj, out = null) {
+    const acc = out || { balletvloer: false, vleugel: false, orkestbak: false };
+    if (!obj || typeof obj !== 'object') return acc;
+    const kw = String(obj.keyword || obj.name || '').toLowerCase();
+    const type = String(obj.type || '').toLowerCase();
+    const isTechListCtx = kw.includes('technischelijst') || kw.includes('technische lijst') || kw.includes('technical list');
+    const markFromKeyword = (keyword) => {
+      if (keyword.includes('balletvloer') || (keyword.includes('ballet') && !keyword.includes('orkest'))) acc.balletvloer = true;
+      if (keyword.includes('vleugel') || keyword.includes('piano')) acc.vleugel = true;
+      if (keyword.includes('orkestbak') || (keyword.includes('orkest') && keyword.includes('bak'))) acc.orkestbak = true;
+    };
+    if (isTechListCtx || type === 'dropdown' || type === 'resource' || obj.keyword === 'group_group_resourcefield') {
+      markFromKeyword(kw);
+    }
+    if (obj.children && Array.isArray(obj.children)) obj.children.forEach((c) => this.scanTechnischeLijstOptionFields(c, acc));
+    if (obj.groups && Array.isArray(obj.groups)) obj.groups.forEach((g) => this.scanTechnischeLijstOptionFields(g, acc));
+    if (obj.fields && Array.isArray(obj.fields)) obj.fields.forEach((f) => this.scanTechnischeLijstOptionFields(f, acc));
+    for (const key in obj) {
+      if (['children', 'groups', 'fields'].includes(key)) continue;
+      const v = obj[key];
+      if (v && typeof v === 'object') this.scanTechnischeLijstOptionFields(v, acc);
+    }
+    return acc;
+  }
+
+  mergeVenueTechOptions(target, patch) {
+    if (!target || !patch) return target;
+    if (patch.balletvloer) target.balletvloer = true;
+    if (patch.vleugel) target.vleugel = true;
+    if (patch.orkestbak) target.orkestbak = true;
+    return target;
+  }
+
+  detectTechOptionsFromEvent(event, eventCustomData = null) {
+    const out = { balletvloer: false, vleugel: false, orkestbak: false };
+    const resources = this.extractResources(event, null, null, eventCustomData);
+    for (const r of resources) {
+      const lower = String(r || '').toLowerCase();
+      if (lower.includes('balletvloer') || lower.includes('ballet')) out.balletvloer = true;
+      if (lower.includes('vleugel') || lower.includes('piano')) out.vleugel = true;
+      if (lower.includes('orkestbak')) out.orkestbak = true;
+    }
+    const customRoots = [eventCustomData, eventCustomData?.data, event?.customdata, event?.customData].filter(Boolean);
+    for (const root of customRoots) this.scanTechnischeLijstOptionFields(root, out);
+    return out;
+  }
+
+  getEventLocationIds(event) {
+    const locations = (Array.isArray(event?.locations) && event.locations.length > 0)
+      ? event.locations
+      : (Array.isArray(event?.rawEvent?.locations) ? event.rawEvent.locations : []);
+    const ids = [];
+    for (const loc of locations) {
+      const id = loc?.id ?? loc?.location_id ?? loc?.venue_id ?? loc?.venueId ?? loc?.code ?? loc?.name;
+      if (id != null && String(id).trim()) ids.push(String(id).trim());
+    }
+    return ids;
+  }
+
   async getVenues() {
     try {
       // Yesplan heeft geen directe venues endpoint, dus halen we venues uit events
       // Haal events op over een periode om alle venues te vinden
       const today = new Date();
       const venueMap = new Map();
+      const venueTechOptions = new Map();
       let foundEvents = 0;
       let consecutiveRateLimitHits = 0;
       const debugVenues = process.env.YESPLAN_VENUES_DEBUG === '1';
@@ -2971,15 +3194,20 @@ class YesplanAPI {
                   safeLog('log', `[getVenues] Match WTPH in venueMap scan: id=${idKey} name=${location?.name} eventId=${event?.id}`);
                 }
 
-                venueMap.set(idKey, {
-                  id: idKey,
-                  name: location?.name ?? location?.location_name ?? location?.venue_name ?? location?.code ?? idKey,
-                  capacity: location?.capacity ?? 0,
-                  location: location?.location ?? '',
-                  description: location?.description ?? '',
-                  type: location?._type ?? 'location',
-                  url: location?.url
-                });
+                if (!venueMap.has(idKey)) {
+                  venueMap.set(idKey, {
+                    id: idKey,
+                    name: location?.name ?? location?.location_name ?? location?.venue_name ?? location?.code ?? idKey,
+                    capacity: location?.capacity ?? 0,
+                    location: location?.location ?? '',
+                    description: location?.description ?? '',
+                    type: location?._type ?? 'location',
+                    url: location?.url
+                  });
+                  venueTechOptions.set(idKey, { balletvloer: false, vleugel: false, orkestbak: false });
+                }
+                const techOpts = this.detectTechOptionsFromEvent(event);
+                this.mergeVenueTechOptions(venueTechOptions.get(idKey), techOpts);
               });
             });
           }
@@ -3001,7 +3229,10 @@ class YesplanAPI {
         await sleep(80);
       }
       
-      const venues = Array.from(venueMap.values());
+      const venues = Array.from(venueMap.values()).map((v) => ({
+        ...v,
+        yesplanTechOptions: venueTechOptions.get(String(v.id)) || { balletvloer: false, vleugel: false, orkestbak: false }
+      }));
       
       // Sorteer alfabetisch op naam (geen specifieke volgorde)
       venues.sort((a, b) => {
@@ -3036,7 +3267,8 @@ class YesplanAPI {
       capacity: venue.capacity || 0,
       location: venue.location || '',
       description: venue.description || '',
-      type: venue.type || 'venue'
+      type: venue.type || 'venue',
+      yesplanTechOptions: venue.yesplanTechOptions || { balletvloer: false, vleugel: false, orkestbak: false }
     }));
   }
 
@@ -3206,6 +3438,15 @@ class YesplanAPI {
       } catch (error) {
         // Negeer errors bij het ophalen van technische lijst documenten
         safeLog('error', 'Error extracting technical list documents:', error);
+      }
+
+      let trekkenlijstDocuments = [];
+      let hasTrekkenlijst = false;
+      try {
+        trekkenlijstDocuments = this.extractTrekkenlijstDocuments(eventCustomData);
+        hasTrekkenlijst = this.hasTrekkenlijst(eventCustomData);
+      } catch (error) {
+        safeLog('error', 'Error extracting trekkenlijst documents:', error);
       }
       
       // Backwards compatibility: haal ook rider attachment op (voor oude code)
@@ -3758,10 +3999,14 @@ class YesplanAPI {
         balletvloerExplicit,
         vleugelExplicit,
         orkestbakExplicit,
+        yesplanTechOptionFields: this.detectTechOptionsFromEvent(event, eventCustomData),
         // Bijlage/rider informatie (backwards compatibility)
         riderAttachment: riderAttachment,
         // Alle documenten uit TECHNISCHE LIJST
         technicalListDocuments: technicalListDocuments,
+        // Trekkenlijst (sectie naast technische lijst)
+        trekkenlijstDocuments: trekkenlijstDocuments,
+        hasTrekkenlijst: hasTrekkenlijst,
         // Technische opmerkingen
         technicalRemarks: technicalRemarks,
         // Volledige event voor extra informatie

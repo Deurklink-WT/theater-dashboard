@@ -11,7 +11,8 @@
 
 set -euo pipefail
 
-REPO="${REPO:-Deurklink-WT/theater-dashboard}"
+# Zet REPO=owner/repo (of gebruik placeholder alleen voor docs/tests).
+REPO="${REPO:-example-org/theater-dashboard}"
 APP_NAME="${APP_NAME:-Shift Happens}"
 TAG="${1:-latest}"
 

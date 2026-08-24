@@ -146,8 +146,6 @@ src/
 ├── preload.js           # Veilige API blootstelling
 ├── api/                 # API integraties
 │   ├── yesplan.js
-│   ├── uurwerk.js
-│   ├── itix.js
 │   └── priva.js
 └── renderer/            # Frontend
     ├── index.html

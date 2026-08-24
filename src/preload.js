@@ -12,9 +12,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getYesplanReservations: (params) => ipcRenderer.invoke('get-yesplan-reservations', params),
   getYesplanSchedule: (eventId, org) => ipcRenderer.invoke('get-yesplan-schedule', eventId, org),
 
-  // Itix API
-  getItixData: (params) => ipcRenderer.invoke('get-itix-data', params),
-
   // Priva API
   getPrivaData: (params) => ipcRenderer.invoke('get-priva-data', params),
 
@@ -60,6 +57,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
   luminodeFetchJson: (opts) => ipcRenderer.invoke('luminode-fetch-json', opts),
 
   luminodeWriteJson: (opts) => ipcRenderer.invoke('luminode-write-json', opts),
+
+  /** Embedded Luminex Flow Viewer (localhost HTTP + SSE) */
+  ensureLuminexViewer: () => ipcRenderer.invoke('ensure-luminex-viewer'),
 
   /** OSC / Stream Deck / Companion → voorstelling-timer (main stuurt osc-timer-trigger) */
   onOscTimerTrigger: (callback) => {

@@ -5,7 +5,7 @@
 set -euo pipefail
 
 TAG="${1:-}"
-REPO="${REPO:-Deurklink-WT/theater-dashboard}"
+REPO="${REPO:-example-org/theater-dashboard}"
 DIST_DIR="${DIST_DIR:-dist}"
 
 if [[ -z "$TAG" ]]; then

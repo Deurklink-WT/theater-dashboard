@@ -1,19 +1,32 @@
 /**
  * Shift Happens - Theater Dashboard
- * Copyright (c) 2026 PdV
+ * Copyright (c) 2026 Team
  * 
  * Proprietary software - All rights reserved
  * 
- * @author PdV
+ * @author Team
  * @license UNLICENSED
  */
 
 // Vertalingen (i18n)
 const TRANSLATIONS = {
     nl: {
-        settings: { colorMode: 'Kleurmodus', language: 'Taal', title: 'Instellingen', save: 'Opslaan', saved: 'Instellingen opgeslagen!', theme: 'Thema', timezoneMode: 'Tijd', timezoneAuto: 'Automatisch', timezoneManual: 'Handmatig', timezoneSelect: 'Handmatige tijdzone', manualTime: 'Handmatige tijd', touchscreenMode: 'Touchscreen-modus', touchscreenModeHint: 'Grotere scrollbalk en grotere tikgebieden voor gebruik op aanraakschermen (bijv. Raspberry Pi-kiosk).', showMode: 'Showmodus', showModeHint: 'Geeft toegang tot de voorstellingtimer en later meer toneelfuncties. Zet uit als je alleen de planning bekijkt.', ioTitle: 'In/Uit', ioHint: 'Kies per protocol welke netwerkinterface gebruikt wordt. Dezelfde interface mag meerdere keren gekozen worden.', interfaceInternet: 'Internet / API verkeer', interfaceLuminex: 'Luminex uitlezen', interfaceSacn: 'sACN scan', interfaceOsc: 'OSC listener', interfaceAuto: 'Automatisch (OS standaard)', venueOrder: 'Zaalvolgorde', venueOrderHint: 'Sleep de zalen om de volgorde aan te passen. Klik op het oog om een zaal te verbergen in de zaal-dropdown.', resetVenueOrder: 'Reset naar standaard', techOptions: 'Technische opties per zaal', techOptionsHint: 'Kies per zaal welke opties (balletvloer, vleugel, orkestbak, zaalplattegrond) getoond worden.', yesplan: 'Yesplan', activeOrg: 'Actieve organisatie', activeOrgHint: 'Bepaal welke Yesplan-organisatie het dashboard gebruikt', org1: 'Organisatie 1', org2: 'Organisatie 2', orgN: 'Organisatie {n}', bothOrgs: 'Beide organisaties', name: 'Naam', shortName: 'Afkorting', baseURL: 'Base URL', apiKey: 'API Key', loadVenues: 'Laad Zalen', loadVenuesHint: 'Haalt zalen op voor zaalvolgorde en header', loadVenuesFullHint: 'Vul per organisatie Base URL en API Key in, klik op "Laad Zalen"', testConnection: 'Test Verbinding', about: 'Over deze app', showVenue: 'Zaal tonen', hideVenue: 'Zaal verbergen', balletvloer: 'Balletvloer', vleugel: 'Vleugel', orkestbak: 'Orkestbak', itix: 'Itix', itixBaseURL: 'Basis-URL zaalplattegrond', itixBaseURLHint: 'Voer het voorvoegsel van de beheer-URL voor de zaalplattegrond in, eindigend vóór het uitvoerings-id (Yesplan-event-id). Voorbeeld: https://tickets.jouworganisatie.nl/beheer/zaalplattegrond/uitvoeringinfo' },
+        settings: { colorMode: 'Kleurmodus', language: 'Taal', title: 'Instellingen', save: 'Opslaan', saved: 'Instellingen opgeslagen!', theme: 'Thema', timezoneMode: 'Tijd', timezoneAuto: 'Automatisch', timezoneManual: 'Handmatig', timezoneSelect: 'Handmatige tijdzone', manualTime: 'Handmatige tijd', touchscreenMode: 'Touchscreen-modus', touchscreenModeHint: 'Grotere scrollbalk en grotere tikgebieden voor gebruik op aanraakschermen (bijv. Raspberry Pi-kiosk).', showMode: 'Showmodus', showModeHint: 'Geeft toegang tot de voorstellingtimer en later meer toneelfuncties. Zet uit als je alleen de planning bekijkt.', ioTitle: 'In/Uit', ioHint: 'Kies per protocol welke netwerkinterface gebruikt wordt. Dezelfde interface mag meerdere keren gekozen worden.', interfaceInternet: 'Internet / API verkeer', interfaceLuminexSacn: 'Luminex / sACN', interfaceOsc: 'OSC listener', interfaceAuto: 'Automatisch (OS standaard)', venueOrder: 'Zaalvolgorde', venueOrderHint: 'Sleep de zalen om de volgorde aan te passen. Klik op het oog om een zaal te verbergen in de zaal-dropdown.', resetVenueOrder: 'Reset naar standaard', techOptions: 'Technische opties per zaal', techOptionsHint: 'Kies per zaal welke opties getoond worden. Zaalplattegrond alleen als Itix-URL is ingesteld. Trekkenlijsten: vink alle zalen aan die in showmode meedoen.', yesplan: 'Yesplan', activeOrg: 'Actieve organisatie', activeOrgHint: 'Bepaal welke Yesplan-organisatie het dashboard gebruikt', org1: 'Organisatie 1', org2: 'Organisatie 2', orgN: 'Organisatie {n}', bothOrgs: 'Beide organisaties', name: 'Naam', shortName: 'Afkorting', baseURL: 'Base URL', apiKey: 'API Key', loadVenues: 'Laad Zalen', loadVenuesHint: 'Haalt zalen op voor zaalvolgorde en header', loadVenuesFullHint: 'Vul per organisatie Base URL en API Key in, klik op "Laad Zalen"', testConnection: 'Test Verbinding', about: 'Over deze app', showVenue: 'Zaal tonen', hideVenue: 'Zaal verbergen', balletvloer: 'Balletvloer', vleugel: 'Vleugel', orkestbak: 'Orkestbak', trekkenlijstenVenue: 'Trekkenlijsten', trekkenlijstenVenueHint: 'Kies welke zaal in showmode de trekkenlijsten-weergave vult (één zaal).', trekkenlijstenVenueLabel: 'Zaal voor trekkenlijsten', trekkenlijstenVenueNone: 'Geen (trekkenlijsten uit)', itix: 'Itix', itixBaseURL: 'Basis-URL zaalplattegrond', itixBaseURLHint: 'Voer het voorvoegsel van de beheer-URL voor de zaalplattegrond in, eindigend vóór het uitvoerings-id (Yesplan-event-id). Voorbeeld: https://tickets.jouworganisatie.nl/beheer/zaalplattegrond/uitvoeringinfo', itixBaseURLOrg: 'Basis-URL zaalplattegrond ({org})' },
         status: { online: 'Online', offline: 'Offline', deels: 'Deels bereikbaar', warning: 'Waarschuwing', systemStatus: 'Systeemstatus', clickForStatus: 'Klik voor systeemstatus', apiServerLabel: 'API-server', apiServerNotSet: 'Niet ingesteld' },
-        nav: { back: 'Terug', backTitle: 'Terug naar vorig scherm', home: 'Home', weekView: 'Weekoverzicht', voorstellingTimer: 'Voorstelling timer', luminex: 'Luminex matrix', techOverview: 'Technisch overzicht', techOverviewTitle: 'Print technisch overzicht voor deze dag (alle zalen)', prevDay: 'Vorige dag', nextDay: 'Volgende dag', refresh: 'Vernieuwen', searchEvent: 'Zoek evenement', searchEventTitle: 'Zoek op evenementnaam (* en ? als wildcard)' },
+        nav: { back: 'Terug', backTitle: 'Terug naar vorig scherm', home: 'Home', weekView: 'Weekoverzicht', voorstellingTimer: 'Voorstelling timer', trekkenlijsten: 'Trekkenlijsten', luminex: 'Lichtsignaal', techOverview: 'Technisch overzicht', techOverviewTitle: 'Print technisch overzicht voor deze dag (alle zalen)', prevDay: 'Vorige dag', nextDay: 'Volgende dag', refresh: 'Vernieuwen', searchEvent: 'Zoek evenement', searchEventTitle: 'Zoek op evenementnaam (* en ? als wildcard)' },
+        trekkenlijsten: {
+            title: 'Trekkenlijsten',
+            lead: 'Komende trekkenlijsten voor {venue} (Yesplan). Opmerkingen en verwerkt-status worden gesynchroniseerd via de Shift-server.',
+            loading: 'Laden…',
+            empty: 'Geen komende trekkenlijsten gevonden voor {venue}.',
+            venueMissing: 'Geen zaal gekozen voor trekkenlijsten. Vink bij Instellingen → Yesplan → Technische opties per zaal één of meer zalen aan.',
+            venueNotFound: 'Gekozen trekkenlijst-zaal niet gevonden in Yesplan.',
+            loadError: 'Kon trekkenlijsten niet laden: {msg}',
+            metaCount: '{n} van de komende 20 trekkenlijsten',
+            verwerkt: 'Verwerkt',
+            commentPlaceholder: 'Opmerking…',
+            syncLoginHint: 'Log in via Instellingen → Shift-server om opmerkingen en verwerkt-status te synchroniseren.'
+        },
         search: { placeholder: 'Evenementnaam… (* = alles, ? = één teken)', wildcardHint: 'Gebruik * voor een reeks tekens en ? voor één teken.' },
         date: { today: 'Vandaag', chooseDate: 'Kies eigen datum', selectDate: 'Selecteer datum:', manualDate: 'Of voer handmatig in (dd-mm-jjjj):', datePlaceholder: 'dd-mm-jjjj', confirm: 'Bevestigen', cancel: 'Annuleren' },
         venue: { allVenues: 'Alle zalen', venue: 'Zaal', unknownVenue: 'Onbekende zaal', venueCount: '{n} zalen', venueId: 'Zaal {id}' },
@@ -227,9 +240,22 @@ const TRANSLATIONS = {
         }
     },
     en: {
-        settings: { colorMode: 'Color mode', language: 'Language', title: 'Settings', save: 'Save', saved: 'Settings saved!', theme: 'Theme', timezoneMode: 'Time', timezoneAuto: 'Automatic', timezoneManual: 'Manual', timezoneSelect: 'Manual time zone', manualTime: 'Manual time', touchscreenMode: 'Touchscreen mode', touchscreenModeHint: 'Larger scrollbar and tap targets for use on touchscreens (e.g. Raspberry Pi kiosk).', showMode: 'Show mode', showModeHint: 'Enables the performance timer and future show features. Turn off if you only read the schedule.', ioTitle: 'In/Out', ioHint: 'Choose which network interface each protocol should use. The same interface can be selected multiple times.', interfaceInternet: 'Internet / API traffic', interfaceLuminex: 'Luminex readout', interfaceSacn: 'sACN scan', interfaceOsc: 'OSC listener', interfaceAuto: 'Automatic (OS default)', venueOrder: 'Venue order', venueOrderHint: 'Drag venues to change the order. Click the eye to hide a venue in the venue dropdown.', resetVenueOrder: 'Reset to default', techOptions: 'Technical options per venue', techOptionsHint: 'Choose per venue which options (dance floor, grand piano, orchestra pit, seating plan) are shown.', yesplan: 'Yesplan', activeOrg: 'Active organisation', activeOrgHint: 'Determine which Yesplan organisation the dashboard uses', org1: 'Organisation 1', org2: 'Organisation 2', orgN: 'Organisation {n}', bothOrgs: 'Both organisations', name: 'Name', shortName: 'Abbreviation', baseURL: 'Base URL', apiKey: 'API Key', loadVenues: 'Load Venues', loadVenuesHint: 'Fetches venues for order and header', loadVenuesFullHint: 'Enter Base URL and API Key per organisation, click "Load Venues"', testConnection: 'Test Connection', about: 'About this app', showVenue: 'Show venue', hideVenue: 'Hide venue', balletvloer: 'Dance floor', vleugel: 'Grand piano', orkestbak: 'Orchestra pit', itix: 'Itix', itixBaseURL: 'Seating plan base URL', itixBaseURLHint: 'Enter the admin URL prefix for the seating plan, ending before the performance id (Yesplan event id). Example: https://tickets.example.com/beheer/zaalplattegrond/uitvoeringinfo' },
+        settings: { colorMode: 'Color mode', language: 'Language', title: 'Settings', save: 'Save', saved: 'Settings saved!', theme: 'Theme', timezoneMode: 'Time', timezoneAuto: 'Automatic', timezoneManual: 'Manual', timezoneSelect: 'Manual time zone', manualTime: 'Manual time', touchscreenMode: 'Touchscreen mode', touchscreenModeHint: 'Larger scrollbar and tap targets for use on touchscreens (e.g. Raspberry Pi kiosk).', showMode: 'Show mode', showModeHint: 'Enables the performance timer and future show features. Turn off if you only read the schedule.', ioTitle: 'In/Out', ioHint: 'Choose which network interface each protocol should use. The same interface can be selected multiple times.', interfaceInternet: 'Internet / API traffic', interfaceLuminexSacn: 'Luminex / sACN', interfaceOsc: 'OSC listener', interfaceAuto: 'Automatic (OS default)', venueOrder: 'Venue order', venueOrderHint: 'Drag venues to change the order. Click the eye to hide a venue in the venue dropdown.', resetVenueOrder: 'Reset to default', techOptions: 'Technical options per venue', techOptionsHint: 'Choose per venue which options are shown. Seating plan only if an Itix URL is set. Fly cue lists: check all venues that should appear in show mode.', yesplan: 'Yesplan', activeOrg: 'Active organisation', activeOrgHint: 'Determine which Yesplan organisation the dashboard uses', org1: 'Organisation 1', org2: 'Organisation 2', orgN: 'Organisation {n}', bothOrgs: 'Both organisations', name: 'Name', shortName: 'Abbreviation', baseURL: 'Base URL', apiKey: 'API Key', loadVenues: 'Load Venues', loadVenuesHint: 'Fetches venues for order and header', loadVenuesFullHint: 'Enter Base URL and API Key per organisation, click "Load Venues"', testConnection: 'Test Connection', about: 'About this app', showVenue: 'Show venue', hideVenue: 'Hide venue', balletvloer: 'Dance floor', vleugel: 'Grand piano', orkestbak: 'Orchestra pit', trekkenlijstenVenue: 'Fly cue lists', trekkenlijstenVenueHint: 'Choose which venue fills the fly cue lists view in show mode (one venue).', trekkenlijstenVenueLabel: 'Venue for fly cue lists', trekkenlijstenVenueNone: 'None (fly cue lists off)', itix: 'Itix', itixBaseURL: 'Seating plan base URL', itixBaseURLHint: 'Enter the admin URL prefix for the seating plan, ending before the performance id (Yesplan event id). Example: https://tickets.example.com/beheer/zaalplattegrond/uitvoeringinfo', itixBaseURLOrg: 'Seating plan base URL ({org})' },
         status: { online: 'Online', offline: 'Offline', deels: 'Partially available', warning: 'Warning', systemStatus: 'System status', clickForStatus: 'Click for system status', apiServerLabel: 'API server', apiServerNotSet: 'Not configured' },
-        nav: { back: 'Back', backTitle: 'Back to previous screen', home: 'Home', weekView: 'Week overview', voorstellingTimer: 'Performance timer', luminex: 'Luminex matrix', techOverview: 'Technical overview', techOverviewTitle: 'Print technical overview for this day (all venues)', prevDay: 'Previous day', nextDay: 'Next day', refresh: 'Refresh', searchEvent: 'Search event', searchEventTitle: 'Search by event name (* and ? as wildcards)' },
+        nav: { back: 'Back', backTitle: 'Back to previous screen', home: 'Home', weekView: 'Week overview', voorstellingTimer: 'Performance timer', trekkenlijsten: 'Fly cue lists', luminex: 'Lighting signal', techOverview: 'Technical overview', techOverviewTitle: 'Print technical overview for this day (all venues)', prevDay: 'Previous day', nextDay: 'Next day', refresh: 'Refresh', searchEvent: 'Search event', searchEventTitle: 'Search by event name (* and ? as wildcards)' },
+        trekkenlijsten: {
+            title: 'Fly cue lists',
+            lead: 'Upcoming fly cue lists for {venue} (Yesplan). Notes and processed status sync via the Shift server.',
+            loading: 'Loading…',
+            empty: 'No upcoming fly cue lists found for {venue}.',
+            venueMissing: 'No venue selected for fly cue lists. Enable one or more under Settings → Yesplan → Technical options per venue.',
+            venueNotFound: 'Selected fly cue list venue not found in Yesplan.',
+            loadError: 'Could not load fly cue lists: {msg}',
+            metaCount: '{n} of the next 20 fly cue lists',
+            verwerkt: 'Processed',
+            commentPlaceholder: 'Note…',
+            syncLoginHint: 'Log in via Settings → Shift server to sync notes and processed status.'
+        },
         search: { placeholder: 'Event name… (* = any, ? = one character)', wildcardHint: 'Use * for any characters and ? for one character.' },
         date: { today: 'Today', chooseDate: 'Choose date', selectDate: 'Select date:', manualDate: 'Or enter manually (dd-mm-yyyy):', datePlaceholder: 'dd-mm-yyyy', confirm: 'Confirm', cancel: 'Cancel' },
         venue: { allVenues: 'All venues', venue: 'Venue', unknownVenue: 'Unknown venue', venueCount: '{n} venues', venueId: 'Venue {id}' },
@@ -454,20 +480,13 @@ class TheaterDashboard {
         };
         this.selectedVenues = []; // Geselecteerde zalen voor alle plugins
         this.availableVenues = []; // Beschikbare zalen
+        /** Per zaal-id: welke technische opties Yesplan kent (uit events/customdata). */
+        this.yesplanVenueTechOptionsCache = Object.create(null);
         this.selectedDate = new Date(); // Geselecteerde datum (standaard vandaag)
         this.maxDateOffsetForward = 365; // Maximaal 1 jaar vooruit
         this.maxDateOffsetBackward = 31; // Maximaal 1 maand terug
-        this.currentView = 'home'; // 'home', 'detail', 'week', 'voorstellingTimer', 'luminex' of 'oscMonitor'
-        this._luminexMatrix = null;
-        this._luminexDiscoveryRunning = false;
-        this._luminexSacnRunning = false;
-        /** @type {object[]} */
-        this._luminexSacnUniverses = [];
-        /** @type {object|null} */
-        this._luminexCapabilities = null;
-        /** @type {Record<string, { sourceUniverse: number, outputKey: string }[]>} */
-        this._luminexRoutePatchesByPb = {};
-        this._luminexNodeLayoutSaveTimer = null;
+        this.currentView = 'home'; // 'home', 'detail', 'week', 'voorstellingTimer', 'trekkenlijsten', 'luminex' of 'oscMonitor'
+        this._luminexViewerResizeBound = false;
         this.tijdschemaScheduleData = null; // laatste geladen tijdschema (detail / timer)
         this._voorstellingTimerClockInterval = null;
         /** Per dagdeel (ochtend / middag / avond): eigen stopwatch en stappen. */
@@ -524,6 +543,14 @@ class TheaterDashboard {
         this._navRailReorderExitTimer = null;
         this._oscMonitorEntries = [];
         this._oscMonitorMaxEntries = 250;
+        this._trekkenlijstenItems = [];
+        this._trekkenlijstenLoading = false;
+        this._trekkenlijstSyncState = {};
+        this._trekkenlijstSyncPollInterval = null;
+        this._trekkenlijstPersistTimer = null;
+        this._trekkenlijstPendingSaveKey = null;
+        this._trekkenlijstVenues = [];
+        this._trekkenlijstVenue = null;
         
         this.init();
     }
@@ -536,7 +563,9 @@ class TheaterDashboard {
         // Setup custom venue selector eerst (moet gebeuren voordat we zalen laden)
         this.setupCustomVenueSelector();
         await this.loadConfig();
-        if (window.__SHIFT_HAPPENS_MOBILE__) void this.refreshApiServerStatus();
+        if (window.__SHIFT_HAPPENS_MOBILE__ || this.getShiftServerBaseUrl() || this.getShiftAuthToken()) {
+            void this.refreshApiServerStatus();
+        }
         await this.loadVenues(); // Laad zalen eerst
         this.updateDateDisplay(); // Update datum weergave
         // Start met home view (reset datum naar vandaag)
@@ -648,6 +677,13 @@ class TheaterDashboard {
             if (this._navRailReorderMode) return;
             void this.showLuminexView();
         });
+        document.getElementById('trekkenlijstenNavBtn')?.addEventListener('click', () => {
+            if (this._navRailReorderMode) return;
+            void this.showTrekkenlijstenView();
+        });
+        document.getElementById('trekkenlijstenRefreshBtn')?.addEventListener('click', () => {
+            void this.loadTrekkenlijsten({ forceRefresh: true });
+        });
         document.getElementById('oscMonitorNavBtn')?.addEventListener('click', () => {
             if (this._navRailReorderMode) return;
             void this.showOscMonitorView();
@@ -656,9 +692,10 @@ class TheaterDashboard {
             this._oscMonitorEntries = [];
             this.renderOscMonitorEntries();
         });
+        document.getElementById('oscMonitorInterface')?.addEventListener('change', (e) => {
+            void this.saveOscMonitorNetworkInterface(e.target?.value);
+        });
         this.setupNavRailReorder();
-
-        this.setupLuminexDiscoveryListeners();
 
         if (window.electronAPI?.onOscTimerTrigger) {
             window.electronAPI.onOscTimerTrigger((payload) => {
@@ -832,6 +869,38 @@ class TheaterDashboard {
         });
         document.getElementById('masterModeEnabledCheckbox')?.addEventListener('change', () => {
             this.updateMasterModeInputState();
+        });
+        document.getElementById('shiftServerBaseUrlInput')?.addEventListener('change', () => {
+            const base = this.normalizeShiftHappensApiBase(
+                String(document.getElementById('shiftServerBaseUrlInput')?.value || '').trim()
+            );
+            if (base) {
+                if (!this.config.app) this.config.app = {};
+                this.config.app.shiftServerBaseUrl = base;
+                if (window.electronAPI?.saveConfig) {
+                    void window.electronAPI.saveConfig('app', {
+                        ...this.config.app,
+                        shiftServerBaseUrl: base
+                    });
+                }
+            }
+            if (this.getShiftAuthToken()) this.startShiftPresenceHeartbeat();
+            void this.refreshShiftAuthStatusLine();
+        });
+        document.getElementById('shiftAuthLoginBtn')?.addEventListener('click', () => {
+            const email = document.getElementById('shiftAuthEmailInput')?.value || '';
+            const password = document.getElementById('shiftAuthPasswordInput')?.value || '';
+            void this.loginShiftServer(email, password)
+                .then(() => this.refreshShiftAuthStatusLine())
+                .then(() => this.refreshTimerSyncStatusLine())
+                .then(() => this.refreshApiServerStatus())
+                .catch((e) => {
+                    const el = document.getElementById('shiftAuthStatusLine');
+                    if (el) el.textContent = e?.message || 'Inloggen mislukt.';
+                });
+        });
+        document.getElementById('shiftAuthLogoutBtn')?.addEventListener('click', () => {
+            void this.logoutShiftServer();
         });
 
         // Reset zaalvolgorde knop
@@ -1273,16 +1342,65 @@ class TheaterDashboard {
     applySavedNavRailOrder() {
         const rail = document.getElementById('navRail');
         if (!rail) return;
-        const order = Array.isArray(this.config?.app?.navRailOrder) ? this.config.app.navRailOrder : [];
+        const railSlot = document.getElementById('navRailTimerSlot');
+        let order = Array.isArray(this.config?.app?.navRailOrder)
+            ? this.config.app.navRailOrder.map((id) => String(id))
+            : [];
+
+        const TIMER_ID = 'voorstellingTimerBtn';
+        const TREK_ID = 'trekkenlijstenNavBtn';
+        const LUMINEX_ID = 'luminexNavBtn';
+
+        // Eenmalige migratie: trekkenlijsten hoort direct onder de timer (niet achter Luminex).
+        if (order.length) {
+            const trekIdx = order.indexOf(TREK_ID);
+            const luminexIdx = order.indexOf(LUMINEX_ID);
+            const missing = trekIdx < 0;
+            const afterLuminex = trekIdx >= 0 && luminexIdx >= 0 && trekIdx > luminexIdx;
+            if (missing || afterLuminex) {
+                order = order.filter((id) => id !== TREK_ID);
+                const ti = order.indexOf(TIMER_ID);
+                if (ti >= 0) order.splice(ti + 1, 0, TREK_ID);
+                else order.unshift(TREK_ID);
+                this.config.app = this.config.app || {};
+                this.config.app.navRailOrder = order;
+                if (window.electronAPI?.getConfig && window.electronAPI?.saveConfig) {
+                    window.electronAPI.getConfig('app').then((cfg) => {
+                        const next = cfg || {};
+                        next.navRailOrder = order;
+                        return window.electronAPI.saveConfig('app', next);
+                    }).catch(() => {});
+                }
+            }
+        }
+
         if (!order.length) return;
 
-        const known = new Set(order.map((id) => String(id)));
+        const known = new Set(order);
+        const appendBtn = (el) => {
+            if (!el) return;
+            if (el.id === TIMER_ID && railSlot) {
+                railSlot.appendChild(el);
+                rail.appendChild(railSlot);
+                return;
+            }
+            rail.appendChild(el);
+        };
         for (const id of order) {
-            const el = rail.querySelector(`#${CSS.escape(String(id))}`);
-            if (el) rail.appendChild(el);
+            appendBtn(rail.querySelector(`#${CSS.escape(String(id))}`));
         }
         rail.querySelectorAll('.nav-rail-btn[id]').forEach((btn) => {
-            if (!known.has(btn.id)) rail.appendChild(btn);
+            if (!known.has(btn.id)) {
+                if (btn.id === TREK_ID) {
+                    const timerEl = document.getElementById(TIMER_ID);
+                    const after = (timerEl?.parentElement === railSlot ? railSlot : timerEl) || null;
+                    if (after?.nextSibling) rail.insertBefore(btn, after.nextSibling);
+                    else if (after) after.after(btn);
+                    else rail.appendChild(btn);
+                } else {
+                    rail.appendChild(btn);
+                }
+            }
         });
     }
 
@@ -1320,6 +1438,9 @@ class TheaterDashboard {
                 itix: itix || {},
                 app: app || {}
             };
+            this.syncCloudflareAccessToStorage();
+            this.syncShiftAuthToStorage();
+            if (this.getShiftAuthToken()) this.startShiftPresenceHeartbeat();
             this.nostradamusRoleOrder = Array.isArray(this.config?.app?.nostradamusRoleOrder)
                 ? this.config.app.nostradamusRoleOrder.map((v) => String(v || '').trim()).filter(Boolean)
                 : [];
@@ -1425,6 +1546,7 @@ class TheaterDashboard {
             
             if (result && result.success && result.data && Array.isArray(result.data) && result.data.length > 0) {
                 this.availableVenues = result.data;
+                this.mergeYesplanVenueTechOptionsFromVenues(this.availableVenues);
                 this.populateVenueSelector();
                 
                 // Herstel laatst gekozen zalen als beschikbaar
@@ -2184,7 +2306,9 @@ class TheaterDashboard {
             console.error('Data laden fout:', error);
         } finally {
             this.showLoading(false);
-            if (window.__SHIFT_HAPPENS_MOBILE__) void this.refreshApiServerStatus();
+            if (window.__SHIFT_HAPPENS_MOBILE__ || this.getShiftServerBaseUrl() || this.getShiftAuthToken()) {
+            void this.refreshApiServerStatus();
+        }
         }
     }
 
@@ -2225,6 +2349,7 @@ class TheaterDashboard {
             }
 
             this.data.yesplan = result;
+            this.updateYesplanVenueTechOptionsFromEvents(result?.data);
             this.updateYesplanDisplay(result);
             this.updateStatus('yesplan', result.success ? 'online' : 'offline', result.timestamp || new Date());
             // Verkoopkaart werkt volledig op Yesplan-data en reserveringen.
@@ -2334,6 +2459,7 @@ class TheaterDashboard {
         this.hideVoorstellingTimerShell();
         this.hideLuminexShell();
         this.hideOscMonitorShell();
+        this.hideTrekkenlijstenShell();
 
         const weekWrapper = document.getElementById('weekViewWrapper');
         const homeContainer = document.getElementById('homeViewContainer');
@@ -2354,6 +2480,9 @@ class TheaterDashboard {
         document.getElementById('weekBtn')?.classList.remove('active');
         document.getElementById('homeBtn')?.classList.add('active');
         document.getElementById('voorstellingTimerBtn')?.classList.remove('active');
+        document.getElementById('trekkenlijstenNavBtn')?.classList.remove('active');
+        document.getElementById('luminexNavBtn')?.classList.remove('active');
+        document.getElementById('oscMonitorNavBtn')?.classList.remove('active');
         
         if (dashboardGrid) {
             dashboardGrid.classList.add('home-view');
@@ -2413,6 +2542,7 @@ class TheaterDashboard {
         this.hideVoorstellingTimerShell();
         this.hideLuminexShell();
         this.hideOscMonitorShell();
+        this.hideTrekkenlijstenShell();
 
         const weekWrapper = document.getElementById('weekViewWrapper');
         const homeContainer = document.getElementById('homeViewContainer');
@@ -2492,9 +2622,11 @@ class TheaterDashboard {
         this.hideVoorstellingTimerShell();
         this.hideLuminexShell();
         this.hideOscMonitorShell();
+        this.hideTrekkenlijstenShell();
         document.body.classList.remove('home-view-active');
         document.body.classList.add('week-view-active');
         document.body.classList.remove('voorstelling-timer-active');
+        document.body.classList.remove('trekkenlijsten-active');
 
         const weekWrapper = document.getElementById('weekViewWrapper');
         const homeContainer = document.getElementById('homeViewContainer');
@@ -2550,6 +2682,9 @@ class TheaterDashboard {
         }
         if (viewName === 'luminex') {
             return true;
+        }
+        if (viewName === 'trekkenlijsten') {
+            return this.isShowModeEnabled();
         }
         if (viewName === 'oscMonitor') {
             return this.isShowModeEnabled();
@@ -2609,6 +2744,9 @@ class TheaterDashboard {
         if (viewName === 'luminex') {
             return true;
         }
+        if (viewName === 'trekkenlijsten') {
+            return this.isShowModeEnabled();
+        }
         if (viewName === 'oscMonitor') {
             return this.isShowModeEnabled();
         }
@@ -2654,8 +2792,12 @@ class TheaterDashboard {
                 await this.showWeekView();
             } else if (targetEntry.view === 'voorstellingTimer') {
                 await this.showVoorstellingTimerView();
+            } else if (targetEntry.view === 'trekkenlijsten') {
+                await this.showTrekkenlijstenView();
             } else if (targetEntry.view === 'luminex') {
                 await this.showLuminexView();
+            } else if (targetEntry.view === 'oscMonitor') {
+                await this.showOscMonitorView();
             }
         } finally {
             this._isNavigatingBack = false;
@@ -2709,6 +2851,7 @@ class TheaterDashboard {
                 }
             }
             this.data.yesplan = result;
+            this.updateYesplanVenueTechOptionsFromEvents(result?.data);
             this.updateYesplanDisplay(result);
             this.updateStatus('yesplan', result.success ? 'online' : 'offline', result.timestamp || new Date());
             if (id === this.loadHomeRequestId) await this.loadUurwerkData();
@@ -2723,7 +2866,9 @@ class TheaterDashboard {
             if (id === this.loadHomeRequestId) {
                 this.showLoading(false);
                 this.setDateNavDisabled(false);
-                if (window.__SHIFT_HAPPENS_MOBILE__) void this.refreshApiServerStatus();
+                if (window.__SHIFT_HAPPENS_MOBILE__ || this.getShiftServerBaseUrl() || this.getShiftAuthToken()) {
+            void this.refreshApiServerStatus();
+        }
             }
         }
     }
@@ -2813,7 +2958,9 @@ class TheaterDashboard {
             if (id === this.loadWeekRequestId) {
                 this.showLoading(false);
                 this.setDateNavDisabled(false);
-                if (window.__SHIFT_HAPPENS_MOBILE__) void this.refreshApiServerStatus();
+                if (window.__SHIFT_HAPPENS_MOBILE__ || this.getShiftServerBaseUrl() || this.getShiftAuthToken()) {
+            void this.refreshApiServerStatus();
+        }
             }
         }
     }
@@ -4595,31 +4742,48 @@ class TheaterDashboard {
     }
 
     /**
+     * Yesplan-speelanker: start van voorstelling/concert/show (niet stop/einde).
+     * Veel schema's gebruiken "Concert (start)" i.p.v. "Voorstelling (start)".
+     */
+    isPerformanceAnchorScheduleRow(it) {
+        const desc = String(it?.description || '').trim().toLowerCase();
+        if (!desc) return false;
+        if (/\(\s*stop\s*\)/.test(desc)) return false;
+        if (/\b(einde|eind)\s+(voorstelling|concert|show)\b/.test(desc)) return false;
+        if (/\b(voorstelling|concert|show|musical|cabaret|voorstellin)\b/.test(desc)) {
+            if (/\(\s*start\s*\)/.test(desc)) return true;
+            if (/\bstart\b/.test(desc) && !/\b(voor|before)\b/.test(desc)) return true;
+            if (!/\(\s*stop\s*\)/.test(desc) && !/\bpauze\b/.test(desc)) return true;
+        }
+        return false;
+    }
+
+    /**
      * Regels die voor dagdeel-classificatie niet meetellen (aankomst/opbouw vóór de voorstelling).
      * Voorstelling/pauze/einde tellen wél mee.
      */
     isPrepTijdschemaRowForSlotClassification(it) {
         const d = String(it.description || '').toLowerCase();
-        if (/\b(voorstelling|pauze|einde|interval|tussenpauze)\b/.test(d)) return false;
-        return /\b(aankomst|opbouw|soundcheck|techniek|grime|kap|briefing|preek|kleed|garderobe)\b/.test(d);
+        if (this.isPerformanceAnchorScheduleRow(it)) return false;
+        if (/\b(pauze|einde|interval|tussenpauze)\b/.test(d)) return false;
+        return /\b(aankomst|opbouw|soundcheck|techniek|grime|kap|briefing|preek|kleed|garderobe|overstaan|huistechniek|aanwezig|besichtiging|repetitie)\b/.test(d);
     }
 
     /**
-     * Tijd waarop we het dagdeel bepalen: liefst de vroegste regel met "voorstelling",
+     * Tijd waarop we het dagdeel bepalen: liefst de vroegste speelanker (voorstelling/concert start),
      * anders vroegste niet-prep-regel (zodat 14:30 start niet als "ochtend" door 10:30 aankomst valt).
      */
     getTijdschemaBlockClassificationMinutes(block) {
         const items = block?.items || [];
-        let voorstellingMin = Infinity;
+        let performanceMin = Infinity;
         let nonPrepMin = Infinity;
         for (const it of items) {
             const m = this.normalizeShowDayMinutes(this.tijdschemaTimeStringToMinutes(it.time));
             if (m == null) continue;
-            const desc = String(it.description || '');
-            if (/\bvoorstelling\b/i.test(desc) && m < voorstellingMin) voorstellingMin = m;
+            if (this.isPerformanceAnchorScheduleRow(it) && m < performanceMin) performanceMin = m;
             if (!this.isPrepTijdschemaRowForSlotClassification(it) && m < nonPrepMin) nonPrepMin = m;
         }
-        if (Number.isFinite(voorstellingMin)) return voorstellingMin;
+        if (Number.isFinite(performanceMin)) return performanceMin;
         if (Number.isFinite(nonPrepMin)) return nonPrepMin;
         return this.getTijdschemaBlockEarliestMinutes(block);
     }
@@ -5380,6 +5544,354 @@ class TheaterDashboard {
         document.body.classList.remove('osc-monitor-active');
     }
 
+    hideTrekkenlijstenShell() {
+        this.stopTrekkenlijstSyncPoll();
+        const w = document.getElementById('trekkenlijstenWrapper');
+        if (w) w.style.display = 'none';
+        document.getElementById('trekkenlijstenNavBtn')?.classList.remove('active');
+        document.body.classList.remove('trekkenlijsten-active');
+    }
+
+    isDefaultTrekkenlijstVenue(venueId, venueName) {
+        const name = String(venueName || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        const code = String(venueName || venueId || '').toUpperCase().split(/[,\s(]/)[0].trim();
+        return name.includes('payzaal') || name === 'pay' || /\bpay\b/.test(name) || code === 'WTPY';
+    }
+
+    getVenueOrderIndex(venueName) {
+        const savedOrder = this.getVenueOrder();
+        const u = String(venueName || '').toUpperCase();
+        let idx = savedOrder.findIndex((o) => u === o);
+        if (idx !== -1) return idx;
+        for (const o of [...savedOrder].sort((x, y) => y.length - x.length)) {
+            if (u.startsWith(o)) return savedOrder.indexOf(o);
+        }
+        return Number.MAX_SAFE_INTEGER;
+    }
+
+    findTrekkenlijstVenues() {
+        const venues = Array.isArray(this.availableVenues) ? this.availableVenues : [];
+        if (!venues.length) return [];
+
+        const saved = this.config?.app?.venueResourceOptions || {};
+        const hasExplicit = venues.some((v) => typeof saved[String(v.id)]?.trekkenlijsten === 'boolean');
+        let marked = venues.filter((v) => saved[String(v.id)]?.trekkenlijsten === true);
+
+        if (!marked.length && !hasExplicit) {
+            // Migratie: eerder opgeslagen als trekkenlijstVenueId / trekkenlijstVenueIds
+            const ids = Array.isArray(this.config?.app?.trekkenlijstVenueIds)
+                ? this.config.app.trekkenlijstVenueIds.map((id) => String(id))
+                : [];
+            const legacyId = String(this.config?.app?.trekkenlijstVenueId || '').trim();
+            if (legacyId && !ids.includes(legacyId)) ids.push(legacyId);
+            if (ids.length) {
+                marked = venues.filter((v) => ids.includes(String(v.id)));
+            }
+        }
+
+        if (!marked.length && !hasExplicit) {
+            // Fallback voor bestaande installaties: Payzaal / WTPY
+            marked = venues.filter((v) => this.isDefaultTrekkenlijstVenue(v.id, v.name));
+        }
+
+        marked.sort((a, b) => this.getVenueOrderIndex(a.name) - this.getVenueOrderIndex(b.name)
+            || String(a.name || '').localeCompare(String(b.name || '')));
+        return marked;
+    }
+
+    findTrekkenlijstVenue() {
+        return this.findTrekkenlijstVenues()[0] || null;
+    }
+
+    getTrekkenlijstVenueLabel(venues) {
+        const list = Array.isArray(venues) ? venues.filter(Boolean) : (venues ? [venues] : []);
+        if (!list.length) return '—';
+        return list
+            .map((v) => this.getVenueDisplayName(v) || v.name || v.shortName || String(v.id || '—'))
+            .join(', ');
+    }
+
+    /** @deprecated */
+    findPayzaalVenue() {
+        return this.findTrekkenlijstVenue();
+    }
+
+    isTrekkenlijstEvent(event) {
+        if (Array.isArray(event?.trekkenlijstDocuments) && event.trekkenlijstDocuments.length > 0) return true;
+        if (event?.hasTrekkenlijst === true) return true;
+        return false;
+    }
+
+    trekkenlijstDocLabel(doc) {
+        if (!doc?.url) return doc?.name || '';
+        const urlParts = String(doc.url).split('/');
+        const fileName = urlParts[urlParts.length - 1] || doc.name || 'Document';
+        const decoded = decodeURIComponent(fileName).replace(/%20/g, ' ');
+        return decoded.endsWith('.pdf') ? decoded.slice(0, -4) : decoded;
+    }
+
+    formatTrekkenlijstDate(value) {
+        if (!value) return '—';
+        const d = value instanceof Date ? value : new Date(value);
+        if (Number.isNaN(d.getTime())) {
+            const s = String(value);
+            // Yesplan date: dd-mm-yyyy
+            const m = s.match(/^(\d{2})-(\d{2})-(\d{4})/);
+            if (m) return `${m[1]}-${m[2]}-${m[3]}`;
+            return s;
+        }
+        const locale = this.locale === 'en' ? 'en-GB' : 'nl-NL';
+        return d.toLocaleDateString(locale, { day: '2-digit', month: '2-digit', year: 'numeric' });
+    }
+
+    formatTrekkenlijstTime(event) {
+        const raw =
+            event?.startTime ||
+            event?.time ||
+            event?.start ||
+            (typeof event?.startDate === 'string' && event.startDate.includes('T') ? event.startDate : null);
+        if (!raw) return '—';
+        if (typeof raw === 'string' && /^\d{1,2}:\d{2}/.test(raw)) return raw.slice(0, 5);
+        const d = new Date(raw);
+        if (Number.isNaN(d.getTime())) return '—';
+        const locale = this.locale === 'en' ? 'en-GB' : 'nl-NL';
+        return d.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit', hour12: false });
+    }
+
+    renderTrekkenlijstenList() {
+        const list = document.getElementById('trekkenlijstenList');
+        const meta = document.getElementById('trekkenlijstenMeta');
+        if (!list || !meta) return;
+
+        if (this._trekkenlijstenLoading) {
+            meta.textContent = this.t('trekkenlijsten.loading');
+            list.innerHTML = `<div class="trekkenlijsten-empty">${this.escapeHtml(this.t('trekkenlijsten.loading'))}</div>`;
+            return;
+        }
+
+        const items = Array.isArray(this._trekkenlijstenItems) ? this._trekkenlijstenItems : [];
+        const syncOn = this.isTrekkenlijstSyncEnabled();
+        const venueLabel = this.getTrekkenlijstVenueLabel(this._trekkenlijstVenues);
+        if (!items.length) {
+            meta.textContent = this.t('trekkenlijsten.empty', { venue: venueLabel });
+            list.innerHTML = `<div class="trekkenlijsten-empty">${this.escapeHtml(this.t('trekkenlijsten.empty'))}</div>`;
+            return;
+        }
+
+        meta.textContent = syncOn
+            ? this.t('trekkenlijsten.metaCount', { n: items.length })
+            : `${this.t('trekkenlijsten.metaCount', { n: items.length })} · ${this.t('trekkenlijsten.syncLoginHint')}`;
+
+        list.innerHTML = items.map((item) => {
+            const docHtml = item.docUrl
+                ? `<a href="#" class="rider-link trekkenlijsten-entry-doc" data-rider-url="${this.escapeHtml(String(item.docUrl))}" title="${this.escapeHtml(item.docLabel || '')}">` +
+                  `<i class="fas fa-file-pdf" aria-hidden="true"></i> ${this.escapeHtml(item.docLabel || 'PDF')}` +
+                  `</a>`
+                : '';
+            const disabledAttr = syncOn ? '' : ' disabled';
+            const commentVal = this.escapeHtml(item.comment || '');
+            return (
+                `<div class="trekkenlijsten-entry${item.verwerkt ? ' trekkenlijsten-entry--done' : ''}" role="listitem" data-sync-key="${this.escapeHtml(String(item.syncKey || ''))}">` +
+                `<div class="trekkenlijsten-entry-main">` +
+                `<span class="trekkenlijsten-entry-date">${this.escapeHtml(item.dateLabel)}</span>` +
+                `<span class="trekkenlijsten-entry-time">${this.escapeHtml(item.timeLabel)}</span>` +
+                `<span class="trekkenlijsten-entry-title">${this.escapeHtml(item.title)}` +
+                (item.venueLabel && (this._trekkenlijstVenues || []).length > 1
+                    ? ` <span class="trekkenlijsten-entry-venue">${this.escapeHtml(item.venueLabel)}</span>`
+                    : '') +
+                `</span>` +
+                (docHtml ? `<span class="trekkenlijsten-entry-doc-wrap">${docHtml}</span>` : '') +
+                `</div>` +
+                `<div class="trekkenlijsten-entry-actions">` +
+                `<label class="trekkenlijsten-verwerkt-label">` +
+                `<input type="checkbox" class="trekkenlijsten-verwerkt-cb" data-sync-key="${this.escapeHtml(String(item.syncKey || ''))}"${item.verwerkt ? ' checked' : ''}${disabledAttr}>` +
+                `<span>${this.escapeHtml(this.t('trekkenlijsten.verwerkt'))}</span>` +
+                `</label>` +
+                `<textarea class="trekkenlijsten-comment-input" rows="2" data-sync-key="${this.escapeHtml(String(item.syncKey || ''))}" placeholder="${this.escapeHtml(this.t('trekkenlijsten.commentPlaceholder'))}"${disabledAttr}>${commentVal}</textarea>` +
+                `</div>` +
+                `</div>`
+            );
+        }).join('');
+        this.setupRiderLinkHandlers(list);
+        this.setupTrekkenlijstenListHandlers(list);
+    }
+
+    async loadTrekkenlijsten(opts = {}) {
+        const forceRefresh = !!(opts && opts.forceRefresh);
+        if (!window.electronAPI?.getYesplanData) {
+            this._trekkenlijstenItems = [];
+            this.renderTrekkenlijstenList();
+            return;
+        }
+        this._trekkenlijstenLoading = true;
+        this.renderTrekkenlijstenList();
+
+        try {
+            const trekVenues = this.findTrekkenlijstVenues();
+            this._trekkenlijstVenues = trekVenues;
+            this._trekkenlijstVenue = trekVenues[0] || null;
+            if (!trekVenues.length) {
+                this._trekkenlijstenItems = [];
+                this._trekkenlijstenLoading = false;
+                const meta = document.getElementById('trekkenlijstenMeta');
+                const list = document.getElementById('trekkenlijstenList');
+                if (meta) meta.textContent = this.t('trekkenlijsten.venueMissing');
+                if (list) {
+                    list.innerHTML = `<div class="trekkenlijsten-empty">${this.escapeHtml(this.t('trekkenlijsten.venueMissing'))}</div>`;
+                }
+                return;
+            }
+
+            const start = new Date();
+            start.setHours(0, 0, 0, 0);
+            const end = new Date(start);
+            end.setDate(end.getDate() + 120);
+            const toYmd = (d) => {
+                const y = d.getFullYear();
+                const m = String(d.getMonth() + 1).padStart(2, '0');
+                const day = String(d.getDate()).padStart(2, '0');
+                return `${y}-${m}-${day}`;
+            };
+            const range = {
+                startDate: toYmd(start),
+                endDate: toYmd(end),
+                skipCache: forceRefresh
+            };
+
+            const results = await Promise.all(
+                trekVenues.map((venue) => window.electronAPI.getYesplanData({
+                    ...range,
+                    venueId: String(venue.id)
+                }))
+            );
+
+            const venueById = new Map(trekVenues.map((v) => [String(v.id), v]));
+            const events = [];
+            let firstError = null;
+            for (const result of results) {
+                if (result && result.success === false && !firstError) {
+                    firstError = result.error || '?';
+                }
+                if (Array.isArray(result?.data)) events.push(...result.data);
+            }
+
+            const now = Date.now();
+            const seen = new Set();
+            const mapped = events
+                .filter((e) => this.isTrekkenlijstEvent(e))
+                .map((e) => {
+                    const startRaw = e.startDate || e.date || e.start || null;
+                    const startTs = startRaw ? new Date(startRaw).getTime() : NaN;
+                    const docs = Array.isArray(e.trekkenlijstDocuments) ? e.trekkenlijstDocuments : [];
+                    const firstDoc = docs[0] || null;
+                    const orgId = e._organizationId || 1;
+                    const syncKey = `${orgId}:${e.id}`;
+                    const venueIds = Array.isArray(e.venueIds) ? e.venueIds.map(String) : [];
+                    const matchedVenue = venueIds
+                        .map((vid) => venueById.get(vid))
+                        .find(Boolean)
+                        || trekVenues[0]
+                        || null;
+                    return {
+                        id: e.id,
+                        orgId,
+                        syncKey,
+                        venueId: matchedVenue ? String(matchedVenue.id) : null,
+                        venueLabel: matchedVenue ? this.getTrekkenlijstVenueLabel([matchedVenue]) : '',
+                        title: e.title || e.name || e.productionName || e.performer || '—',
+                        dateLabel: this.formatTrekkenlijstDate(startRaw),
+                        timeLabel: this.formatTrekkenlijstTime(e),
+                        eventDateRaw: startRaw ? String(startRaw).slice(0, 10) : null,
+                        docUrl: firstDoc?.url || null,
+                        docLabel: firstDoc ? this.trekkenlijstDocLabel(firstDoc) : '',
+                        verwerkt: false,
+                        comment: '',
+                        syncUpdatedAt: null,
+                        sortTs: Number.isFinite(startTs) ? startTs : Number.MAX_SAFE_INTEGER
+                    };
+                })
+                .filter((item) => {
+                    if (item.sortTs < now - (6 * 60 * 60 * 1000)) return false;
+                    if (seen.has(item.syncKey)) return false;
+                    seen.add(item.syncKey);
+                    return true;
+                })
+                .sort((a, b) => a.sortTs - b.sortTs)
+                .slice(0, 20);
+
+            this._trekkenlijstenItems = mapped;
+            await this.refreshTrekkenlijstSyncFromServer(true);
+            if (firstError) {
+                const meta = document.getElementById('trekkenlijstenMeta');
+                if (meta) meta.textContent = this.t('trekkenlijsten.loadError', { msg: firstError });
+            }
+        } catch (e) {
+            this._trekkenlijstenItems = [];
+            const meta = document.getElementById('trekkenlijstenMeta');
+            if (meta) meta.textContent = this.t('trekkenlijsten.loadError', { msg: e.message || String(e) });
+        } finally {
+            this._trekkenlijstenLoading = false;
+            this.renderTrekkenlijstenList();
+        }
+    }
+
+    async showTrekkenlijstenView() {
+        if (!this.isShowModeEnabled()) return;
+        if (this.currentView === 'trekkenlijsten') {
+            await this.showHomeView(false);
+            return;
+        }
+        this.pushHistorySnapshotIfNeeded('trekkenlijsten');
+        this.previousView = this.currentView;
+        this.currentView = 'trekkenlijsten';
+        this.hideVoorstellingTimerShell();
+        this.hideLuminexShell();
+        this.hideOscMonitorShell();
+
+        const weekWrapper = document.getElementById('weekViewWrapper');
+        const homeContainer = document.getElementById('homeViewContainer');
+        const detailWrapper = document.getElementById('detailViewWrapper');
+        const timerWrapper = document.getElementById('voorstellingTimerWrapper');
+        const luminexWrapper = document.getElementById('luminexViewWrapper');
+        const oscWrapper = document.getElementById('oscMonitorWrapper');
+        const trekWrapper = document.getElementById('trekkenlijstenWrapper');
+        const homeStatus = document.getElementById('homeViewStatus');
+        if (weekWrapper) weekWrapper.style.display = 'none';
+        if (homeContainer) homeContainer.style.display = 'none';
+        if (detailWrapper) detailWrapper.style.display = 'none';
+        if (timerWrapper) timerWrapper.style.display = 'none';
+        if (luminexWrapper) luminexWrapper.style.display = 'none';
+        if (oscWrapper) oscWrapper.style.display = 'none';
+        if (trekWrapper) trekWrapper.style.display = 'block';
+        if (homeStatus) homeStatus.style.display = 'none';
+
+        document.getElementById('weekBtn')?.classList.remove('active');
+        document.getElementById('homeBtn')?.classList.remove('active');
+        document.getElementById('voorstellingTimerBtn')?.classList.remove('active');
+        document.getElementById('luminexNavBtn')?.classList.remove('active');
+        document.getElementById('oscMonitorNavBtn')?.classList.remove('active');
+        document.getElementById('trekkenlijstenNavBtn')?.classList.add('active');
+
+        document.body.classList.remove('home-view-active');
+        document.body.classList.remove('week-view-active');
+        document.body.classList.remove('voorstelling-timer-active');
+        document.body.classList.remove('luminex-view-active');
+        document.body.classList.remove('osc-monitor-active');
+        document.body.classList.add('trekkenlijsten-active');
+
+        const techOverviewBtn = document.getElementById('techOverviewBtn');
+        if (techOverviewBtn) techOverviewBtn.style.display = 'none';
+
+        const dateSelector = document.querySelector('.date-selector');
+        const venueSelector = document.querySelector('.venue-selector');
+        if (dateSelector) dateSelector.style.display = 'none';
+        if (venueSelector) venueSelector.style.display = 'none';
+
+        this.updateBackButtonVisibility();
+        await this.loadTrekkenlijsten();
+        this.startTrekkenlijstSyncPoll();
+    }
+
     addOscMonitorEntry(payload) {
         const now = new Date();
         const locale = this.locale === 'en' ? 'en-GB' : 'nl-NL';
@@ -5398,11 +5910,10 @@ class TheaterDashboard {
         const meta = document.getElementById('oscMonitorMeta');
         if (!list || !meta) return;
         if (!this._oscMonitorEntries.length) {
-            meta.textContent = 'Wachten op OSC berichten…';
-            list.innerHTML = '';
+            list.innerHTML = '<div class="osc-monitor-empty">Nog geen OSC timer-triggers ontvangen.</div>';
+            this.updateOscMonitorListenMeta();
             return;
         }
-        meta.textContent = `${this._oscMonitorEntries.length} bericht(en) in buffer. Nieuwste bovenaan.`;
         list.innerHTML = this._oscMonitorEntries.map((entry) => (
             `<div class="osc-monitor-entry">` +
             `<span class="osc-monitor-entry-time">${this.escapeHtml(entry.stamp)}</span>` +
@@ -5410,1854 +5921,118 @@ class TheaterDashboard {
             `<span class="osc-monitor-entry-step">${this.escapeHtml(entry.stepId)}</span>` +
             `</div>`
         )).join('');
+        this.updateOscMonitorListenMeta();
     }
 
-    ensureLuminexMatrix() {
-        const root = document.getElementById('luminexMatrixRoot');
-        if (!root || !window.LuminexMatrixView || this._luminexMatrix) return;
-        this._luminexMatrix = new window.LuminexMatrixView(root, {
-            dynamic: true,
-            inputsTitle: this.t('luminex.inputsTitle'),
-            outputsTitle: this.t('luminex.outputsTitle'),
-            engineColumnTitle: this.t('luminex.engineColumnTitle'),
-            engineHubLabel: this.t('luminex.engineHubLabel'),
-            emptyInputsHint: this.t('luminex.emptyInputsHint'),
-            dragHint: this.t('luminex.dragHint'),
-            dragCanvasHint: this.t('luminex.dragCanvasHint'),
-            sourceNetworkLine: this.t('luminex.sourceNetworkLine'),
-            notSeenInScanShort: this.t('luminex.notSeenInScanShort'),
-            sourceLanOnly: this.t('luminex.sourceLanOnly'),
-            sacnMergeEngineBadge: this.t('luminex.sacnMergeEngineBadge'),
-            mergeLine: this.t('luminex.mergeLine'),
-            mergeLineModeOnly: this.t('luminex.mergeLineModeOnly'),
-            getLabelIn: (i) => this.t('luminex.portIn', { n: i + 1 }),
-            getLabelOut: (i) => this.t('luminex.portOut', { n: i + 1 }),
-            onChange: () => this.onLuminexMatrixChange(),
-            onNodeLayoutChange: (layout) => this._saveLuminexNodeLayoutDebounced(layout)
-        });
+    getOscMonitorListenHost() {
+        const routing = this.config?.app?.networkRouting || {};
+        const iface = String(routing.oscInterface || 'auto').trim();
+        if (iface && iface !== 'auto') return iface;
+        return '127.0.0.1';
     }
 
-    _saveLuminexNodeLayoutDebounced(layout) {
-        if (!window.electronAPI?.saveConfig || !layout || typeof layout !== 'object') return;
-        if (this._luminexNodeLayoutSaveTimer) clearTimeout(this._luminexNodeLayoutSaveTimer);
-        this._luminexNodeLayoutSaveTimer = setTimeout(async () => {
-            this._luminexNodeLayoutSaveTimer = null;
-            try {
-                const prev = await this.getLuminexConfigRaw();
-                const prevNl = prev.nodeLayout && typeof prev.nodeLayout === 'object' ? prev.nodeLayout : {};
-                const { byProcessblock: _drop, ...restNl } = prevNl;
-                await window.electronAPI.saveConfig('luminex', { ...prev, nodeLayout: { ...restNl, ...layout } });
-            } catch (_) {
-                /* ignore */
+    updateOscMonitorListenMeta() {
+        const meta = document.getElementById('oscMonitorMeta');
+        if (!meta) return;
+        const listen = `udp://${this.getOscMonitorListenHost()}:3955`;
+        const count = this._oscMonitorEntries.length;
+        if (!count) {
+            meta.textContent = `Luistert op ${listen} · wachten op berichten…`;
+            return;
+        }
+        meta.textContent = `${count} bericht(en) · ${listen} · nieuwste bovenaan`;
+    }
+
+    async saveOscMonitorNetworkInterface(selected) {
+        if (!window.electronAPI?.getConfig || !window.electronAPI?.saveConfig) return;
+        const value = String(selected || 'auto').trim() || 'auto';
+        try {
+            const appCfg = await window.electronAPI.getConfig('app') || {};
+            const networkRouting = {
+                ...(appCfg.networkRouting || {}),
+                ...(this.config.app?.networkRouting || {}),
+                oscInterface: value
+            };
+            const result = await window.electronAPI.saveConfig('app', { ...appCfg, networkRouting });
+            if (!result?.success) return;
+            this.config.app = { ...(this.config.app || {}), networkRouting };
+            const settingsSel = document.getElementById('networkOscInterface');
+            if (settingsSel) {
+                settingsSel.value = value;
+                if (![...settingsSel.options].some((o) => o.value === value)) settingsSel.value = 'auto';
             }
-        }, 650);
+            this.updateOscMonitorListenMeta();
+        } catch (_) {
+            /* ignore */
+        }
+    }
+
+    syncOscMonitorInterfaceSelect() {
+        const sel = document.getElementById('oscMonitorInterface');
+        if (!sel) return;
+        const value = String(this.config?.app?.networkRouting?.oscInterface || 'auto').trim() || 'auto';
+        if ([...sel.options].some((o) => o.value === value)) sel.value = value;
+        else sel.value = 'auto';
+        const wrap = document.querySelector('.osc-monitor-iface-wrap');
+        if (wrap) wrap.hidden = typeof window.electronAPI?.getNetworkInterfaces !== 'function';
     }
 
     refreshLuminexChrome() {
-        const sub = document.getElementById('luminexCardSubtitle');
-        if (sub) sub.textContent = this.t('luminex.subtitle');
         const lumNav = document.getElementById('luminexNavBtn');
         if (lumNav) lumNav.title = this.t('nav.luminex');
-        if (this._luminexMatrix) {
-            this._luminexMatrix.setLabels({
-                inputsTitle: this.t('luminex.inputsTitle'),
-                outputsTitle: this.t('luminex.outputsTitle'),
-                engineColumnTitle: this.t('luminex.engineColumnTitle'),
-                engineHubLabel: this.t('luminex.engineHubLabel'),
-                emptyInputsHint: this.t('luminex.emptyInputsHint'),
-                dragHint: this.t('luminex.dragHint'),
-                dragCanvasHint: this.t('luminex.dragCanvasHint'),
-                sourceNetworkLine: this.t('luminex.sourceNetworkLine'),
-                notSeenInScanShort: this.t('luminex.notSeenInScanShort'),
-                sourceLanOnly: this.t('luminex.sourceLanOnly'),
-                sacnMergeEngineBadge: this.t('luminex.sacnMergeEngineBadge'),
-                mergeLine: this.t('luminex.mergeLine'),
-                mergeLineModeOnly: this.t('luminex.mergeLineModeOnly'),
-                getLabelIn: (i) => this.t('luminex.portIn', { n: i + 1 }),
-                getLabelOut: (i) => this.t('luminex.portOut', { n: i + 1 })
-            });
-        }
-        const syncNodeLbl = document.querySelector('#luminexSyncNodeBtn span[data-i18n="luminex.syncToNode"]');
-        if (syncNodeLbl) syncNodeLbl.textContent = this.t('luminex.syncToNode');
     }
 
-    setupLuminexDiscoveryListeners() {
-        document.getElementById('luminexDiscoverBtn')?.addEventListener('click', () => {
-            void this.runLuminodeDiscovery();
-        });
-        document.getElementById('luminexSacnScanBtn')?.addEventListener('click', () => {
-            void this.runSacnDiscovery();
-        });
-        document.getElementById('luminexSaveHostBtn')?.addEventListener('click', () => {
-            void this.saveLuminexHostFromInput();
-        });
-        document.getElementById('luminexFetchCapBtn')?.addEventListener('click', () => {
-            void this.fetchLuminodeCapabilitiesUI();
-        });
-        document.getElementById('luminexOpenWebBtn')?.addEventListener('click', () => {
-            void this.openLuminodeWebUi();
-        });
-        document.getElementById('luminexSaveRouteBtn')?.addEventListener('click', () => {
-            void this.saveLuminexRoute();
-        });
-        document.getElementById('luminexSyncNodeBtn')?.addEventListener('click', () => {
-            void this.pushLuminodePatchFromUi();
-        });
-        document.getElementById('luminexDeviceList')?.addEventListener('click', (e) => {
-            const btn = e.target.closest('.luminex-device-pick');
-            if (!btn) return;
-            const ip = btn.getAttribute('data-ip');
-            if (!ip) return;
-            const input = document.getElementById('luminexHostInput');
-            if (input) input.value = ip;
-            void this.saveLuminexHostFromInput();
-        });
-        document.getElementById('luminexShowAllOutputs')?.addEventListener('change', (e) => {
-            void this.saveLuminexShowAllOutputsPreference(!!e.target.checked);
-        });
+    _resizeLuminexViewerFrame() {
+        const wrap = document.getElementById('luminexViewWrapper');
+        const frame = document.getElementById('luminexViewerFrame');
+        if (!wrap || !frame || wrap.style.display === 'none') return;
+        const inner = wrap.closest('.main-workspace-inner') || wrap.parentElement;
+        const main = document.querySelector('.main-content');
+        const wrapTop = wrap.getBoundingClientRect().top;
+        const bottomEdge = (inner || main || document.body).getBoundingClientRect().bottom;
+        const availableH = Math.floor(bottomEdge - wrapTop);
+        const w = Math.max(320, Math.floor(wrap.clientWidth || wrap.getBoundingClientRect().width));
+        const h = Math.max(480, availableH);
+        frame.style.width = `${w}px`;
+        frame.style.height = `${h}px`;
     }
 
-    async saveLuminexShowAllOutputsPreference(checked) {
-        if (!window.electronAPI?.saveConfig) return;
+    async ensureLuminexViewerFrame() {
+        const frame = document.getElementById('luminexViewerFrame');
+        const errEl = document.getElementById('luminexViewerError');
+        if (!frame || !window.electronAPI?.ensureLuminexViewer) return;
         try {
-            const prev = await this.getLuminexConfigRaw();
-            const prevRoute = prev.route && typeof prev.route === 'object' ? prev.route : {};
-            await window.electronAPI.saveConfig('luminex', {
-                ...prev,
-                route: { ...prevRoute, showAllOutputs: checked }
-            });
-            await this.refreshLuminexMatrixPorts();
-        } catch (_) {
-            /* ignore */
-        }
-    }
-
-    setLuminexDiscoveryStatus(text) {
-        const el = document.getElementById('luminexDiscoveryStatus');
-        if (el) el.textContent = text || '';
-    }
-
-    /**
-     * @param {string} main
-     * @param {{ warnings?: string[], meta?: string, isError?: boolean } | undefined} opts
-     */
-    setLuminexSacnStatus(main, opts) {
-        const block = document.getElementById('luminexSacnResultBlock');
-        const mainEl = document.getElementById('luminexSacnStatusLine');
-        const metaEl = document.getElementById('luminexSacnMetaLine');
-        const warnEl = document.getElementById('luminexSacnWarningsLine');
-        const text = main || '';
-        const warnings = opts && Array.isArray(opts.warnings) ? opts.warnings : [];
-        const meta = opts && opts.meta ? String(opts.meta) : '';
-        const isError = !!(opts && opts.isError);
-
-        if (mainEl) {
-            mainEl.textContent = text;
-            mainEl.classList.toggle('luminex-sacn-result-main--error', isError);
-        }
-        if (metaEl) {
-            if (meta) {
-                metaEl.hidden = false;
-                metaEl.textContent = meta;
-            } else {
-                metaEl.hidden = true;
-                metaEl.textContent = '';
-            }
-        }
-        if (warnEl) {
-            if (warnings.length) {
-                warnEl.hidden = false;
-                const detail =
-                    warnings.length <= 2
-                        ? warnings.join(' · ')
-                        : `${warnings.slice(0, 2).join(' · ')} (+${warnings.length - 2})`;
-                warnEl.textContent = this.t('luminex.sacnSocketWarning', { detail });
-            } else {
-                warnEl.hidden = true;
-                warnEl.textContent = '';
-            }
-        }
-        if (block) {
-            block.hidden = !text && warnings.length === 0;
-        }
-    }
-
-    setLuminexRouteStatus(text) {
-        const el = document.getElementById('luminexRouteStatus');
-        if (el) el.textContent = text || '';
-    }
-
-    setLuminexEngineStatus(text) {
-        const el = document.getElementById('luminexEngineStatus');
-        if (el) el.textContent = text || '';
-    }
-
-    async getLuminexConfigRaw() {
-        if (!window.electronAPI?.getConfig) return {};
-        try {
-            return (await window.electronAPI.getConfig('luminex')) || {};
-        } catch (_) {
-            return {};
-        }
-    }
-
-    async loadLuminexConfigIntoUI() {
-        const cfg = await this.getLuminexConfigRaw();
-        const hostEl = document.getElementById('luminexHostInput');
-        if (hostEl) hostEl.value = (cfg.host && String(cfg.host).trim()) || '10.0.1.230';
-        const pwEl = document.getElementById('luminexPasswordInput');
-        if (pwEl) pwEl.value = cfg.password != null ? String(cfg.password) : '';
-        const minEl = document.getElementById('luminexSacnMin');
-        const maxEl = document.getElementById('luminexSacnMax');
-        if (minEl) minEl.value = cfg.sacnMin != null ? String(cfg.sacnMin) : '1';
-        if (maxEl) maxEl.value = cfg.sacnMax != null ? String(cfg.sacnMax) : '96';
-        const showAllEl = document.getElementById('luminexShowAllOutputs');
-        if (showAllEl) showAllEl.checked = cfg.route?.showAllOutputs === true;
-        this._hydrateLuminexRoutePatchesFromConfig(cfg);
-        const pbSel = document.getElementById('luminexRouteProcessblock');
-        const r = cfg.route || {};
-        if (pbSel && r.processblockId != null && [...pbSel.options].some((o) => o.value === String(r.processblockId))) {
-            pbSel.value = String(r.processblockId);
-        }
-        /* Matrix wordt gevuld na getLuminodeCapabilities (device-config + lokale patch). */
-    }
-
-    async saveLuminexHostFromInput() {
-        const hostEl = document.getElementById('luminexHostInput');
-        const pwEl = document.getElementById('luminexPasswordInput');
-        if (!hostEl || !window.electronAPI?.saveConfig) return;
-        const host = String(hostEl.value || '').trim();
-        if (!host) return;
-        const password = pwEl ? String(pwEl.value || '') : '';
-        const prev = await this.getLuminexConfigRaw();
-        const minEl = document.getElementById('luminexSacnMin');
-        const maxEl = document.getElementById('luminexSacnMax');
-        const sacnMin = minEl ? parseInt(minEl.value, 10) : 1;
-        const sacnMax = maxEl ? parseInt(maxEl.value, 10) : 96;
-        const res = await window.electronAPI.saveConfig('luminex', {
-            ...prev,
-            host,
-            password,
-            sacnMin: Number.isNaN(sacnMin) ? 1 : sacnMin,
-            sacnMax: Number.isNaN(sacnMax) ? 96 : sacnMax
-        });
-        if (res && res.success === false) {
-            this.setLuminexDiscoveryStatus(this.t('luminex.discoverError', { msg: res.error || 'save' }));
-            return;
-        }
-        this.setLuminexDiscoveryStatus(this.t('luminex.hostSaved'));
-        await this.fetchLuminodeCapabilitiesUI();
-    }
-
-    _normalizeLuminexRoutePatches(arr) {
-        return (arr || [])
-            .map((p) => ({
-                sourceUniverse: Number(p.sourceUniverse),
-                outputKey: p.outputKey != null ? String(p.outputKey) : ''
-            }))
-            .filter((p) => !Number.isNaN(p.sourceUniverse) && p.outputKey);
-    }
-
-    /**
-     * @param {number|null} pbId
-     */
-    _getSavedPatchesForPb(pbId) {
-        if (pbId == null) return [];
-        return this._luminexRoutePatchesByPb[String(pbId)] || [];
-    }
-
-    _hydrateLuminexRoutePatchesFromConfig(cfg) {
-        const r = (cfg && cfg.route) || {};
-        if (r.patchesByProcessblock && typeof r.patchesByProcessblock === 'object' && !Array.isArray(r.patchesByProcessblock)) {
-            this._luminexRoutePatchesByPb = {};
-            for (const [k, v] of Object.entries(r.patchesByProcessblock)) {
-                this._luminexRoutePatchesByPb[k] = this._normalizeLuminexRoutePatches(Array.isArray(v) ? v : []);
-            }
-        } else if (Array.isArray(r.patches) && r.patches.length) {
-            const pid = r.processblockId != null ? String(r.processblockId) : '0';
-            this._luminexRoutePatchesByPb = { [pid]: this._normalizeLuminexRoutePatches(r.patches) };
-        } else if (r.sourceUniverse != null && r.outputKey) {
-            const pid = r.processblockId != null ? String(r.processblockId) : '0';
-            this._luminexRoutePatchesByPb = {
-                [pid]: this._normalizeLuminexRoutePatches([{ sourceUniverse: r.sourceUniverse, outputKey: r.outputKey }])
-            };
-        } else {
-            this._luminexRoutePatchesByPb = {};
-        }
-    }
-
-    async runSacnDiscovery() {
-        if (!window.electronAPI?.discoverSacnUniverses) {
-            this.setLuminexSacnStatus(this.t('luminex.discoverUnavailable'), { isError: true });
-            return;
-        }
-        if (this._luminexSacnRunning) return;
-        this._luminexSacnRunning = true;
-        const btn = document.getElementById('luminexSacnScanBtn');
-        if (btn) btn.disabled = true;
-        this.setLuminexSacnStatus(this.t('luminex.sacnScanning'), {});
-        const minEl = document.getElementById('luminexSacnMin');
-        const maxEl = document.getElementById('luminexSacnMax');
-        const minU = minEl ? parseInt(minEl.value, 10) : 1;
-        const maxU = maxEl ? parseInt(maxEl.value, 10) : 96;
-        const hostEl = document.getElementById('luminexHostInput');
-        const hintHost =
-            hostEl && String(hostEl.value || '').trim() ? String(hostEl.value).trim() : undefined;
-        const selectedIface = String(
-            this.config?.app?.networkRouting?.sacnInterface ||
-            this.config?.app?.networkRouting?.luminexInterface ||
-            ''
-        ).trim();
-        const iface = selectedIface && selectedIface !== 'auto' ? selectedIface : undefined;
-        try {
-            const res = await window.electronAPI.discoverSacnUniverses({
-                minUniverse: Number.isNaN(minU) ? 1 : minU,
-                maxUniverse: Number.isNaN(maxU) ? 96 : maxU,
-                durationMs: 7500,
-                hintHost,
-                iface
-            });
-            if (!res || !res.ok) {
-                this.setLuminexSacnStatus(this.t('luminex.sacnError', { msg: (res && res.error) || '?' }), {
-                    isError: true,
-                    warnings: (res && res.warnings) || []
-                });
-                this._luminexSacnUniverses = [];
-                await this.refreshLuminexMatrixPorts();
-                return;
-            }
-            this._luminexSacnUniverses = res.universes || [];
-            const n = this._luminexSacnUniverses.length;
-            const totalStreams =
-                res.totalStreams != null ? Number(res.totalStreams) : n;
-            let mainLine;
-            if (n === 0) {
-                mainLine = this.t('luminex.sacnEmpty');
-            } else if (totalStreams > n) {
-                mainLine = this.t('luminex.sacnDoneUniversesAndSources', {
-                    u: n,
-                    s: totalStreams
-                });
-            } else {
-                mainLine = this.t('luminex.sacnDone', { n });
-            }
-            const rmin = res.range && res.range.min != null ? res.range.min : minU;
-            const rmax = res.range && res.range.max != null ? res.range.max : maxU;
-            const sec = res.durationMs != null ? Math.round(Number(res.durationMs) / 1000) : 8;
-            let metaLine = this.t('luminex.sacnScanMeta', { min: rmin, max: rmax, sec });
-            if (res.multicastIface) {
-                metaLine += this.t('luminex.sacnScanMetaIface', { iface: res.multicastIface });
-            }
-            this.setLuminexSacnStatus(mainLine, {
-                meta: metaLine,
-                warnings: res.warnings || []
-            });
-            const prev = await this.getLuminexConfigRaw();
-            await window.electronAPI.saveConfig('luminex', {
-                ...prev,
-                sacnMin: Number.isNaN(minU) ? 1 : minU,
-                sacnMax: Number.isNaN(maxU) ? 96 : maxU
-            });
-            await this.refreshLuminexMatrixPorts();
-        } catch (e) {
-            this.setLuminexSacnStatus(this.t('luminex.sacnError', { msg: e.message || String(e) }), {
-                isError: true
-            });
-            await this.refreshLuminexMatrixPorts();
-        } finally {
-            this._luminexSacnRunning = false;
-            if (btn) btn.disabled = false;
-        }
-    }
-
-    buildOutputOptionsFromCapabilities(cap) {
-        const opts = [];
-        const di = cap.deviceinfo || {};
-        const n = Number(di.nr_dmx_ports) || 0;
-        for (let i = 1; i <= n; i++) {
-            opts.push({
-                key: `dmx:${i - 1}`,
-                label: this.t('luminex.outputDmx', { n: i }),
-                ioClass: 'dmx'
-            });
-        }
-        const io = cap.io;
-        if (Array.isArray(io)) {
-            io.forEach((row, idx) => {
-                const name = row.name || row.label || row.title || `I/O ${idx + 1}`;
-                const cls = row.io_class != null ? String(row.io_class).toLowerCase() : '';
-                opts.push({ key: `io:${idx}`, label: String(name), ioClass: cls });
-            });
-        } else if (io && typeof io === 'object') {
-            const arr = io.outputs || io.IO || io.list;
-            if (Array.isArray(arr)) {
-                arr.forEach((row, idx) => {
-                    const name = row.name || row.label || `Output ${idx + 1}`;
-                    const cls = row.io_class != null ? String(row.io_class).toLowerCase() : '';
-                    opts.push({ key: `ioarr:${idx}`, label: String(name), ioClass: cls });
-                });
-            }
-        }
-        if (opts.length === 0) {
-            opts.push({ key: 'web:manual', label: this.t('luminex.outputFallback'), ioClass: '' });
-        }
-        return opts;
-    }
-
-    buildDefaultLuminexOutputs() {
-        const out = [];
-        for (let i = 1; i <= 8; i++) {
-            out.push({
-                key: `dmx:${i - 1}`,
-                label: this.t('luminex.outputDmx', { n: i }),
-                ioClass: 'dmx'
-            });
-        }
-        return out;
-    }
-
-    /** sACN-universes die op de LumiNode als uitgang staan — scan kan dat als “bron” tonen; het is merge→uitgang. */
-    getSacnOutputUniversesFromCap(cap) {
-        const s = new Set();
-        if (!cap || !Array.isArray(cap.io)) return s;
-        cap.io.forEach((row) => {
-            if (!row || String(row.io_class).toLowerCase() !== 'sacn') return;
-            const ot = String(row.io_type ?? '').toLowerCase();
-            if (ot === 'input' || ot === 'idle') return;
-            if (ot !== '' && ot !== 'output') return;
-            const u = Number(row.universe);
-            if (!Number.isNaN(u) && u >= 1 && u <= 64000) s.add(u);
-        });
-        return s;
-    }
-
-    /** Voegt device-routing en lokaal opgeslagen routes samen (device wint bij dezelfde bron→uitgang). */
-    mergeRoutePatches(devicePatches, savedPatches) {
-        const m = new Map();
-        for (const p of savedPatches || []) {
-            if (p == null || p.sourceUniverse == null || !p.outputKey) continue;
-            const pid = p.processblockId != null && p.processblockId !== '' ? Number(p.processblockId) : null;
-            m.set(`${pid == null ? '' : pid}→${Number(p.sourceUniverse)}→${String(p.outputKey)}`, {
-                sourceUniverse: Number(p.sourceUniverse),
-                outputKey: String(p.outputKey),
-                processblockId: pid
-            });
-        }
-        for (const p of devicePatches || []) {
-            if (p == null || p.sourceUniverse == null || !p.outputKey) continue;
-            const pid = p.processblockId != null && p.processblockId !== '' ? Number(p.processblockId) : null;
-            m.set(`${pid == null ? '' : pid}→${Number(p.sourceUniverse)}→${String(p.outputKey)}`, {
-                sourceUniverse: Number(p.sourceUniverse),
-                outputKey: String(p.outputKey),
-                processblockId: pid
-            });
-        }
-        return [...m.values()];
-    }
-
-    normalizePipelineOutputsBlob(raw) {
-        if (!raw || raw._error) return [];
-        if (Array.isArray(raw)) return raw;
-        if (typeof raw === 'object') {
-            const keys = ['outputs', 'output', 'list', 'data', 'items', 'IO'];
-            for (const k of keys) {
-                if (Array.isArray(raw[k])) return raw[k];
-            }
-        }
-        return [];
-    }
-
-    /** Bron-volgorde zoals de LumiNode die oplevert (slot 0 = eerste invoer in de flow). */
-    extractOrderedSourceSlots(sources) {
-        if (!sources || sources._error) return [];
-        const parseNum = (v) => {
-            if (typeof v === 'number' && v >= 1 && v <= 64000) return v;
-            if (typeof v === 'string') {
-                const t = v.trim();
-                if (/^\d{1,5}$/.test(t)) {
-                    const n = parseInt(t, 10);
-                    if (n >= 1 && n <= 64000) return n;
-                }
-                const m = t.match(/^(\d+)\s*\.\s*(\d{1,5})$/);
-                if (m) {
-                    const n = parseInt(m[2], 10);
-                    if (n >= 1 && n <= 64000) return n;
-                }
-            }
-            return null;
-        };
-        const extractU = (obj) => {
-            if (!obj || typeof obj !== 'object') return null;
-            const keys = [
-                'universe',
-                'Universe',
-                'sourceUniverse',
-                'sacn_universe',
-                'universeId',
-                'uni',
-                'dmxUniverse',
-                'dmx_universe'
-            ];
-            for (const k of keys) {
-                if (obj[k] == null) continue;
-                const n = parseNum(obj[k]);
-                if (n != null) return n;
-            }
-            return null;
-        };
-        if (Array.isArray(sources)) {
-            const out = [];
-            for (const item of sources) {
-                if (typeof item === 'number' && item >= 1 && item <= 64000) {
-                    out.push(item);
-                    continue;
-                }
-                if (item && typeof item === 'object') {
-                    const u = extractU(item);
-                    if (u != null) out.push(u);
-                }
-            }
-            return out;
-        }
-        if (typeof sources === 'object') {
-            const numKeys = Object.keys(sources)
-                .filter((k) => /^\d+$/.test(k))
-                .map(Number)
-                .sort((a, b) => a - b);
-            if (numKeys.length) {
-                return numKeys
-                    .map((k) => {
-                        const item = sources[String(k)];
-                        if (typeof item === 'number' && item >= 1 && item <= 64000) return item;
-                        if (item && typeof item === 'object') return extractU(item);
-                        return null;
-                    })
-                    .filter((u) => u != null);
-            }
-        }
-        return [];
-    }
-
-    resolveOutputKeyForPipelineOutput(outEntry, oi, outputOpts) {
-        if (!outEntry || typeof outEntry !== 'object' || !Array.isArray(outputOpts) || outputOpts.length === 0) return null;
-        const label = (outEntry.name || outEntry.label || outEntry.title || outEntry.protocol || '').toString();
-        const hay = `${label} ${outEntry.type || ''} ${outEntry.io_type || ''}`.toLowerCase();
-        if (hay.trim()) {
-            for (const o of outputOpts) {
-                const ol = o.label.toLowerCase();
-                if (ol.length >= 3 && hay.includes(ol.slice(0, Math.min(8, ol.length)))) return o.key;
-            }
-        }
-        const idx = outEntry.index ?? outEntry.output_index ?? outEntry.id ?? oi;
-        const n = Number(idx);
-        if (!Number.isNaN(n) && outputOpts[n]) return outputOpts[n].key;
-        if (outputOpts[oi]) return outputOpts[oi].key;
-        return null;
-    }
-
-    pickGraphUniverse(obj) {
-        if (!obj || typeof obj !== 'object') return null;
-        const keys = [
-            'input_universe',
-            'inputUniverse',
-            'sourceUniverse',
-            'universe_in',
-            'src_universe',
-            'universe'
-        ];
-        for (const k of keys) {
-            if (obj[k] == null) continue;
-            const n = Number(obj[k]);
-            if (!Number.isNaN(n) && n >= 1 && n <= 64000) return n;
-        }
-        return null;
-    }
-
-    pickGraphOutputKey(obj, outputOpts) {
-        if (!obj || typeof obj !== 'object' || !Array.isArray(outputOpts)) return null;
-        if (obj.output_key != null) {
-            const s = String(obj.output_key);
-            if (outputOpts.some((o) => o.key === s)) return s;
-        }
-        const oi = obj.output_index ?? obj.output_idx ?? obj.out_index ?? obj.destination_index;
-        if (oi != null && Number.isFinite(Number(oi))) {
-            const i = Number(oi);
-            if (outputOpts[i]) return outputOpts[i].key;
-        }
-        return null;
-    }
-
-    collectPatchesFromPipelineGraph(root, outputOpts, tryAdd, depth = 0) {
-        if (depth > 18 || root == null) return;
-        if (Array.isArray(root)) {
-            root.forEach((x) => this.collectPatchesFromPipelineGraph(x, outputOpts, tryAdd, depth + 1));
-            return;
-        }
-        if (typeof root !== 'object') return;
-        const u = this.pickGraphUniverse(root);
-        const ok = this.pickGraphOutputKey(root, outputOpts);
-        if (u != null && ok) tryAdd(u, ok);
-        for (const v of Object.values(root)) {
-            if (v != null && typeof v === 'object') this.collectPatchesFromPipelineGraph(v, outputOpts, tryAdd, depth + 1);
-        }
-    }
-
-    buildIoByIdMap(cap) {
-        const m = new Map();
-        const ioList = cap && Array.isArray(cap.io) ? cap.io : [];
-        ioList.forEach((row) => {
-            if (row && row.id != null && !Number.isNaN(Number(row.id))) m.set(Number(row.id), row);
-        });
-        return m;
-    }
-
-    /** Zelfde volgorde/sleutels als buildOutputOptionsFromCapabilities: dmx:p, daarna io:idx. */
-    buildIoIdToOutputKeyMap(cap) {
-        const map = new Map();
-        const di = (cap && cap.deviceinfo) || {};
-        const nrDmx = Number(di.nr_dmx_ports) || 0;
-        const ioList = cap && Array.isArray(cap.io) ? cap.io : [];
-        ioList.forEach((row, idx) => {
-            if (row == null || row.id == null) return;
-            const id = Number(row.id);
-            if (Number.isNaN(id)) return;
-            const cls = String(row.io_class || '').toLowerCase();
-            if (cls === 'dmx') {
-                const pn = Number(row.port_number) || 0;
-                if (pn >= 0 && (nrDmx === 0 || pn < nrDmx)) {
-                    map.set(id, `dmx:${pn}`);
-                    return;
-                }
-            }
-            map.set(id, `io:${idx}`);
-        });
-        return map;
-    }
-
-    /** Universe voor matrix-bronkolom (sACN/Art-Net/DMX-input). */
-    universeFromInputIo(io) {
-        if (!io || typeof io !== 'object') return null;
-        const cls = String(io.io_class || '').toLowerCase();
-        if (cls === 'sacn') {
-            const u = Number(io.universe);
-            if (!Number.isNaN(u) && u >= 1 && u <= 64000) return u;
-        }
-        if (cls === 'artnet') {
-            const u = Number(io.universe);
-            if (!Number.isNaN(u) && u >= 0 && u <= 64000) return u >= 1 ? u : u + 1;
-        }
-        if (cls === 'dmx') {
-            const rdm = Number(io.rdm_universe);
-            if (!Number.isNaN(rdm) && rdm >= 0) return rdm;
-            const pn = Number(io.port_number);
-            if (!Number.isNaN(pn) && pn >= 0) return pn + 1;
-        }
-        return null;
-    }
-
-    /**
-     * LumiNode levert processblock/{id} soms met inputs/outputs in een geneste `processblockConfig`.
-     */
-    _normalizeProcessBlockSerializeConfig(cfg) {
-        if (!cfg || typeof cfg !== 'object' || cfg._error) return null;
-        if (cfg.inputs && cfg.outputs && typeof cfg.inputs === 'object' && typeof cfg.outputs === 'object') {
-            return { inputs: cfg.inputs, outputs: cfg.outputs };
-        }
-        const pbc = cfg.processblockConfig;
-        if (pbc && typeof pbc === 'object' && pbc.inputs && pbc.outputs) {
-            return { inputs: pbc.inputs, outputs: pbc.outputs };
-        }
-        if (cfg.data && typeof cfg.data === 'object' && cfg.data.inputs && cfg.data.outputs) {
-            return { inputs: cfg.data.inputs, outputs: cfg.data.outputs };
-        }
-        if (cfg.meta && typeof cfg.meta === 'object' && cfg.meta.inputs && cfg.meta.outputs) {
-            return { inputs: cfg.meta.inputs, outputs: cfg.meta.outputs };
-        }
-        if (
-            cfg.configuration &&
-            typeof cfg.configuration === 'object' &&
-            cfg.configuration.inputs &&
-            cfg.configuration.outputs
-        ) {
-            return { inputs: cfg.configuration.inputs, outputs: cfg.configuration.outputs };
-        }
-        return null;
-    }
-
-    /** inputs/outputs als array [{ io_id, … }] of [12, 13] → slot-map voor infer. */
-    _coerceProcessBlockIoMaps(inputs, outs) {
-        const toMap = (v) => {
-            if (v == null) return v;
-            if (!Array.isArray(v)) return v;
-            const o = {};
-            v.forEach((item, i) => {
-                if (item == null) return;
-                if (typeof item === 'number' || typeof item === 'string') {
-                    const n = Number(item);
-                    if (!Number.isNaN(n)) o[String(i)] = n;
-                    return;
-                }
-                if (typeof item === 'object') {
-                    const id = item.io_id ?? item.ioId ?? item.id ?? item.IO;
-                    if (id == null) return;
-                    const n = Number(id);
-                    if (Number.isNaN(n)) return;
-                    const slot = item.slot != null ? String(item.slot) : String(i);
-                    o[slot] = n;
-                }
-            });
-            return o;
-        };
-        return { inputs: toMap(inputs), outputs: toMap(outs) };
-    }
-
-    /**
-     * OpenAPI ProcessBlockSerialize: inputs { slot: io_id }, outputs { key: io_id }.
-     * Merge-engine: alle actieve invoer-universes naar elke geconfigureerde uitgang (zoals op de node).
-     */
-    inferPatchesFromProcessBlockSerialize(cfg, cap, outputOpts) {
-        const flat = this._normalizeProcessBlockSerializeConfig(cfg);
-        if (!flat) return [];
-        const coerced = this._coerceProcessBlockIoMaps(flat.inputs, flat.outputs);
-        const inputs = coerced.inputs;
-        const outs = coerced.outputs;
-        if (!inputs || !outs || typeof inputs !== 'object' || typeof outs !== 'object') return [];
-
-        const ioById = this.buildIoByIdMap(cap);
-        const ioIdToKey = this.buildIoIdToOutputKeyMap(cap);
-        const validKeys = new Set((outputOpts || []).map((o) => o.key));
-
-        const inputUniverses = [];
-        for (const ioIdRaw of Object.values(inputs)) {
-            const ioId = Number(ioIdRaw);
-            if (Number.isNaN(ioId) || ioId < 0) continue;
-            const io = ioById.get(ioId);
-            const u = this.universeFromInputIo(io);
-            if (u != null) inputUniverses.push(u);
-        }
-        const uniqIn = [...new Set(inputUniverses)];
-
-        const outputKeys = [];
-        for (const ioIdRaw of Object.values(outs)) {
-            const ioId = Number(ioIdRaw);
-            if (Number.isNaN(ioId) || ioId < 0) continue;
-            const ok = ioIdToKey.get(ioId);
-            if (ok && validKeys.has(ok)) outputKeys.push(ok);
-        }
-        const uniqOut = [...new Set(outputKeys)];
-
-        if (uniqIn.length === 0 || uniqOut.length === 0) return [];
-
-        const patches = [];
-        for (const u of uniqIn) {
-            for (const ok of uniqOut) {
-                patches.push({ sourceUniverse: u, outputKey: ok });
-            }
-        }
-        return patches;
-    }
-
-    _collectIoIds(v, out, keyHint = '') {
-        if (v == null) return;
-        if (typeof v === 'number' || typeof v === 'string') {
-            if (!/io|id|input|output|slot/i.test(String(keyHint || ''))) return;
-            const n = Number(v);
-            if (!Number.isNaN(n) && n >= 0) out.push(n);
-            return;
-        }
-        if (Array.isArray(v)) {
-            v.forEach((x) => this._collectIoIds(x, out, keyHint));
-            return;
-        }
-        if (typeof v !== 'object') return;
-        if (v._error) return;
-        const maybeId = v.io_id ?? v.ioId ?? v.id ?? v.IO;
-        if (maybeId != null) {
-            const n = Number(maybeId);
-            if (!Number.isNaN(n) && n >= 0) out.push(n);
-        }
-        for (const [k, val] of Object.entries(v)) this._collectIoIds(val, out, k);
-    }
-
-    inferDeviceRoutePatchesFromExtendedApi(pb, cap, outputOpts) {
-        if (!pb || !cap || !Array.isArray(outputOpts) || outputOpts.length === 0) return [];
-        const ioById = this.buildIoByIdMap(cap);
-        const ioIdToKey = this.buildIoIdToOutputKeyMap(cap);
-        const validKeys = new Set(outputOpts.map((o) => String(o.key || '')));
-
-        const inIoIdsRaw = [];
-        const outIoIdsRaw = [];
-
-        /* 1) Processblock serialize (direct of genest) */
-        const cfg = this._normalizeProcessBlockSerializeConfig(pb.processblockConfig || pb.meta);
-        if (cfg) {
-            const c = this._coerceProcessBlockIoMaps(cfg.inputs, cfg.outputs);
-            this._collectIoIds(c.inputs, inIoIdsRaw, 'input');
-            this._collectIoIds(c.outputs, outIoIdsRaw, 'output');
-        }
-
-        /* 2) Extra endpoints uit OpenAPI */
-        this._collectIoIds(pb.processblockInputSlots, inIoIdsRaw, 'input');
-        this._collectIoIds(pb.processblockOutputsConfig, outIoIdsRaw, 'output');
-        this._collectIoIds(pb.ioByProcessblockInput, inIoIdsRaw, 'input');
-
-        const inputUniverses = [];
-        for (const ioId of inIoIdsRaw) {
-            const io = ioById.get(Number(ioId));
-            const u = this.universeFromInputIo(io);
-            if (u != null) inputUniverses.push(Number(u));
-        }
-        const uniqIn = [...new Set(inputUniverses)];
-
-        const outputKeys = [];
-        for (const ioId of outIoIdsRaw) {
-            const ok = ioIdToKey.get(Number(ioId));
-            if (ok && validKeys.has(ok)) outputKeys.push(String(ok));
-        }
-        const uniqOut = [...new Set(outputKeys)];
-
-        if (uniqIn.length === 0 || uniqOut.length === 0) return [];
-        const patches = [];
-        for (const u of uniqIn) {
-            for (const ok of uniqOut) patches.push({ sourceUniverse: u, outputKey: ok });
-        }
-        return patches;
-    }
-
-    /**
-     * Fallback: pipeline JSON (sources/outputs blobs) + pipelineRoot-graaf.
-     */
-    inferDeviceRoutePatchesFromPipeline(pb, outputOpts) {
-        if (!pb || !Array.isArray(outputOpts) || outputOpts.length === 0) return [];
-        const patches = [];
-        const tryAdd = (u, key) => {
-            const n = Number(u);
-            if (Number.isNaN(n) || n < 1 || !key) return;
-            patches.push({ sourceUniverse: n, outputKey: String(key) });
-        };
-        const slotU = this.extractOrderedSourceSlots(pb.sources);
-        const outs = this.normalizePipelineOutputsBlob(pb.outputs);
-        outs.forEach((outEntry, oi) => {
-            const outKey = this.resolveOutputKeyForPipelineOutput(outEntry, oi, outputOpts);
-            if (!outKey) return;
-            const slotKeys = [
-                'inputs',
-                'input_slots',
-                'source_slots',
-                'input_indices',
-                'source_indices',
-                'from_slots',
-                'in_slots',
-                'active_sources',
-                'sources',
-                'connected_inputs'
-            ];
-            for (const sk of slotKeys) {
-                const arr = outEntry[sk];
-                if (!Array.isArray(arr)) continue;
-                for (const slot of arr) {
-                    const si = Number(slot);
-                    if (!Number.isNaN(si) && slotU[si] != null) tryAdd(slotU[si], outKey);
-                }
-            }
-            const single = outEntry.input_slot ?? outEntry.input_index ?? outEntry.source_slot;
-            if (single != null && !Number.isNaN(Number(single)) && slotU[Number(single)] != null) {
-                tryAdd(slotU[Number(single)], outKey);
-            }
-        });
-
-        if (pb.pipelineRoot && typeof pb.pipelineRoot === 'object') {
-            this.collectPatchesFromPipelineGraph(pb.pipelineRoot, outputOpts, tryAdd, 0);
-        }
-
-        const seen = new Set();
-        const out = [];
-        for (const p of patches) {
-            const k = `${p.sourceUniverse}→${p.outputKey}`;
-            if (seen.has(k)) continue;
-            seen.add(k);
-            out.push(p);
-        }
-        return out;
-    }
-
-    /**
-     * Eerst OpenAPI processblock (inputs/outputs als io_id), anders pipeline-heuristiek.
-     * Zet route.deviceRouting false om uit te zetten.
-     */
-    inferDeviceRoutePatches(pb, cap, outputOpts) {
-        if (!pb || !cap || !Array.isArray(outputOpts) || outputOpts.length === 0) return [];
-        const fromExtendedApi = this.inferDeviceRoutePatchesFromExtendedApi(pb, cap, outputOpts);
-        if (fromExtendedApi.length > 0) return fromExtendedApi;
-        return this.inferDeviceRoutePatchesFromPipeline(pb, outputOpts);
-    }
-
-    /** Haalt universe-nummers uit het ruwe JSON van pipeline/.../sources (LumiNode). */
-    extractUniversesFromLumiNodeSources(sources) {
-        const out = [];
-        const seen = new Set();
-        const walk = (v, key) => {
-            if (v == null) return;
-            if (typeof v === 'number') {
-                const n = v;
-                if (n >= 1 && n <= 64000 && key && /universe|net|src|source|sacn|dmx|input|port/i.test(String(key))) {
-                    if (!seen.has(n)) {
-                        seen.add(n);
-                        out.push(n);
-                    }
+            const result = await window.electronAPI.ensureLuminexViewer();
+            if (!result?.success || !result.url) {
+                if (errEl) {
+                    errEl.hidden = false;
+                    errEl.textContent = result?.error || 'Lichtsignaal viewer kon niet starten.';
                 }
                 return;
             }
-            if (Array.isArray(v)) {
-                v.forEach((item) => walk(item, key));
-                return;
+            if (errEl) {
+                errEl.hidden = true;
+                errEl.textContent = '';
             }
-            if (typeof v === 'object') {
-                for (const [k, val] of Object.entries(v)) {
-                    walk(val, k);
-                    if (typeof val === 'number' && val >= 1 && val <= 64000) {
-                        if (/universe|net|src|source|sacn|dmx|input|port/i.test(k) && !seen.has(val)) {
-                            seen.add(val);
-                            out.push(val);
-                        }
-                    }
-                }
+            const current = frame.getAttribute('src') || '';
+            if (current !== result.url) {
+                frame.setAttribute('src', result.url);
             }
-        };
-        walk(sources, '');
-        return out.sort((a, b) => a - b);
-    }
-
-    /**
-     * Parseert pipeline/.../sources JSON naar rijen met universe + netwerk/tags uit LumiNode.
-     * Ondersteunt o.a. arrays van universe-nummers en objecten met network/interface/tags.
-     */
-    parseLumiNodeSourcesToRows(sources) {
-        const byU = new Map();
-
-        const mergeNet = (a, b) => {
-            if (!b || !String(b).trim()) return a || '';
-            const t = String(b).trim();
-            if (!a) return t;
-            if (a.includes(t)) return a;
-            return `${a} · ${t}`;
-        };
-
-        const add = (u, opts = {}) => {
-            const n = Number(u);
-            if (Number.isNaN(n) || n < 1 || n > 64000) return;
-            const cur = byU.get(n) || { universe: n, networkTag: '', labelFromDevice: '' };
-            if (opts.networkTag) cur.networkTag = mergeNet(cur.networkTag, opts.networkTag);
-            if (opts.labelFromDevice && String(opts.labelFromDevice).trim() && !cur.labelFromDevice) {
-                cur.labelFromDevice = String(opts.labelFromDevice).trim();
+            if (!frame.dataset.boundResize) {
+                frame.dataset.boundResize = '1';
+                frame.addEventListener('dom-ready', () => this._resizeLuminexViewerFrame());
             }
-            byU.set(n, cur);
-        };
-
-        const parseNum = (v) => {
-            if (typeof v === 'number' && v >= 1 && v <= 64000) return v;
-            if (typeof v === 'string') {
-                const t = v.trim();
-                if (/^\d{1,5}$/.test(t)) {
-                    const n = parseInt(t, 10);
-                    if (n >= 1 && n <= 64000) return n;
-                }
-                const m = t.match(/^(\d+)\s*\.\s*(\d{1,5})$/);
-                if (m) {
-                    const n = parseInt(m[2], 10);
-                    if (n >= 1 && n <= 64000) return n;
-                }
+            requestAnimationFrame(() => this._resizeLuminexViewerFrame());
+            if (!this._luminexViewerResizeBound) {
+                this._luminexViewerResizeBound = true;
+                window.addEventListener('resize', () => this._resizeLuminexViewerFrame());
             }
-            return null;
-        };
-
-        const extractNetworkFromObj = (obj) => {
-            const keys = [
-                'network',
-                'Network',
-                'networkName',
-                'interface',
-                'Interface',
-                'nic',
-                'NIC',
-                'ethernet',
-                'sourceNetwork',
-                'netName',
-                'net',
-                'Net',
-                'iface',
-                'deviceNetwork',
-                'tag',
-                'Tag',
-                'tags',
-                'network_tag',
-                'NetworkTag',
-                'networkTags',
-                'vlan',
-                'ipSubnet',
-                'subnet'
-            ];
-            for (const k of keys) {
-                const v = obj[k];
-                if (v == null) continue;
-                if (Array.isArray(v)) {
-                    const s = v
-                        .map((x) => {
-                            if (x != null && typeof x === 'object' && x.name != null) return String(x.name);
-                            if (x != null && typeof x !== 'object') return String(x);
-                            return '';
-                        })
-                        .filter(Boolean)
-                        .join(', ');
-                    if (s) return s;
-                } else if (typeof v === 'object' && v != null && v.name != null) {
-                    return String(v.name);
-                } else if (typeof v === 'string' || typeof v === 'number') {
-                    return String(v);
-                }
+        } catch (err) {
+            console.error('Luminex viewer laden mislukt:', err);
+            if (errEl) {
+                errEl.hidden = false;
+                errEl.textContent = err?.message || String(err);
             }
-            return '';
-        };
-
-        const extractLabelFromObj = (obj) => {
-            const keys = ['name', 'label', 'sourceName', 'title', 'SourceName', 'displayName', 'shortName', 'description'];
-            for (const k of keys) {
-                if (obj[k] != null && String(obj[k]).trim()) return String(obj[k]).trim();
-            }
-            return '';
-        };
-
-        const extractUniverseFromObj = (obj) => {
-            const keys = [
-                'universe',
-                'Universe',
-                'sourceUniverse',
-                'sacn_universe',
-                'universeId',
-                'uni',
-                'unv',
-                'dmxUniverse',
-                'dmx_universe',
-                'UniverseNumber',
-                'universe_no',
-                'universeNumber'
-            ];
-            for (const k of keys) {
-                if (obj[k] == null) continue;
-                const n = parseNum(obj[k]);
-                if (n != null) return n;
-            }
-            return null;
-        };
-
-        const handleObject = (obj) => {
-            if (!obj || typeof obj !== 'object') return;
-            const u = extractUniverseFromObj(obj);
-            if (u != null) {
-                add(u, {
-                    networkTag: extractNetworkFromObj(obj),
-                    labelFromDevice: extractLabelFromObj(obj)
-                });
-            }
-        };
-
-        const walk = (v, depth) => {
-            if (depth > 48 || v == null) return;
-            if (Array.isArray(v)) {
-                if (
-                    v.length > 0 &&
-                    v.every((x) => typeof x === 'number' && x >= 1 && x <= 64000)
-                ) {
-                    v.forEach((n) => add(n, {}));
-                    return;
-                }
-                v.forEach((item) => walk(item, depth + 1));
-                return;
-            }
-            if (typeof v === 'object') {
-                handleObject(v);
-                for (const [k, val] of Object.entries(v)) {
-                    if (val != null && typeof val === 'object' && !Array.isArray(val)) {
-                        const kn = parseNum(k);
-                        if (kn != null) {
-                            add(kn, {
-                                networkTag: extractNetworkFromObj(val),
-                                labelFromDevice: extractLabelFromObj(val)
-                            });
-                        }
-                    }
-                    walk(val, depth + 1);
-                }
-            }
-        };
-
-        walk(sources, 0);
-        return Array.from(byU.values()).sort((a, b) => a.universe - b.universe);
-    }
-
-    /**
-     * Universes die volgens device-routing (of bronnenlijst) in de gekozen process engine samenkomen — voor HPT-merge-label op sACN-uit.
-     */
-    _computeMergeHtpSourceUniverses(pb, cap) {
-        if (!pb || !cap || !cap.ok) return [];
-        const fullOutputs = this.buildOutputOptionsFromCapabilities(cap);
-        const patches = this.inferDeviceRoutePatches(pb, cap, fullOutputs);
-        const s = new Set();
-        for (const p of patches) {
-            if (p.sourceUniverse != null) s.add(Number(p.sourceUniverse));
-        }
-        let arr = [...s].sort((a, b) => a - b);
-        if (arr.length === 0 && pb.sources && !pb.sources._error) {
-            let dr = this.parseLumiNodeSourcesToRows(pb.sources);
-            if (dr.length === 0) {
-                const nums = this.extractUniversesFromLumiNodeSources(pb.sources);
-                dr = nums.map((u) => ({ universe: u }));
-            }
-            arr = [...new Set(dr.map((x) => Number(x.universe)).filter((u) => !Number.isNaN(u)))].sort((a, b) => a - b);
-        }
-        return arr;
-    }
-
-    /** Merge-modus zoals de LumiNode die meldt (processblock.mode), genormaliseerd naar korte label (HTP/LTP/…). */
-    _formatMergeModeLabel(raw) {
-        if (raw == null || raw === '') return 'HTP';
-        const s = String(raw).trim();
-        const u = s.toUpperCase();
-        if (u.includes('HTP') || u.includes('HIGHEST')) return 'HTP';
-        if (u.includes('LTP') || u.includes('LATEST') || u.includes('LOWEST')) return 'LTP';
-        if (/^[A-Z0-9 _+-]{1,24}$/i.test(s)) return s.length <= 16 ? s.toUpperCase() : u.slice(0, 16);
-        return 'HTP';
-    }
-
-    /**
-     * Vervangt universe-nummers in pipeline/sources-JSON; vermijdt io_id en andere numerieke id's te wijzigen.
-     */
-    applyUniverseMapToPipelineSourcesJson(value, map) {
-        if (value == null) return value;
-        if (Array.isArray(value)) {
-            if (value.length && value.every((x) => typeof x === 'number')) {
-                return value.map((n) => (typeof n === 'number' && map.has(n) ? map.get(n) : n));
-            }
-            return value.map((v) => this.applyUniverseMapToPipelineSourcesJson(v, map));
-        }
-        if (typeof value === 'object') {
-            const o = {};
-            for (const [k, v] of Object.entries(value)) {
-                const kl = String(k).toLowerCase();
-                const universeKey =
-                    /universe|univers|src|source|sacn|net$|input|dmx_port|port_no|rdm/i.test(kl) &&
-                    !/id$|_id|index|slot|count|offset|version|type|class/i.test(kl);
-                if (universeKey && typeof v === 'number' && map.has(v)) {
-                    o[k] = map.get(v);
-                } else {
-                    o[k] = this.applyUniverseMapToPipelineSourcesJson(v, map);
-                }
-            }
-            return o;
-        }
-        return value;
-    }
-
-    /** Invulo-universes per processblock.inputs-io_id (OpenAPI). */
-    _inputUniversesFromProcessblockInputs(inputs, ioById) {
-        const list = [];
-        if (!inputs || typeof inputs !== 'object') return list;
-        for (const ioIdRaw of Object.values(inputs)) {
-            const io = ioById.get(Number(ioIdRaw));
-            const u = this.universeFromInputIo(io);
-            if (u != null) list.push(u);
-        }
-        return [...new Set(list)].sort((a, b) => a - b);
-    }
-
-    /** Zoekt io.id van een sACN-invoerregel met dit universe (zoals in deviceinfo IO-lijst). */
-    findSacnInputIoIdForUniverse(cap, universe) {
-        const u = Number(universe);
-        if (Number.isNaN(u)) return null;
-        const ioList = cap && Array.isArray(cap.io) ? cap.io : [];
-        const scoreRow = (row) => {
-            if (!row || row.id == null) return -1;
-            if (String(row.io_class || '').toLowerCase() !== 'sacn') return -1;
-            if (Number(row.universe) !== u) return -1;
-            const ot = String(row.io_type || '').toLowerCase();
-            if (ot === 'input' || ot === '') return 2;
-            if (ot === 'output') return 0;
-            return 1;
-        };
-        let best = null;
-        let bestScore = -1;
-        for (const row of ioList) {
-            const sc = scoreRow(row);
-            if (sc > bestScore) {
-                bestScore = sc;
-                best = row;
-            }
-        }
-        return best && best.id != null ? Number(best.id) : null;
-    }
-
-    buildMergedSacnInputs(cap, processblockId, scanUniverses) {
-        const scanList = Array.isArray(scanUniverses) ? scanUniverses : [];
-        const scanMap = new Map();
-        for (const u of scanList) {
-            if (u == null || u.universe == null) continue;
-            const n = Number(u.universe);
-            if (!Number.isNaN(n)) scanMap.set(n, u);
-        }
-
-        const scanRowForUniverse = (uni) => {
-            const n = Number(uni);
-            if (Number.isNaN(n)) return null;
-            const direct = scanMap.get(n);
-            if (direct) return direct;
-            for (const x of scanList) {
-                if (x && Number(x.universe) === n) return x;
-            }
-            return null;
-        };
-
-        const isLiveSacn = (s) => {
-            if (!s) return false;
-            if (Number(s.hits) > 0) return true;
-            if (s.sourceName && String(s.sourceName).trim()) return true;
-            if (s.sourceAddress && String(s.sourceAddress).trim()) return true;
-            return false;
-        };
-
-        const rows = [];
-        const seenU = new Set();
-        const sacnOutU = this.getSacnOutputUniversesFromCap(cap);
-        const pb =
-            cap && cap.ok && Array.isArray(cap.processblocks)
-                ? cap.processblocks.find((p) => Number(p.id) === Number(processblockId))
-                : null;
-        const mergeHtpUniverses = this._computeMergeHtpSourceUniverses(pb, cap);
-        const mergeModeLabel = pb ? this._formatMergeModeLabel(pb.meta?.mode ?? pb.processblockConfig?.mode) : 'HTP';
-        if (pb && pb.sources && !pb.sources._error) {
-            let deviceRows = this.parseLumiNodeSourcesToRows(pb.sources);
-            if (deviceRows.length === 0) {
-                const nums = this.extractUniversesFromLumiNodeSources(pb.sources);
-                deviceRows = nums.map((u) => ({ universe: u, networkTag: '', labelFromDevice: '' }));
-            }
-            deviceRows.forEach((dr) => {
-                const u = Number(dr.universe);
-                if (Number.isNaN(u)) return;
-                seenU.add(u);
-                const s = scanRowForUniverse(u);
-                const liveSacn = isLiveSacn(s);
-                const sourceName =
-                    (s && s.sourceName && String(s.sourceName).trim()) ||
-                    (dr.labelFromDevice && String(dr.labelFromDevice).trim()) ||
-                    this.t('luminex.deviceSourceLabel');
-                const row = {
-                    universe: u,
-                    sourceName,
-                    sourceAddress: (s && s.sourceAddress) || '',
-                    networkTag: dr.networkTag || '',
-                    fromDevice: true,
-                    liveSacn,
-                    mergeFromEngine: sacnOutU.has(u)
-                };
-                if (row.mergeFromEngine) {
-                    row.mergeHtpUniverses = mergeHtpUniverses.slice();
-                    row.mergeModeLabel = mergeModeLabel;
-                }
-                rows.push(row);
-            });
-        }
-        scanList.forEach((u) => {
-            if (u == null || u.universe == null) return;
-            const uni = Number(u.universe);
-            if (Number.isNaN(uni)) return;
-            if (!seenU.has(uni)) {
-                const row = {
-                    universe: uni,
-                    sourceName: u.sourceName,
-                    sourceAddress: u.sourceAddress || '',
-                    networkTag: '',
-                    fromDevice: false,
-                    liveSacn: true,
-                    mergeFromEngine: sacnOutU.has(uni)
-                };
-                if (row.mergeFromEngine) {
-                    row.mergeHtpUniverses = mergeHtpUniverses.slice();
-                    row.mergeModeLabel = mergeModeLabel;
-                }
-                rows.push(row);
-            }
-        });
-        rows.sort((a, b) => a.universe - b.universe);
-        return rows.map((r) => ({ ...r, processblockId: Number(processblockId) }));
-    }
-
-    /**
-     * Eén invoerkaart per universe (geen dubbele rijen per process engine); processblockId zit op de patch, niet op de bron.
-     */
-    dedupeMergedSacnInputsAcrossEngines(pbs, cap, scanUniverses) {
-        const byNorm = new Map();
-        const byMerge = new Map();
-        for (const pb of pbs) {
-            const rows = this.buildMergedSacnInputs(cap, pb.id, scanUniverses);
-            for (const r of rows) {
-                const u = Number(r.universe);
-                if (Number.isNaN(u)) continue;
-                if (r.mergeFromEngine) {
-                    if (!byMerge.has(u)) {
-                        const { processblockId: _pb, ...rest } = r;
-                        byMerge.set(u, { ...rest });
-                    } else {
-                        const ex = byMerge.get(u);
-                        if (!ex.fromDevice && r.fromDevice) ex.fromDevice = true;
-                        if (r.liveSacn) ex.liveSacn = true;
-                    }
-                } else if (!byNorm.has(u)) {
-                    const { processblockId: _pb, ...rest } = r;
-                    byNorm.set(u, { ...rest });
-                } else {
-                    const ex = byNorm.get(u);
-                    if (!ex.fromDevice && r.fromDevice) ex.fromDevice = true;
-                    if (r.liveSacn) ex.liveSacn = true;
-                }
-            }
-        }
-        return [...byNorm.values(), ...byMerge.values()].sort((a, b) => Number(a.universe) - Number(b.universe));
-    }
-
-    _updateLuminexRouteStatusFromMatrices() {
-        const patches = this._luminexMatrix?.getRoutePatches?.() || [];
-        const n = patches.filter((p) => p.sourceUniverse != null && p.outputKey).length;
-        this.setLuminexRouteStatus(this.t('luminex.matrixConnectionsStatus', { n: String(n) }));
-    }
-
-    async refreshLuminexMatrixPorts() {
-        this.ensureLuminexMatrix();
-        if (!this._luminexMatrix || !this._luminexMatrix.dynamic) return;
-        const cfg = await this.getLuminexConfigRaw();
-        const preserveLayout = cfg.route && cfg.route.preserveLuminexNodeLayout === true;
-        const nl = cfg.nodeLayout;
-        if (
-            preserveLayout &&
-            nl &&
-            typeof nl === 'object' &&
-            this._luminexMatrix.setNodeLayout
-        ) {
-            if (nl.byProcessblock && typeof nl.byProcessblock === 'object') {
-                const merged = {};
-                for (const v of Object.values(nl.byProcessblock)) {
-                    if (v && typeof v === 'object') Object.assign(merged, v);
-                }
-                this._luminexMatrix.setNodeLayout(merged, true);
-            } else if (!nl.byProcessblock) {
-                this._luminexMatrix.setNodeLayout(nl, true);
-            }
-        }
-        const cap = this._luminexCapabilities;
-        const pbsRaw = cap && cap.ok && Array.isArray(cap.processblocks) ? cap.processblocks : [];
-        const _seenPbId = new Set();
-        const pbs = pbsRaw.filter((pb) => {
-            const id = Number(pb && pb.id);
-            if (Number.isNaN(id) || _seenPbId.has(id)) return false;
-            _seenPbId.add(id);
-            return true;
-        });
-        if (pbs.length > 1 && this._luminexMatrix.setEngineBlockSpecs) {
-            this._luminexMatrix.setEngineBlockSpecs(pbs.map((pb) => ({ id: pb.id, name: pb.name || '' })));
-        } else if (this._luminexMatrix.setEngineBlockSpecs) {
-            this._luminexMatrix.setEngineBlockSpecs(null);
-        }
-        const mergedInputs =
-            pbs.length > 1
-                ? this.dedupeMergedSacnInputsAcrossEngines(pbs, cap, this._luminexSacnUniverses)
-                : pbs.length === 1
-                  ? this.buildMergedSacnInputs(cap, pbs[0].id, this._luminexSacnUniverses)
-                  : [];
-        const fullOutputs =
-            cap && cap.ok ? this.buildOutputOptionsFromCapabilities(cap) : this.buildDefaultLuminexOutputs();
-        const deviceSync = cfg.route?.deviceRouting !== false;
-        const showAllOutputs = cfg.route?.showAllOutputs === true;
-        const allCombined = [];
-        for (const pb of pbs) {
-            const devicePatches =
-                deviceSync && pb
-                    ? this.inferDeviceRoutePatches(pb, cap, fullOutputs).map((p) => ({
-                          ...p,
-                          processblockId: Number(pb.id)
-                      }))
-                    : [];
-            const savedPatches = this._getSavedPatchesForPb(pb.id).map((p) => ({
-                ...p,
-                processblockId: Number(pb.id)
-            }));
-            allCombined.push(...this.mergeRoutePatches(devicePatches, savedPatches));
-        }
-        const usedOutKeys = new Set(allCombined.map((p) => p.outputKey).filter(Boolean));
-        const hideUnused = !showAllOutputs && allCombined.length > 0;
-        const isIoOutputKey = (k) => {
-            const s = String(k || '');
-            return s.startsWith('io:') || s.startsWith('ioarr:');
-        };
-        const outputs = fullOutputs.map((o) => {
-            const key = o.key;
-            const used = key && usedOutKeys.has(key);
-            const hideBecauseUnused = !!(hideUnused && key && !used);
-            /*
-             * Generieke fysieke I/O (cap.io, geen sACN-universe-uitgang) altijd verborgen — ook als
-             * «Toon alle uitgangen» aan staat (die optie geldt voor ongebruikte DMX e.d., niet voor RJ45/I/O-blokken).
-             * sACN-universe als uitgang (io_class sacn, label Universe …) blijft zichtbaar tenzij hideBecauseUnused.
-             */
-            const ioCls = String(o.ioClass || '').toLowerCase();
-            const lab = String(o.label || '').trim();
-            /* Ook als de node io_class=sacn foutief zet op fysieke I/O-poorten (label «I/O 6»). */
-            const looksLikePhysicalIoLabel = /^I\s*\/\s*O\s*\d+/i.test(lab);
-            const hideGenericPhysicalIo = !!(
-                isIoOutputKey(key) &&
-                (ioCls !== 'sacn' || looksLikePhysicalIoLabel)
-            );
-            return {
-                ...o,
-                hidden: hideBecauseUnused || hideGenericPhysicalIo
-            };
-        });
-        if (pbs.length === 1) {
-            const pb = pbs[0];
-            this._luminexMatrix.setEngineSpec({ name: pb.name, id: pb.id });
-        } else {
-            this._luminexMatrix.setEngineSpec({ name: '', id: null });
-        }
-        this._luminexMatrix.setDynamicPorts(mergedInputs, outputs);
-        if (allCombined.length) {
-            this._luminexMatrix.applyPatchesFromRoutes(allCombined);
-        }
-        if (!preserveLayout && typeof this._luminexMatrix.applyAutoStackedLayout === 'function') {
-            this._luminexMatrix.applyAutoStackedLayout();
-        }
-        this._updateLuminexRouteStatusFromMatrices();
-    }
-
-    onLuminexMatrixChange() {
-        this._updateLuminexRouteStatusFromMatrices();
-        if (this._luminexRouteAutoSaveTimer) clearTimeout(this._luminexRouteAutoSaveTimer);
-        this._luminexRouteAutoSaveTimer = setTimeout(() => {
-            this._luminexRouteAutoSaveTimer = null;
-            void this.saveLuminexRoute({ silent: true });
-        }, 550);
-        if (this._luminexNodeSyncTimer) clearTimeout(this._luminexNodeSyncTimer);
-        this._luminexNodeSyncTimer = setTimeout(() => {
-            this._luminexNodeSyncTimer = null;
-            void this.syncLuminodePipelineSources({ silent: true });
-        }, 950);
-    }
-
-    async fetchLuminodeCapabilitiesUI() {
-        const hostEl = document.getElementById('luminexHostInput');
-        const pwEl = document.getElementById('luminexPasswordInput');
-        if (!hostEl || !window.electronAPI?.getLuminodeCapabilities) return;
-        const host = String(hostEl.value || '').trim();
-        if (!host) {
-            this.setLuminexEngineStatus(this.t('luminex.discoverError', { msg: 'host' }));
-            return;
-        }
-        const password = pwEl ? String(pwEl.value || '') : '';
-        this.setLuminexEngineStatus(this.t('luminex.fetchCapLoading'));
-        try {
-            const cap = await window.electronAPI.getLuminodeCapabilities(host, password);
-            this._luminexCapabilities = cap;
-            if (!cap.ok) {
-                this.setLuminexEngineStatus(this.t('luminex.fetchCapError', { msg: (cap.errors && cap.errors[0]) || '?' }));
-                return;
-            }
-            const pbSel = document.getElementById('luminexRouteProcessblock');
-            if (pbSel) {
-                pbSel.innerHTML = '';
-                (cap.processblocks || []).forEach((pb) => {
-                    const opt = document.createElement('option');
-                    opt.value = String(pb.id);
-                    opt.textContent = `${pb.name} (id ${pb.id})`;
-                    pbSel.appendChild(opt);
-                });
-            }
-            const cfg = await this.getLuminexConfigRaw();
-            const r = cfg.route || {};
-            const savedId = r.processblockId != null ? String(r.processblockId) : '';
-            if (pbSel && pbSel.options.length > 0) {
-                if (savedId && [...pbSel.options].some((o) => o.value === savedId)) {
-                    pbSel.value = savedId;
-                } else {
-                    pbSel.selectedIndex = 0;
-                }
-            }
-            this.setLuminexEngineStatus(this.t('luminex.fetchCapDone'));
-            await this.refreshLuminexMatrixPorts();
-        } catch (e) {
-            this.setLuminexEngineStatus(this.t('luminex.fetchCapError', { msg: e.message || String(e) }));
-        }
-    }
-
-    async openLuminodeWebUi() {
-        const hostEl = document.getElementById('luminexHostInput');
-        const host = hostEl && String(hostEl.value || '').trim();
-        if (!host || !window.electronAPI?.openExternal) return;
-        const url = `http://${host}/`;
-        await window.electronAPI.openExternal(url);
-    }
-
-    /** Handmatig: duidelijke status + altijd resultaat tonen (ook «geen wijziging»). */
-    async pushLuminodePatchFromUi() {
-        if (!window.electronAPI?.luminodeFetchJson || !window.electronAPI?.luminodeWriteJson) {
-            this.setLuminexEngineStatus(this.t('luminex.syncSourcesPutError', { detail: 'IPC' }));
-            return;
-        }
-        this.setLuminexEngineStatus(this.t('luminex.syncSourcesWorking'));
-        try {
-            await this.syncLuminodePipelineSources({ silent: false });
-        } catch (e) {
-            this.setLuminexEngineStatus(this.t('luminex.syncSourcesPutError', { detail: e.message || String(e) }));
-        }
-    }
-
-    /**
-     * Eén processblock: pipeline/sources of fallback processblock-PUT.
-     * @returns {'changed'|'noop'|'error'}
-     */
-    async _syncLuminodePipelineSourcesForProcessblock(host, password, cap, pbId) {
-        const all = this._luminexMatrix?.getRoutePatches?.() || [];
-        const pbs = cap && cap.ok && Array.isArray(cap.processblocks) ? cap.processblocks : [];
-        const multi = pbs.length > 1;
-        const patches = all.filter((p) => {
-            if (p.processblockId != null && p.processblockId !== '') {
-                return Number(p.processblockId) === Number(pbId);
-            }
-            /* In multi-engine mogen ongedefinieerde processblock-routes niet impliciet naar engine 1 vallen. */
-            return !multi;
-        });
-        const hasExplicitForPb = all.some(
-            (p) => p.processblockId != null && p.processblockId !== '' && Number(p.processblockId) === Number(pbId)
-        );
-        if (multi && !hasExplicitForPb) {
-            return 'noop';
-        }
-        const rows = this.buildMergedSacnInputs(cap, pbId, this._luminexSacnUniverses);
-        const mergeOut = new Set(rows.filter((x) => x.mergeFromEngine).map((x) => Number(x.universe)));
-        const desired = [];
-        for (const p of patches) {
-            const u = Number(p.sourceUniverse);
-            if (Number.isNaN(u)) continue;
-            if (mergeOut.has(u)) continue;
-            desired.push(u);
-        }
-        const desiredUnis = [...new Set(desired)].sort((a, b) => a - b);
-
-        const pathSources = `pipeline/processblock/${pbId}/sources`;
-        const res = await window.electronAPI.luminodeFetchJson({ host, password, path: pathSources });
-        if (!res || !res.ok || res.data == null) {
-            this.setLuminexEngineStatus(this.t('luminex.syncSourcesError', { detail: (res && res.error) || '?' }));
-            return 'error';
-        }
-
-        const srcRows = this.parseLumiNodeSourcesToRows(res.data);
-        let currentUnis =
-            srcRows.length > 0
-                ? [...new Set(srcRows.map((r) => Number(r.universe)).filter((n) => !Number.isNaN(n)))].sort(
-                      (a, b) => a - b
-                  )
-                : this.extractUniversesFromLumiNodeSources(res.data).sort((a, b) => a - b);
-
-        if (currentUnis.length !== desiredUnis.length) {
-            this.setLuminexEngineStatus(
-                this.t('luminex.syncSourcesCountMismatch', {
-                    current: String(currentUnis.length),
-                    desired: String(desiredUnis.length)
-                })
-            );
-            return 'error';
-        }
-        const same =
-            currentUnis.length === desiredUnis.length && currentUnis.every((v, i) => v === desiredUnis[i]);
-        if (same) {
-            return 'noop';
-        }
-
-        const map = new Map();
-        for (let i = 0; i < currentUnis.length; i++) {
-            map.set(currentUnis[i], desiredUnis[i]);
-        }
-
-        const newSourcesBody = this.applyUniverseMapToPipelineSourcesJson(res.data, map);
-        let put = await window.electronAPI.luminodeWriteJson({
-            host,
-            password,
-            path: pathSources,
-            body: newSourcesBody,
-            method: 'PUT'
-        });
-        if (!put || !put.ok) {
-            put = await window.electronAPI.luminodeWriteJson({
-                host,
-                password,
-                path: pathSources,
-                body: newSourcesBody,
-                method: 'POST'
-            });
-        }
-
-        if (put && put.ok) {
-            return 'changed';
-        }
-
-        const resPb = await window.electronAPI.luminodeFetchJson({ host, password, path: `processblock/${pbId}` });
-        if (!resPb || !resPb.ok || resPb.data == null) {
-            this.setLuminexEngineStatus(
-                this.t('luminex.syncSourcesPutError', {
-                    detail: (put && put.error) || '?'
-                })
-            );
-            return 'error';
-        }
-
-        const rawPb = resPb.data;
-        const cfg = rawPb.processblockConfig != null ? rawPb.processblockConfig : rawPb;
-        const inputs = cfg && cfg.inputs;
-        const ioById = this.buildIoByIdMap(cap);
-        if (!inputs || typeof inputs !== 'object') {
-            this.setLuminexEngineStatus(this.t('luminex.syncSourcesPutError', { detail: (put && put.error) || '?' }));
-            return 'error';
-        }
-
-        const currentPbUnis = this._inputUniversesFromProcessblockInputs(inputs, ioById);
-        if (currentPbUnis.length !== desiredUnis.length) {
-            this.setLuminexEngineStatus(
-                this.t('luminex.syncSourcesCountMismatch', {
-                    current: String(currentPbUnis.length),
-                    desired: String(desiredUnis.length)
-                })
-            );
-            return 'error';
-        }
-        const mapPb = new Map();
-        for (let i = 0; i < currentPbUnis.length; i++) {
-            mapPb.set(currentPbUnis[i], desiredUnis[i]);
-        }
-
-        const out = JSON.parse(JSON.stringify(rawPb));
-        const outCfg = out.processblockConfig != null ? out.processblockConfig : out;
-        const newInputs = { ...outCfg.inputs };
-        for (const [slot, ioIdRaw] of Object.entries(outCfg.inputs)) {
-            const ioId = Number(ioIdRaw);
-            const io = ioById.get(ioId);
-            const u = this.universeFromInputIo(io);
-            if (u == null || !mapPb.has(u)) continue;
-            const targetU = mapPb.get(u);
-            if (targetU === u) continue;
-            const newIoId = this.findSacnInputIoIdForUniverse(cap, targetU);
-            if (newIoId == null) {
-                this.setLuminexEngineStatus(this.t('luminex.syncSourcesNoIo', { u: String(targetU) }));
-                return 'error';
-            }
-            newInputs[slot] = newIoId;
-        }
-        const inputsChanged = Object.keys(newInputs).some(
-            (slot) => Number(newInputs[slot]) !== Number(outCfg.inputs[slot])
-        );
-        if (!inputsChanged) {
-            this.setLuminexEngineStatus(this.t('luminex.syncSourcesReadOnly'));
-            return 'error';
-        }
-        if (out.processblockConfig != null) {
-            out.processblockConfig = { ...outCfg, inputs: newInputs };
-        } else {
-            out.inputs = newInputs;
-        }
-
-        let putPb = await window.electronAPI.luminodeWriteJson({
-            host,
-            password,
-            path: `processblock/${pbId}`,
-            body: out,
-            method: 'PUT'
-        });
-        if (!putPb || !putPb.ok) {
-            putPb = await window.electronAPI.luminodeWriteJson({
-                host,
-                password,
-                path: `processblock/${pbId}`,
-                body: out,
-                method: 'POST'
-            });
-        }
-        if (!putPb || !putPb.ok) {
-            this.setLuminexEngineStatus(
-                this.t('luminex.syncSourcesPutError', { detail: (putPb && putPb.error) || (put && put.error) || '?' })
-            );
-            return 'error';
-        }
-        return 'changed';
-    }
-
-    /**
-     * Schrijft naar de LumiNode: eerst pipeline/sources (als de firmware dat toestaat), anders PUT processblock/{id}
-     * met hergemapte inputs-io_id's (OpenAPI). Zelfde aantal bronnen; pairwise op gesorteerde universe-lijsten.
-     * @param {{ silent?: boolean }} [opts] — bij silent: geen succes- of «geen wijziging»-melding (wel fouten).
-     */
-    async syncLuminodePipelineSources(opts = {}) {
-        const silent = opts && opts.silent === true;
-        try {
-            const prev = await this.getLuminexConfigRaw();
-            const r = prev.route && typeof prev.route === 'object' ? prev.route : {};
-            if (r.syncPipelineSources === false) return;
-        } catch (_) {
-            /* ignore */
-        }
-
-        if (!window.electronAPI?.luminodeFetchJson || !window.electronAPI?.luminodeWriteJson) {
-            if (!silent) this.setLuminexEngineStatus(this.t('luminex.syncSourcesPutError', { detail: 'IPC' }));
-            return;
-        }
-        const hostEl = document.getElementById('luminexHostInput');
-        const pwEl = document.getElementById('luminexPasswordInput');
-        const host = hostEl && String(hostEl.value || '').trim();
-        if (!host) {
-            if (!silent) this.setLuminexEngineStatus(this.t('luminex.discoverError', { msg: 'host' }));
-            return;
-        }
-        const password = pwEl ? String(pwEl.value || '') : '';
-
-        const cap = this._luminexCapabilities;
-        if (!cap || !cap.ok) {
-            this.setLuminexEngineStatus(this.t('luminex.syncNeedsCapabilities'));
-            return;
-        }
-        const pbs = Array.isArray(cap.processblocks) ? cap.processblocks : [];
-        if (!pbs.length || !this._luminexMatrix) {
-            if (!silent) this.setLuminexEngineStatus(this.t('luminex.saveRouteRequiresEngine'));
-            return;
-        }
-
-        let anyChanged = false;
-        for (const pb of pbs) {
-            const outcome = await this._syncLuminodePipelineSourcesForProcessblock(host, password, cap, pb.id);
-            if (outcome === 'error') return;
-            if (outcome === 'changed') anyChanged = true;
-        }
-
-        if (anyChanged) {
-            try {
-                await this.fetchLuminodeCapabilitiesUI();
-            } catch (_) {
-                await this.refreshLuminexMatrixPorts();
-            }
-        }
-        if (!silent) {
-            if (anyChanged) this.setLuminexEngineStatus(this.t('luminex.syncSourcesOk'));
-            else this.setLuminexEngineStatus(this.t('luminex.syncSourcesNoChange'));
-        }
-    }
-
-    async saveLuminexRoute(opts = {}) {
-        const silent = opts && opts.silent === true;
-        if (!this._luminexMatrix) {
-            if (!silent) this.setLuminexRouteStatus(this.t('luminex.saveRouteRequiresEngine'));
-            return;
-        }
-        const patchesRaw = this._luminexMatrix.getRoutePatches?.() || [];
-        const cap = this._luminexCapabilities;
-        const defaultPb =
-            cap && cap.ok && Array.isArray(cap.processblocks) && cap.processblocks[0]
-                ? String(cap.processblocks[0].id)
-                : '0';
-        const patchesByProcessblock = {};
-        for (const p of patchesRaw) {
-            if (p.sourceUniverse == null || !p.outputKey) continue;
-            const pid = p.processblockId != null ? String(p.processblockId) : defaultPb;
-            if (!patchesByProcessblock[pid]) patchesByProcessblock[pid] = [];
-            patchesByProcessblock[pid].push({
-                sourceUniverse: Number(p.sourceUniverse),
-                outputKey: String(p.outputKey)
-            });
-        }
-        const firstPid = Object.keys(patchesByProcessblock).sort()[0] || defaultPb;
-        const firstPatches = patchesByProcessblock[firstPid] || [];
-        const first = firstPatches[0];
-        const processblockId = firstPid ? Number(firstPid) : null;
-        const prev = await this.getLuminexConfigRaw();
-        const prevRoute = prev.route && typeof prev.route === 'object' ? prev.route : {};
-        const prevNl = prev.nodeLayout && typeof prev.nodeLayout === 'object' ? prev.nodeLayout : {};
-        const { byProcessblock: _b, ...restNl } = prevNl;
-        const flatLayout = this._luminexMatrix.getNodeLayout?.() || {};
-        const nodeLayout = { ...restNl, ...flatLayout };
-        const res = await window.electronAPI.saveConfig('luminex', {
-            ...prev,
-            nodeLayout,
-            route: {
-                ...prevRoute,
-                patches: firstPatches,
-                patchesByProcessblock,
-                processblockId: processblockId != null && !Number.isNaN(processblockId) ? processblockId : null,
-                sourceUniverse: first ? first.sourceUniverse : null,
-                outputKey: first ? first.outputKey : null,
-                updatedAt: Date.now()
-            }
-        });
-        if (res && res.success === false) {
-            this.setLuminexRouteStatus(this.t('luminex.discoverError', { msg: res.error || 'save' }));
-            return;
-        }
-        this._luminexRoutePatchesByPb = { ...patchesByProcessblock };
-        if (!silent) this.setLuminexRouteStatus(this.t('luminex.routeSaved'));
-    }
-
-    renderLuminexDeviceList(devices) {
-        const ul = document.getElementById('luminexDeviceList');
-        if (!ul) return;
-        ul.innerHTML = '';
-        (devices || []).forEach((d) => {
-            const ip =
-                d.ipv4 ||
-                (Array.isArray(d.addresses) ? d.addresses.find((a) => a && typeof a === 'string' && !a.includes(':')) : null) ||
-                (Array.isArray(d.addresses) ? d.addresses[0] : null);
-            if (!ip) return;
-            const li = document.createElement('li');
-            li.className = 'luminex-device-item';
-            const b = document.createElement('button');
-            b.type = 'button';
-            b.className = 'btn btn-secondary btn-sm luminex-device-pick';
-            b.setAttribute('data-ip', ip);
-            const label = d.name || 'LumiNode';
-            b.textContent = `${label} — ${ip}`;
-            b.title = this.t('luminex.pickDevice');
-            li.appendChild(b);
-            ul.appendChild(li);
-        });
-    }
-
-    async runLuminodeDiscovery() {
-        if (!window.electronAPI?.discoverLuminodes) {
-            this.setLuminexDiscoveryStatus(this.t('luminex.discoverUnavailable'));
-            return;
-        }
-        if (this._luminexDiscoveryRunning) return;
-        this._luminexDiscoveryRunning = true;
-        const btn = document.getElementById('luminexDiscoverBtn');
-        if (btn) btn.disabled = true;
-        this.setLuminexDiscoveryStatus(this.t('luminex.discovering'));
-        try {
-            const res = await window.electronAPI.discoverLuminodes();
-            if (!res || !res.ok) {
-                this.setLuminexDiscoveryStatus(this.t('luminex.discoverError', { msg: (res && res.error) || '?' }));
-                this.renderLuminexDeviceList([]);
-                return;
-            }
-            const devs = res.devices || [];
-            this.renderLuminexDeviceList(devs);
-            if (devs.length === 0) {
-                this.setLuminexDiscoveryStatus(this.t('luminex.discoverEmpty'));
-            } else {
-                this.setLuminexDiscoveryStatus(this.t('luminex.discoverDone', { n: devs.length }));
-            }
-        } catch (e) {
-            this.setLuminexDiscoveryStatus(this.t('luminex.discoverError', { msg: e.message || String(e) }));
-        } finally {
-            this._luminexDiscoveryRunning = false;
-            if (btn) btn.disabled = false;
         }
     }
 
@@ -7271,6 +6046,7 @@ class TheaterDashboard {
         this.currentView = 'luminex';
         this.hideVoorstellingTimerShell();
         this.hideOscMonitorShell();
+        this.hideTrekkenlijstenShell();
 
         const weekWrapper = document.getElementById('weekViewWrapper');
         const homeContainer = document.getElementById('homeViewContainer');
@@ -7280,17 +6056,21 @@ class TheaterDashboard {
         if (weekWrapper) weekWrapper.style.display = 'none';
         if (homeContainer) homeContainer.style.display = 'none';
         if (detailWrapper) detailWrapper.style.display = 'none';
-        if (luminexWrapper) luminexWrapper.style.display = 'block';
+        if (luminexWrapper) luminexWrapper.style.display = 'flex';
         if (homeStatus) homeStatus.style.display = 'none';
 
         document.getElementById('weekBtn')?.classList.remove('active');
         document.getElementById('homeBtn')?.classList.remove('active');
         document.getElementById('voorstellingTimerBtn')?.classList.remove('active');
+        document.getElementById('trekkenlijstenNavBtn')?.classList.remove('active');
+        document.getElementById('oscMonitorNavBtn')?.classList.remove('active');
         document.getElementById('luminexNavBtn')?.classList.add('active');
 
         document.body.classList.remove('home-view-active');
         document.body.classList.remove('week-view-active');
         document.body.classList.remove('voorstelling-timer-active');
+        document.body.classList.remove('trekkenlijsten-active');
+        document.body.classList.remove('osc-monitor-active');
         document.body.classList.add('luminex-view-active');
 
         const techOverviewBtn = document.getElementById('techOverviewBtn');
@@ -7298,22 +6078,16 @@ class TheaterDashboard {
 
         const dateSelector = document.querySelector('.date-selector');
         const venueSelector = document.querySelector('.venue-selector');
-        if (dateSelector) {
-            dateSelector.style.display = 'flex';
-            dateSelector.style.visibility = 'visible';
-        }
-        if (venueSelector) {
-            venueSelector.style.display = 'block';
-            venueSelector.style.visibility = 'visible';
-        }
+        if (dateSelector) dateSelector.style.display = 'none';
+        if (venueSelector) venueSelector.style.display = 'none';
 
-        this.ensureLuminexMatrix();
+        await this.ensureLuminexViewerFrame();
         this.refreshLuminexChrome();
-        await this.loadLuminexConfigIntoUI();
-        await this.fetchLuminodeCapabilitiesUI();
-        void this.runLuminodeDiscovery();
-        await this.runSacnDiscovery();
         this.updateBackButtonVisibility();
+        requestAnimationFrame(() => {
+            this._resizeLuminexViewerFrame();
+            requestAnimationFrame(() => this._resizeLuminexViewerFrame());
+        });
     }
 
     async showOscMonitorView() {
@@ -7327,12 +6101,14 @@ class TheaterDashboard {
         this.currentView = 'oscMonitor';
         this.hideVoorstellingTimerShell();
         this.hideLuminexShell();
+        this.hideTrekkenlijstenShell();
 
         const weekWrapper = document.getElementById('weekViewWrapper');
         const homeContainer = document.getElementById('homeViewContainer');
         const detailWrapper = document.getElementById('detailViewWrapper');
         const timerWrapper = document.getElementById('voorstellingTimerWrapper');
         const luminexWrapper = document.getElementById('luminexViewWrapper');
+        const trekWrapper = document.getElementById('trekkenlijstenWrapper');
         const oscWrapper = document.getElementById('oscMonitorWrapper');
         const homeStatus = document.getElementById('homeViewStatus');
         if (weekWrapper) weekWrapper.style.display = 'none';
@@ -7340,6 +6116,7 @@ class TheaterDashboard {
         if (detailWrapper) detailWrapper.style.display = 'none';
         if (timerWrapper) timerWrapper.style.display = 'none';
         if (luminexWrapper) luminexWrapper.style.display = 'none';
+        if (trekWrapper) trekWrapper.style.display = 'none';
         if (oscWrapper) oscWrapper.style.display = 'block';
         if (homeStatus) homeStatus.style.display = 'none';
 
@@ -7347,12 +6124,14 @@ class TheaterDashboard {
         document.getElementById('homeBtn')?.classList.remove('active');
         document.getElementById('voorstellingTimerBtn')?.classList.remove('active');
         document.getElementById('luminexNavBtn')?.classList.remove('active');
+        document.getElementById('trekkenlijstenNavBtn')?.classList.remove('active');
         document.getElementById('oscMonitorNavBtn')?.classList.add('active');
 
         document.body.classList.remove('home-view-active');
         document.body.classList.remove('week-view-active');
         document.body.classList.remove('voorstelling-timer-active');
         document.body.classList.remove('luminex-view-active');
+        document.body.classList.remove('trekkenlijsten-active');
         document.body.classList.add('osc-monitor-active');
 
         const techOverviewBtn = document.getElementById('techOverviewBtn');
@@ -7360,15 +6139,11 @@ class TheaterDashboard {
 
         const dateSelector = document.querySelector('.date-selector');
         const venueSelector = document.querySelector('.venue-selector');
-        if (dateSelector) {
-            dateSelector.style.display = 'flex';
-            dateSelector.style.visibility = 'visible';
-        }
-        if (venueSelector) {
-            venueSelector.style.display = 'block';
-            venueSelector.style.visibility = 'visible';
-        }
+        if (dateSelector) dateSelector.style.display = 'none';
+        if (venueSelector) venueSelector.style.display = 'none';
 
+        await this.refreshNetworkInterfaceOptions();
+        this.syncOscMonitorInterfaceSelect();
         this.renderOscMonitorEntries();
         this.updateBackButtonVisibility();
     }
@@ -7378,6 +6153,7 @@ class TheaterDashboard {
             clearInterval(this._voorstellingTimerClockInterval);
             this._voorstellingTimerClockInterval = null;
         }
+        this.stopVoorstellingTimerSyncPoll();
     }
 
     createEmptyVoorstellingSlotState() {
@@ -7446,6 +6222,547 @@ class TheaterDashboard {
         return `${dateStr}|${venue}|${evKey}`;
     }
 
+    normalizeShiftHappensApiBase(raw) {
+        let t = String(raw || '').trim();
+        if (!t) return '';
+        if (!/^https?:\/\//i.test(t)) t = `http://${t}`;
+        try {
+            const u = new URL(t);
+            const host = u.hostname.toLowerCase();
+            if (host.indexOf('yesplan') !== -1) return '';
+            const p = (u.pathname || '').toLowerCase();
+            if (p.indexOf('zaalplattegrond') !== -1 || p.indexOf('uitvoeringinfo') !== -1) return '';
+            const pathPart = u.pathname === '/' ? '' : u.pathname.replace(/\/$/, '');
+            return u.origin + pathPart;
+        } catch {
+            return '';
+        }
+    }
+
+    getCloudflareAccessHeaders() {
+        const id = String(
+            this.config?.app?.cloudflareAccessClientId
+            || localStorage.getItem('SHIFT_HAPPENS_ACCESS_CLIENT_ID')
+            || ''
+        ).trim();
+        const secret = String(
+            this.config?.app?.cloudflareAccessClientSecret
+            || localStorage.getItem('SHIFT_HAPPENS_ACCESS_CLIENT_SECRET')
+            || ''
+        ).trim();
+        if (!id || !secret) return {};
+        return {
+            'CF-Access-Client-Id': id,
+            'CF-Access-Client-Secret': secret
+        };
+    }
+
+    getShiftAuthToken() {
+        return String(
+            this.config?.app?.shiftAuthToken
+            || localStorage.getItem('SHIFT_HAPPENS_AUTH_TOKEN')
+            || ''
+        ).trim();
+    }
+
+    getShiftClientLabel() {
+        if (window.__SHIFT_HAPPENS_MOBILE__) return 'iphone';
+        if (window.electronAPI && !window.__SHIFT_HAPPENS_MOBILE__) return 'desktop';
+        return 'web';
+    }
+
+    syncShiftAuthToStorage() {
+        const token = String(this.config?.app?.shiftAuthToken || '').trim();
+        if (token) localStorage.setItem('SHIFT_HAPPENS_AUTH_TOKEN', token);
+        else localStorage.removeItem('SHIFT_HAPPENS_AUTH_TOKEN');
+    }
+
+    syncCloudflareAccessToStorage() {
+        const id = String(this.config?.app?.cloudflareAccessClientId || '').trim();
+        const secret = String(this.config?.app?.cloudflareAccessClientSecret || '').trim();
+        if (id) localStorage.setItem('SHIFT_HAPPENS_ACCESS_CLIENT_ID', id);
+        else localStorage.removeItem('SHIFT_HAPPENS_ACCESS_CLIENT_ID');
+        if (secret) localStorage.setItem('SHIFT_HAPPENS_ACCESS_CLIENT_SECRET', secret);
+        else localStorage.removeItem('SHIFT_HAPPENS_ACCESS_CLIENT_SECRET');
+    }
+
+    fetchShiftHappensApi(url, options = {}) {
+        const headers = {
+            ...this.getCloudflareAccessHeaders(),
+            'X-Shift-Client': this.getShiftClientLabel(),
+            'X-Shift-View': String(this.currentView || 'home'),
+            ...(options.headers || {})
+        };
+        const token = this.getShiftAuthToken();
+        if (token) headers.Authorization = `Bearer ${token}`;
+        return fetch(url, { ...options, headers });
+    }
+
+    startShiftPresenceHeartbeat() {
+        this.stopShiftPresenceHeartbeat();
+        if (!this.getShiftAuthToken()) return;
+        const ping = () => { void this.pingShiftPresence(); };
+        ping();
+        this._shiftPresenceInterval = setInterval(ping, 10000);
+    }
+
+    stopShiftPresenceHeartbeat() {
+        if (this._shiftPresenceInterval) {
+            clearInterval(this._shiftPresenceInterval);
+            this._shiftPresenceInterval = null;
+        }
+    }
+
+    async loginShiftServer(email, password) {
+        const raw = String(document.getElementById('shiftServerBaseUrlInput')?.value || '').trim();
+        let base = this.normalizeShiftHappensApiBase(raw);
+        if (!base && window.__SHIFT_HAPPENS_MOBILE__) {
+            base = this.getShiftHappensApiBase();
+        }
+        if (!base) throw new Error('Vul eerst een server-URL in.');
+        const r = await fetch(`${base.replace(/\/$/, '')}/api/auth/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Shift-Client': this.getShiftClientLabel(),
+                ...this.getCloudflareAccessHeaders()
+            },
+            body: JSON.stringify({ email, password })
+        });
+        const j = await r.json().catch(() => ({}));
+        if (!r.ok || !j?.success || !j.token) {
+            throw new Error(j?.error === 'INVALID_CREDENTIALS' ? 'Onjuist e-mailadress of wachtwoord.' : (j?.error || 'Inloggen mislukt'));
+        }
+        if (!this.config.app) this.config.app = {};
+        this.config.app.shiftAuthToken = j.token;
+        this.config.app.shiftAuthEmail = j.user?.email || email;
+        this.config.app.shiftServerBaseUrl = base;
+        if (window.electronAPI?.saveConfig) {
+            await window.electronAPI.saveConfig('app', {
+                ...this.config.app,
+                shiftAuthToken: j.token,
+                shiftAuthEmail: j.user?.email || email,
+                shiftServerBaseUrl: base
+            });
+        }
+        this.syncShiftAuthToStorage();
+        await this.pingShiftPresence();
+        this.startShiftPresenceHeartbeat();
+        this.updateShiftAuthPasswordField();
+        void this.refreshApiServerStatus();
+        return j;
+    }
+
+    async logoutShiftServer() {
+        this.stopShiftPresenceHeartbeat();
+        if (!this.config.app) this.config.app = {};
+        delete this.config.app.shiftAuthToken;
+        if (window.electronAPI?.saveConfig) {
+            const next = { ...this.config.app };
+            delete next.shiftAuthToken;
+            await window.electronAPI.saveConfig('app', next);
+        }
+        localStorage.removeItem('SHIFT_HAPPENS_AUTH_TOKEN');
+        const pwd = document.getElementById('shiftAuthPasswordInput');
+        if (pwd) {
+            pwd.value = '';
+            pwd.placeholder = '';
+        }
+        this.updateShiftAuthPasswordField();
+        await this.refreshShiftAuthStatusLine();
+        this.updateShiftAuthPasswordField();
+        await this.refreshTimerSyncStatusLine();
+        void this.refreshApiServerStatus();
+    }
+
+    updateShiftAuthPasswordField() {
+        const el = document.getElementById('shiftAuthPasswordInput');
+        if (!el) return;
+        el.type = 'password';
+        if (this.getShiftAuthToken() && !String(el.value || '').length) {
+            el.placeholder = '••••••••';
+        } else if (!this.getShiftAuthToken()) {
+            el.placeholder = '';
+        }
+    }
+
+    async refreshShiftAuthStatusLine() {
+        const el = document.getElementById('shiftAuthStatusLine');
+        if (!el) return;
+        const token = this.getShiftAuthToken();
+        let base = this.resolveShiftServerBaseUrl();
+        if (!base && window.__SHIFT_HAPPENS_MOBILE__) base = this.getShiftHappensApiBase();
+        if (!token) {
+            el.textContent = base ? 'Niet ingelogd.' : 'Vul server-URL in en log in.';
+            this.updateShiftAuthPasswordField();
+            return;
+        }
+        const email = this.config?.app?.shiftAuthEmail || '';
+        if (!base) {
+            el.textContent = email ? `Ingelogd als ${email}.` : 'Ingelogd.';
+            this.updateShiftAuthPasswordField();
+            return;
+        }
+        try {
+            const r = await this.fetchShiftHappensApi(`${base.replace(/\/$/, '')}/api/health`);
+            const j = await r.json().catch(() => ({}));
+            if (r.ok && j?.ok) {
+                el.textContent = email ? `Verbonden als ${email}.` : 'Verbonden met server.';
+            } else if (r.status === 401) {
+                el.textContent = 'Sessie verlopen — opnieuw inloggen.';
+            } else {
+                el.textContent = email ? `Ingelogd als ${email}, server niet bereikbaar.` : 'Server niet bereikbaar.';
+            }
+        } catch {
+            el.textContent = email ? `Ingelogd als ${email}, server niet bereikbaar.` : 'Server niet bereikbaar.';
+        }
+        this.updateShiftAuthPasswordField();
+    }
+
+    /** Timer sync volgt automatisch op Shift-server login (geen aparte schakelaar). */
+    isTimerSyncEnabled() {
+        return !!(this.getShiftAuthToken() && this.getShiftServerBaseUrl());
+    }
+
+    /** Centrale Shift-server URL (sync, login, gedeelde functies). */
+    getShiftServerBaseUrl() {
+        const fromConfig = String(
+            this.config?.app?.shiftServerBaseUrl
+            || this.config?.app?.timerSyncBaseUrl
+            || ''
+        ).trim();
+        let raw = fromConfig;
+        if (!raw && window.__SHIFT_HAPPENS_MOBILE__) {
+            raw = window.SHIFT_HAPPENS_API_BASE || localStorage.getItem('SHIFT_HAPPENS_API_BASE') || '';
+        }
+        return this.normalizeShiftHappensApiBase(raw);
+    }
+
+    /** URL uit formulierveld of opgeslagen config (voor pings/status). */
+    resolveShiftServerBaseUrl() {
+        const fromInput = this.normalizeShiftHappensApiBase(
+            String(document.getElementById('shiftServerBaseUrlInput')?.value || '').trim()
+        );
+        if (fromInput) return fromInput;
+        return this.getShiftServerBaseUrl();
+    }
+
+    getTimerSyncBaseUrl() {
+        if (!this.isTimerSyncEnabled()) return '';
+        return this.getShiftServerBaseUrl();
+    }
+
+    async fetchTimerSyncSnapshot(key) {
+        const base = this.getTimerSyncBaseUrl();
+        if (!base || !key) return null;
+        try {
+            const url = `${base.replace(/\/$/, '')}/api/voorstelling-timer/snapshot/${encodeURIComponent(key)}`;
+            const r = await this.fetchShiftHappensApi(url);
+            if (!r.ok) return null;
+            const j = await r.json();
+            if (!j?.success || !j.slots) return null;
+            return { slots: j.slots, updatedAt: j.updatedAt || null };
+        } catch (e) {
+            console.warn('Timer sync ophalen mislukt:', e);
+            return null;
+        }
+    }
+
+    async pushTimerSyncSnapshot({ key, slots, updatedAt, baseUpdatedAt }) {
+        const base = this.getTimerSyncBaseUrl();
+        if (!base || !key) return { ok: false };
+        try {
+            const url = `${base.replace(/\/$/, '')}/api/voorstelling-timer/snapshot`;
+            const r = await this.fetchShiftHappensApi(url, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ key, slots, updatedAt, baseUpdatedAt: baseUpdatedAt || null })
+            });
+            const j = await r.json().catch(() => ({}));
+            if (r.status === 409 && j?.conflict) {
+                return { ok: false, conflict: true, slots: j.slots, updatedAt: j.updatedAt };
+            }
+            if (!r.ok || !j?.success) return { ok: false };
+            return { ok: true, updatedAt: j.updatedAt || updatedAt };
+        } catch (e) {
+            console.warn('Timer sync pushen mislukt:', e);
+            return { ok: false };
+        }
+    }
+
+    isTrekkenlijstSyncEnabled() {
+        return !!(this.getShiftAuthToken() && this.getShiftServerBaseUrl());
+    }
+
+    getTrekkenlijstSyncBaseUrl() {
+        if (!this.isTrekkenlijstSyncEnabled()) return '';
+        return this.getShiftServerBaseUrl();
+    }
+
+    mergeTrekkenlijstSyncStateIntoItems() {
+        const state = this._trekkenlijstSyncState || {};
+        for (const item of this._trekkenlijstenItems || []) {
+            const s = state[item.syncKey];
+            if (s) {
+                item.verwerkt = !!s.verwerkt;
+                item.comment = s.comment || '';
+                item.syncUpdatedAt = s.updatedAt || null;
+                item.verwerktBy = s.verwerktBy || null;
+                item.commentBy = s.commentBy || null;
+            }
+        }
+    }
+
+    async fetchTrekkenlijstSyncItems() {
+        const base = this.getTrekkenlijstSyncBaseUrl();
+        if (!base) return null;
+        try {
+            const url = `${base.replace(/\/$/, '')}/api/trekkenlijst/items`;
+            const r = await this.fetchShiftHappensApi(url, { cache: 'no-store' });
+            if (!r.ok) return null;
+            const j = await r.json();
+            if (!j?.success || !j.items) return null;
+            return j.items;
+        } catch (e) {
+            console.warn('Trekkenlijst sync ophalen mislukt:', e);
+            return null;
+        }
+    }
+
+    async pushTrekkenlijstSyncItem(payload) {
+        const base = this.getTrekkenlijstSyncBaseUrl();
+        if (!base || !payload?.key) return { ok: false };
+        try {
+            const url = `${base.replace(/\/$/, '')}/api/trekkenlijst/item`;
+            const r = await this.fetchShiftHappensApi(url, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const j = await r.json().catch(() => ({}));
+            if (r.status === 409 && j?.conflict) {
+                return { ok: false, conflict: true, item: j.item, updatedAt: j.item?.updatedAt || null };
+            }
+            if (!r.ok || !j?.success) return { ok: false };
+            return { ok: true, item: j.item || null, updatedAt: j.updatedAt || null };
+        } catch (e) {
+            console.warn('Trekkenlijst sync pushen mislukt:', e);
+            return { ok: false };
+        }
+    }
+
+    async refreshTrekkenlijstSyncFromServer(forceMerge = false) {
+        if (!this.isTrekkenlijstSyncEnabled()) return;
+        const items = await this.fetchTrekkenlijstSyncItems();
+        if (!items) return;
+        const knownKeys = new Set((this._trekkenlijstenItems || []).map((i) => i.syncKey));
+        let changed = forceMerge;
+        for (const [key, val] of Object.entries(items)) {
+            if (!knownKeys.has(key)) continue;
+            const prev = this._trekkenlijstSyncState[key];
+            const prevTs = Date.parse(prev?.updatedAt || '') || 0;
+            const nextTs = Date.parse(val?.updatedAt || '') || 0;
+            if (!prev || nextTs > prevTs) {
+                this._trekkenlijstSyncState[key] = val;
+                changed = true;
+            }
+        }
+        if (changed) {
+            this.mergeTrekkenlijstSyncStateIntoItems();
+            if (this.currentView === 'trekkenlijsten') this.renderTrekkenlijstenList();
+        }
+    }
+
+    schedulePersistTrekkenlijstItem(syncKey) {
+        this._trekkenlijstPendingSaveKey = syncKey;
+        if (this._trekkenlijstPersistTimer) clearTimeout(this._trekkenlijstPersistTimer);
+        this._trekkenlijstPersistTimer = setTimeout(() => {
+            this._trekkenlijstPersistTimer = null;
+            const key = this._trekkenlijstPendingSaveKey;
+            this._trekkenlijstPendingSaveKey = null;
+            if (key) void this.persistTrekkenlijstItemNow(key);
+        }, 700);
+    }
+
+    async persistTrekkenlijstItemNow(syncKey) {
+        if (!this.isTrekkenlijstSyncEnabled()) return;
+        const item = (this._trekkenlijstenItems || []).find((i) => i.syncKey === syncKey);
+        if (!item) return;
+        const result = await this.pushTrekkenlijstSyncItem({
+            key: syncKey,
+            title: item.title,
+            eventDate: item.eventDateRaw || null,
+            verwerkt: !!item.verwerkt,
+            comment: item.comment || '',
+            baseUpdatedAt: item.syncUpdatedAt || null
+        });
+        if (result.ok) {
+            if (result.item) {
+                this._trekkenlijstSyncState[syncKey] = result.item;
+                item.verwerkt = !!result.item.verwerkt;
+                item.comment = result.item.comment || '';
+                item.syncUpdatedAt = result.item.updatedAt || result.updatedAt || null;
+                item.verwerktBy = result.item.verwerktBy || null;
+                item.commentBy = result.item.commentBy || null;
+            } else if (result.updatedAt) {
+                item.syncUpdatedAt = result.updatedAt;
+            }
+            return;
+        }
+        if (result.conflict && result.item) {
+            this._trekkenlijstSyncState[syncKey] = result.item;
+            this.mergeTrekkenlijstSyncStateIntoItems();
+            if (this.currentView === 'trekkenlijsten') this.renderTrekkenlijstenList();
+        }
+    }
+
+    startTrekkenlijstSyncPoll() {
+        this.stopTrekkenlijstSyncPoll();
+        if (!this.isTrekkenlijstSyncEnabled()) return;
+        this._trekkenlijstSyncPollInterval = setInterval(() => {
+            if (this.currentView !== 'trekkenlijsten') return;
+            if (this._trekkenlijstPersistTimer) return;
+            void this.refreshTrekkenlijstSyncFromServer();
+        }, 4000);
+    }
+
+    stopTrekkenlijstSyncPoll() {
+        if (this._trekkenlijstSyncPollInterval) {
+            clearInterval(this._trekkenlijstSyncPollInterval);
+            this._trekkenlijstSyncPollInterval = null;
+        }
+        if (this._trekkenlijstPersistTimer) {
+            clearTimeout(this._trekkenlijstPersistTimer);
+            this._trekkenlijstPersistTimer = null;
+        }
+    }
+
+    setupTrekkenlijstenListHandlers(list) {
+        if (!list || list._trekkenHandlersBound) return;
+        list._trekkenHandlersBound = true;
+        list.addEventListener('change', (e) => {
+            const cb = e.target.closest('.trekkenlijsten-verwerkt-cb');
+            if (!cb) return;
+            const key = cb.dataset.syncKey;
+            const item = (this._trekkenlijstenItems || []).find((i) => i.syncKey === key);
+            if (!item) return;
+            item.verwerkt = cb.checked;
+            const row = cb.closest('.trekkenlijsten-entry');
+            if (row) row.classList.toggle('trekkenlijsten-entry--done', cb.checked);
+            if (!this.isTrekkenlijstSyncEnabled()) return;
+            void this.persistTrekkenlijstItemNow(key);
+        });
+        list.addEventListener('input', (e) => {
+            const ta = e.target.closest('.trekkenlijsten-comment-input');
+            if (!ta) return;
+            const key = ta.dataset.syncKey;
+            const item = (this._trekkenlijstenItems || []).find((i) => i.syncKey === key);
+            if (!item) return;
+            item.comment = ta.value;
+            if (!this.isTrekkenlijstSyncEnabled()) return;
+            this.schedulePersistTrekkenlijstItem(key);
+        });
+    }
+
+    pickNewerTimerSnapshot(a, b) {
+        if (!a?.slots) return b?.slots ? b : null;
+        if (!b?.slots) return a;
+        const ta = Date.parse(a.updatedAt || '') || 0;
+        const tb = Date.parse(b.updatedAt || '') || 0;
+        return tb >= ta ? b : a;
+    }
+
+    applyVoorstellingTimerSnapToSessions(sessions, snap) {
+        if (!snap?.slots) return;
+        for (const { slotId, scheduleData: sessSched } of sessions) {
+            if (this.isUnsafeObjectKey(slotId)) continue;
+            const saved = snap.slots[slotId];
+            if (!saved || typeof saved !== 'object') {
+                this.recalculateVoorstellingTimerFromMarks(slotId);
+                continue;
+            }
+            const pauseCount = this.countPauzesInSchedule(sessSched);
+            const st = this.ensureVoorstellingSlotState(slotId);
+            if (Array.isArray(saved.customStepOrder) && saved.customStepOrder.length) {
+                st.customStepOrder = saved.customStepOrder.filter(
+                    (id) => typeof id === 'string' && id.length > 0 && !this.isUnsafeObjectKey(id)
+                );
+            }
+            if (saved.customLabels && typeof saved.customLabels === 'object') {
+                const nextLabels = Object.create(null);
+                Object.entries(saved.customLabels).forEach(([k, v]) => {
+                    if (this.isUnsafeObjectKey(k)) return;
+                    nextLabels[k] = String(v || '').trim();
+                });
+                st.customLabels = nextLabels;
+            }
+            if (Array.isArray(saved.remarks)) {
+                st.remarks = saved.remarks
+                    .filter((r) => r && typeof r === 'object')
+                    .map((r) => ({
+                        id: typeof r.id === 'string' && r.id ? r.id : `remark_${Math.random().toString(36).slice(2, 10)}`,
+                        stepId: typeof r.stepId === 'string' ? r.stepId : '',
+                        wallIso: typeof r.wallIso === 'string' ? r.wallIso : '',
+                        text: String(r.text || '').trim()
+                    }))
+                    .filter((r) => r.stepId && r.wallIso && r.text);
+            }
+            if (!saved.marks || typeof saved.marks !== 'object') {
+                this.recalculateVoorstellingTimerFromMarks(slotId);
+                continue;
+            }
+            const validSteps = new Set(this.getVoorstellingTimerStepsForSlot(slotId, pauseCount));
+            st.marks = Object.create(null);
+            for (const [stepId, iso] of Object.entries(saved.marks)) {
+                if (!validSteps.has(stepId) || typeof iso !== 'string') continue;
+                st.marks[stepId] = iso;
+            }
+            this.recalculateVoorstellingTimerFromMarks(slotId);
+        }
+    }
+
+    buildVoorstellingTimerSlotsPayload(sessions) {
+        const slots = {};
+        let any = false;
+        for (const { slotId } of sessions) {
+            if (this.isUnsafeObjectKey(slotId)) continue;
+            const st = this.voorstellingTimerBySlot[slotId];
+            const marks = st?.marks;
+            const hasMarks = marks && Object.keys(marks).length > 0;
+            const remarks = Array.isArray(st?.remarks) ? st.remarks : [];
+            const hasRemarks = remarks.length > 0;
+            const hasLayout =
+                (Array.isArray(st?.customStepOrder) && st.customStepOrder.length > 0) ||
+                (st?.customLabels && Object.keys(st.customLabels).length > 0);
+            if (!hasMarks && !hasLayout && !hasRemarks) continue;
+            const payload = { marks: hasMarks ? { ...marks } : {} };
+            if (Array.isArray(st.customStepOrder) && st.customStepOrder.length) {
+                payload.customStepOrder = [...st.customStepOrder];
+            }
+            if (st.customLabels && Object.keys(st.customLabels).length) {
+                const safeLabels = Object.create(null);
+                Object.entries(st.customLabels).forEach(([k, v]) => {
+                    if (this.isUnsafeObjectKey(k)) return;
+                    safeLabels[k] = String(v || '').trim();
+                });
+                if (Object.keys(safeLabels).length) payload.customLabels = safeLabels;
+            }
+            if (hasRemarks) {
+                payload.remarks = remarks
+                    .map((r) => ({
+                        id: String(r?.id || ''),
+                        stepId: String(r?.stepId || ''),
+                        wallIso: String(r?.wallIso || ''),
+                        text: String(r?.text || '').trim()
+                    }))
+                    .filter((r) => r.id && r.stepId && r.wallIso && r.text);
+            }
+            slots[slotId] = payload;
+            any = true;
+        }
+        return { slots, any };
+    }
+
     pruneVoorstellingTimerSnapshotKeys(snapshots) {
         const maxAgeMs = 120 * 86400000;
         const cutoff = Date.now() - maxAgeMs;
@@ -7482,65 +6799,52 @@ class TheaterDashboard {
             }
         };
 
-        if (!window.electronAPI?.getConfig) {
+        const key = this.getVoorstellingTimerStorageKey();
+        if (!key) {
             recalcAll();
             return;
         }
+
+        let localSnap = null;
+        if (window.electronAPI?.getConfig) {
+            try {
+                const raw = await window.electronAPI.getConfig('voorstellingTimer');
+                const snap = raw?.snapshots?.[key];
+                if (snap?.slots) localSnap = { slots: snap.slots, updatedAt: snap.updatedAt || null };
+            } catch (e) {
+                console.warn('Voorstelling timer lokaal laden mislukt:', e);
+            }
+        }
+
+        let serverSnap = null;
+        if (this.isTimerSyncEnabled() && this.getTimerSyncBaseUrl()) {
+            serverSnap = await this.fetchTimerSyncSnapshot(key);
+        }
+
+        const chosen = this.pickNewerTimerSnapshot(localSnap, serverSnap);
+        if (!chosen?.slots) {
+            this._voorstellingTimerSyncKnownUpdatedAt = null;
+            recalcAll();
+            return;
+        }
+
         try {
-            const key = this.getVoorstellingTimerStorageKey();
-            if (!key) {
-                recalcAll();
-                return;
-            }
-            const raw = await window.electronAPI.getConfig('voorstellingTimer');
-            const snap = raw?.snapshots?.[key];
-            if (!snap?.slots) {
-                recalcAll();
-                return;
-            }
-            for (const { slotId, scheduleData: sessSched } of sessions) {
-                if (this.isUnsafeObjectKey(slotId)) continue;
-                const saved = snap.slots[slotId];
-                if (!saved || typeof saved !== 'object') {
-                    this.recalculateVoorstellingTimerFromMarks(slotId);
-                    continue;
-                }
-                const pauseCount = this.countPauzesInSchedule(sessSched);
-                const st = this.ensureVoorstellingSlotState(slotId);
-                if (Array.isArray(saved.customStepOrder) && saved.customStepOrder.length) {
-                    st.customStepOrder = saved.customStepOrder.filter(
-                        (id) => typeof id === 'string' && id.length > 0 && !this.isUnsafeObjectKey(id)
-                    );
-                }
-                if (saved.customLabels && typeof saved.customLabels === 'object') {
-                    const nextLabels = Object.create(null);
-                    Object.entries(saved.customLabels).forEach(([k, v]) => {
-                        if (this.isUnsafeObjectKey(k)) return;
-                        nextLabels[k] = String(v || '').trim();
-                    });
-                    st.customLabels = nextLabels;
-                }
-                if (Array.isArray(saved.remarks)) {
-                    st.remarks = saved.remarks
-                        .filter((r) => r && typeof r === 'object')
-                        .map((r) => ({
-                            id: typeof r.id === 'string' && r.id ? r.id : `remark_${Math.random().toString(36).slice(2, 10)}`,
-                            stepId: typeof r.stepId === 'string' ? r.stepId : '',
-                            wallIso: typeof r.wallIso === 'string' ? r.wallIso : '',
-                            text: String(r.text || '').trim()
-                        }))
-                        .filter((r) => r.stepId && r.wallIso && r.text);
-                }
-                if (!saved.marks || typeof saved.marks !== 'object') {
-                    this.recalculateVoorstellingTimerFromMarks(slotId);
-                    continue;
-                }
-                const validSteps = new Set(this.getVoorstellingTimerStepsForSlot(slotId, pauseCount));
-                for (const [stepId, iso] of Object.entries(saved.marks)) {
-                    if (!validSteps.has(stepId) || typeof iso !== 'string') continue;
-                    st.marks[stepId] = iso;
-                }
-                this.recalculateVoorstellingTimerFromMarks(slotId);
+            this.applyVoorstellingTimerSnapToSessions(sessions, chosen);
+            this._voorstellingTimerSyncKnownUpdatedAt = chosen.updatedAt || null;
+
+            // Als server nieuwer was dan lokaal: lokaal bijwerken zodat offline hetzelfde blijft.
+            if (
+                serverSnap?.updatedAt &&
+                (!localSnap?.updatedAt || (Date.parse(serverSnap.updatedAt) || 0) > (Date.parse(localSnap.updatedAt) || 0)) &&
+                window.electronAPI?.getConfig &&
+                window.electronAPI?.saveConfig
+            ) {
+                const prev = await window.electronAPI.getConfig('voorstellingTimer');
+                const base = { ...(prev?.snapshots || {}) };
+                base[key] = { slots: serverSnap.slots, updatedAt: serverSnap.updatedAt };
+                await window.electronAPI.saveConfig('voorstellingTimer', {
+                    snapshots: this.pruneVoorstellingTimerSnapshotKeys(base)
+                });
             }
         } catch (e) {
             console.warn('Voorstelling timer snapshot laden mislukt:', e);
@@ -7565,56 +6869,72 @@ class TheaterDashboard {
         if (!this.tijdschemaScheduleData?.length) return;
         const key = this.getVoorstellingTimerStorageKey();
         const sessions = this.buildTimerDaySessions(this.tijdschemaScheduleData);
-        const slots = {};
-        let any = false;
-        for (const { slotId } of sessions) {
-            if (this.isUnsafeObjectKey(slotId)) continue;
-            const st = this.voorstellingTimerBySlot[slotId];
-            const marks = st?.marks;
-            const hasMarks = marks && Object.keys(marks).length > 0;
-            const remarks = Array.isArray(st?.remarks) ? st.remarks : [];
-            const hasRemarks = remarks.length > 0;
-            const hasLayout =
-                (Array.isArray(st?.customStepOrder) && st.customStepOrder.length > 0) ||
-                (st?.customLabels && Object.keys(st.customLabels).length > 0);
-            if (!hasMarks && !hasLayout && !hasRemarks) continue;
-            const payload = { marks: hasMarks ? { ...marks } : {} };
-            if (Array.isArray(st.customStepOrder) && st.customStepOrder.length) {
-                payload.customStepOrder = [...st.customStepOrder];
-            }
-            if (st.customLabels && Object.keys(st.customLabels).length) {
-                const safeLabels = Object.create(null);
-                Object.entries(st.customLabels).forEach(([k, v]) => {
-                    if (this.isUnsafeObjectKey(k)) return;
-                    safeLabels[k] = String(v || '').trim();
-                });
-                if (Object.keys(safeLabels).length) payload.customLabels = safeLabels;
-            }
-            if (hasRemarks) {
-                payload.remarks = remarks
-                    .map((r) => ({
-                        id: String(r?.id || ''),
-                        stepId: String(r?.stepId || ''),
-                        wallIso: String(r?.wallIso || ''),
-                        text: String(r?.text || '').trim()
-                    }))
-                    .filter((r) => r.id && r.stepId && r.wallIso && r.text);
-            }
-            if (!this.isUnsafeObjectKey(slotId)) slots[slotId] = payload;
-            any = true;
-        }
+        const { slots, any } = this.buildVoorstellingTimerSlotsPayload(sessions);
+        const updatedAt = new Date().toISOString();
+        const baseUpdatedAt = this._voorstellingTimerSyncKnownUpdatedAt || null;
         try {
             const prev = await window.electronAPI.getConfig('voorstellingTimer');
             const base = { ...(prev?.snapshots || {}) };
             if (!any) {
                 delete base[key];
             } else {
-                base[key] = { slots, updatedAt: new Date().toISOString() };
+                base[key] = { slots, updatedAt };
             }
             const snapshots = this.pruneVoorstellingTimerSnapshotKeys(base);
             await window.electronAPI.saveConfig('voorstellingTimer', { snapshots });
+            this._voorstellingTimerSyncKnownUpdatedAt = any ? updatedAt : null;
+
+            if (this.isTimerSyncEnabled() && this.getTimerSyncBaseUrl()) {
+                if (!any) {
+                    // Geen dedicated delete-endpoint; lege dag blijft lokaal gewist.
+                    return;
+                }
+                const push = await this.pushTimerSyncSnapshot({ key, slots, updatedAt, baseUpdatedAt });
+                if (push.ok) {
+                    this._voorstellingTimerSyncKnownUpdatedAt = push.updatedAt || updatedAt;
+                } else if (push.conflict && push.slots) {
+                    this.applyVoorstellingTimerSnapToSessions(sessions, {
+                        slots: push.slots,
+                        updatedAt: push.updatedAt
+                    });
+                    this._voorstellingTimerSyncKnownUpdatedAt = push.updatedAt || null;
+                    if (this.currentView === 'voorstellingTimer') {
+                        void this.renderVoorstellingTimerUI().catch(() => {});
+                    }
+                }
+            }
         } catch (e) {
             console.warn('Voorstelling timer snapshot opslaan mislukt:', e);
+        }
+    }
+
+    startVoorstellingTimerSyncPoll() {
+        this.stopVoorstellingTimerSyncPoll();
+        if (!this.isTimerSyncEnabled() || !this.getTimerSyncBaseUrl()) return;
+        const tick = async () => {
+            if (this.currentView !== 'voorstellingTimer') return;
+            if (this._voorstellingTimerPersistTimer) return;
+            const key = this.getVoorstellingTimerStorageKey();
+            if (!key || !this.tijdschemaScheduleData?.length) return;
+            const serverSnap = await this.fetchTimerSyncSnapshot(key);
+            if (!serverSnap?.updatedAt || !serverSnap.slots) return;
+            const knownTs = Date.parse(this._voorstellingTimerSyncKnownUpdatedAt || '') || 0;
+            const serverTs = Date.parse(serverSnap.updatedAt) || 0;
+            if (serverTs <= knownTs) return;
+            const sessions = this.buildTimerDaySessions(this.tijdschemaScheduleData);
+            this.applyVoorstellingTimerSnapToSessions(sessions, serverSnap);
+            this._voorstellingTimerSyncKnownUpdatedAt = serverSnap.updatedAt;
+            void this.renderVoorstellingTimerUI().catch(() => {});
+        };
+        this._voorstellingTimerSyncPollInterval = setInterval(() => {
+            void tick();
+        }, 4000);
+    }
+
+    stopVoorstellingTimerSyncPoll() {
+        if (this._voorstellingTimerSyncPollInterval) {
+            clearInterval(this._voorstellingTimerSyncPollInterval);
+            this._voorstellingTimerSyncPollInterval = null;
         }
     }
 
@@ -9131,6 +8451,7 @@ class TheaterDashboard {
         this.currentView = 'voorstellingTimer';
         this.hideLuminexShell();
         this.hideOscMonitorShell();
+        this.hideTrekkenlijstenShell();
 
         const weekWrapper = document.getElementById('weekViewWrapper');
         const homeContainer = document.getElementById('homeViewContainer');
@@ -9146,10 +8467,16 @@ class TheaterDashboard {
 
         document.body.classList.remove('home-view-active');
         document.body.classList.remove('week-view-active');
+        document.body.classList.remove('trekkenlijsten-active');
+        document.body.classList.remove('luminex-view-active');
+        document.body.classList.remove('osc-monitor-active');
         document.body.classList.add('voorstelling-timer-active');
 
         document.getElementById('weekBtn')?.classList.remove('active');
         document.getElementById('homeBtn')?.classList.remove('active');
+        document.getElementById('trekkenlijstenNavBtn')?.classList.remove('active');
+        document.getElementById('luminexNavBtn')?.classList.remove('active');
+        document.getElementById('oscMonitorNavBtn')?.classList.remove('active');
         document.getElementById('voorstellingTimerBtn')?.classList.add('active');
 
         const techOverviewBtn = document.getElementById('techOverviewBtn');
@@ -9168,6 +8495,7 @@ class TheaterDashboard {
 
         await this.renderVoorstellingTimerUI();
         this.startVoorstellingTimerClockLoop();
+        this.startVoorstellingTimerSyncPoll();
         this.updateBackButtonVisibility();
     }
 
@@ -10386,7 +9714,9 @@ class TheaterDashboard {
         // Update status bij wijziging van internetverbinding
         window.addEventListener('online', () => {
             this.isOnline = true;
-            if (window.__SHIFT_HAPPENS_MOBILE__) void this.refreshApiServerStatus();
+            if (window.__SHIFT_HAPPENS_MOBILE__ || this.getShiftServerBaseUrl() || this.getShiftAuthToken()) {
+            void this.refreshApiServerStatus();
+        }
         });
         
         window.addEventListener('offline', () => {
@@ -10404,7 +9734,7 @@ class TheaterDashboard {
     
     updateAllCardsOffline() {
         this.statusBySystem.yesplan = 'offline';
-        if (window.__SHIFT_HAPPENS_MOBILE__ && this.getShiftHappensApiBase()) {
+        if (this.getShiftHappensApiBase()) {
             this.statusBySystem.apiServer = 'offline';
         }
         this.updateMasterStatus();
@@ -10414,29 +9744,33 @@ class TheaterDashboard {
      * Zelfde normalisatie als api-mobile.js (Shift Happens API-basis-URL).
      */
     getShiftHappensApiBase() {
-        if (!window.__SHIFT_HAPPENS_MOBILE__) return '';
-        const raw = window.SHIFT_HAPPENS_API_BASE || localStorage.getItem('SHIFT_HAPPENS_API_BASE') || '';
-        let t = String(raw || '').trim();
-        if (!t) return '';
-        if (!/^https?:\/\//i.test(t)) t = 'http://' + t;
+        if (window.__SHIFT_HAPPENS_MOBILE__) {
+            const raw = window.SHIFT_HAPPENS_API_BASE || localStorage.getItem('SHIFT_HAPPENS_API_BASE') || '';
+            return this.normalizeShiftHappensApiBase(raw);
+        }
+        return this.resolveShiftServerBaseUrl();
+    }
+
+    async pingShiftPresence() {
+        const base = this.resolveShiftServerBaseUrl();
+        if (!base || !this.getShiftAuthToken()) return false;
         try {
-            const u = new URL(t);
-            const host = u.hostname.toLowerCase();
-            if (host.indexOf('yesplan') !== -1) return '';
-            const p = (u.pathname || '').toLowerCase();
-            if (p.indexOf('zaalplattegrond') !== -1 || p.indexOf('uitvoeringinfo') !== -1) return '';
-            const pathPart = u.pathname === '/' ? '' : u.pathname.replace(/\/$/, '');
-            return u.origin + pathPart;
-        } catch {
-            return '';
+            const r = await this.fetchShiftHappensApi(`${base.replace(/\/$/, '')}/api/auth/presence`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ client: this.getShiftClientLabel(), view: this.currentView || 'home' })
+            });
+            if (!r.ok) {
+                console.warn('Presence ping HTTP', r.status, base);
+            }
+            return r.ok;
+        } catch (e) {
+            console.warn('Presence ping mislukt:', e);
+            return false;
         }
     }
 
     async refreshApiServerStatus() {
-        if (!window.__SHIFT_HAPPENS_MOBILE__) {
-            this.statusBySystem.apiServer = null;
-            return;
-        }
         const base = this.getShiftHappensApiBase();
         if (!base) {
             this.statusBySystem.apiServer = null;
@@ -10452,7 +9786,7 @@ class TheaterDashboard {
             const url = `${base.replace(/\/$/, '')}/api/health`;
             const ctrl = new AbortController();
             const t = setTimeout(() => ctrl.abort(), 8000);
-            const r = await fetch(url, { method: 'GET', cache: 'no-store', signal: ctrl.signal });
+            const r = await this.fetchShiftHappensApi(url, { method: 'GET', cache: 'no-store', signal: ctrl.signal });
             clearTimeout(t);
             let j = {};
             try {
@@ -10460,7 +9794,8 @@ class TheaterDashboard {
             } catch {
                 /* ignore */
             }
-            this.statusBySystem.apiServer = r.ok && j && j.ok === true ? 'online' : 'offline';
+            const authed = !j?.authRequired || !!this.getShiftAuthToken();
+            this.statusBySystem.apiServer = r.ok && j && j.ok === true && authed ? 'online' : 'offline';
         } catch {
             this.statusBySystem.apiServer = 'offline';
         }
@@ -10479,7 +9814,7 @@ class TheaterDashboard {
         const sb = this.statusBySystem || {};
         const parts = [];
         if (sb.yesplan) parts.push(sb.yesplan);
-        if (window.__SHIFT_HAPPENS_MOBILE__ && this.getShiftHappensApiBase() && sb.apiServer) {
+        if (this.getShiftHappensApiBase() && sb.apiServer) {
             parts.push(sb.apiServer);
         }
         const onlineCount = parts.filter((s) => s === 'online').length;
@@ -10513,8 +9848,11 @@ class TheaterDashboard {
 
         const renderContent = () => {
             const systems = [{ id: 'yesplan', label: 'Yesplan' }];
-            if (window.__SHIFT_HAPPENS_MOBILE__) {
-                systems.push({ id: 'apiServer', label: this.t('status.apiServerLabel') });
+            if (this.getShiftHappensApiBase()) {
+                systems.push({
+                    id: 'apiServer',
+                    label: window.__SHIFT_HAPPENS_MOBILE__ ? this.t('status.apiServerLabel') : 'Shift-server'
+                });
             }
             let html = '';
             for (const { id, label } of systems) {
@@ -10647,6 +9985,7 @@ class TheaterDashboard {
         }
         await this.refreshNetworkInterfaceOptions();
         this.populateSettingsForm();
+        this.bindOrgNameLabelListeners();
         this.setupSettingsNavigation();
         this.activateSettingsPage(this.settingsPageKey || 'app-config');
         const modal = document.getElementById('settingsModal');
@@ -10697,7 +10036,7 @@ class TheaterDashboard {
             {
                 key: 'io',
                 title: this.locale === 'en' ? 'In/Out' : 'In/Uit',
-                selectors: ['#networkInternetInterface', '#networkLuminexInterface', '#networkSacnInterface', '#networkOscInterface']
+                selectors: ['#networkInternetInterface', '#networkLuminexSacnInterface', '#networkOscInterface']
             },
             {
                 key: 'yesplan',
@@ -10755,7 +10094,8 @@ class TheaterDashboard {
             if (sectionEl.id === 'apiServerSection') return 'app-config';
             if (sectionEl.id === 'desktopUpdateSection') return 'app-config'; // updates horen bij app-configuratie
             if (sectionEl.querySelector('#themeSelect') || sectionEl.querySelector('#touchscreenModeCheckbox')) return 'app-config';
-            if (sectionEl.querySelector('#networkInternetInterface') || sectionEl.querySelector('#networkOscInterface') || sectionEl.querySelector('#networkSacnInterface')) return 'io';
+            if (sectionEl.querySelector('#networkInternetInterface') || sectionEl.querySelector('#networkOscInterface') || sectionEl.querySelector('#networkLuminexSacnInterface')) return 'io';
+            if (sectionEl.querySelector('#shiftServerBaseUrlInput')) return 'io';
             if (sectionEl.querySelector('#masterModeEnabledCheckbox')) return 'io';
             if (sectionEl.querySelector('#yesplanBaseURL') || sectionEl.querySelector('#yesplanBaseURL2') || sectionEl.querySelector('#activeYesplanOrg')) return 'yesplan';
             if (sectionEl.querySelector('#privaBaseURL')) return 'app-config';
@@ -10885,21 +10225,47 @@ class TheaterDashboard {
 
     getOrgDisplayName(orgNum) {
         const config = orgNum === 2 ? this.config.yesplan2 : this.config.yesplan;
-        const shortName = config?.shortName?.trim();
         const name = config?.name?.trim();
+        const shortName = config?.shortName?.trim();
+        if (name) return name;
         if (shortName) return shortName;
-        if (name) {
-            const words = name.split(/[\s\-_/]+/).map((w) => w.trim()).filter(Boolean);
-            if (words.length >= 2) {
-                return words.slice(0, 3).map((w) => w.charAt(0).toUpperCase()).join('');
-            }
-            const upperHints = (name.match(/[A-Z]/g) || []).join('');
-            if (upperHints.length >= 2) return upperHints.slice(0, 3);
-            const compact = name.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-            if (compact.length >= 2) return compact.slice(0, 2);
-            if (compact.length === 1) return compact;
-        }
         return this.t('settings.orgN', { n: orgNum });
+    }
+
+    getOrgLabelForSettings(orgNum) {
+        const nameId = orgNum === 2 ? 'yesplanOrgName2' : 'yesplanOrgName';
+        const shortNameId = orgNum === 2 ? 'yesplanOrgShortName2' : 'yesplanOrgShortName';
+        const nameFromForm = document.getElementById(nameId)?.value?.trim();
+        const shortFromForm = document.getElementById(shortNameId)?.value?.trim();
+        if (nameFromForm) return nameFromForm;
+        if (shortFromForm) return shortFromForm;
+        return this.getOrgDisplayName(orgNum);
+    }
+
+    updateOrgDependentSettingsLabels() {
+        const label1 = document.getElementById('itixBaseURLLabel1');
+        const label2 = document.getElementById('itixBaseURLLabel2');
+        if (label1) label1.textContent = this.t('settings.itixBaseURLOrg', { org: this.getOrgLabelForSettings(1) });
+        if (label2) label2.textContent = this.t('settings.itixBaseURLOrg', { org: this.getOrgLabelForSettings(2) });
+
+        const activeOrgSelect = document.getElementById('activeYesplanOrg');
+        if (activeOrgSelect) {
+            const current = activeOrgSelect.value;
+            const opt1 = activeOrgSelect.querySelector('option[value="1"]');
+            const opt2 = activeOrgSelect.querySelector('option[value="2"]');
+            if (opt1) opt1.textContent = this.getOrgLabelForSettings(1);
+            if (opt2) opt2.textContent = this.getOrgLabelForSettings(2);
+            if ([...activeOrgSelect.options].some((o) => o.value === current)) activeOrgSelect.value = current;
+        }
+    }
+
+    bindOrgNameLabelListeners() {
+        if (this.orgNameLabelListenersBound) return;
+        ['yesplanOrgName', 'yesplanOrgShortName', 'yesplanOrgName2', 'yesplanOrgShortName2'].forEach((id) => {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('input', () => this.updateOrgDependentSettingsLabels());
+        });
+        this.orgNameLabelListenersBound = true;
     }
 
     getVenueDisplayName(venue) {
@@ -10956,7 +10322,7 @@ class TheaterDashboard {
     }
 
     async refreshNetworkInterfaceOptions() {
-        const ids = ['networkInternetInterface', 'networkLuminexInterface', 'networkSacnInterface', 'networkOscInterface'];
+        const ids = ['networkInternetInterface', 'networkLuminexSacnInterface', 'networkOscInterface', 'oscMonitorInterface'];
         const selects = ids
             .map((id) => document.getElementById(id))
             .filter(Boolean);
@@ -11027,6 +10393,7 @@ class TheaterDashboard {
         const legacyItixBase = this.config.itix?.baseURL || '';
         if (itixBaseEl1) itixBaseEl1.value = this.config.itix?.baseURL1 || legacyItixBase;
         if (itixBaseEl2) itixBaseEl2.value = this.config.itix?.baseURL2 || '';
+        this.updateOrgDependentSettingsLabels();
 
         // Thema
         const themeSelect = document.getElementById('themeSelect');
@@ -11069,6 +10436,30 @@ class TheaterDashboard {
         if (masterModeEnabledCheckbox) {
             masterModeEnabledCheckbox.checked = this.config.app?.masterModeEnabled === true;
         }
+        const shiftServerBaseUrlInput = document.getElementById('shiftServerBaseUrlInput');
+        if (shiftServerBaseUrlInput) {
+            shiftServerBaseUrlInput.value = String(
+                this.config.app?.shiftServerBaseUrl || this.config.app?.timerSyncBaseUrl || ''
+            );
+            const urlRow = shiftServerBaseUrlInput.closest('.form-row');
+            if (urlRow) urlRow.style.display = window.__SHIFT_HAPPENS_MOBILE__ ? 'none' : '';
+        }
+        const shiftAuthEmailInput = document.getElementById('shiftAuthEmailInput');
+        if (shiftAuthEmailInput) {
+            shiftAuthEmailInput.value = String(this.config.app?.shiftAuthEmail || '');
+        }
+        const shiftAuthPasswordInput = document.getElementById('shiftAuthPasswordInput');
+        if (shiftAuthPasswordInput) {
+            shiftAuthPasswordInput.value = '';
+            this.updateShiftAuthPasswordField();
+            shiftAuthPasswordInput.addEventListener('focus', () => {
+                if (this.getShiftAuthToken() && !shiftAuthPasswordInput.value) {
+                    shiftAuthPasswordInput.placeholder = '';
+                }
+            }, { once: false });
+        }
+        void this.refreshShiftAuthStatusLine();
+        if (this.getShiftAuthToken()) this.startShiftPresenceHeartbeat();
         const masterModeNameInput = document.getElementById('masterModeNameInput');
         if (masterModeNameInput) {
             masterModeNameInput.value = String(this.config.app?.masterModeName || '');
@@ -11091,11 +10482,16 @@ class TheaterDashboard {
                 networkInternetInterface.value = 'auto';
             }
         }
-        const networkLuminexInterface = document.getElementById('networkLuminexInterface');
-        if (networkLuminexInterface) {
-            networkLuminexInterface.value = String(routing.luminexInterface || 'auto');
-            if (![...networkLuminexInterface.options].some((o) => o.value === networkLuminexInterface.value)) {
-                networkLuminexInterface.value = 'auto';
+        const networkLuminexSacnInterface = document.getElementById('networkLuminexSacnInterface');
+        if (networkLuminexSacnInterface) {
+            const combined = String(
+                routing.luminexInterface
+                || routing.sacnInterface
+                || 'auto'
+            );
+            networkLuminexSacnInterface.value = combined;
+            if (![...networkLuminexSacnInterface.options].some((o) => o.value === networkLuminexSacnInterface.value)) {
+                networkLuminexSacnInterface.value = 'auto';
             }
         }
         const networkOscInterface = document.getElementById('networkOscInterface');
@@ -11105,13 +10501,7 @@ class TheaterDashboard {
                 networkOscInterface.value = 'auto';
             }
         }
-        const networkSacnInterface = document.getElementById('networkSacnInterface');
-        if (networkSacnInterface) {
-            networkSacnInterface.value = String(routing.sacnInterface || 'auto');
-            if (![...networkSacnInterface.options].some((o) => o.value === networkSacnInterface.value)) {
-                networkSacnInterface.value = 'auto';
-            }
-        }
+        this.syncOscMonitorInterfaceSelect();
 
         // API-server URL (alleen op iPhone/web)
         const apiServerSection = document.getElementById('apiServerSection');
@@ -11131,6 +10521,7 @@ class TheaterDashboard {
 
         // Zaalvolgorde
         this.populateVenueOrderSettings();
+        if (this.data?.yesplan?.data?.length) this.updateYesplanVenueTechOptionsFromEvents(this.data.yesplan.data);
         // Technische opties per zaal
         this.populateVenueResourceOptionsSettings();
     }
@@ -11168,6 +10559,10 @@ class TheaterDashboard {
         } catch (_) {
             resultEl.textContent = '';
         }
+    }
+
+    async refreshTimerSyncStatusLine() {
+        // Timer sync volgt Shift-login; geen aparte statusregel meer.
     }
 
     updateMasterModeInputState() {
@@ -11301,64 +10696,133 @@ class TheaterDashboard {
         this.setupVenueOrderDragAndDrop(container);
     }
 
+
+    mergeYesplanVenueTechOptionsFromVenues(venues) {
+        if (!Array.isArray(venues)) return;
+        for (const venue of venues) {
+            const id = String(venue?.id || '').trim();
+            if (!id) continue;
+            const opts = venue?.yesplanTechOptions;
+            if (!opts || typeof opts !== 'object') continue;
+            const cur = this.yesplanVenueTechOptionsCache[id] || { balletvloer: false, vleugel: false, orkestbak: false };
+            if (opts.balletvloer) cur.balletvloer = true;
+            if (opts.vleugel) cur.vleugel = true;
+            if (opts.orkestbak) cur.orkestbak = true;
+            this.yesplanVenueTechOptionsCache[id] = cur;
+        }
+    }
+
+    updateYesplanVenueTechOptionsFromEvents(events) {
+        if (!Array.isArray(events) || !events.length) return;
+        for (const event of events) {
+            const venueIds = Array.isArray(event?.venueIds) ? event.venueIds : [];
+            const fields = event?.yesplanTechOptionFields;
+            const opts = fields && typeof fields === 'object'
+                ? {
+                    balletvloer: !!fields.balletvloer,
+                    vleugel: !!fields.vleugel,
+                    orkestbak: !!fields.orkestbak
+                }
+                : {
+                    balletvloer: !!(event?.balletvloerExplicit || event?.hasBalletvloer),
+                    vleugel: !!(event?.vleugelExplicit || event?.hasVleugel),
+                    orkestbak: !!(event?.orkestbakExplicit || event?.hasOrkestbak || event?.orkestbakValue)
+                };
+            if (Array.isArray(event?.resources)) {
+                for (const r of event.resources) {
+                    const lower = String(r || '').toLowerCase();
+                    if (lower.includes('balletvloer') || lower.includes('ballet')) opts.balletvloer = true;
+                    if (lower.includes('vleugel') || lower.includes('piano')) opts.vleugel = true;
+                    if (lower.includes('orkestbak')) opts.orkestbak = true;
+                }
+            }
+            if (!opts.balletvloer && !opts.vleugel && !opts.orkestbak) continue;
+            for (const vid of venueIds) {
+                const id = String(vid || '').trim();
+                if (!id) continue;
+                const cur = this.yesplanVenueTechOptionsCache[id] || { balletvloer: false, vleugel: false, orkestbak: false };
+                if (opts.balletvloer) cur.balletvloer = true;
+                if (opts.vleugel) cur.vleugel = true;
+                if (opts.orkestbak) cur.orkestbak = true;
+                this.yesplanVenueTechOptionsCache[id] = cur;
+            }
+        }
+    }
+
+    getYesplanDetectedVenueTechOptions(venueId, venueName) {
+        const id = String(venueId || '').trim();
+        const fromCache = id ? this.yesplanVenueTechOptionsCache[id] : null;
+        const venue = id && Array.isArray(this.availableVenues)
+            ? this.availableVenues.find((v) => String(v.id) === id)
+            : null;
+        const fromVenue = venue?.yesplanTechOptions;
+        const out = {
+            balletvloer: !!(fromCache?.balletvloer || fromVenue?.balletvloer),
+            vleugel: !!(fromCache?.vleugel || fromVenue?.vleugel),
+            orkestbak: !!(fromCache?.orkestbak || fromVenue?.orkestbak)
+        };
+        if (out.balletvloer || out.vleugel || out.orkestbak) return out;
+        const v = String(venueName || venue?.name || '').toUpperCase();
+        const code = String(v.split(/[,\s(]/)[0] || '').trim();
+        if (['WTPY', 'MCGZ', 'DKW'].includes(code)) return { balletvloer: true, vleugel: true, orkestbak: true };
+        if (code === 'MCKZ') return { balletvloer: false, vleugel: true, orkestbak: true };
+        return out;
+    }
+
     populateVenueResourceOptionsSettings() {
         const container = document.getElementById('venueResourceOptionsList');
         if (!container || !this.availableVenues || !Array.isArray(this.availableVenues)) {
-            container.innerHTML = `<p style="color: #a0aec0; font-size: 0.875rem;">${this.t('messages.loadVenuesFirst')}</p>`;
+            if (container) {
+                container.innerHTML = `<p style="color: #a0aec0; font-size: 0.875rem;">${this.t('messages.loadVenuesFirst')}</p>`;
+            }
             return;
         }
         const saved = this.config.app?.venueResourceOptions || {};
-        const savedOrder = this.getVenueOrder();
+        const trekVenueIds = new Set(this.findTrekkenlijstVenues().map((v) => String(v.id)));
         const venues = [...this.availableVenues].sort((a, b) => {
-            const getIndex = (n) => {
-                const u = String(n || '').toUpperCase();
-                const idx = savedOrder.findIndex(o => u === o);
-                if (idx !== -1) return idx;
-                for (const o of [...savedOrder].sort((x, y) => y.length - x.length)) {
-                    if (u.startsWith(o)) return savedOrder.indexOf(o);
-                }
-                return -1;
-            };
-            const iA = getIndex(a.name), iB = getIndex(b.name);
-            if (iA !== -1 && iB !== -1) return iA - iB;
-            if (iA !== -1) return -1;
-            if (iB !== -1) return 1;
+            const iA = this.getVenueOrderIndex(a.name);
+            const iB = this.getVenueOrderIndex(b.name);
+            if (iA !== iB) return iA - iB;
             return (a.name || '').localeCompare(b.name || '');
         });
         container.innerHTML = '';
-        venues.forEach(venue => {
+        const anyItix = venues.some((venue) => this.hasItixBaseURLForVenue(String(venue.id)));
+        venues.forEach((venue) => {
             const id = String(venue.id);
-            let v = saved[id];
-            if (!v) {
-                // Eerste installatie / geen lokale instellingen voor deze zaal:
-                // start met alle vinkjes uit. Bij updates met bestaande data blijft saved[id] leidend.
-                v = {
-                    balletvloer: false,
-                    vleugel: false,
-                    orkestbak: false,
-                    zaalplattegrond: false
-                };
-            }
-            const detected = this.getBalletvloerVleugelDisplay(venue.name, id);
-            const showBalletvloerOpt = !!detected.showBalletvloer || !!v.balletvloer;
-            const showVleugelOpt = !!detected.showVleugel || !!v.vleugel;
-            const showOrkestbakOpt = !!detected.showOrkestbak || !!v.orkestbak;
-            const showZaalplattegrondOpt = this.hasItixBaseURLForVenue(id);
-            const optionCount = [showBalletvloerOpt, showVleugelOpt, showOrkestbakOpt, showZaalplattegrondOpt].filter(Boolean).length;
-            if (!optionCount) return;
+            const detected = this.getYesplanDetectedVenueTechOptions(id, venue.name);
+            const v = saved[id] || {};
+            const balletvloer = v.balletvloer != null ? !!v.balletvloer : !!detected.balletvloer;
+            const vleugel = v.vleugel != null ? !!v.vleugel : !!detected.vleugel;
+            const orkestbak = v.orkestbak != null ? !!v.orkestbak : !!detected.orkestbak;
+            const showZaalplattegrond = this.hasItixBaseURLForVenue(id);
+            const zaalplattegrond = showZaalplattegrond
+                ? (v.zaalplattegrond != null ? !!v.zaalplattegrond : true)
+                : false;
+            const trekkenlijsten = v.trekkenlijsten != null
+                ? !!v.trekkenlijsten
+                : trekVenueIds.has(id);
+
+            const zaalplattegrondHtml = showZaalplattegrond
+                ? `<label class="venue-resource-opt"><input type="checkbox" data-venue-id="${this.escapeHtml(id)}" data-option="zaalplattegrond" ${zaalplattegrond ? 'checked' : ''}> Zaalplattegrond</label>`
+                : (anyItix
+                    ? `<span class="venue-resource-opt venue-resource-opt--placeholder" aria-hidden="true"></span>`
+                    : '');
+
             const item = document.createElement('div');
             item.className = 'venue-resource-options-item';
             item.innerHTML = `
                 <span class="venue-resource-name">${this.escapeHtml(this.getVenueDisplayName(venue))}</span>
                 <div class="venue-resource-checkboxes">
-                    ${showBalletvloerOpt ? `<label><input type="checkbox" data-venue-id="${this.escapeHtml(id)}" data-option="balletvloer" ${v.balletvloer ? 'checked' : ''}> ${this.t('settings.balletvloer')}</label>` : ''}
-                    ${showVleugelOpt ? `<label><input type="checkbox" data-venue-id="${this.escapeHtml(id)}" data-option="vleugel" ${v.vleugel ? 'checked' : ''}> ${this.t('settings.vleugel')}</label>` : ''}
-                    ${showOrkestbakOpt ? `<label><input type="checkbox" data-venue-id="${this.escapeHtml(id)}" data-option="orkestbak" ${v.orkestbak ? 'checked' : ''}> ${this.t('settings.orkestbak')}</label>` : ''}
-                    ${showZaalplattegrondOpt ? `<label><input type="checkbox" data-venue-id="${this.escapeHtml(id)}" data-option="zaalplattegrond" ${v.zaalplattegrond !== false ? 'checked' : ''}> Zaalplattegrond</label>` : ''}
+                    <label class="venue-resource-opt"><input type="checkbox" data-venue-id="${this.escapeHtml(id)}" data-option="balletvloer" ${balletvloer ? 'checked' : ''}> ${this.t('settings.balletvloer')}</label>
+                    <label class="venue-resource-opt"><input type="checkbox" data-venue-id="${this.escapeHtml(id)}" data-option="vleugel" ${vleugel ? 'checked' : ''}> ${this.t('settings.vleugel')}</label>
+                    <label class="venue-resource-opt"><input type="checkbox" data-venue-id="${this.escapeHtml(id)}" data-option="orkestbak" ${orkestbak ? 'checked' : ''}> ${this.t('settings.orkestbak')}</label>
+                    ${zaalplattegrondHtml}
+                    <label class="venue-resource-opt"><input type="checkbox" data-venue-id="${this.escapeHtml(id)}" data-option="trekkenlijsten" ${trekkenlijsten ? 'checked' : ''}> ${this.t('settings.trekkenlijstenVenue')}</label>
                 </div>
             `;
             container.appendChild(item);
         });
+        container.classList.toggle('venue-resource-options-list--with-plattegrond', anyItix);
     }
 
     setupVenueOrderDragAndDrop(container) {
@@ -11478,11 +10942,22 @@ class TheaterDashboard {
                         const n = parseInt(document.getElementById('masterModePortInput')?.value || '3847', 10);
                         return Number.isFinite(n) && n > 0 && n <= 65535 ? n : 3847;
                     })(),
+                    timerSyncEnabled: !!(this.getShiftAuthToken() && (
+                        this.getShiftServerBaseUrl()
+                        || this.normalizeShiftHappensApiBase(String(document.getElementById('shiftServerBaseUrlInput')?.value || '').trim())
+                    )),
+                    shiftServerBaseUrl: (() => {
+                        const raw = String(document.getElementById('shiftServerBaseUrlInput')?.value || '').trim();
+                        if (!raw) return '';
+                        return this.normalizeShiftHappensApiBase(raw);
+                    })(),
+                    shiftAuthEmail: String(document.getElementById('shiftAuthEmailInput')?.value || '').trim(),
+                    shiftAuthToken: this.config.app?.shiftAuthToken || '',
                     networkRouting: {
                         ...(this.config.app?.networkRouting || {}),
                         internetInterface: document.getElementById('networkInternetInterface')?.value || 'auto',
-                        luminexInterface: document.getElementById('networkLuminexInterface')?.value || 'auto',
-                        sacnInterface: document.getElementById('networkSacnInterface')?.value || 'auto',
+                        luminexInterface: document.getElementById('networkLuminexSacnInterface')?.value || 'auto',
+                        sacnInterface: document.getElementById('networkLuminexSacnInterface')?.value || 'auto',
                         oscInterface: document.getElementById('networkOscInterface')?.value || 'auto'
                     },
                     activeYesplanOrg: (() => {
@@ -11492,6 +10967,19 @@ class TheaterDashboard {
                     selectedVenues: preservedSelectedVenues,
                     selectedVenue: preservedSelectedVenues.length === 1 ? preservedSelectedVenues[0] : null,
                     selectedDate: preservedSelectedDate.toISOString(),
+                    trekkenlijstVenueIds: (() => {
+                        const list = document.getElementById('venueResourceOptionsList');
+                        if (!list) return [];
+                        return Array.from(list.querySelectorAll('input[data-option="trekkenlijsten"]:checked'))
+                            .map((cb) => String(cb.dataset.venueId || '').trim())
+                            .filter(Boolean);
+                    })(),
+                    trekkenlijstVenueId: (() => {
+                        // Backwards compatible: eerste gekozen zaal
+                        const list = document.getElementById('venueResourceOptionsList');
+                        const checked = list?.querySelector('input[data-option="trekkenlijsten"]:checked');
+                        return checked?.dataset?.venueId ? String(checked.dataset.venueId) : null;
+                    })(),
                     venueResourceOptions: (() => {
                         const opts = {};
                         const list = document.getElementById('venueResourceOptionsList');
@@ -11642,6 +11130,10 @@ class TheaterDashboard {
             }
             this.showSuccess(this.t('settings.saved'));
             await this.refreshMasterModeStatusLine();
+            await this.refreshTimerSyncStatusLine();
+            if (this.currentView === 'voorstellingTimer') {
+                this.startVoorstellingTimerSyncPoll();
+            }
         } catch (error) {
             console.error('Instellingen opslaan fout:', error);
             this.showError('settings', error?.message || this.t('errors.settingsSave'));
@@ -11714,6 +11206,10 @@ class TheaterDashboard {
         if (weekBtn) weekBtn.title = this.t('nav.weekView');
         const luminexNavBtn = document.getElementById('luminexNavBtn');
         if (luminexNavBtn) luminexNavBtn.title = this.t('nav.luminex');
+        const trekkenlijstenNavBtn = document.getElementById('trekkenlijstenNavBtn');
+        if (trekkenlijstenNavBtn) trekkenlijstenNavBtn.title = this.t('nav.trekkenlijsten');
+        const oscMonitorNavBtn = document.getElementById('oscMonitorNavBtn');
+        if (oscMonitorNavBtn) oscMonitorNavBtn.title = 'OSC Monitor';
         this.refreshVoorstellingTimerChrome();
         this.refreshLuminexChrome();
         const techOverviewBtn = document.getElementById('techOverviewBtn');
@@ -11734,6 +11230,7 @@ class TheaterDashboard {
         this.updateDateDisplay();
         this.updateDateTimeDisplay();
         this.updateVoorstellingTimezoneDisplay();
+        this.updateOrgDependentSettingsLabels();
     }
 
     async testConnection(system) {
@@ -11834,8 +11331,10 @@ class TheaterDashboard {
 
             if (result.success && result.data && result.data.length > 0) {
                 this.availableVenues = result.data;
+                this.mergeYesplanVenueTechOptionsFromVenues(this.availableVenues);
                 this.populateVenueSelector();
                 this.populateVenueOrderSettings();
+                this.populateVenueResourceOptionsSettings();
                 if (showLoading) this.showSuccess(this.t('messages.venuesLoaded', { n: result.data.length }));
             } else {
                 if (showLoading) alert('Geen zalen gevonden. Controleer je API instellingen.');
@@ -11895,7 +11394,7 @@ class TheaterDashboard {
             banner.addEventListener('click', async () => {
                 const phase = banner.dataset.phase;
                 if (phase === 'manual-download' && window.electronAPI?.openExternal) {
-                    await window.electronAPI.openExternal('https://github.com/Deurklink-WT/theater-dashboard/releases/latest');
+                    await window.electronAPI.openExternal('https://github.com/example-org/theater-dashboard/releases/latest');
                     return;
                 }
                 if (phase === 'downloaded' && window.electronAPI.quitAndInstallUpdate) {
@@ -12051,12 +11550,14 @@ class TheaterDashboard {
     getBalletvloerVleugelDisplay(venueName, venueId) {
         const opts = this.getVenueResourceOptions(venueId, venueName);
         if (opts) return opts;
-        const v = String(venueName || '').toUpperCase();
-        const code = String(v.split(/[,\s(]/)[0] || '').trim();
+        const detected = this.getYesplanDetectedVenueTechOptions(venueId, venueName);
         const canShowSeating = this.hasItixBaseURLForVenue(venueId);
-        if (['WTPY', 'MCGZ', 'DKW'].includes(code)) return { showBalletvloer: true, showVleugel: true, showOrkestbak: true, showZaalplattegrond: canShowSeating };
-        if (code === 'MCKZ') return { showBalletvloer: false, showVleugel: true, showOrkestbak: true, showZaalplattegrond: canShowSeating };
-        return { showBalletvloer: false, showVleugel: false, showOrkestbak: false, showZaalplattegrond: canShowSeating };
+        return {
+            showBalletvloer: !!detected.balletvloer,
+            showVleugel: !!detected.vleugel,
+            showOrkestbak: !!detected.orkestbak,
+            showZaalplattegrond: canShowSeating
+        };
     }
 
     shouldShowTechnicalPartForEvent(event, partKey, enabledByVenue) {

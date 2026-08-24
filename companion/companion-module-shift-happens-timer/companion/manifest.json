@@ -10,7 +10,7 @@
   "bugs": "https://github.com/bitfocus/companion-module-shift-happens-timer/issues",
   "maintainers": [
     {
-      "name": "PdV",
+      "name": "Team",
       "email": "info@example.com"
     }
   ],
@@ -21,7 +21,7 @@
     "entrypoint": "../src/main.js"
   },
   "legacyIds": [],
-  "manufacturer": "PdV",
+  "manufacturer": "Team",
   "products": ["Theater Dashboard"],
   "keywords": ["osc", "timer", "theater", "shift-happens"]
 }

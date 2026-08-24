@@ -5,7 +5,8 @@ const os = require('os');
 
 const DISCOVERY_PORT = Number(process.env.SHIFT_HAPPENS_MASTER_DISCOVERY_PORT || 38471);
 const DEFAULT_MASTER_PORT = Number(process.env.SHIFT_HAPPENS_MASTER_PORT || 3847);
-const UNLOCK_PASSWORD = 'tech7511';
+/** Vereist env SHIFT_HAPPENS_MASTER_UNLOCK_PASSWORD; leeg = fail-closed (geen ontgrendeling). */
+const UNLOCK_PASSWORD = String(process.env.SHIFT_HAPPENS_MASTER_UNLOCK_PASSWORD || '').trim();
 const UNLOCK_GRANT_MS = 90 * 1000;
 
 function listIpv4Addresses() {
@@ -51,7 +52,7 @@ class MasterModeService {
   }
 
   unlock(password) {
-    if (String(password || '') !== UNLOCK_PASSWORD) {
+    if (!UNLOCK_PASSWORD || String(password || '') !== UNLOCK_PASSWORD) {
       return { success: false, error: 'INVALID_PASSWORD' };
     }
     this.unlockedUntil = Date.now() + UNLOCK_GRANT_MS;

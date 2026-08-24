@@ -272,124 +272,65 @@
                     </div>
                 </div>
             </div>
-            <!-- Luminex: I/O matrix (n8n-achtige verbindingen) -->
+            <!-- Luminex: embedded Lichtsignaal Flow Viewer -->
             <div id="luminexViewWrapper" class="luminex-view-wrapper" style="display: none;">
-                <div class="card luminex-card">
-                    <div class="card-header luminex-card-header">
-                        <div>
-                            <h3><i class="fas fa-project-diagram"></i> <span data-i18n="luminex.title">Luminex</span></h3>
-                            <p class="luminex-card-subtitle" id="luminexCardSubtitle" data-i18n="luminex.subtitle"></p>
+                <p id="luminexViewerError" class="luminex-viewer-error" hidden></p>
+                <webview id="luminexViewerFrame" class="luminex-viewer-frame" src="about:blank" allowpopups></webview>
+            </div>
+            <!-- Trekkenlijsten (Payzaal): komende 20 uit Yesplan -->
+            <div id="trekkenlijstenWrapper" class="trekkenlijsten-wrapper" style="display: none;">
+                <div class="card trekkenlijsten-card">
+                    <div class="card-header trekkenlijsten-card-header">
+                        <h3><i class="fas fa-list-ol"></i> <span data-i18n="trekkenlijsten.title">Trekkenlijsten</span></h3>
+                        <div class="card-header-actions">
+                            <button id="trekkenlijstenRefreshBtn" type="button" class="btn btn-secondary btn-sm" title="Vernieuwen">
+                                <i class="fas fa-sync-alt"></i> <span data-i18n="nav.refresh">Vernieuwen</span>
+                            </button>
                         </div>
                     </div>
-                    <div class="card-content luminex-card-content luminex-card-content--compact">
-                        <p class="luminex-card-lead" data-i18n="luminex.compactLead">We lezen de LumiNode-config uit en tonen je patch. sACN-scan vult live gegevens aan.</p>
-
-                        <div class="luminex-discovery luminex-discovery--compact" id="luminexDiscovery">
-                            <div class="luminex-discovery-row">
-                                <button type="button" id="luminexDiscoverBtn" class="btn btn-secondary btn-sm">
-                                    <i class="fas fa-search-location"></i> <span data-i18n="luminex.discoverBtn">Zoek LumiNode (mDNS)</span>
-                                </button>
-                                <span id="luminexDiscoveryStatus" class="luminex-discovery-status" aria-live="polite"></span>
-                            </div>
-                            <div class="luminex-discovery-target">
-                                <label for="luminexHostInput" class="luminex-host-label" data-i18n="luminex.hostLabel">IP-adres</label>
-                                <div class="luminex-host-row luminex-host-row--save">
-                                    <input type="text" id="luminexHostInput" class="luminex-host-input" placeholder="10.0.1.230" autocomplete="off" spellcheck="false">
-                                    <button type="button" id="luminexSaveHostBtn" class="btn btn-primary btn-sm luminex-save-host-btn" data-i18n="luminex.saveHost">Opslaan</button>
-                                </div>
-                                <label for="luminexPasswordInput" class="luminex-host-label luminex-host-label--pw" data-i18n="luminex.passwordLabel">Wachtwoord (optioneel)</label>
-                                <div class="luminex-host-row">
-                                    <input type="password" id="luminexPasswordInput" class="luminex-host-input" placeholder="" autocomplete="off">
-                                </div>
-                            </div>
-                            <ul id="luminexDeviceList" class="luminex-device-list" aria-label="Gevonden apparaten"></ul>
-                        </div>
-
-                        <div class="luminex-toolbar luminex-toolbar--engine">
-                            <span class="luminex-pb-picker" hidden aria-hidden="true">
-                                <label class="luminex-toolbar-label" for="luminexRouteProcessblock" data-i18n="luminex.routeEngine">Process engine</label>
-                                <select id="luminexRouteProcessblock" class="luminex-routing-select luminex-routing-select--toolbar"></select>
-                            </span>
-                            <button type="button" id="luminexFetchCapBtn" class="btn btn-secondary btn-sm">
-                                <i class="fas fa-sync-alt"></i> <span data-i18n="luminex.fetchCapabilities">Vernieuw engines &amp; I/O</span>
-                            </button>
-                            <button type="button" id="luminexOpenWebBtn" class="btn btn-secondary btn-sm">
-                                <i class="fas fa-external-link-alt"></i> <span data-i18n="luminex.openWebUi">Open webinterface</span>
-                            </button>
-                            <span id="luminexEngineStatus" class="luminex-toolbar-status luminex-engine-status" aria-live="polite"></span>
-                        </div>
-                        <p class="luminex-engine-merge-hint" data-i18n="luminex.mergeHint"></p>
-
-                        <div class="luminex-toolbar luminex-toolbar--sacn">
-                            <span class="luminex-toolbar-slabel" data-i18n="luminex.sacnToolbarLabel">sACN</span>
-                            <div class="luminex-sacn-range luminex-sacn-range--inline">
-                                <label class="luminex-sacn-range-label"><span data-i18n="luminex.sacnFrom">Van</span>
-                                    <input type="number" id="luminexSacnMin" class="luminex-sacn-num" min="1" max="63999" value="1">
-                                </label>
-                                <label class="luminex-sacn-range-label"><span data-i18n="luminex.sacnTo">Tot</span>
-                                    <input type="number" id="luminexSacnMax" class="luminex-sacn-num" min="1" max="63999" value="96">
-                                </label>
-                            </div>
-                            <button type="button" id="luminexSacnScanBtn" class="btn btn-secondary btn-sm">
-                                <i class="fas fa-broadcast-tower"></i> <span data-i18n="luminex.sacnScanBtn">Scan sACN</span>
-                            </button>
-                        </div>
-                        <div id="luminexSacnResultBlock" class="luminex-sacn-result-block" hidden aria-live="polite">
-                            <div id="luminexSacnStatusLine" class="luminex-sacn-result-main"></div>
-                            <div id="luminexSacnMetaLine" class="luminex-sacn-result-meta" hidden></div>
-                            <div id="luminexSacnWarningsLine" class="luminex-sacn-warnings-line" hidden></div>
-                        </div>
-                        <p class="luminex-sacn-explain" id="luminexSacnExplain" data-i18n="luminex.sacnMixedExplain"></p>
-
-                        <div class="luminex-patch-block luminex-patch-block--canvas">
-                            <h5 class="luminex-patch-subtitle luminex-section-title--friendly" id="luminexPatchHeading" data-i18n="luminex.visualPatchHeading">Je patch</h5>
-                            <p class="luminex-patch-subhint luminex-section-hint--friendly" data-i18n="luminex.visualPatchHint">Sleep van bron naar uitgang. Het signaal loopt in de node via de gekozen process engine. Tik op een lijn om te verwijderen.</p>
-                            <label class="luminex-show-all-outputs-label">
-                                <input type="checkbox" id="luminexShowAllOutputs">
-                                <span data-i18n="luminex.showAllOutputsLabel">Toon alle uitgangen (ook zonder patch)</span>
-                            </label>
-                            <div id="luminexMatrixRoot" class="luminex-matrix-root"></div>
-                        </div>
-
-                        <div class="luminex-footer-actions">
-                            <p class="luminex-routing-footer-hint" data-i18n="luminex.routingFooterHint">Bewaar je keuze lokaal (dashboard). Volledige device-configuratie blijft via de LumiNode-webinterface.</p>
-                            <div class="luminex-footer-actions-row">
-                                <button type="button" id="luminexSaveRouteBtn" class="btn btn-primary btn-sm">
-                                    <i class="fas fa-save"></i> <span data-i18n="luminex.saveRoute">Bewaar route</span>
-                                </button>
-                                <button type="button" id="luminexSyncNodeBtn" class="btn btn-secondary btn-sm">
-                                    <i class="fas fa-cloud-upload-alt"></i> <span data-i18n="luminex.syncToNode">Push naar LumiNode</span>
-                                </button>
-                            </div>
-                            <p id="luminexRouteStatus" class="luminex-route-status" aria-live="polite"></p>
-                        </div>
+                    <div class="card-content trekkenlijsten-card-content">
+                        <div id="trekkenlijstenMeta" class="trekkenlijsten-meta" aria-live="polite">Laden…</div>
+                        <div id="trekkenlijstenList" class="trekkenlijsten-list" role="list"></div>
                     </div>
                 </div>
             </div>
             <!-- OSC Monitor: live inkomende OSC timer-triggers -->
             <div id="oscMonitorWrapper" class="osc-monitor-wrapper" style="display: none;">
-                <div class="card osc-monitor-card">
-                    <div class="card-header osc-monitor-card-header">
-                        <h3><i class="fas fa-wave-square"></i> <span>OSC Monitor</span></h3>
-                        <div class="card-header-actions">
-                            <button id="oscMonitorClearBtn" type="button" class="btn btn-secondary btn-sm">
-                                <i class="fas fa-trash"></i> <span>Leegmaken</span>
-                            </button>
-                        </div>
+                <header class="osc-monitor-topbar">
+                    <div class="osc-monitor-brand">
+                        <i class="fas fa-wave-square osc-monitor-logo" aria-hidden="true"></i>
+                        <h1 class="osc-monitor-title">OSC Monitor</h1>
+                        <span class="osc-monitor-pill">Live</span>
                     </div>
-                    <div class="card-content osc-monitor-card-content">
-                        <p class="osc-monitor-lead">Live triggerlog van OSC timer-berichten.</p>
-                        <div id="oscMonitorMeta" class="osc-monitor-meta">Wachten op OSC berichten…</div>
-                        <div id="oscMonitorList" class="osc-monitor-list" role="log" aria-live="polite"></div>
+                    <div class="osc-monitor-iface-wrap">
+                        <label class="osc-monitor-iface-label" for="oscMonitorInterface">Adapter</label>
+                        <select id="oscMonitorInterface" class="osc-monitor-iface-select" title="Netwerkadapter voor OSC listener"></select>
                     </div>
+                    <p class="osc-monitor-meta" id="oscMonitorMeta">Wachten op OSC berichten…</p>
+                    <div class="osc-monitor-actions">
+                        <button id="oscMonitorClearBtn" type="button" class="osc-monitor-action-btn">
+                            <i class="fas fa-trash"></i> <span>Leegmaken</span>
+                        </button>
+                    </div>
+                </header>
+                <div class="osc-monitor-body">
+                    <div class="osc-monitor-table-head" aria-hidden="true">
+                        <span>Tijd</span>
+                        <span>Slot</span>
+                        <span>Stap</span>
+                    </div>
+                    <div id="oscMonitorList" class="osc-monitor-list" role="log" aria-live="polite"></div>
                 </div>
             </div>
                 </div>
-                <aside class="nav-rail nav-rail--end" id="navRail" aria-label="Extra navigatie">
-                    <button type="button" id="luminexNavBtn" class="nav-rail-btn" title="Luminex">
+                <aside class="nav-rail nav-rail--end" id="navRail" aria-label="Showmode navigatie">
+                    <div id="navRailTimerSlot" class="nav-rail-timer-slot" aria-hidden="true"></div>
+                    <button type="button" id="trekkenlijstenNavBtn" class="nav-rail-btn" title="Trekkenlijsten">
+                        <i class="fas fa-list-ol"></i>
+                    </button>
+                    <button type="button" id="luminexNavBtn" class="nav-rail-btn" title="Lichtsignaal">
                         <i class="fas fa-project-diagram"></i>
                     </button>
-                    <div id="navRailTimerSlot" class="nav-rail-timer-slot" aria-hidden="true"></div>
                     <button type="button" id="oscMonitorNavBtn" class="nav-rail-btn" title="OSC Monitor">
                         <i class="fas fa-wave-square"></i>
                     </button>
@@ -538,14 +479,8 @@
                             </div>
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="networkLuminexInterface" data-i18n="settings.interfaceLuminex">Luminex uitlezen</label>
-                                    <select id="networkLuminexInterface" class="form-select"></select>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="networkSacnInterface" data-i18n="settings.interfaceSacn">sACN scan</label>
-                                    <select id="networkSacnInterface" class="form-select"></select>
+                                    <label for="networkLuminexSacnInterface" data-i18n="settings.interfaceLuminexSacn">Luminex / sACN</label>
+                                    <select id="networkLuminexSacnInterface" class="form-select"></select>
                                 </div>
                             </div>
                             <div class="form-row">
@@ -574,7 +509,7 @@
                         <div class="settings-section">
                             <h3><i class="fas fa-filter"></i> <span data-i18n="settings.techOptions">Technische opties per zaal</span></h3>
                             <p style="color: #a0aec0; font-size: 0.875rem; margin-bottom: 1rem;" data-i18n="settings.techOptionsHint">
-                                Kies per zaal welke opties (balletvloer, vleugel, orkestbak, zaalplattegrond) mits beschikbaar getoond worden. Stel dit in op basis van wat je in Yesplan per zaal ziet.
+                                Kies per zaal welke opties getoond worden. Zaalplattegrond alleen als Itix-URL is ingesteld. Trekkenlijsten: vink alle zalen aan die in showmode meedoen.
                             </p>
                             <div id="venueResourceOptionsList" class="venue-resource-options-list">
                                 <!-- Wordt dynamisch gevuld -->
@@ -606,7 +541,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="yesplanOrgShortName" data-i18n="settings.shortName">Afkorting</label>
-                                    <input type="text" id="yesplanOrgShortName" placeholder="bv. WT" class="form-input">
+                                    <input type="text" id="yesplanOrgShortName" placeholder="bv. ORG1" class="form-input">
                                 </div>
                                 <div class="form-group">
                                     <label for="yesplanBaseURL" data-i18n="settings.baseURL">Base URL</label>
@@ -634,7 +569,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="yesplanOrgShortName2" data-i18n="settings.shortName">Afkorting</label>
-                                    <input type="text" id="yesplanOrgShortName2" placeholder="bv. MP" class="form-input">
+                                    <input type="text" id="yesplanOrgShortName2" placeholder="bv. ORG2" class="form-input">
                                 </div>
                                 <div class="form-group">
                                     <label for="yesplanBaseURL2" data-i18n="settings.baseURL">Base URL</label>
@@ -666,11 +601,11 @@
                                 Voer het voorvoegsel van de beheer-URL voor de zaalplattegrond in, eindigend vóór het uitvoerings-id (Yesplan-event-id). Voorbeeld: https://tickets.jouworganisatie.nl/beheer/zaalplattegrond/uitvoeringinfo
                             </p>
                             <div class="form-group">
-                                <label for="itixBaseURL1">Basis-URL zaalplattegrond (organisatie 1)</label>
+                                <label for="itixBaseURL1" id="itixBaseURLLabel1">Basis-URL zaalplattegrond (organisatie 1)</label>
                                 <input type="url" id="itixBaseURL1" class="form-input" placeholder="https://tickets.jouworganisatie.nl/beheer/zaalplattegrond/uitvoeringinfo" autocomplete="off">
                             </div>
                             <div class="form-group">
-                                <label for="itixBaseURL2">Basis-URL zaalplattegrond (organisatie 2)</label>
+                                <label for="itixBaseURL2" id="itixBaseURLLabel2">Basis-URL zaalplattegrond (organisatie 2)</label>
                                 <input type="url" id="itixBaseURL2" class="form-input" placeholder="https://tickets.jouworganisatie2.nl/beheer/zaalplattegrond/uitvoeringinfo" autocomplete="off">
                             </div>
                         </div>
@@ -705,6 +640,39 @@
                                 <i class="fas fa-sync-alt"></i> <span data-i18n="updates.checkNow">Nu controleren op updates</span>
                             </button>
                             <p id="updateCheckResult" style="color: #94a3b8; font-size: 0.85rem; margin-top: 0.75rem; min-height: 1.25rem;" aria-live="polite"></p>
+                        </div>
+
+                        <!-- Centrale Shift-server (login + URL) -->
+                        <div class="settings-section" id="shiftServerSection">
+                            <h3><i class="fas fa-cloud"></i> Shift-server</h3>
+                            <p style="color: #a0aec0; font-size: 0.875rem; margin-bottom: 1rem;">
+                                Verbind met de centrale server voor sync en gedeelde functies. Timer sync tussen apparaten gaat automatisch mee zodra je bent ingelogd.
+                            </p>
+                            <div class="form-row">
+                                <div class="form-group form-group--full">
+                                    <label for="shiftServerBaseUrlInput">Server-URL</label>
+                                    <input type="url" id="shiftServerBaseUrlInput" class="form-input form-input--wide" placeholder="https://..." autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group form-group--half">
+                                    <label for="shiftAuthEmailInput">E-mail</label>
+                                    <input type="email" id="shiftAuthEmailInput" class="form-input" autocomplete="username" placeholder="jouw@email.nl">
+                                </div>
+                                <div class="form-group form-group--half">
+                                    <label for="shiftAuthPasswordInput">Wachtwoord</label>
+                                    <input type="password" id="shiftAuthPasswordInput" class="form-input" autocomplete="current-password" placeholder="">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <button type="button" class="btn btn-secondary" id="shiftAuthLoginBtn">
+                                    <i class="fas fa-sign-in-alt"></i> Inloggen
+                                </button>
+                                <button type="button" class="btn btn-secondary" id="shiftAuthLogoutBtn" style="margin-left: 0.5rem;">
+                                    Uitloggen
+                                </button>
+                            </div>
+                            <p id="shiftAuthStatusLine" style="color: #94a3b8; font-size: 0.8rem; margin-top: 0.25rem; min-height: 1.1rem;" aria-live="polite"></p>
                         </div>
 
                         <!-- Master mode (LAN) -->
@@ -756,8 +724,8 @@
                                     <span style="color: #a0aec0;">Theater Dashboard v1.6.0-beta.1</span>
                                 </p>
                                 <p style="margin-bottom: 0.75rem;">
-                                    <strong style="color: #cbd5e0;">Ontwikkeld door:</strong> PdV<br>
-                                    <strong style="color: #cbd5e0;">Copyright:</strong> © 2026 PdV. Alle rechten voorbehouden.
+                                    <strong style="color: #cbd5e0;">Ontwikkeld door:</strong> Team<br>
+                                    <strong style="color: #cbd5e0;">Copyright:</strong> © 2026 Team. Alle rechten voorbehouden.
                                 </p>
                                 <p style="margin-bottom: 0.75rem;">
                                     <strong style="color: #cbd5e0;">Licentie:</strong> Proprietary (Niet gelicenseerd voor herdistributie)
@@ -1170,13 +1138,12 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
-            <span>v1.6.0-beta.1 © 2026 PdV</span>
+            <span>v1.6.0-beta.1 © 2026 Team</span>
         </div>
     </footer>
 
     <script src="api-mobile.js"></script>
     <script src="itix-seating-url.js"></script>
-    <script src="luminex-matrix.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

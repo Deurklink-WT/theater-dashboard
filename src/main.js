@@ -1,10 +1,10 @@
 /**
  * Shift Happens - Theater Dashboard
- * Copyright (c) 2026 PdV
+ * Copyright (c) 2026 Team
  * 
  * Proprietary software - All rights reserved
  * 
- * @author PdV
+ * @author Team
  * @license UNLICENSED
  */
 
@@ -85,6 +85,12 @@ const { startOscTimerListener } = require('./main/osc-timer-listener');
 const { browseLuminodes } = require('./main/luminode-discovery');
 const { scanSacnUniverses } = require('./main/sacn-scan');
 const { getLumiNodeCapabilities, fetchJson, writeJson } = require('./main/luminode-api');
+const {
+  startLuminexViewerServer,
+  stopLuminexViewerServer,
+  getLuminexViewerUrl,
+  reloadLuminexViewerConfig,
+} = require('./main/luminex-viewer-server');
 
 // Yesplan response cache (vermindert serverbelasting bij navigatie)
 // Standaard ruim: 6 uur. Overschrijfbaar via env var.
@@ -372,6 +378,7 @@ function createWindow() {
       nodeIntegration: false,
       contextIsolation: true,
       enableRemoteModule: false,
+      webviewTag: true,
       preload: path.join(__dirname, 'preload.js')
     },
     titleBarStyle: 'hiddenInset', // macOS stijl
@@ -1049,6 +1056,27 @@ ipcMain.handle('luminode-fetch-json', async (_event, { host, password, path } = 
   }
 });
 
+ipcMain.handle('ensure-luminex-viewer', async () => {
+  try {
+    const luminex = secureConfigFromStorage(store.get('luminex', {}) || {});
+    const appCfg = store.get('app', {}) || {};
+    const existingUrl = getLuminexViewerUrl();
+    if (existingUrl) {
+      reloadLuminexViewerConfig(luminex, appCfg);
+      return { success: true, url: existingUrl };
+    }
+    const result = await startLuminexViewerServer({
+      userDataDir: app.getPath('userData'),
+      shiftHappensLuminex: luminex,
+      shiftHappensApp: appCfg,
+    });
+    return { success: true, url: result.url };
+  } catch (err) {
+    console.error('ensure-luminex-viewer:', err);
+    return { success: false, error: String(err.message || err) };
+  }
+});
+
 ipcMain.handle('luminode-write-json', async (_event, { host, password, path, body, method } = {}) => {
   try {
     const localAddress = getSelectedInterfaceAddress('luminexInterface');
@@ -1193,9 +1221,6 @@ async function runYesplanSearchCli() {
 
 // App event handlers
 app.whenReady().then(() => {
-  // #region agent log
-  fetch('http://127.0.0.1:7671/ingest/2548f020-a557-4bec-9e00-75fa0560139b',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'16a395'},body:JSON.stringify({sessionId:'16a395',runId:'cleanup-usage-scan',hypothesisId:'H0',location:'src/main.js:app.whenReady',message:'Main process ready',data:{personnelCli:PERSONNEL_CLI,searchCli:SEARCH_CLI},timestamp:Date.now()})}).catch(()=>{});
-  // #endregion
   if (PERSONNEL_CLI) return runPersonnelCli();
   if (SEARCH_CLI) return runYesplanSearchCli();
   createWindow();
@@ -1224,6 +1249,7 @@ app.on('will-quit', () => {
     stopOscTimer();
     stopOscTimer = null;
   }
+  stopLuminexViewerServer();
   masterModeService.stop().catch(() => {
     /* ignore */
   });
