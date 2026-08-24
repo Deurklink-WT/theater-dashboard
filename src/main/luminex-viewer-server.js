@@ -210,8 +210,8 @@ function createRequestHandler() {
         });
         json(res, result.ok ? 200 : 400, result);
       } catch (err) {
-        const msg = err && err.message ? String(err.message) : 'Request failed';
-        json(res, 400, { error: msg });
+        console.error('[luminex] discover failed:', err && err.message ? err.message : err);
+        json(res, 400, { error: 'Discovery mislukt' });
       }
       return;
     }
@@ -228,8 +228,8 @@ function createRequestHandler() {
         const result = await testNodeConnection({ ip, password });
         json(res, 200, result);
       } catch (err) {
-        const msg = err && err.message ? String(err.message) : 'Request failed';
-        json(res, 400, { error: msg });
+        console.error('[luminex] node test failed:', err && err.message ? err.message : err);
+        json(res, 400, { error: 'Verbindingstest mislukt' });
       }
       return;
     }
@@ -299,7 +299,8 @@ function createRequestHandler() {
           state.apply(config);
           json(res, 200, { ok: true });
         } catch (err) {
-          json(res, 400, { error: err && err.message ? String(err.message) : 'Request failed' });
+          console.error('[luminex] config save failed:', err && err.message ? err.message : err);
+          json(res, 400, { error: 'Config opslaan mislukt' });
         }
         return;
       }

@@ -35,6 +35,10 @@ class YesplanAPI {
       axiosConfig.httpsAgent = new https.Agent({ keepAlive: true, localAddress: this.localAddress });
     }
     this.client = axios.create(axiosConfig);
+    this.client.interceptors.request.use((req) => {
+      this.assertAllowedRequestUrl(req);
+      return req;
+    });
 
     // Cache op datum-niveau om dezelfde day-requests te dedupliceren.
     // Dit helpt vooral bij weekweergave (dag-voor-dag ophalen) en bij snelle navigatie.
@@ -69,6 +73,28 @@ class YesplanAPI {
       return u.origin;
     } catch (_) {
       return '';
+    }
+  }
+
+  sanitizeYesplanId(raw) {
+    const id = String(raw || '').trim();
+    if (!/^[A-Za-z0-9._:-]{1,128}$/.test(id)) {
+      throw new Error('Ongeldig Yesplan-id');
+    }
+    return id;
+  }
+
+  assertAllowedRequestUrl(req) {
+    const base = String(this.baseURL || '').trim();
+    if (!base) throw new Error('Yesplan baseURL ontbreekt of is ongeldig');
+    const allowed = new URL(base);
+    const rawUrl = String(req?.url || '');
+    const absolute = rawUrl.startsWith('http://') || rawUrl.startsWith('https://')
+      ? new URL(rawUrl)
+      : new URL(rawUrl, allowed.origin);
+    if (absolute.protocol !== 'https:') throw new Error('Alleen HTTPS naar Yesplan is toegestaan');
+    if (absolute.hostname.toLowerCase() !== allowed.hostname.toLowerCase()) {
+      throw new Error('Yesplan-request host komt niet overeen met geconfigureerde baseURL');
     }
   }
 
@@ -2737,7 +2763,7 @@ class YesplanAPI {
   async getEventCustomDataRaw(eventId) {
     if (!eventId) return null;
 
-    const id = String(eventId);
+    const id = this.sanitizeYesplanId(eventId);
     const cached = this._eventCustomDataCache.get(id);
     const now = Date.now();
     if (cached && (now - cached.ts) < this._eventCustomDataCacheTtlMs) {
@@ -2852,8 +2878,9 @@ class YesplanAPI {
 
   async getSchedule(eventId) {
     try {
+      const id = this.sanitizeYesplanId(eventId);
       const queryString = this.addApiKey();
-      const url = queryString ? `/api/event/${eventId}/schedule?${queryString}` : `/api/event/${eventId}/schedule`;
+      const url = queryString ? `/api/event/${id}/schedule?${queryString}` : `/api/event/${id}/schedule`;
 
       const response = await this.client.get(url);
 
@@ -2877,8 +2904,9 @@ class YesplanAPI {
 
   async getEventDetails(eventId) {
     try {
+      const id = this.sanitizeYesplanId(eventId);
       const queryString = this.addApiKey();
-      const url = queryString ? `/api/event/${eventId}?${queryString}` : `/api/event/${eventId}`;
+      const url = queryString ? `/api/event/${id}?${queryString}` : `/api/event/${id}`;
       
       const response = await this.client.get(url);
       
@@ -3305,31 +3333,37 @@ class YesplanAPI {
         let ticketingData = null;
         let eventDetails = null;
         let resourceBookingsData = null;
+        let eventApiId;
+        try {
+          eventApiId = this.sanitizeYesplanId(event.id);
+        } catch (_) {
+          return { eventId: event.id, eventCustomData: null, groupData: null, customData: null, ticketingData: null, eventDetails: null, resourceBookingsData: null };
+        }
 
         // 1. Altijd event customdata ophalen (personeel, techniek, etc.)
         try {
-          const eventCustomDataUrl = `/api/event/${event.id}/customdata?${queryString}`;
+          const eventCustomDataUrl = `/api/event/${eventApiId}/customdata?${queryString}`;
           const eventCustomDataResponse = await this.client.get(eventCustomDataUrl);
           eventCustomData = eventCustomDataResponse.data;
         } catch (error) {}
 
         // 2. Altijd event details + ticketing + resourcebookings ophalen (kaartverkoop, zaalplattegrond)
         try {
-          const eventDetailUrl = `/api/event/${event.id}?${queryString}&expand=ticketing,resources,resourcebookings,contactbookings`;
+          const eventDetailUrl = `/api/event/${eventApiId}?${queryString}&expand=ticketing,resources,resourcebookings,contactbookings`;
           const eventDetailResponse = await this.client.get(eventDetailUrl);
           eventDetails = eventDetailResponse.data || null;
           if (eventDetails?.ticketing) ticketingData = eventDetails.ticketing;
           if (eventDetails?.resourcebookings) resourceBookingsData = eventDetails.resourcebookings;
         } catch (error) {
           try {
-            const ticketingUrl = `/api/event/${event.id}/ticketing?${queryString}`;
+            const ticketingUrl = `/api/event/${eventApiId}/ticketing?${queryString}`;
             const ticketingResponse = await this.client.get(ticketingUrl);
             ticketingData = ticketingResponse.data;
           } catch (e2) {}
         }
         if (!resourceBookingsData) {
           try {
-            const rbUrl = `/api/event/${event.id}/resourcebookings?${queryString}`;
+            const rbUrl = `/api/event/${eventApiId}/resourcebookings?${queryString}`;
             const rbRes = await this.client.get(rbUrl);
             resourceBookingsData = rbRes.data?.data || rbRes.data;
           } catch (error) {}

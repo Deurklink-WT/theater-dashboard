@@ -2149,7 +2149,7 @@ class TheaterDashboard {
 
         if (!Array.isArray(events) || events.length === 0) {
             if (query && query.length >= 2) {
-                container.innerHTML = `<div class="search-no-results"><i class="fas fa-search"></i> Geen resultaten voor <strong>${query.replace(/</g,'&lt;')}</strong></div>`;
+                container.innerHTML = `<div class="search-no-results"><i class="fas fa-search"></i> Geen resultaten voor <strong>${this.escapeHtml(query)}</strong></div>`;
             }
             return;
         }
@@ -2161,11 +2161,11 @@ class TheaterDashboard {
         }
 
         const escapeHtml = (s) => String(s || '')
-            .replace(/\\/g, '&#92;')
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;');
+            .replace(/"/g, '&quot;')
+            .replace(/\\/g, '&#92;');
 
         const statusClass = (statusStr) => {
             const s = String(statusStr || '').toLowerCase();
@@ -3105,7 +3105,13 @@ class TheaterDashboard {
             if (byDay[key]) byDay[key].push(e);
         });
 
-        const escapeText = (v) => String(v || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+        const escapeText = (v) => String(v || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;')
+            .replace(/\\/g, '&#92;');
 
         const buildEventBlock = (event) => {
             const title = escapeText(event.title);
@@ -9555,7 +9561,8 @@ class TheaterDashboard {
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;')
             .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#039;');
+            .replace(/'/g, '&#039;')
+            .replace(/\\/g, '&#92;');
         
         // Als er Yesplan verkoopdata is, toon die (met reserveringen uit Yesplan).
         if (yesplanEvents.length > 0) {
@@ -10320,12 +10327,12 @@ class TheaterDashboard {
 
     escapeHtml(str) {
         return String(str || '')
-            .replace(/\\/g, '&#92;')
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;')
             .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#039;');
+            .replace(/'/g, '&#039;')
+            .replace(/\\/g, '&#92;');
     }
 
     formatNetworkInterfaceLabel(iface) {
