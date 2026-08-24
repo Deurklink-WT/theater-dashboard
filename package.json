@@ -1,6 +1,6 @@
 {
   "name": "theater-dashboard",
-  "version": "1.6.0-beta.0",
+  "version": "1.6.0-beta.1",
   "description": "Theater dashboard - integratie van Yesplan, Uurwerk, Itix en Priva systemen",
   "main": "src/main.js",
   "scripts": {

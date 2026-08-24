@@ -741,10 +741,10 @@
                                     </h4>
                                     
 
-                                                                        <!-- Version 1.6.0-beta.1 -->
+                                    <!-- Version 1.6.0-beta.1 -->
                                     <div style="margin-bottom: 1rem;">
                                         <h5 style="color: #cbd5e0; font-size: 0.95rem; margin-bottom: 0.5rem; font-weight: 600;">
-                                            v1.6.0-beta.1 (24-08-2026)
+                                            v1.6.0-beta.1 (25-08-2026)
                                         </h5>
                                         <ul style="margin-left: 1.25rem; margin-bottom: 0; padding-left: 0.5rem;">
                                             <li style="margin-bottom: 0.25rem;">
@@ -754,22 +754,31 @@
                                                 <strong style="color: #cbd5e0;">Nieuw:</strong> OSC Monitor — full-screen live triggerlog in dezelfde stijl als Lichtsignaal, met netwerkadapter-keuze in de topbar.
                                             </li>
                                             <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> API-server met Docker-stack, whitelist-login (access auth) en control panel voor beheer.
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Beveiliging:</strong> Rate limiting op API/login, geen Cloudflare- of GitHub-secrets meer in localStorage/builds, Yesplan-URL whitelist, strengere HTML-escape en schonere foutmeldingen.
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Updater:</strong> Auto-update downloads hersteld (assetnamen in <code>latest*.yml</code> komen overeen met de release-bestanden); publish-target weer correct voor GitHub Releases.
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Pi:</strong> Kiosk-script voor AppImage, autostart en dagelijkse update-check; betrouwbaardere GitHub-release-fetch.
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
                                                 <strong style="color: #cbd5e0;">Verbeterd:</strong> Showmodus-navigatie — timer, Lichtsignaal en OSC als knoppen zonder aparte rail-card, bovenaan uitgelijnd met de grote card.
                                             </li>
                                             <li style="margin-bottom: 0.25rem;">
                                                 <strong style="color: #cbd5e0;">Verbeterd:</strong> Zaalkiezer compacter buiten touchscreen-modus; grote knoppen blijven beschikbaar mét touchscreen-modus.
                                             </li>
                                             <li style="margin-bottom: 0.25rem;">
-                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Personeelsfilters verbeterd (dynamische functies, versleepbare volgorde, compactere weergave).
+                                                <strong style="color: #cbd5e0;">Verbeterd:</strong> Personeelsfilters (dynamische functies, versleepbare volgorde, compactere weergave).
                                             </li>
                                             <li style="margin-bottom: 0.25rem;">
-                                                <strong style="color: #cbd5e0;">Verbeterd:</strong> Verkoopcijfers robuuster uit Yesplan, met betere veldmapping en validatie op onrealistische waarden.
+                                                <strong style="color: #cbd5e0;">Verbeterd:</strong> Verkoopcijfers robuuster uit Yesplan; Itix per organisatie; technische opties per zaal alleen waar relevant.
                                             </li>
                                             <li style="margin-bottom: 0.25rem;">
-                                                <strong style="color: #cbd5e0;">Verbeterd:</strong> Itix-instellingen per organisatie en consistentere zaalplattegrond-logica.
-                                            </li>
-                                            <li style="margin-bottom: 0.25rem;">
-                                                <strong style="color: #cbd5e0;">Verbeterd:</strong> Technische opties per zaal tonen nu alleen relevante onderdelen (mits beschikbaar), met betere zaalcode-detectie.
+                                                <strong style="color: #cbd5e0;">Onderhoud:</strong> Afhankelijkheden bijgewerkt (o.a. Electron/axios); ongebruikte API-stubs opgeruimd; master-unlock alleen via omgeving.
                                             </li>
                                         </ul>
                                     </div>
