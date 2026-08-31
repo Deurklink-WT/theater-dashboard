@@ -40,7 +40,7 @@
     "@capacitor/core": "^6.0.0",
     "@capacitor/ios": "^6.0.0",
     "electron": "^43.4.1",
-    "electron-builder": "^24.6.4",
+    "electron-builder": "^26.15.3",
     "electronmon": "^2.0.4",
     "jest": "^29.7.0"
   },
