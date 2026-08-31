@@ -36,7 +36,7 @@
   "homepage": "https://github.com/Deurklink-WT/theater-dashboard#readme",
   "license": "UNLICENSED",
   "devDependencies": {
-    "@capacitor/cli": "^6.0.0",
+    "@capacitor/cli": "^8.5.0",
     "@capacitor/core": "^6.0.0",
     "@capacitor/ios": "^6.0.0",
     "electron": "^43.4.1",
