@@ -51,7 +51,7 @@
     "date-fns": "^2.30.0",
     "electron-store": "^8.1.0",
     "electron-updater": "^6.8.9",
-    "express": "^4.22.2",
+    "express": "^5.2.1",
     "express-rate-limit": "^8.6.2",
     "node-cron": "^3.0.3",
     "sacn": "^4.6.2"
