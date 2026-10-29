@@ -14,8 +14,24 @@
    * Normaliseert en valideert de opgeslagen API-server-URL.
    * Voorkomt per ongeluk Yesplan- of Itix-zaalplattegrond-URL in dit veld (regressie na v1.5.5).
    */
+  /**
+   * Dashboard geopend via de API-server zelf (/app). Dan is de pagina-origin de server.
+   * Niet gebruiken voor Capacitor/file (iPhone-bundel): daar blijft het aparte serverveld verplicht.
+   */
+  function sameOriginApiFallback() {
+    try {
+      var loc = window.location;
+      if (!loc || (loc.protocol !== 'http:' && loc.protocol !== 'https:')) return '';
+      var path = loc.pathname || '';
+      if (path === '/app' || path.indexOf('/app/') === 0 || path.indexOf('/controlpanel') === 0) {
+        return loc.origin;
+      }
+    } catch (e) { /* ignore */ }
+    return '';
+  }
+
   function getBase() {
-    const raw = window.SHIFT_HAPPENS_API_BASE || localStorage.getItem('SHIFT_HAPPENS_API_BASE') || '';
+    const raw = window.SHIFT_HAPPENS_API_BASE || localStorage.getItem('SHIFT_HAPPENS_API_BASE') || sameOriginApiFallback();
     let t = String(raw || '').trim();
     if (!t) return '';
     if (!/^https?:\/\//i.test(t)) t = 'http://' + t;

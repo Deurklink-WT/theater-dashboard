@@ -2577,7 +2577,24 @@ textarea.voorstelling-timer-replace-input {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     gap: 1rem;
+}
+
+.settings-save-status {
+    margin: 0;
+    margin-right: auto;
+    min-height: 1.25rem;
+    font-size: 0.9rem;
+    line-height: 1.3;
+}
+
+.settings-save-status--error {
+    color: #fca5a5;
+}
+
+.settings-save-status--ok {
+    color: #86efac;
 }
 
 .voorstelling-timer-custom-step-footer {

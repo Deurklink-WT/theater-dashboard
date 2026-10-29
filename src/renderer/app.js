@@ -10000,6 +10000,7 @@ class TheaterDashboard {
             manualTimeInput.dataset.boundManualTime = '1';
         }
         await this.refreshNetworkInterfaceOptions();
+        this.showSettingsSaveStatus('');
         this.populateSettingsForm();
         this.bindOrgNameLabelListeners();
         this.setupSettingsNavigation();
@@ -10916,8 +10917,21 @@ class TheaterDashboard {
         });
     }
 
+    showSettingsSaveStatus(message, isError) {
+        const el = document.getElementById('settingsSaveStatus');
+        if (!el) return;
+        el.textContent = message || '';
+        el.classList.toggle('settings-save-status--error', !!isError && !!message);
+        el.classList.toggle('settings-save-status--ok', !isError && !!message);
+    }
+
     async saveSettings() {
-        if (!window.electronAPI) return;
+        if (!window.electronAPI) {
+            this.showSettingsSaveStatus(this.t('errors.settingsSave'), true);
+            return;
+        }
+
+        this.showSettingsSaveStatus('');
 
         try {
             // Bewaar huidige schermcontext zodat Opslaan de gebruiker niet naar een andere zaal/view duwt.
@@ -11148,9 +11162,17 @@ class TheaterDashboard {
             await this.loadAllData();
 
             if (saveWarnings.length > 0) {
-                this.showError('settings', Array.from(new Set(saveWarnings)).join(' '));
+                this.showSettingsSaveStatus(Array.from(new Set(saveWarnings)).join(' '), true);
+            } else {
+                this.showSettingsSaveStatus(this.t('settings.saved'), false);
             }
             this.showSuccess(this.t('settings.saved'));
+            const showOnlyViews = ['voorstellingTimer', 'trekkenlijsten', 'oscMonitor'];
+            if (!this.isShowModeEnabled() && showOnlyViews.includes(this.currentView)) {
+                await this.showHomeView(false);
+            } else {
+                this.refreshVoorstellingTimerChrome();
+            }
             await this.refreshMasterModeStatusLine();
             await this.refreshTimerSyncStatusLine();
             if (this.currentView === 'voorstellingTimer') {
@@ -11158,7 +11180,7 @@ class TheaterDashboard {
             }
         } catch (error) {
             console.error('Instellingen opslaan fout:', error);
-            this.showError('settings', this.escapeHtml(error?.message || this.t('errors.settingsSave')));
+            this.showSettingsSaveStatus(error?.message || this.t('errors.settingsSave'), true);
         }
     }
 
