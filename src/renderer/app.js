@@ -11,7 +11,7 @@
 // Vertalingen (i18n)
 const TRANSLATIONS = {
     nl: {
-        settings: { colorMode: 'Kleurmodus', language: 'Taal', title: 'Instellingen', save: 'Opslaan', saved: 'Instellingen opgeslagen!', theme: 'Thema', timezoneMode: 'Tijd', timezoneAuto: 'Automatisch', timezoneManual: 'Handmatig', timezoneSelect: 'Handmatige tijdzone', manualTime: 'Handmatige tijd', touchscreenMode: 'Touchscreen-modus', touchscreenModeHint: 'Grotere scrollbalk en grotere tikgebieden voor gebruik op aanraakschermen (bijv. Raspberry Pi-kiosk).', showMode: 'Showmodus', showModeHint: 'Geeft toegang tot de voorstellingtimer en later meer toneelfuncties. Zet uit als je alleen de planning bekijkt.', ioTitle: 'In/Uit', ioHint: 'Kies per protocol welke netwerkinterface gebruikt wordt. Dezelfde interface mag meerdere keren gekozen worden.', interfaceInternet: 'Internet / API verkeer', interfaceLuminexSacn: 'Luminex / sACN', interfaceOsc: 'OSC listener', interfaceAuto: 'Automatisch (OS standaard)', venueOrder: 'Zaalvolgorde', venueOrderHint: 'Sleep de zalen om de volgorde aan te passen. Klik op het oog om een zaal te verbergen in de zaal-dropdown.', resetVenueOrder: 'Reset naar standaard', techOptions: 'Technische opties per zaal', techOptionsHint: 'Kies per zaal welke opties getoond worden. Zaalplattegrond alleen als Itix-URL is ingesteld. Trekkenlijsten: vink alle zalen aan die in showmode meedoen.', yesplan: 'Yesplan', activeOrg: 'Actieve organisatie', activeOrgHint: 'Bepaal welke Yesplan-organisatie het dashboard gebruikt', org1: 'Organisatie 1', org2: 'Organisatie 2', orgN: 'Organisatie {n}', bothOrgs: 'Beide organisaties', name: 'Naam', shortName: 'Afkorting', baseURL: 'Base URL', apiKey: 'API Key', loadVenues: 'Laad Zalen', loadVenuesHint: 'Haalt zalen op voor zaalvolgorde en header', loadVenuesFullHint: 'Vul per organisatie Base URL en API Key in, klik op "Laad Zalen"', testConnection: 'Test Verbinding', about: 'Over deze app', showVenue: 'Zaal tonen', hideVenue: 'Zaal verbergen', balletvloer: 'Balletvloer', vleugel: 'Vleugel', orkestbak: 'Orkestbak', trekkenlijstenVenue: 'Trekkenlijsten', trekkenlijstenVenueHint: 'Kies welke zaal in showmode de trekkenlijsten-weergave vult (één zaal).', trekkenlijstenVenueLabel: 'Zaal voor trekkenlijsten', trekkenlijstenVenueNone: 'Geen (trekkenlijsten uit)', itix: 'Itix', itixBaseURL: 'Basis-URL zaalplattegrond', itixBaseURLHint: 'Voer het voorvoegsel van de beheer-URL voor de zaalplattegrond in, eindigend vóór het uitvoerings-id (Yesplan-event-id). Voorbeeld: https://tickets.jouworganisatie.nl/beheer/zaalplattegrond/uitvoeringinfo', itixBaseURLOrg: 'Basis-URL zaalplattegrond ({org})' },
+        settings: { colorMode: 'Kleurmodus', language: 'Taal', title: 'Instellingen', save: 'Opslaan', saved: 'Instellingen opgeslagen!', theme: 'Thema', timezoneMode: 'Tijd', timezoneAuto: 'Automatisch', timezoneManual: 'Handmatig', timezoneSelect: 'Handmatige tijdzone', manualTime: 'Handmatige tijd', touchscreenMode: 'Touchscreen-modus', touchscreenModeHint: 'Grotere scrollbalk en grotere tikgebieden voor gebruik op aanraakschermen (bijv. Raspberry Pi-kiosk).', showMode: 'Showmodus', showModeHint: 'Geeft toegang tot de voorstellingtimer en later meer toneelfuncties. Zet uit als je alleen de planning bekijkt.', ioTitle: 'In/Uit', ioHint: 'Kies per protocol welke netwerkinterface gebruikt wordt. Dezelfde interface mag meerdere keren gekozen worden.', interfaceInternet: 'Internet / API verkeer', interfaceLuminexSacn: 'Luminex / sACN', interfaceOsc: 'OSC listener', interfaceAuto: 'Automatisch (OS standaard)', venueOrder: 'Zaalvolgorde', venueOrderHint: 'Sleep de zalen om de volgorde aan te passen. Klik op het oog om een zaal te verbergen in de zaal-dropdown.', resetVenueOrder: 'Reset naar standaard', techOptions: 'Technische opties per zaal', techOptionsHint: 'Kies per zaal welke opties getoond worden. Zaalplattegrond alleen als Itix-URL is ingesteld. Trekkenlijsten: vink de zalen aan die in de trekkenwandlijst meedoen.', yesplan: 'Yesplan', activeOrg: 'Actieve organisatie', activeOrgHint: 'Bepaal welke Yesplan-organisatie het dashboard gebruikt', org1: 'Organisatie 1', org2: 'Organisatie 2', orgN: 'Organisatie {n}', bothOrgs: 'Beide organisaties', name: 'Naam', shortName: 'Afkorting', baseURL: 'Base URL', apiKey: 'API Key', loadVenues: 'Laad Zalen', loadVenuesHint: 'Haalt zalen op voor zaalvolgorde en header', loadVenuesFullHint: 'Vul per organisatie Base URL en API Key in, klik op "Laad Zalen"', testConnection: 'Test Verbinding', about: 'Over deze app', showVenue: 'Zaal tonen', hideVenue: 'Zaal verbergen', balletvloer: 'Balletvloer', vleugel: 'Vleugel', orkestbak: 'Orkestbak', trekkenlijstenVenue: 'Trekkenlijsten', trekkenlijstenVenueHint: 'Kies welke zaal in showmode de trekkenlijsten-weergave vult (één zaal).', trekkenlijstenVenueLabel: 'Zaal voor trekkenlijsten', trekkenlijstenVenueNone: 'Geen (trekkenlijsten uit)', itix: 'Itix', itixBaseURL: 'Basis-URL zaalplattegrond', itixBaseURLHint: 'Voer het voorvoegsel van de beheer-URL voor de zaalplattegrond in, eindigend vóór het uitvoerings-id (Yesplan-event-id). Voorbeeld: https://tickets.jouworganisatie.nl/beheer/zaalplattegrond/uitvoeringinfo', itixBaseURLOrg: 'Basis-URL zaalplattegrond ({org})' },
         status: { online: 'Online', offline: 'Offline', deels: 'Deels bereikbaar', warning: 'Waarschuwing', systemStatus: 'Systeemstatus', clickForStatus: 'Klik voor systeemstatus', apiServerLabel: 'API-server', apiServerNotSet: 'Niet ingesteld' },
         nav: { back: 'Terug', backTitle: 'Terug naar vorig scherm', home: 'Home', weekView: 'Weekoverzicht', voorstellingTimer: 'Voorstelling timer', trekkenlijsten: 'Trekkenlijsten', luminex: 'Lichtsignaal', techOverview: 'Technisch overzicht', techOverviewTitle: 'Print technisch overzicht voor deze dag (alle zalen)', prevDay: 'Vorige dag', nextDay: 'Volgende dag', refresh: 'Vernieuwen', searchEvent: 'Zoek evenement', searchEventTitle: 'Zoek op evenementnaam (* en ? als wildcard)' },
         trekkenlijsten: {
@@ -22,8 +22,14 @@ const TRANSLATIONS = {
             venueMissing: 'Geen zaal gekozen voor trekkenlijsten. Vink bij Instellingen → Yesplan → Technische opties per zaal één of meer zalen aan.',
             venueNotFound: 'Gekozen trekkenlijst-zaal niet gevonden in Yesplan.',
             loadError: 'Kon trekkenlijsten niet laden: {msg}',
-            metaCount: '{n} van de komende 20 trekkenlijsten',
+            metaCount: '{from}–{to} van {total}',
+            pagerPrev: 'Vorige',
+            pagerNext: 'Volgende',
+            loadingMore: 'Volgende reeks laden…',
+            noMore: 'Geen verdere trekkenlijsten in deze periode. Volgende zoekt verder.',
             verwerkt: 'Verwerkt',
+            verwerktBy: 'door {name}',
+            verwerktLocked: 'Alleen {name} kan dit uitzetten',
             commentPlaceholder: 'Opmerking…',
             syncLoginHint: 'Log in via Instellingen → Shift-server om opmerkingen en verwerkt-status te synchroniseren.'
         },
@@ -44,8 +50,9 @@ const TRANSLATIONS = {
         test: { testing: 'Testen...', success: 'Succesvol', failed: 'Gefaald' },
         updates: {
             sectionTitle: 'Updates (desktop)',
-            hint: 'Alleen actief in de geïnstalleerde app. Met npm start (ontwikkeling) is er geen automatische update.',
+            hint: 'Standaard alleen stabiele versies; die worden automatisch gedownload. Bèta alleen als je dat hier kiest, en die download je zelf.',
             checkNow: 'Nu controleren op updates',
+            betaOptIn: 'Bèta-updates ontvangen',
             devNoop: 'Ontwikkelingsmodus: geen update-check (test met de geïnstalleerde app).',
             disabled: 'Updates uit (SKIP_AUTO_UPDATE).',
             okAvailable: 'Update beschikbaar: {v}',
@@ -240,7 +247,7 @@ const TRANSLATIONS = {
         }
     },
     en: {
-        settings: { colorMode: 'Color mode', language: 'Language', title: 'Settings', save: 'Save', saved: 'Settings saved!', theme: 'Theme', timezoneMode: 'Time', timezoneAuto: 'Automatic', timezoneManual: 'Manual', timezoneSelect: 'Manual time zone', manualTime: 'Manual time', touchscreenMode: 'Touchscreen mode', touchscreenModeHint: 'Larger scrollbar and tap targets for use on touchscreens (e.g. Raspberry Pi kiosk).', showMode: 'Show mode', showModeHint: 'Enables the performance timer and future show features. Turn off if you only read the schedule.', ioTitle: 'In/Out', ioHint: 'Choose which network interface each protocol should use. The same interface can be selected multiple times.', interfaceInternet: 'Internet / API traffic', interfaceLuminexSacn: 'Luminex / sACN', interfaceOsc: 'OSC listener', interfaceAuto: 'Automatic (OS default)', venueOrder: 'Venue order', venueOrderHint: 'Drag venues to change the order. Click the eye to hide a venue in the venue dropdown.', resetVenueOrder: 'Reset to default', techOptions: 'Technical options per venue', techOptionsHint: 'Choose per venue which options are shown. Seating plan only if an Itix URL is set. Fly cue lists: check all venues that should appear in show mode.', yesplan: 'Yesplan', activeOrg: 'Active organisation', activeOrgHint: 'Determine which Yesplan organisation the dashboard uses', org1: 'Organisation 1', org2: 'Organisation 2', orgN: 'Organisation {n}', bothOrgs: 'Both organisations', name: 'Name', shortName: 'Abbreviation', baseURL: 'Base URL', apiKey: 'API Key', loadVenues: 'Load Venues', loadVenuesHint: 'Fetches venues for order and header', loadVenuesFullHint: 'Enter Base URL and API Key per organisation, click "Load Venues"', testConnection: 'Test Connection', about: 'About this app', showVenue: 'Show venue', hideVenue: 'Hide venue', balletvloer: 'Dance floor', vleugel: 'Grand piano', orkestbak: 'Orchestra pit', trekkenlijstenVenue: 'Fly cue lists', trekkenlijstenVenueHint: 'Choose which venue fills the fly cue lists view in show mode (one venue).', trekkenlijstenVenueLabel: 'Venue for fly cue lists', trekkenlijstenVenueNone: 'None (fly cue lists off)', itix: 'Itix', itixBaseURL: 'Seating plan base URL', itixBaseURLHint: 'Enter the admin URL prefix for the seating plan, ending before the performance id (Yesplan event id). Example: https://tickets.example.com/beheer/zaalplattegrond/uitvoeringinfo', itixBaseURLOrg: 'Seating plan base URL ({org})' },
+        settings: { colorMode: 'Color mode', language: 'Language', title: 'Settings', save: 'Save', saved: 'Settings saved!', theme: 'Theme', timezoneMode: 'Time', timezoneAuto: 'Automatic', timezoneManual: 'Manual', timezoneSelect: 'Manual time zone', manualTime: 'Manual time', touchscreenMode: 'Touchscreen mode', touchscreenModeHint: 'Larger scrollbar and tap targets for use on touchscreens (e.g. Raspberry Pi kiosk).', showMode: 'Show mode', showModeHint: 'Enables the performance timer and future show features. Turn off if you only read the schedule.', ioTitle: 'In/Out', ioHint: 'Choose which network interface each protocol should use. The same interface can be selected multiple times.', interfaceInternet: 'Internet / API traffic', interfaceLuminexSacn: 'Luminex / sACN', interfaceOsc: 'OSC listener', interfaceAuto: 'Automatic (OS default)', venueOrder: 'Venue order', venueOrderHint: 'Drag venues to change the order. Click the eye to hide a venue in the venue dropdown.', resetVenueOrder: 'Reset to default', techOptions: 'Technical options per venue', techOptionsHint: 'Choose per venue which options are shown. Seating plan only if an Itix URL is set. Fly cue lists: check the venues that should appear in the fly list.', yesplan: 'Yesplan', activeOrg: 'Active organisation', activeOrgHint: 'Determine which Yesplan organisation the dashboard uses', org1: 'Organisation 1', org2: 'Organisation 2', orgN: 'Organisation {n}', bothOrgs: 'Both organisations', name: 'Name', shortName: 'Abbreviation', baseURL: 'Base URL', apiKey: 'API Key', loadVenues: 'Load Venues', loadVenuesHint: 'Fetches venues for order and header', loadVenuesFullHint: 'Enter Base URL and API Key per organisation, click "Load Venues"', testConnection: 'Test Connection', about: 'About this app', showVenue: 'Show venue', hideVenue: 'Hide venue', balletvloer: 'Dance floor', vleugel: 'Grand piano', orkestbak: 'Orchestra pit', trekkenlijstenVenue: 'Fly cue lists', trekkenlijstenVenueHint: 'Choose which venue fills the fly cue lists view in show mode (one venue).', trekkenlijstenVenueLabel: 'Venue for fly cue lists', trekkenlijstenVenueNone: 'None (fly cue lists off)', itix: 'Itix', itixBaseURL: 'Seating plan base URL', itixBaseURLHint: 'Enter the admin URL prefix for the seating plan, ending before the performance id (Yesplan event id). Example: https://tickets.example.com/beheer/zaalplattegrond/uitvoeringinfo', itixBaseURLOrg: 'Seating plan base URL ({org})' },
         status: { online: 'Online', offline: 'Offline', deels: 'Partially available', warning: 'Warning', systemStatus: 'System status', clickForStatus: 'Click for system status', apiServerLabel: 'API server', apiServerNotSet: 'Not configured' },
         nav: { back: 'Back', backTitle: 'Back to previous screen', home: 'Home', weekView: 'Week overview', voorstellingTimer: 'Performance timer', trekkenlijsten: 'Fly cue lists', luminex: 'Lighting signal', techOverview: 'Technical overview', techOverviewTitle: 'Print technical overview for this day (all venues)', prevDay: 'Previous day', nextDay: 'Next day', refresh: 'Refresh', searchEvent: 'Search event', searchEventTitle: 'Search by event name (* and ? as wildcards)' },
         trekkenlijsten: {
@@ -251,8 +258,14 @@ const TRANSLATIONS = {
             venueMissing: 'No venue selected for fly cue lists. Enable one or more under Settings → Yesplan → Technical options per venue.',
             venueNotFound: 'Selected fly cue list venue not found in Yesplan.',
             loadError: 'Could not load fly cue lists: {msg}',
-            metaCount: '{n} of the next 20 fly cue lists',
+            metaCount: '{from}–{to} of {total}',
+            pagerPrev: 'Previous',
+            pagerNext: 'Next',
+            loadingMore: 'Loading the next set…',
+            noMore: 'No further fly cue lists in this period. Next searches further ahead.',
             verwerkt: 'Processed',
+            verwerktBy: 'by {name}',
+            verwerktLocked: 'Only {name} can turn this off',
             commentPlaceholder: 'Note…',
             syncLoginHint: 'Log in via Settings → Shift server to sync notes and processed status.'
         },
@@ -273,8 +286,9 @@ const TRANSLATIONS = {
         test: { testing: 'Testing...', success: 'Success', failed: 'Failed' },
         updates: {
             sectionTitle: 'Updates (desktop)',
-            hint: 'Only active in the installed app. There is no auto-update when using npm start (development).',
+            hint: 'Stable releases are downloaded automatically. Beta updates only if you opt in here, and you download those yourself.',
             checkNow: 'Check for updates now',
+            betaOptIn: 'Receive beta updates',
             devNoop: 'Development mode: no update check (use the installed app to test updates).',
             disabled: 'Updates disabled (SKIP_AUTO_UPDATE).',
             okAvailable: 'Update available: {v}',
@@ -485,7 +499,7 @@ class TheaterDashboard {
         this.selectedDate = new Date(); // Geselecteerde datum (standaard vandaag)
         this.maxDateOffsetForward = 365; // Maximaal 1 jaar vooruit
         this.maxDateOffsetBackward = 31; // Maximaal 1 maand terug
-        this.currentView = 'home'; // 'home', 'detail', 'week', 'voorstellingTimer', 'trekkenlijsten', 'luminex' of 'oscMonitor'
+        this.currentView = 'home'; // 'home', 'detail', 'week', 'voorstellingTimer', 'trekkenlijsten' of 'luminex'
         this._luminexViewerResizeBound = false;
         this.tijdschemaScheduleData = null; // laatste geladen tijdschema (detail / timer)
         this._voorstellingTimerClockInterval = null;
@@ -541,9 +555,12 @@ class TheaterDashboard {
         this._navRailLongPressTimer = null;
         this._navRailDragId = null;
         this._navRailReorderExitTimer = null;
-        this._oscMonitorEntries = [];
-        this._oscMonitorMaxEntries = 250;
         this._trekkenlijstenItems = [];
+        this._trekkenlijstenAll = [];
+        this._trekkenlijstenPage = 0;
+        this._trekkenlijstenPageSize = 10;
+        this._trekkenlijstenNoMore = false;
+        this._trekkenlijstRangeEnd = null;
         this._trekkenlijstenLoading = false;
         this._trekkenlijstSyncState = {};
         this._trekkenlijstSyncPollInterval = null;
@@ -684,16 +701,11 @@ class TheaterDashboard {
         document.getElementById('trekkenlijstenRefreshBtn')?.addEventListener('click', () => {
             void this.loadTrekkenlijsten({ forceRefresh: true });
         });
-        document.getElementById('oscMonitorNavBtn')?.addEventListener('click', () => {
-            if (this._navRailReorderMode) return;
-            void this.showOscMonitorView();
+        document.getElementById('trekkenlijstenPrevBtn')?.addEventListener('click', () => {
+            this.showTrekkenlijstenPage(this._trekkenlijstenPage - 1);
         });
-        document.getElementById('oscMonitorClearBtn')?.addEventListener('click', () => {
-            this._oscMonitorEntries = [];
-            this.renderOscMonitorEntries();
-        });
-        document.getElementById('oscMonitorInterface')?.addEventListener('change', (e) => {
-            void this.saveOscMonitorNetworkInterface(e.target?.value);
+        document.getElementById('trekkenlijstenNextBtn')?.addEventListener('click', () => {
+            void this.showNextTrekkenlijsten();
         });
         this.setupNavRailReorder();
 
@@ -701,7 +713,6 @@ class TheaterDashboard {
             window.electronAPI.onOscTimerTrigger((payload) => {
                 const slotId = payload?.slotId;
                 const stepId = payload?.stepId;
-                this.addOscMonitorEntry(payload);
                 if (typeof slotId === 'string' && typeof stepId === 'string') {
                     this.triggerVoorstellingTimerStepFromOsc(slotId.trim(), stepId.trim());
                 }
@@ -850,25 +861,6 @@ class TheaterDashboard {
                 const org = parseInt(e.currentTarget.dataset.org, 10) || 1;
                 this.loadVenuesForSettings(org);
             });
-        });
-        document.getElementById('discoverMasterBtn')?.addEventListener('click', async () => {
-            const resultEl = document.getElementById('masterModeDiscoveryResult');
-            if (resultEl) resultEl.textContent = 'Zoeken...';
-            try {
-                const res = await window.electronAPI?.discoverMasterMode?.();
-                if (!res?.success) throw new Error(res?.error || 'onbekende fout');
-                if (!Array.isArray(res.masters) || res.masters.length === 0) {
-                    if (resultEl) resultEl.textContent = 'Geen actieve master gevonden op dit netwerk.';
-                    return;
-                }
-                const m = res.masters[0];
-                if (resultEl) resultEl.textContent = `Master gevonden: ${m.address}:${m.port}${m.name ? ` (${m.name})` : ''}`;
-            } catch (error) {
-                if (resultEl) resultEl.textContent = `Zoeken mislukt: ${error?.message || String(error)}`;
-            }
-        });
-        document.getElementById('masterModeEnabledCheckbox')?.addEventListener('change', () => {
-            this.updateMasterModeInputState();
         });
         document.getElementById('shiftServerBaseUrlInput')?.addEventListener('change', () => {
             const base = this.normalizeShiftHappensApiBase(
@@ -1348,31 +1340,6 @@ class TheaterDashboard {
             : [];
 
         const TIMER_ID = 'voorstellingTimerBtn';
-        const TREK_ID = 'trekkenlijstenNavBtn';
-        const LUMINEX_ID = 'luminexNavBtn';
-
-        // Eenmalige migratie: trekkenlijsten hoort direct onder de timer (niet achter Luminex).
-        if (order.length) {
-            const trekIdx = order.indexOf(TREK_ID);
-            const luminexIdx = order.indexOf(LUMINEX_ID);
-            const missing = trekIdx < 0;
-            const afterLuminex = trekIdx >= 0 && luminexIdx >= 0 && trekIdx > luminexIdx;
-            if (missing || afterLuminex) {
-                order = order.filter((id) => id !== TREK_ID);
-                const ti = order.indexOf(TIMER_ID);
-                if (ti >= 0) order.splice(ti + 1, 0, TREK_ID);
-                else order.unshift(TREK_ID);
-                this.config.app = this.config.app || {};
-                this.config.app.navRailOrder = order;
-                if (window.electronAPI?.getConfig && window.electronAPI?.saveConfig) {
-                    window.electronAPI.getConfig('app').then((cfg) => {
-                        const next = cfg || {};
-                        next.navRailOrder = order;
-                        return window.electronAPI.saveConfig('app', next);
-                    }).catch(() => {});
-                }
-            }
-        }
 
         if (!order.length) return;
 
@@ -1390,17 +1357,7 @@ class TheaterDashboard {
             appendBtn(rail.querySelector(`#${CSS.escape(String(id))}`));
         }
         rail.querySelectorAll('.nav-rail-btn[id]').forEach((btn) => {
-            if (!known.has(btn.id)) {
-                if (btn.id === TREK_ID) {
-                    const timerEl = document.getElementById(TIMER_ID);
-                    const after = (timerEl?.parentElement === railSlot ? railSlot : timerEl) || null;
-                    if (after?.nextSibling) rail.insertBefore(btn, after.nextSibling);
-                    else if (after) after.after(btn);
-                    else rail.appendChild(btn);
-                } else {
-                    rail.appendChild(btn);
-                }
-            }
+            if (!known.has(btn.id)) rail.appendChild(btn);
         });
     }
 
@@ -1673,6 +1630,7 @@ class TheaterDashboard {
             await this.loadWeekData();
             return;
         }
+        if (this.currentView === 'trekkenlijsten' || this.currentView === 'luminex') return;
         // Als een specifieke zaal is geselecteerd, ga naar detail view
         // Als "alle zalen" is geselecteerd, ga naar home view
         if (this.selectedVenues.length === 1) {
@@ -2463,7 +2421,6 @@ class TheaterDashboard {
         this.detailContext = null;
         this.hideVoorstellingTimerShell();
         this.hideLuminexShell();
-        this.hideOscMonitorShell();
         this.hideTrekkenlijstenShell();
 
         const weekWrapper = document.getElementById('weekViewWrapper');
@@ -2487,7 +2444,6 @@ class TheaterDashboard {
         document.getElementById('voorstellingTimerBtn')?.classList.remove('active');
         document.getElementById('trekkenlijstenNavBtn')?.classList.remove('active');
         document.getElementById('luminexNavBtn')?.classList.remove('active');
-        document.getElementById('oscMonitorNavBtn')?.classList.remove('active');
         
         if (dashboardGrid) {
             dashboardGrid.classList.add('home-view');
@@ -2546,7 +2502,6 @@ class TheaterDashboard {
         if (clearDetailContext) this.detailContext = null;
         this.hideVoorstellingTimerShell();
         this.hideLuminexShell();
-        this.hideOscMonitorShell();
         this.hideTrekkenlijstenShell();
 
         const weekWrapper = document.getElementById('weekViewWrapper');
@@ -2626,7 +2581,6 @@ class TheaterDashboard {
         this.detailContext = null;
         this.hideVoorstellingTimerShell();
         this.hideLuminexShell();
-        this.hideOscMonitorShell();
         this.hideTrekkenlijstenShell();
         document.body.classList.remove('home-view-active');
         document.body.classList.add('week-view-active');
@@ -2647,8 +2601,12 @@ class TheaterDashboard {
 
         const dateSelector = document.querySelector('.date-selector');
         const venueSelector = document.querySelector('.venue-selector');
-        if (dateSelector) dateSelector.style.display = 'none';
+        if (dateSelector) {
+            dateSelector.style.display = 'flex';
+            dateSelector.style.visibility = 'visible';
+        }
         if (venueSelector) venueSelector.style.display = 'block';
+        this.updateDateDisplay();
 
         document.getElementById('weekBtn')?.classList.add('active');
         document.getElementById('homeBtn')?.classList.remove('active');
@@ -2689,10 +2647,7 @@ class TheaterDashboard {
             return true;
         }
         if (viewName === 'trekkenlijsten') {
-            return this.isShowModeEnabled();
-        }
-        if (viewName === 'oscMonitor') {
-            return this.isShowModeEnabled();
+            return this.isTrekkenlijstSyncEnabled();
         }
         return false;
     }
@@ -2750,10 +2705,7 @@ class TheaterDashboard {
             return true;
         }
         if (viewName === 'trekkenlijsten') {
-            return this.isShowModeEnabled();
-        }
-        if (viewName === 'oscMonitor') {
-            return this.isShowModeEnabled();
+            return this.isTrekkenlijstSyncEnabled();
         }
         return false;
     }
@@ -2801,8 +2753,6 @@ class TheaterDashboard {
                 await this.showTrekkenlijstenView();
             } else if (targetEntry.view === 'luminex') {
                 await this.showLuminexView();
-            } else if (targetEntry.view === 'oscMonitor') {
-                await this.showOscMonitorView();
             }
         } finally {
             this._isNavigatingBack = false;
@@ -3117,7 +3067,7 @@ class TheaterDashboard {
             const title = escapeText(event.title);
             const performer = event.performer ? `<p class="week-event-performer"><i class="fas fa-user"></i> ${escapeText(event.performer)}</p>` : '';
             let timeRange = '';
-            if (event.scheduleStartTime && event.scheduleEndTime) timeRange = `${event.scheduleStartTime} – ${event.scheduleEndTime}`;
+            if (event.scheduleStartTime && event.scheduleEndTime) timeRange = `${escapeText(event.scheduleStartTime)} – ${escapeText(event.scheduleEndTime)}`;
             else {
                 const st = event.startDate ? this.formatTime(event.startDate) : '?';
                 const et = event.endDate ? this.formatTime(event.endDate) : '?';
@@ -3131,9 +3081,9 @@ class TheaterDashboard {
                 const parts = [];
                 const bv = event.balletvloerExplicit ? (event.hasBalletvloer ? this.t('resources.ja') : this.t('resources.nee')) : this.t('resources.nietBekend');
                 const vl = event.vleugelExplicit ? (event.hasVleugel ? this.t('resources.ja') : this.t('resources.nee')) : this.t('resources.nietBekend');
-                const ob = event.orkestbakExplicit || event.orkestbakValue
+                const ob = escapeText(event.orkestbakExplicit || event.orkestbakValue
                     ? (event.orkestbakValue || (event.hasOrkestbak ? this.t('resources.ja') : this.t('resources.nee')))
-                    : this.t('resources.nietBekend');
+                    : this.t('resources.nietBekend'));
                 if (this.shouldShowTechnicalPartForEvent(event, 'balletvloer', showBalletvloer)) parts.push(`Balletvloer: <strong>${bv}</strong>`);
                 if (this.shouldShowTechnicalPartForEvent(event, 'vleugel', showVleugel)) parts.push(`Vleugel: <strong>${vl}</strong>`);
                 if (this.shouldShowTechnicalPartForEvent(event, 'orkestbak', showOrkestbak)) parts.push(`Orkestbak: <strong>${ob}</strong>`);
@@ -3227,7 +3177,7 @@ class TheaterDashboard {
                 if (raw.endtime && raw.defaultscheduleend && raw.endtime !== raw.defaultscheduleend) extraParts.push(`Afbouw: ${this.formatTime(raw.endtime)}`);
             }
             if (event.status && event.status !== 'unknown') {
-                const statusStr = event.bookingManager ? `${event.status} – ${escapeText(event.bookingManager)}` : event.status;
+                const statusStr = event.bookingManager ? `${escapeText(event.status)} – ${escapeText(event.bookingManager)}` : escapeText(event.status);
                 extraParts.push(statusStr);
             }
             if (extraParts.length) extra = `<p class="week-event-extra"><i class="fas fa-info-circle"></i> ${extraParts.join(' · ')}</p>`;
@@ -3488,6 +3438,8 @@ class TheaterDashboard {
             
             if (this.currentView === 'week') {
                 await this.loadWeekData();
+            } else if (this.currentView === 'trekkenlijsten' || this.currentView === 'luminex') {
+                this.updateMasterStatus();
             } else if (this.selectedVenues.length === 1) {
                 this.detailContext = null;
                 await this.showDetailView(true, true);
@@ -3718,6 +3670,7 @@ class TheaterDashboard {
                 await this.loadWeekData();
                 return;
             }
+            if (this.currentView === 'trekkenlijsten' || this.currentView === 'luminex') return;
             if (this.selectedVenues.length === 1) {
                 const wasVoorstellingTimer = this.currentView === 'voorstellingTimer';
                 this.detailContext = null;
@@ -3752,6 +3705,7 @@ class TheaterDashboard {
                 await this.loadWeekData();
                 return;
             }
+            if (this.currentView === 'trekkenlijsten' || this.currentView === 'luminex') return;
             if (this.selectedVenues.length === 1) {
                 const wasVoorstellingTimer = this.currentView === 'voorstellingTimer';
                 this.detailContext = null;
@@ -4003,11 +3957,11 @@ class TheaterDashboard {
             <div class="events-list">
                 ${events.map(event => {
                     // Titel zonder artiest
-                    const title = event.title;
+                    const title = this.escapeHtml(event.title);
                     
                     // Artiest op aparte regel (ook als Yesplan titel en artiest dezelfde tekst heeft)
                     const performerInfo = event.performer
-                        ? `<p style="margin-top: 0.25rem; color: #a0aec0; font-size: 0.9rem;"><i class="fas fa-user"></i> ${event.performer}</p>`
+                        ? `<p style="margin-top: 0.25rem; color: #a0aec0; font-size: 0.9rem;"><i class="fas fa-user"></i> ${this.escapeHtml(event.performer)}</p>`
                         : '';
                     const showOrgInfo = this.isBothOrgsActive();
                     const orgNumRaw = String(event._organizationId || '').trim();
@@ -4028,6 +3982,7 @@ class TheaterDashboard {
                         const endTime = event.endDate ? this.formatTime(event.endDate) : 'Onbekend';
                         timeRange = `${startTime} - ${endTime}`;
                     }
+                    timeRange = this.escapeHtml(timeRange);
                     
                     // Resources (balletvloer, vleugel, orkestbak) - per zaal configureerbaar in instellingen
                     const eventVenueId = event._organizationId && event.venueIds?.[0] ? `${event._organizationId}:${event.venueIds[0]}` : event.venueIds?.[0];
@@ -4044,9 +3999,9 @@ class TheaterDashboard {
                             topLineParts.push(`Vleugel: <strong>${vleugelStatus}</strong>`);
                         }
                         if (this.shouldShowTechnicalPartForEvent(event, 'orkestbak', showOrkestbak)) {
-                            const orkestbakStatus = (event.orkestbakExplicit || event.orkestbakValue)
+                            const orkestbakStatus = this.escapeHtml((event.orkestbakExplicit || event.orkestbakValue)
                                 ? (event.orkestbakValue || (event.hasOrkestbak ? this.t('resources.ja') : this.t('resources.nee')))
-                                : this.t('resources.nietBekend');
+                                : this.t('resources.nietBekend'));
                             topLineParts.push(`Orkestbak: <strong>${orkestbakStatus}</strong>`);
                         }
                         const topLineHtml = topLineParts
@@ -4119,11 +4074,11 @@ class TheaterDashboard {
                             const urlParts = doc.url.split('/');
                             const fileName = urlParts[urlParts.length - 1] || doc.name || 'Document';
                             const decodedFileName = decodeURIComponent(fileName).replace(/%20/g, ' ');
-                            const docName = decodedFileName.endsWith('.pdf') ? decodedFileName.replace('.pdf', '') : decodedFileName;
+                            const docName = this.escapeHtml(decodedFileName.endsWith('.pdf') ? decodedFileName.replace('.pdf', '') : decodedFileName);
                             const docDate = doc.date ? new Date(doc.date).toLocaleDateString('nl-NL', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '';
-                            const docAuthor = doc.author || '';
+                            const docAuthor = this.escapeHtml(doc.author || '');
                             const escapedUrl = this.escapeHtml(String(doc.url || ''));
-                            const category = doc.category || 'Document';
+                            const category = this.escapeHtml(doc.category || 'Document');
                             
                             return `
                                 <div style="margin-top: 0.5rem;">
@@ -4161,9 +4116,9 @@ class TheaterDashboard {
                         const urlParts = event.riderAttachment.url.split('/');
                         const fileName = urlParts[urlParts.length - 1] || 'Technische lijst';
                         const decodedFileName = decodeURIComponent(fileName).replace(/%20/g, ' ');
-                        const riderName = decodedFileName.endsWith('.pdf') ? decodedFileName.replace('.pdf', '') : decodedFileName;
+                        const riderName = this.escapeHtml(decodedFileName.endsWith('.pdf') ? decodedFileName.replace('.pdf', '') : decodedFileName);
                         const riderDate = event.riderAttachment.date ? new Date(event.riderAttachment.date).toLocaleDateString('nl-NL', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '';
-                        const riderAuthor = event.riderAttachment.author || '';
+                        const riderAuthor = this.escapeHtml(event.riderAttachment.author || '');
                         const escapedUrl = this.escapeHtml(String(event.riderAttachment.url || ''));
                         technicalListInfo = `<div style="${infoBoxStyle}">
                             <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
@@ -4206,29 +4161,30 @@ class TheaterDashboard {
                     if (!isDetailSingleEvent) {
                         const statusPart = (event.status && event.status !== 'unknown') 
                             ? (event.bookingManager 
-                                ? `${event.status} – ${escapeText(event.bookingManager)}` 
-                                : event.status)
+                                ? `${this.escapeHtml(event.status)} – ${escapeText(event.bookingManager)}` 
+                                : this.escapeHtml(event.status))
                             : null;
                         if (hideVenueInCardFooter) {
                             venueStatusInfo = statusPart
                                 ? `<p style="margin-top: 0.5rem; text-align: right;"><i class="fas fa-info-circle"></i> ${statusPart}</p>`
                                 : '';
                         } else {
+                            const venueLabel = this.escapeHtml(event.venue);
                             venueStatusInfo = (event.venue && event.venue !== 'Onbekend' && statusPart) 
                                 ? `<p style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
-                                    <span><i class="fas fa-map-marker-alt"></i> ${event.venue}</span>
+                                    <span><i class="fas fa-map-marker-alt"></i> ${venueLabel}</span>
                                     <span><i class="fas fa-info-circle"></i> ${statusPart}</span>
                                 </p>`
                                 : (event.venue && event.venue !== 'Onbekend' 
-                                    ? `<p><i class="fas fa-map-marker-alt"></i> ${event.venue}</p>`
+                                    ? `<p><i class="fas fa-map-marker-alt"></i> ${venueLabel}</p>`
                                     : '') + (statusPart 
                                         ? `<p><i class="fas fa-info-circle"></i> ${statusPart}</p>`
                                         : '');
                         }
                     } else if (event.status && event.status !== 'unknown') {
                         const statusPart = event.bookingManager 
-                            ? `${event.status} – ${escapeText(event.bookingManager)}` 
-                            : event.status;
+                            ? `${this.escapeHtml(event.status)} – ${escapeText(event.bookingManager)}` 
+                            : this.escapeHtml(event.status);
                         venueStatusInfo = `<p style="margin-top: 0.5rem;"><i class="fas fa-info-circle"></i> ${statusPart}</p>`;
                     }
                     
@@ -4260,7 +4216,7 @@ class TheaterDashboard {
                     
                     // Maak draagbaar in home view - alleen de titel is draggable
                     const draggableAttr = isHomeView ? 'draggable="true"' : '';
-                    const eventIdAttr = event.id ? `data-event-id="${event.id}"` : '';
+                    const eventIdAttr = event.id ? `data-event-id="${this.escapeHtml(String(event.id))}"` : '';
                     const titleBlock = isDetailSingleEvent ? '' : `
                         <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem;">
                             <h4 ${draggableAttr} class="${isHomeView ? 'drag-handle' : ''}" style="margin: 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${title}</h4>
@@ -4291,8 +4247,7 @@ class TheaterDashboard {
         
         // Voeg event listeners toe voor rider links na het renderen
         try {
-            setTimeout(() => {
-                const riderLinks = container.querySelectorAll('.rider-link');
+            const riderLinks = container.querySelectorAll('.rider-link');
                 riderLinks.forEach(link => {
                     link.addEventListener('click', async (e) => {
                         e.preventDefault();
@@ -4347,7 +4302,6 @@ class TheaterDashboard {
                         }
                     });
                 });
-            }, 0);
         } catch (error) {
             console.error('Error setting up event listeners:', error);
         }
@@ -5527,10 +5481,21 @@ class TheaterDashboard {
                 card.removeAttribute('title');
             }
         }
+        this.updateTrekkenlijstenNavVisibility();
         if (this.currentView === 'voorstellingTimer' && !open) {
             void this.showDetailView(false, false);
         } else if (this.currentView === 'voorstellingTimer' && open) {
             void this.renderVoorstellingTimerUI().catch(() => {});
+        }
+    }
+
+    updateTrekkenlijstenNavVisibility() {
+        const btn = document.getElementById('trekkenlijstenNavBtn');
+        if (!btn) return;
+        const loggedIn = this.isTrekkenlijstSyncEnabled();
+        btn.style.display = loggedIn ? '' : 'none';
+        if (!loggedIn && this.currentView === 'trekkenlijsten') {
+            void this.showHomeView(false);
         }
     }
 
@@ -5550,13 +5515,6 @@ class TheaterDashboard {
         if (w) w.style.display = 'none';
         document.getElementById('luminexNavBtn')?.classList.remove('active');
         document.body.classList.remove('luminex-view-active');
-    }
-
-    hideOscMonitorShell() {
-        const w = document.getElementById('oscMonitorWrapper');
-        if (w) w.style.display = 'none';
-        document.getElementById('oscMonitorNavBtn')?.classList.remove('active');
-        document.body.classList.remove('osc-monitor-active');
     }
 
     hideTrekkenlijstenShell() {
@@ -5614,10 +5572,6 @@ class TheaterDashboard {
         return marked;
     }
 
-    findTrekkenlijstVenue() {
-        return this.findTrekkenlijstVenues()[0] || null;
-    }
-
     getTrekkenlijstVenueLabel(venues) {
         const list = Array.isArray(venues) ? venues.filter(Boolean) : (venues ? [venues] : []);
         if (!list.length) return '—';
@@ -5626,23 +5580,139 @@ class TheaterDashboard {
             .join(', ');
     }
 
-    /** @deprecated */
-    findPayzaalVenue() {
-        return this.findTrekkenlijstVenue();
+    normalizeFlyListText(s) {
+        return String(s || '')
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '');
+    }
+
+    isFlyListText(s) {
+        const t = this.normalizeFlyListText(s);
+        if (!t) return false;
+        if (t.includes('technische lijst') || t.includes('technical list') || t.includes('technischelijst')) return false;
+        if (t.includes('kaplijst') || t.includes('kap lijst') || t.includes('kap-lijst')) return true;
+        if (t.includes('changement')) return true;
+        return t.includes('trekkenlijst') || t.includes('trekken lijst') || t.includes('treklijst') || t.includes('fly cue');
+    }
+
+    isFlyListRelatedDocument(doc) {
+        if (!doc?.url) return false;
+        const category = doc.category || '';
+        const name = doc.name || '';
+        let file = '';
+        try {
+            file = decodeURIComponent(String(doc.url).split('/').pop() || '');
+        } catch {
+            file = String(doc.url).split('/').pop() || '';
+        }
+        return this.isFlyListText(category) || this.isFlyListText(name) || this.isFlyListText(file);
+    }
+
+    isTrekkenlijstSetupTitle(title) {
+        const t = this.normalizeFlyListText(title);
+        return /(^|[^a-z0-9])(bouwen|opbouw|afbouw|ombouw|inhangen|inhang|inrichten|montage|demontage|change-over|changeover|get-in|get-out|get in|get out)([^a-z0-9]|$)/.test(t);
+    }
+
+    collapseTrekkenlijstSetupRows(items) {
+        const sorted = [...(items || [])].sort((a, b) => (a.sortTs || 0) - (b.sortTs || 0));
+        const performances = [];
+        const setups = [];
+        for (const item of sorted) {
+            if (this.isTrekkenlijstSetupTitle(item?.title)) setups.push(item);
+            else performances.push(item);
+        }
+        const used = new Set();
+        for (const setup of setups) {
+            const urls = new Set((setup.docs || []).map((d) => d?.url).filter(Boolean));
+            const byDoc = performances.filter((perf) => (perf.docs || []).some((d) => d?.url && urls.has(d.url)));
+            let host = byDoc[0] || null;
+            if (!host && setup.groupId) {
+                const byGroup = performances.filter((perf) =>
+                    String(perf.groupId || '') === String(setup.groupId)
+                    && String(perf.venueId || '') === String(setup.venueId || '')
+                );
+                if (byGroup.length === 1) host = byGroup[0];
+            }
+            if (!host) continue;
+            used.add(setup);
+            const known = new Set((host.docs || []).map((d) => d?.url).filter(Boolean));
+            host.docs = host.docs || [];
+            for (const doc of setup.docs || []) {
+                if (!doc?.url || known.has(doc.url)) continue;
+                known.add(doc.url);
+                host.docs.push(doc);
+            }
+        }
+        return [...performances, ...setups.filter((setup) => !used.has(setup))]
+            .sort((a, b) => (a.sortTs || 0) - (b.sortTs || 0));
+    }
+
+    trekkenlijstShowKey(item) {
+        const title = this.normalizeFlyListText(item?.title || '')
+            .replace(/[^a-z0-9]+/g, ' ')
+            .trim();
+        return `${item?.orgId || 1}:${item?.venueId || ''}:${title || item?.id || ''}`;
+    }
+
+    trekkenlijstActorLabel(email) {
+        const value = String(email || '').trim();
+        if (!value) return '';
+        const at = value.indexOf('@');
+        return at > 0 ? value.slice(0, at) : value;
+    }
+
+    canClearTrekkenlijstVerwerkt(item) {
+        if (!item?.verwerkt) return true;
+        const owner = String(item.verwerktBy || '').trim().toLowerCase();
+        if (!owner) return true;
+        const mine = String(this.config?.app?.shiftAuthEmail || '').trim().toLowerCase();
+        return mine === owner;
+    }
+
+    flyListKindLabel(text) {
+        const t = this.normalizeFlyListText(text);
+        if (t.includes('kaplijst') || t.includes('kap lijst') || t.includes('kap-lijst')) return 'Kaplijst';
+        if (t.includes('changement')) return 'Changement';
+        return 'Trekkenlijst';
+    }
+
+    collectTrekkenlijstDocs(event) {
+        const out = [];
+        const seen = new Set();
+        const push = (doc) => {
+            if (!this.isFlyListRelatedDocument(doc)) return;
+            const url = String(doc?.url || '').trim();
+            if (!url || seen.has(url)) return;
+            seen.add(url);
+            out.push(doc);
+        };
+        for (const doc of event?.trekkenlijstDocuments || []) push(doc);
+        for (const doc of event?.technicalListDocuments || []) push(doc);
+        return out;
     }
 
     isTrekkenlijstEvent(event) {
-        if (Array.isArray(event?.trekkenlijstDocuments) && event.trekkenlijstDocuments.length > 0) return true;
-        if (event?.hasTrekkenlijst === true) return true;
-        return false;
+        return this.collectTrekkenlijstDocs(event).length > 0;
     }
 
     trekkenlijstDocLabel(doc) {
-        if (!doc?.url) return doc?.name || '';
-        const urlParts = String(doc.url).split('/');
-        const fileName = urlParts[urlParts.length - 1] || doc.name || 'Document';
-        const decoded = decodeURIComponent(fileName).replace(/%20/g, ' ');
-        return decoded.endsWith('.pdf') ? decoded.slice(0, -4) : decoded;
+        const fromName = String(doc?.name || '').replace(/\.pdf$/i, '').trim();
+        let fromUrl = '';
+        if (doc?.url) {
+            const urlParts = String(doc.url).split('/');
+            const fileName = urlParts[urlParts.length - 1] || '';
+            try {
+                fromUrl = decodeURIComponent(fileName).replace(/%20/g, ' ');
+            } catch {
+                fromUrl = fileName.replace(/%20/g, ' ');
+            }
+            if (fromUrl.toLowerCase().endsWith('.pdf')) fromUrl = fromUrl.slice(0, -4);
+        }
+        const urlLooksNamed = /[a-z]/i.test(fromUrl) && !/^\d+$/.test(fromUrl);
+        if (urlLooksNamed) return fromUrl;
+        if (fromName) return fromName;
+        return fromUrl || 'PDF';
     }
 
     formatTrekkenlijstDate(value) {
@@ -5673,80 +5743,262 @@ class TheaterDashboard {
         return d.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit', hour12: false });
     }
 
+    setTrekkenlijstenAll(items, resetPage = false) {
+        this._trekkenlijstenAll = this.collapseTrekkenlijstSetupRows(items);
+        if (resetPage) this._trekkenlijstenPage = 0;
+        this.syncTrekkenlijstenVisibleItems();
+    }
+
+    syncTrekkenlijstenVisibleItems() {
+        const all = this._trekkenlijstenAll || [];
+        const size = this._trekkenlijstenPageSize || 10;
+        const pages = Math.max(1, Math.ceil(all.length / size));
+        if (this._trekkenlijstenPage > pages - 1) this._trekkenlijstenPage = pages - 1;
+        if (this._trekkenlijstenPage < 0) this._trekkenlijstenPage = 0;
+        const start = this._trekkenlijstenPage * size;
+        this._trekkenlijstenItems = all.slice(start, start + size);
+    }
+
+    showTrekkenlijstenPage(page) {
+        const all = this._trekkenlijstenAll || [];
+        const size = this._trekkenlijstenPageSize || 10;
+        const last = Math.max(0, Math.ceil(all.length / size) - 1);
+        const next = Math.max(0, Math.min(last, page));
+        if (next === this._trekkenlijstenPage) return;
+        this._trekkenlijstenPage = next;
+        this.syncTrekkenlijstenVisibleItems();
+        this.renderTrekkenlijstenList();
+        document.querySelector('.trekkenlijsten-card-content')?.scrollTo({ top: 0 });
+    }
+
+    async showNextTrekkenlijsten() {
+        const all = this._trekkenlijstenAll || [];
+        const size = this._trekkenlijstenPageSize || 10;
+        const last = Math.max(0, Math.ceil(all.length / size) - 1);
+        if (this._trekkenlijstenPage < last) {
+            this.showTrekkenlijstenPage(this._trekkenlijstenPage + 1);
+            return;
+        }
+        if (this._trekkenlijstenLoading) return;
+        const before = all.length;
+        const meta = document.getElementById('trekkenlijstenMeta');
+        if (meta) meta.textContent = this.t('trekkenlijsten.loadingMore');
+        this._trekkenlijstenAheadEmpty = false;
+        await this.loadTrekkenlijsten({ append: true });
+        if ((this._trekkenlijstenAll || []).length > before) {
+            this._trekkenlijstenAheadEmpty = false;
+            this._trekkenlijstenPage = Math.floor(before / size);
+            this.syncTrekkenlijstenVisibleItems();
+            this.renderTrekkenlijstenList();
+            document.querySelector('.trekkenlijsten-card-content')?.scrollTo({ top: 0 });
+        } else {
+            this._trekkenlijstenAheadEmpty = true;
+            this.renderTrekkenlijstenList();
+        }
+    }
+
+    updateTrekkenlijstenPager() {
+        const prev = document.getElementById('trekkenlijstenPrevBtn');
+        const next = document.getElementById('trekkenlijstenNextBtn');
+        if (prev) prev.disabled = this._trekkenlijstenLoading || this._trekkenlijstenPage <= 0;
+        if (next) next.disabled = !!this._trekkenlijstenLoading;
+    }
+
     renderTrekkenlijstenList() {
         const list = document.getElementById('trekkenlijstenList');
         const meta = document.getElementById('trekkenlijstenMeta');
         if (!list || !meta) return;
 
-        if (this._trekkenlijstenLoading) {
+        const items = Array.isArray(this._trekkenlijstenItems) ? this._trekkenlijstenItems : [];
+        if (this._trekkenlijstenLoading && !items.length && !(this._trekkenlijstenAll || []).length) {
             meta.textContent = this.t('trekkenlijsten.loading');
-            list.innerHTML = `<div class="trekkenlijsten-empty">${this.escapeHtml(this.t('trekkenlijsten.loading'))}</div>`;
+            list.innerHTML = '';
+            this.updateTrekkenlijstenPager();
             return;
         }
 
-        const items = Array.isArray(this._trekkenlijstenItems) ? this._trekkenlijstenItems : [];
         const syncOn = this.isTrekkenlijstSyncEnabled();
         const venueLabel = this.getTrekkenlijstVenueLabel(this._trekkenlijstVenues);
         if (!items.length) {
             meta.textContent = this.t('trekkenlijsten.empty', { venue: venueLabel });
             list.innerHTML = `<div class="trekkenlijsten-empty">${this.escapeHtml(this.t('trekkenlijsten.empty'))}</div>`;
+            this.updateTrekkenlijstenPager();
             return;
         }
 
+        const allCount = (this._trekkenlijstenAll || []).length;
+        const size = this._trekkenlijstenPageSize || 10;
+        const from = this._trekkenlijstenPage * size + 1;
+        const to = Math.min(allCount, from + items.length - 1);
+        const countLabel = this.t('trekkenlijsten.metaCount', { from, to, total: allCount });
+        const aheadNote = this._trekkenlijstenAheadEmpty ? ` · ${this.t('trekkenlijsten.noMore')}` : '';
         meta.textContent = syncOn
-            ? this.t('trekkenlijsten.metaCount', { n: items.length })
-            : `${this.t('trekkenlijsten.metaCount', { n: items.length })} · ${this.t('trekkenlijsten.syncLoginHint')}`;
+            ? `${countLabel}${aheadNote}`
+            : `${countLabel}${aheadNote} · ${this.t('trekkenlijsten.syncLoginHint')}`;
 
         list.innerHTML = items.map((item) => {
-            const docHtml = item.docUrl
-                ? `<a href="#" class="rider-link trekkenlijsten-entry-doc" data-rider-url="${this.escapeHtml(String(item.docUrl))}" title="${this.escapeHtml(item.docLabel || '')}">` +
-                  `<i class="fas fa-file-pdf" aria-hidden="true"></i> ${this.escapeHtml(item.docLabel || 'PDF')}` +
-                  `</a>`
-                : '';
+            const docs = Array.isArray(item.docs) ? item.docs : [];
+            const docHtml = docs.map((doc) => {
+                const label = doc.label || 'PDF';
+                const kind = this.flyListKindLabel(`${doc.kind || ''} ${label}`);
+                return `<a href="#" class="rider-link trekkenlijsten-entry-doc" data-rider-url="${this.escapeHtml(String(doc.url))}" title="${this.escapeHtml(label)}">` +
+                  `<span class="week-event-chip">${this.escapeHtml(kind)}</span>` +
+                  `<i class="fas fa-file-pdf" aria-hidden="true"></i>` +
+                  `<span class="trekkenlijsten-entry-doc-name">${this.escapeHtml(label)}</span>` +
+                  `</a>`;
+            }).join('');
             const disabledAttr = syncOn ? '' : ' disabled';
+            const canClear = this.canClearTrekkenlijstVerwerkt(item);
+            const verwerktLocked = !!(item.verwerkt && !canClear);
+            const verwerktDisabled = disabledAttr || (verwerktLocked ? ' disabled' : '');
+            const actorName = this.trekkenlijstActorLabel(item.verwerktBy);
+            const actorTitle = this.escapeHtml(String(item.verwerktBy || ''));
+            const byHtml = item.verwerkt && actorName
+                ? `<p class="trekkenlijsten-verwerkt-by" title="${actorTitle}">${this.escapeHtml(this.t('trekkenlijsten.verwerktBy', { name: actorName }))}</p>`
+                : '';
+            const lockTitle = verwerktLocked
+                ? ` title="${this.escapeHtml(this.t('trekkenlijsten.verwerktLocked', { name: actorName || item.verwerktBy || '' }))}"`
+                : '';
             const commentVal = this.escapeHtml(item.comment || '');
+            const venueHtml = item.venueLabel && (this._trekkenlijstVenues || []).length > 1
+                ? ` <span class="trekkenlijsten-entry-venue">${this.escapeHtml(item.venueLabel)}</span>`
+                : '';
             return (
-                `<div class="trekkenlijsten-entry${item.verwerkt ? ' trekkenlijsten-entry--done' : ''}" role="listitem" data-sync-key="${this.escapeHtml(String(item.syncKey || ''))}">` +
-                `<div class="trekkenlijsten-entry-main">` +
-                `<span class="trekkenlijsten-entry-date">${this.escapeHtml(item.dateLabel)}</span>` +
-                `<span class="trekkenlijsten-entry-time">${this.escapeHtml(item.timeLabel)}</span>` +
-                `<span class="trekkenlijsten-entry-title">${this.escapeHtml(item.title)}` +
-                (item.venueLabel && (this._trekkenlijstVenues || []).length > 1
-                    ? ` <span class="trekkenlijsten-entry-venue">${this.escapeHtml(item.venueLabel)}</span>`
-                    : '') +
-                `</span>` +
-                (docHtml ? `<span class="trekkenlijsten-entry-doc-wrap">${docHtml}</span>` : '') +
+                `<article class="data-item trekkenlijsten-entry${item.verwerkt ? ' trekkenlijsten-entry--done' : ''}" role="listitem" data-sync-key="${this.escapeHtml(String(item.syncKey || ''))}">` +
+                `<div class="trekkenlijsten-entry-top">` +
+                `<h4>${this.escapeHtml(item.title)}${venueHtml}</h4>` +
+                `<p class="trekkenlijsten-entry-when"><i class="fas fa-clock" aria-hidden="true"></i> ${this.escapeHtml(item.dateLabel)} · ${this.escapeHtml(item.timeLabel)}</p>` +
                 `</div>` +
-                `<div class="trekkenlijsten-entry-actions">` +
-                `<label class="trekkenlijsten-verwerkt-label">` +
-                `<input type="checkbox" class="trekkenlijsten-verwerkt-cb" data-sync-key="${this.escapeHtml(String(item.syncKey || ''))}"${item.verwerkt ? ' checked' : ''}${disabledAttr}>` +
+                `<div class="trekkenlijsten-entry-body">` +
+                `<div class="trekkenlijsten-entry-main">` +
+                (docHtml ? `<div class="trekkenlijsten-entry-docs">${docHtml}</div>` : '') +
+                `<div class="trekkenlijsten-verwerkt-block"${lockTitle}>` +
+                `<label class="settings-checkbox-label trekkenlijsten-verwerkt-label">` +
+                `<input type="checkbox" class="trekkenlijsten-verwerkt-cb" data-sync-key="${this.escapeHtml(String(item.syncKey || ''))}"${item.verwerkt ? ' checked' : ''}${verwerktDisabled}>` +
                 `<span>${this.escapeHtml(this.t('trekkenlijsten.verwerkt'))}</span>` +
                 `</label>` +
-                `<textarea class="trekkenlijsten-comment-input" rows="2" data-sync-key="${this.escapeHtml(String(item.syncKey || ''))}" placeholder="${this.escapeHtml(this.t('trekkenlijsten.commentPlaceholder'))}"${disabledAttr}>${commentVal}</textarea>` +
+                byHtml +
                 `</div>` +
-                `</div>`
+                `</div>` +
+                `<textarea class="trekkenlijsten-comment-input" rows="3" data-sync-key="${this.escapeHtml(String(item.syncKey || ''))}" placeholder="${this.escapeHtml(this.t('trekkenlijsten.commentPlaceholder'))}"${disabledAttr}>${commentVal}</textarea>` +
+                `</div>` +
+                `</article>`
             );
         }).join('');
         this.setupRiderLinkHandlers(list);
         this.setupTrekkenlijstenListHandlers(list);
+        this.alignTrekkenlijstenCommentColumn();
+        this.updateTrekkenlijstenPager();
+    }
+
+    alignTrekkenlijstenCommentColumn() {
+        const list = document.getElementById('trekkenlijstenList');
+        if (!list) return;
+        if (!this._trekkenAlignResize) {
+            this._trekkenAlignResize = () => {
+                if (this.currentView === 'trekkenlijsten') this.alignTrekkenlijstenCommentColumn();
+            };
+            window.addEventListener('resize', this._trekkenAlignResize);
+        }
+        const docs = list.querySelectorAll('.trekkenlijsten-entry-doc');
+        if (!docs.length) {
+            list.style.removeProperty('--trekken-docs-width');
+            return;
+        }
+        list.style.setProperty('--trekken-docs-width', 'max-content');
+        let max = 0;
+        docs.forEach((el) => {
+            max = Math.max(max, el.getBoundingClientRect().width);
+        });
+        const body = list.querySelector('.trekkenlijsten-entry-body');
+        const gap = body ? (parseFloat(getComputedStyle(body).columnGap) || 16) : 16;
+        const minComment = 16 * 16;
+        const cap = Math.max(180, list.clientWidth - gap - minComment);
+        list.style.setProperty('--trekken-docs-width', `${Math.min(Math.ceil(max + 1), cap)}px`);
+    }
+
+    applyTrekkenlijstFeedItems(items) {
+        return (Array.isArray(items) ? items : []).map((item) => {
+            const startRaw = item.startRaw || item.eventDateRaw || null;
+            return {
+                ...item,
+                startRaw,
+                dateLabel: this.formatTrekkenlijstDate(startRaw),
+                timeLabel: this.formatTrekkenlijstTime({ startDate: startRaw }),
+                verwerkt: false,
+                comment: '',
+                syncUpdatedAt: null,
+                verwerktBy: null,
+                commentBy: null
+            };
+        });
+    }
+
+    async fetchTrekkenlijstFeed(venueIds) {
+        const base = this.getTrekkenlijstSyncBaseUrl();
+        if (!base || !venueIds?.length) return null;
+        try {
+            const q = encodeURIComponent(venueIds.map(String).join(','));
+            const url = `${base.replace(/\/$/, '')}/api/trekkenlijst/feed?venues=${q}`;
+            const r = await this.fetchShiftHappensApi(url, { cache: 'no-store' });
+            if (!r.ok) return null;
+            const j = await r.json();
+            if (!j?.success) return null;
+            return j;
+        } catch (e) {
+            console.warn('Trekkenlijst-cache ophalen mislukt:', e);
+            return null;
+        }
+    }
+
+    async saveTrekkenlijstFeed(venueIds, items) {
+        const base = this.getTrekkenlijstSyncBaseUrl();
+        if (!base || !venueIds?.length) return;
+        try {
+            const url = `${base.replace(/\/$/, '')}/api/trekkenlijst/feed`;
+            await this.fetchShiftHappensApi(url, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    venueIds,
+                    items: (items || []).map((item) => ({
+                        id: item.id,
+                        orgId: item.orgId,
+                        syncKey: item.syncKey,
+                        venueId: item.venueId,
+                        venueLabel: item.venueLabel,
+                        title: item.title,
+                        groupId: item.groupId || null,
+                        startRaw: item.startRaw || null,
+                        eventDateRaw: item.eventDateRaw || null,
+                        docs: item.docs || [],
+                        sortTs: item.sortTs
+                    }))
+                })
+            });
+        } catch (e) {
+            console.warn('Trekkenlijst-cache opslaan mislukt:', e);
+        }
     }
 
     async loadTrekkenlijsten(opts = {}) {
-        const forceRefresh = !!(opts && opts.forceRefresh);
+        const forceRefresh = !!opts.forceRefresh;
+        const append = !!opts.append;
         if (!window.electronAPI?.getYesplanData) {
-            this._trekkenlijstenItems = [];
+            this.setTrekkenlijstenAll([], true);
             this.renderTrekkenlijstenList();
             return;
         }
         this._trekkenlijstenLoading = true;
-        this.renderTrekkenlijstenList();
+        this.updateTrekkenlijstenPager();
+        if (!(this._trekkenlijstenAll || []).length) this.renderTrekkenlijstenList();
 
         try {
             const trekVenues = this.findTrekkenlijstVenues();
             this._trekkenlijstVenues = trekVenues;
             this._trekkenlijstVenue = trekVenues[0] || null;
             if (!trekVenues.length) {
-                this._trekkenlijstenItems = [];
+                this.setTrekkenlijstenAll([], true);
                 this._trekkenlijstenLoading = false;
                 const meta = document.getElementById('trekkenlijstenMeta');
                 const list = document.getElementById('trekkenlijstenList');
@@ -5759,6 +6011,11 @@ class TheaterDashboard {
 
             const start = new Date();
             start.setHours(0, 0, 0, 0);
+            if (append && this._trekkenlijstRangeEnd) {
+                start.setTime(new Date(this._trekkenlijstRangeEnd).getTime());
+                start.setDate(start.getDate() + 1);
+                start.setHours(0, 0, 0, 0);
+            }
             const end = new Date(start);
             end.setDate(end.getDate() + 120);
             const toYmd = (d) => {
@@ -5767,10 +6024,31 @@ class TheaterDashboard {
                 const day = String(d.getDate()).padStart(2, '0');
                 return `${y}-${m}-${day}`;
             };
+            const venueIds = trekVenues.map((v) => String(v.id));
+            if (!forceRefresh && !append) {
+                const cached = await this.fetchTrekkenlijstFeed(venueIds);
+                if (cached?.hit) {
+                    this._trekkenlijstenNoMore = false;
+                    this._trekkenlijstRangeEnd = end;
+                    this.setTrekkenlijstenAll(this.applyTrekkenlijstFeedItems(cached.items), true);
+                    await this.refreshTrekkenlijstSyncFromServer(true);
+                    return;
+                }
+                if (Array.isArray(cached?.items) && cached.items.length) {
+                    this._trekkenlijstenNoMore = false;
+                    this._trekkenlijstRangeEnd = end;
+                    this.setTrekkenlijstenAll(this.applyTrekkenlijstFeedItems(cached.items), true);
+                    await this.refreshTrekkenlijstSyncFromServer(true);
+                    this._trekkenlijstenLoading = false;
+                    this.renderTrekkenlijstenList();
+                    this._trekkenlijstenLoading = true;
+                }
+            }
+
             const range = {
                 startDate: toYmd(start),
                 endDate: toYmd(end),
-                skipCache: forceRefresh
+                skipCache: forceRefresh || append
             };
 
             const results = await Promise.all(
@@ -5783,10 +6061,12 @@ class TheaterDashboard {
             const venueById = new Map(trekVenues.map((v) => [String(v.id), v]));
             const events = [];
             let firstError = null;
+            let failedDays = 0;
             for (const result of results) {
                 if (result && result.success === false && !firstError) {
                     firstError = result.error || '?';
                 }
+                failedDays += Number(result?.failedDays) || 0;
                 if (Array.isArray(result?.data)) events.push(...result.data);
             }
 
@@ -5797,7 +6077,10 @@ class TheaterDashboard {
                 .map((e) => {
                     const startRaw = e.startDate || e.date || e.start || null;
                     const startTs = startRaw ? new Date(startRaw).getTime() : NaN;
-                    const docs = Array.isArray(e.trekkenlijstDocuments) ? e.trekkenlijstDocuments : [];
+                    const docs = this.collectTrekkenlijstDocs(e).map((doc) => ({
+                        url: doc.url,
+                        label: this.trekkenlijstDocLabel(doc)
+                    }));
                     const firstDoc = docs[0] || null;
                     const orgId = e._organizationId || 1;
                     const syncKey = `${orgId}:${e.id}`;
@@ -5814,34 +6097,71 @@ class TheaterDashboard {
                         venueId: matchedVenue ? String(matchedVenue.id) : null,
                         venueLabel: matchedVenue ? this.getTrekkenlijstVenueLabel([matchedVenue]) : '',
                         title: e.title || e.name || e.productionName || e.performer || '—',
+                        groupId: e.groupId ? String(e.groupId) : null,
                         dateLabel: this.formatTrekkenlijstDate(startRaw),
                         timeLabel: this.formatTrekkenlijstTime(e),
+                        startRaw: startRaw ? String(startRaw) : null,
                         eventDateRaw: startRaw ? String(startRaw).slice(0, 10) : null,
                         docUrl: firstDoc?.url || null,
-                        docLabel: firstDoc ? this.trekkenlijstDocLabel(firstDoc) : '',
+                        docLabel: firstDoc?.label || '',
+                        docs,
                         verwerkt: false,
                         comment: '',
                         syncUpdatedAt: null,
                         sortTs: Number.isFinite(startTs) ? startTs : Number.MAX_SAFE_INTEGER
                     };
                 })
-                .filter((item) => {
-                    if (item.sortTs < now - (6 * 60 * 60 * 1000)) return false;
-                    if (seen.has(item.syncKey)) return false;
-                    seen.add(item.syncKey);
-                    return true;
-                })
-                .sort((a, b) => a.sortTs - b.sortTs)
-                .slice(0, 20);
+                .filter((item) => item.sortTs >= now - (6 * 60 * 60 * 1000))
+                .sort((a, b) => a.sortTs - b.sortTs);
 
-            this._trekkenlijstenItems = mapped;
+            const byShow = new Map();
+            for (const item of mapped) {
+                const showKey = this.trekkenlijstShowKey(item);
+                if (seen.has(showKey)) {
+                    const existing = byShow.get(showKey);
+                    const knownUrls = new Set((existing.docs || []).map((d) => d.url));
+                    for (const doc of item.docs || []) {
+                        if (!doc?.url || knownUrls.has(doc.url)) continue;
+                        knownUrls.add(doc.url);
+                        existing.docs.push(doc);
+                    }
+                    continue;
+                }
+                seen.add(showKey);
+                item.syncKey = showKey;
+                byShow.set(showKey, item);
+            }
+
+            const mappedUnique = Array.from(byShow.values());
+            this._trekkenlijstRangeEnd = end;
+            if (append) {
+                const prev = this._trekkenlijstenAll || [];
+                const merged = new Map(prev.map((item) => [item.syncKey, item]));
+                let added = 0;
+                for (const item of mappedUnique) {
+                    if (merged.has(item.syncKey)) continue;
+                    merged.set(item.syncKey, item);
+                    added += 1;
+                }
+                const all = Array.from(merged.values()).sort((a, b) => (a.sortTs || 0) - (b.sortTs || 0));
+                if (added) this._trekkenlijstenPage = Math.floor(prev.length / (this._trekkenlijstenPageSize || 10));
+                this._trekkenlijstenAll = this.collapseTrekkenlijstSetupRows(all);
+                this.syncTrekkenlijstenVisibleItems();
+                if (added && !firstError && failedDays === 0) await this.saveTrekkenlijstFeed(venueIds, this._trekkenlijstenAll);
+            } else {
+                this._trekkenlijstenNoMore = false;
+                this.setTrekkenlijstenAll(mappedUnique, true);
+                if (!firstError && failedDays === 0) {
+                    await this.saveTrekkenlijstFeed(venueIds, this._trekkenlijstenAll);
+                }
+            }
             await this.refreshTrekkenlijstSyncFromServer(true);
-            if (firstError) {
+            if (firstError && mappedUnique.length === 0 && !(this._trekkenlijstenAll || []).length) {
                 const meta = document.getElementById('trekkenlijstenMeta');
                 if (meta) meta.textContent = this.t('trekkenlijsten.loadError', { msg: firstError });
             }
         } catch (e) {
-            this._trekkenlijstenItems = [];
+            if (!(this._trekkenlijstenAll || []).length) this.setTrekkenlijstenAll([], true);
             const meta = document.getElementById('trekkenlijstenMeta');
             if (meta) meta.textContent = this.t('trekkenlijsten.loadError', { msg: e.message || String(e) });
         } finally {
@@ -5851,24 +6171,19 @@ class TheaterDashboard {
     }
 
     async showTrekkenlijstenView() {
-        if (!this.isShowModeEnabled()) return;
-        if (this.currentView === 'trekkenlijsten') {
-            await this.showHomeView(false);
-            return;
-        }
+        if (!this.isTrekkenlijstSyncEnabled()) return;
+        if (this.currentView === 'trekkenlijsten') return;
         this.pushHistorySnapshotIfNeeded('trekkenlijsten');
         this.previousView = this.currentView;
         this.currentView = 'trekkenlijsten';
         this.hideVoorstellingTimerShell();
         this.hideLuminexShell();
-        this.hideOscMonitorShell();
 
         const weekWrapper = document.getElementById('weekViewWrapper');
         const homeContainer = document.getElementById('homeViewContainer');
         const detailWrapper = document.getElementById('detailViewWrapper');
         const timerWrapper = document.getElementById('voorstellingTimerWrapper');
         const luminexWrapper = document.getElementById('luminexViewWrapper');
-        const oscWrapper = document.getElementById('oscMonitorWrapper');
         const trekWrapper = document.getElementById('trekkenlijstenWrapper');
         const homeStatus = document.getElementById('homeViewStatus');
         if (weekWrapper) weekWrapper.style.display = 'none';
@@ -5876,7 +6191,6 @@ class TheaterDashboard {
         if (detailWrapper) detailWrapper.style.display = 'none';
         if (timerWrapper) timerWrapper.style.display = 'none';
         if (luminexWrapper) luminexWrapper.style.display = 'none';
-        if (oscWrapper) oscWrapper.style.display = 'none';
         if (trekWrapper) trekWrapper.style.display = 'block';
         if (homeStatus) homeStatus.style.display = 'none';
 
@@ -5884,14 +6198,12 @@ class TheaterDashboard {
         document.getElementById('homeBtn')?.classList.remove('active');
         document.getElementById('voorstellingTimerBtn')?.classList.remove('active');
         document.getElementById('luminexNavBtn')?.classList.remove('active');
-        document.getElementById('oscMonitorNavBtn')?.classList.remove('active');
         document.getElementById('trekkenlijstenNavBtn')?.classList.add('active');
 
         document.body.classList.remove('home-view-active');
         document.body.classList.remove('week-view-active');
         document.body.classList.remove('voorstelling-timer-active');
         document.body.classList.remove('luminex-view-active');
-        document.body.classList.remove('osc-monitor-active');
         document.body.classList.add('trekkenlijsten-active');
 
         const techOverviewBtn = document.getElementById('techOverviewBtn');
@@ -5899,97 +6211,21 @@ class TheaterDashboard {
 
         const dateSelector = document.querySelector('.date-selector');
         const venueSelector = document.querySelector('.venue-selector');
-        if (dateSelector) dateSelector.style.display = 'none';
-        if (venueSelector) venueSelector.style.display = 'none';
+        if (dateSelector) {
+            dateSelector.style.display = 'flex';
+            dateSelector.style.visibility = 'visible';
+        }
+        if (venueSelector) {
+            venueSelector.style.display = 'block';
+            venueSelector.style.visibility = 'visible';
+        }
+        this.updateDateDisplay();
+        this.updateVenueSelectorDisplay();
 
         this.updateBackButtonVisibility();
         await this.loadTrekkenlijsten();
+        this.updateMasterStatus();
         this.startTrekkenlijstSyncPoll();
-    }
-
-    addOscMonitorEntry(payload) {
-        const now = new Date();
-        const locale = this.locale === 'en' ? 'en-GB' : 'nl-NL';
-        const stamp = now.toLocaleTimeString(locale, { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        const slotId = String(payload?.slotId || 'onbekend').trim() || 'onbekend';
-        const stepId = String(payload?.stepId || 'onbekend').trim() || 'onbekend';
-        this._oscMonitorEntries.unshift({ stamp, slotId, stepId });
-        if (this._oscMonitorEntries.length > this._oscMonitorMaxEntries) {
-            this._oscMonitorEntries.length = this._oscMonitorMaxEntries;
-        }
-        if (this.currentView === 'oscMonitor') this.renderOscMonitorEntries();
-    }
-
-    renderOscMonitorEntries() {
-        const list = document.getElementById('oscMonitorList');
-        const meta = document.getElementById('oscMonitorMeta');
-        if (!list || !meta) return;
-        if (!this._oscMonitorEntries.length) {
-            list.innerHTML = '<div class="osc-monitor-empty">Nog geen OSC timer-triggers ontvangen.</div>';
-            this.updateOscMonitorListenMeta();
-            return;
-        }
-        list.innerHTML = this._oscMonitorEntries.map((entry) => (
-            `<div class="osc-monitor-entry">` +
-            `<span class="osc-monitor-entry-time">${this.escapeHtml(entry.stamp)}</span>` +
-            `<span class="osc-monitor-entry-slot">${this.escapeHtml(entry.slotId)}</span>` +
-            `<span class="osc-monitor-entry-step">${this.escapeHtml(entry.stepId)}</span>` +
-            `</div>`
-        )).join('');
-        this.updateOscMonitorListenMeta();
-    }
-
-    getOscMonitorListenHost() {
-        const routing = this.config?.app?.networkRouting || {};
-        const iface = String(routing.oscInterface || 'auto').trim();
-        if (iface && iface !== 'auto') return iface;
-        return '127.0.0.1';
-    }
-
-    updateOscMonitorListenMeta() {
-        const meta = document.getElementById('oscMonitorMeta');
-        if (!meta) return;
-        const listen = `udp://${this.getOscMonitorListenHost()}:3955`;
-        const count = this._oscMonitorEntries.length;
-        if (!count) {
-            meta.textContent = `Luistert op ${listen} · wachten op berichten…`;
-            return;
-        }
-        meta.textContent = `${count} bericht(en) · ${listen} · nieuwste bovenaan`;
-    }
-
-    async saveOscMonitorNetworkInterface(selected) {
-        if (!window.electronAPI?.getConfig || !window.electronAPI?.saveConfig) return;
-        const value = String(selected || 'auto').trim() || 'auto';
-        try {
-            const appCfg = await window.electronAPI.getConfig('app') || {};
-            const networkRouting = {
-                ...(appCfg.networkRouting || {}),
-                ...(this.config.app?.networkRouting || {}),
-                oscInterface: value
-            };
-            const result = await window.electronAPI.saveConfig('app', { ...appCfg, networkRouting });
-            if (!result?.success) return;
-            this.config.app = { ...(this.config.app || {}), networkRouting };
-            const settingsSel = document.getElementById('networkOscInterface');
-            if (settingsSel) {
-                settingsSel.value = value;
-                if (![...settingsSel.options].some((o) => o.value === value)) settingsSel.value = 'auto';
-            }
-            this.updateOscMonitorListenMeta();
-        } catch (_) {
-            /* ignore */
-        }
-    }
-
-    syncOscMonitorInterfaceSelect() {
-        const sel = document.getElementById('oscMonitorInterface');
-        if (!sel) return;
-        const value = String(this.config?.app?.networkRouting?.oscInterface || 'auto').trim() || 'auto';
-        if ([...sel.options].some((o) => o.value === value)) sel.value = value;
-        else sel.value = 'auto';
-        const wrap = document.querySelector('.osc-monitor-iface-wrap');
-        if (wrap) wrap.hidden = typeof window.electronAPI?.getNetworkInterfaces !== 'function';
     }
 
     refreshLuminexChrome() {
@@ -6060,7 +6296,6 @@ class TheaterDashboard {
         this.previousView = this.currentView;
         this.currentView = 'luminex';
         this.hideVoorstellingTimerShell();
-        this.hideOscMonitorShell();
         this.hideTrekkenlijstenShell();
 
         const weekWrapper = document.getElementById('weekViewWrapper');
@@ -6078,14 +6313,12 @@ class TheaterDashboard {
         document.getElementById('homeBtn')?.classList.remove('active');
         document.getElementById('voorstellingTimerBtn')?.classList.remove('active');
         document.getElementById('trekkenlijstenNavBtn')?.classList.remove('active');
-        document.getElementById('oscMonitorNavBtn')?.classList.remove('active');
         document.getElementById('luminexNavBtn')?.classList.add('active');
 
         document.body.classList.remove('home-view-active');
         document.body.classList.remove('week-view-active');
         document.body.classList.remove('voorstelling-timer-active');
         document.body.classList.remove('trekkenlijsten-active');
-        document.body.classList.remove('osc-monitor-active');
         document.body.classList.add('luminex-view-active');
 
         const techOverviewBtn = document.getElementById('techOverviewBtn');
@@ -6093,8 +6326,16 @@ class TheaterDashboard {
 
         const dateSelector = document.querySelector('.date-selector');
         const venueSelector = document.querySelector('.venue-selector');
-        if (dateSelector) dateSelector.style.display = 'none';
-        if (venueSelector) venueSelector.style.display = 'none';
+        if (dateSelector) {
+            dateSelector.style.display = 'flex';
+            dateSelector.style.visibility = 'visible';
+        }
+        if (venueSelector) {
+            venueSelector.style.display = 'block';
+            venueSelector.style.visibility = 'visible';
+        }
+        this.updateDateDisplay();
+        this.updateVenueSelectorDisplay();
 
         await this.ensureLuminexViewerFrame();
         this.refreshLuminexChrome();
@@ -6103,64 +6344,6 @@ class TheaterDashboard {
             this._resizeLuminexViewerFrame();
             requestAnimationFrame(() => this._resizeLuminexViewerFrame());
         });
-    }
-
-    async showOscMonitorView() {
-        if (!this.isShowModeEnabled()) return;
-        if (this.currentView === 'oscMonitor') {
-            await this.showHomeView(false);
-            return;
-        }
-        this.pushHistorySnapshotIfNeeded('oscMonitor');
-        this.previousView = this.currentView;
-        this.currentView = 'oscMonitor';
-        this.hideVoorstellingTimerShell();
-        this.hideLuminexShell();
-        this.hideTrekkenlijstenShell();
-
-        const weekWrapper = document.getElementById('weekViewWrapper');
-        const homeContainer = document.getElementById('homeViewContainer');
-        const detailWrapper = document.getElementById('detailViewWrapper');
-        const timerWrapper = document.getElementById('voorstellingTimerWrapper');
-        const luminexWrapper = document.getElementById('luminexViewWrapper');
-        const trekWrapper = document.getElementById('trekkenlijstenWrapper');
-        const oscWrapper = document.getElementById('oscMonitorWrapper');
-        const homeStatus = document.getElementById('homeViewStatus');
-        if (weekWrapper) weekWrapper.style.display = 'none';
-        if (homeContainer) homeContainer.style.display = 'none';
-        if (detailWrapper) detailWrapper.style.display = 'none';
-        if (timerWrapper) timerWrapper.style.display = 'none';
-        if (luminexWrapper) luminexWrapper.style.display = 'none';
-        if (trekWrapper) trekWrapper.style.display = 'none';
-        if (oscWrapper) oscWrapper.style.display = 'block';
-        if (homeStatus) homeStatus.style.display = 'none';
-
-        document.getElementById('weekBtn')?.classList.remove('active');
-        document.getElementById('homeBtn')?.classList.remove('active');
-        document.getElementById('voorstellingTimerBtn')?.classList.remove('active');
-        document.getElementById('luminexNavBtn')?.classList.remove('active');
-        document.getElementById('trekkenlijstenNavBtn')?.classList.remove('active');
-        document.getElementById('oscMonitorNavBtn')?.classList.add('active');
-
-        document.body.classList.remove('home-view-active');
-        document.body.classList.remove('week-view-active');
-        document.body.classList.remove('voorstelling-timer-active');
-        document.body.classList.remove('luminex-view-active');
-        document.body.classList.remove('trekkenlijsten-active');
-        document.body.classList.add('osc-monitor-active');
-
-        const techOverviewBtn = document.getElementById('techOverviewBtn');
-        if (techOverviewBtn) techOverviewBtn.style.display = 'none';
-
-        const dateSelector = document.querySelector('.date-selector');
-        const venueSelector = document.querySelector('.venue-selector');
-        if (dateSelector) dateSelector.style.display = 'none';
-        if (venueSelector) venueSelector.style.display = 'none';
-
-        await this.refreshNetworkInterfaceOptions();
-        this.syncOscMonitorInterfaceSelect();
-        this.renderOscMonitorEntries();
-        this.updateBackButtonVisibility();
     }
 
     stopVoorstellingTimerClockLoop() {
@@ -6364,6 +6547,7 @@ class TheaterDashboard {
         await this.pingShiftPresence();
         this.startShiftPresenceHeartbeat();
         this.updateShiftAuthPasswordField();
+        this.updateTrekkenlijstenNavVisibility();
         void this.refreshApiServerStatus();
         return j;
     }
@@ -6386,6 +6570,7 @@ class TheaterDashboard {
         this.updateShiftAuthPasswordField();
         await this.refreshShiftAuthStatusLine();
         this.updateShiftAuthPasswordField();
+        this.updateTrekkenlijstenNavVisibility();
         await this.refreshTimerSyncStatusLine();
         void this.refreshApiServerStatus();
     }
@@ -6516,7 +6701,7 @@ class TheaterDashboard {
 
     mergeTrekkenlijstSyncStateIntoItems() {
         const state = this._trekkenlijstSyncState || {};
-        for (const item of this._trekkenlijstenItems || []) {
+        for (const item of this._trekkenlijstenAll || []) {
             const s = state[item.syncKey];
             if (s) {
                 item.verwerkt = !!s.verwerkt;
@@ -6558,6 +6743,9 @@ class TheaterDashboard {
             if (r.status === 409 && j?.conflict) {
                 return { ok: false, conflict: true, item: j.item, updatedAt: j.item?.updatedAt || null };
             }
+            if (r.status === 403 && j?.forbidden) {
+                return { ok: false, forbidden: true, item: j.item || null };
+            }
             if (!r.ok || !j?.success) return { ok: false };
             return { ok: true, item: j.item || null, updatedAt: j.updatedAt || null };
         } catch (e) {
@@ -6570,7 +6758,7 @@ class TheaterDashboard {
         if (!this.isTrekkenlijstSyncEnabled()) return;
         const items = await this.fetchTrekkenlijstSyncItems();
         if (!items) return;
-        const knownKeys = new Set((this._trekkenlijstenItems || []).map((i) => i.syncKey));
+        const knownKeys = new Set((this._trekkenlijstenAll || []).map((i) => i.syncKey));
         let changed = forceMerge;
         for (const [key, val] of Object.entries(items)) {
             if (!knownKeys.has(key)) continue;
@@ -6601,7 +6789,7 @@ class TheaterDashboard {
 
     async persistTrekkenlijstItemNow(syncKey) {
         if (!this.isTrekkenlijstSyncEnabled()) return;
-        const item = (this._trekkenlijstenItems || []).find((i) => i.syncKey === syncKey);
+        const item = (this._trekkenlijstenAll || []).find((i) => i.syncKey === syncKey);
         if (!item) return;
         const result = await this.pushTrekkenlijstSyncItem({
             key: syncKey,
@@ -6624,7 +6812,7 @@ class TheaterDashboard {
             }
             return;
         }
-        if (result.conflict && result.item) {
+        if ((result.conflict || result.forbidden) && result.item) {
             this._trekkenlijstSyncState[syncKey] = result.item;
             this.mergeTrekkenlijstSyncStateIntoItems();
             if (this.currentView === 'trekkenlijsten') this.renderTrekkenlijstenList();
@@ -6659,11 +6847,17 @@ class TheaterDashboard {
             const cb = e.target.closest('.trekkenlijsten-verwerkt-cb');
             if (!cb) return;
             const key = cb.dataset.syncKey;
-            const item = (this._trekkenlijstenItems || []).find((i) => i.syncKey === key);
+            const item = (this._trekkenlijstenAll || []).find((i) => i.syncKey === key);
             if (!item) return;
+            if (!cb.checked && !this.canClearTrekkenlijstVerwerkt(item)) {
+                cb.checked = true;
+                return;
+            }
             item.verwerkt = cb.checked;
+            item.verwerktBy = cb.checked ? (this.config?.app?.shiftAuthEmail || item.verwerktBy || null) : null;
             const row = cb.closest('.trekkenlijsten-entry');
             if (row) row.classList.toggle('trekkenlijsten-entry--done', cb.checked);
+            this.renderTrekkenlijstenList();
             if (!this.isTrekkenlijstSyncEnabled()) return;
             void this.persistTrekkenlijstItemNow(key);
         });
@@ -6671,7 +6865,7 @@ class TheaterDashboard {
             const ta = e.target.closest('.trekkenlijsten-comment-input');
             if (!ta) return;
             const key = ta.dataset.syncKey;
-            const item = (this._trekkenlijstenItems || []).find((i) => i.syncKey === key);
+            const item = (this._trekkenlijstenAll || []).find((i) => i.syncKey === key);
             if (!item) return;
             item.comment = ta.value;
             if (!this.isTrekkenlijstSyncEnabled()) return;
@@ -6955,19 +7149,33 @@ class TheaterDashboard {
 
     startVoorstellingTimerClockLoop() {
         this.stopVoorstellingTimerClockLoop();
+        let wallEl = null;
+        let lastWall = '';
+        const swBySlot = new Map();
         const tick = () => {
-            const wallEl = document.getElementById('voorstellingWallClock');
+            if (!wallEl || !wallEl.isConnected) {
+                wallEl = document.getElementById('voorstellingWallClock');
+                lastWall = '';
+            }
             if (wallEl) {
                 const now = this.getNowDate();
                 const locale = this.locale === 'en' ? 'en-GB' : 'nl-NL';
-                wallEl.textContent = now.toLocaleTimeString(locale, this.wallClockTimeFormatOptions());
+                const text = now.toLocaleTimeString(locale, this.wallClockTimeFormatOptions());
+                if (text !== lastWall) {
+                    wallEl.textContent = text;
+                    lastWall = text;
+                }
             }
             this.updateVoorstellingTimezoneDisplay();
             (this._timerSessions || []).forEach(({ slotId }) => {
-                const swEl = document.querySelector(`[data-slot-stopwatch="${slotId}"]`);
-                if (swEl) {
-                    swEl.textContent = this.formatStopwatchMs(this.getVoorstellingStopwatchMs(slotId));
+                let swEl = swBySlot.get(slotId);
+                if (!swEl || !swEl.isConnected) {
+                    swEl = document.querySelector(`[data-slot-stopwatch="${slotId}"]`);
+                    swBySlot.set(slotId, swEl);
                 }
+                if (!swEl) return;
+                const text = this.formatStopwatchMs(this.getVoorstellingStopwatchMs(slotId));
+                if (swEl.textContent !== text) swEl.textContent = text;
             });
             this.updateVoorstellingAuxiliaryClock();
         };
@@ -7187,9 +7395,13 @@ class TheaterDashboard {
     }
 
     updateVoorstellingTimezoneDisplay() {
-        const el = document.getElementById('voorstellingTimezoneDisplay');
+        const el = this._tzDisplayEl && this._tzDisplayEl.isConnected
+            ? this._tzDisplayEl
+            : document.getElementById('voorstellingTimezoneDisplay');
+        this._tzDisplayEl = el;
         if (!el) return;
-        el.textContent = this.formatLocalTimezoneDisplay();
+        const text = this.formatLocalTimezoneDisplay();
+        if (el.textContent !== text) el.textContent = text;
     }
 
     commitPauseDurationInput(inp) {
@@ -7212,9 +7424,11 @@ class TheaterDashboard {
      * Primaire sessie = laatste kolom in de timer (meestal avond).
      */
     updateVoorstellingAuxiliaryClock() {
-        const topWrap = document.getElementById('voorstellingPauseCountdownTopWrap');
-        const topEl = document.getElementById('voorstellingPauseCountdownTop');
-        const labelEl = document.getElementById('voorstellingAuxClockLabel');
+        const cached = this._auxClockEls;
+        const topWrap = cached?.topWrap?.isConnected ? cached.topWrap : document.getElementById('voorstellingPauseCountdownTopWrap');
+        const topEl = cached?.topEl?.isConnected ? cached.topEl : document.getElementById('voorstellingPauseCountdownTop');
+        const labelEl = cached?.labelEl?.isConnected ? cached.labelEl : document.getElementById('voorstellingAuxClockLabel');
+        this._auxClockEls = { topWrap, topEl, labelEl };
         if (!topWrap || !topEl) return;
 
         const sessions = this._timerSessions || [];
@@ -8465,7 +8679,6 @@ class TheaterDashboard {
         this.previousView = this.currentView;
         this.currentView = 'voorstellingTimer';
         this.hideLuminexShell();
-        this.hideOscMonitorShell();
         this.hideTrekkenlijstenShell();
 
         const weekWrapper = document.getElementById('weekViewWrapper');
@@ -8484,14 +8697,12 @@ class TheaterDashboard {
         document.body.classList.remove('week-view-active');
         document.body.classList.remove('trekkenlijsten-active');
         document.body.classList.remove('luminex-view-active');
-        document.body.classList.remove('osc-monitor-active');
         document.body.classList.add('voorstelling-timer-active');
 
         document.getElementById('weekBtn')?.classList.remove('active');
         document.getElementById('homeBtn')?.classList.remove('active');
         document.getElementById('trekkenlijstenNavBtn')?.classList.remove('active');
         document.getElementById('luminexNavBtn')?.classList.remove('active');
-        document.getElementById('oscMonitorNavBtn')?.classList.remove('active');
         document.getElementById('voorstellingTimerBtn')?.classList.add('active');
 
         const techOverviewBtn = document.getElementById('techOverviewBtn');
@@ -9706,7 +9917,7 @@ class TheaterDashboard {
                     <div class="data-stat-label">${this.t('dataStats.luchtvochtigheid')}</div>
                 </div>
                 <div class="data-stat">
-                    <div class="data-stat-value">${climate.airQuality || '--'}</div>
+                    <div class="data-stat-value">${this.escapeHtml(climate.airQuality || '--')}</div>
                     <div class="data-stat-label">${this.t('dataStats.luchtkwaliteit')}</div>
                 </div>
                 <div class="data-stat">
@@ -9719,8 +9930,8 @@ class TheaterDashboard {
                     <h4>Huidige Status</h4>
                     <p><i class="fas fa-thermometer-half"></i> Temperatuur: ${climate.temperature || 'Onbekend'}°C</p>
                     <p><i class="fas fa-tint"></i> Luchtvochtigheid: ${climate.humidity || 'Onbekend'}%</p>
-                    <p><i class="fas fa-wind"></i> Ventilatie: ${climate.ventilation || 'Onbekend'}</p>
-                    <p><i class="fas fa-clock"></i> Laatste update: ${climate.lastUpdate || 'Onbekend'}</p>
+                    <p><i class="fas fa-wind"></i> Ventilatie: ${this.escapeHtml(climate.ventilation || 'Onbekend')}</p>
+                    <p><i class="fas fa-clock"></i> Laatste update: ${this.escapeHtml(climate.lastUpdate || 'Onbekend')}</p>
                 </div>
             </div>
         `;
@@ -9843,9 +10054,11 @@ class TheaterDashboard {
             ? document.getElementById('detailViewStatus')
             : this.currentView === 'week'
                 ? document.getElementById('weekViewStatus')
-                : this.currentView === 'home'
-                    ? document.getElementById('homeViewStatus')
-                    : null;
+                : this.currentView === 'trekkenlijsten'
+                    ? document.getElementById('trekkenlijstenViewStatus')
+                    : this.currentView === 'home'
+                        ? document.getElementById('homeViewStatus')
+                        : null;
         if (!masterEl) return;
 
         const labels = { online: this.t('status.online'), deels: this.t('status.deels'), offline: this.t('status.offline'), warning: this.t('status.warning') };
@@ -9853,7 +10066,7 @@ class TheaterDashboard {
         const textEl = masterEl.querySelector('.status-text');
         if (indicator) indicator.className = `status-indicator ${aggregate}`;
         if (textEl) textEl.textContent = labels[aggregate] || 'Offline';
-        masterEl.className = `card-status status-${aggregate}`;
+        masterEl.className = `card-status card-status--clickable status-${aggregate}`;
     }
 
     showStatusPopover(anchorEl) {
@@ -9963,7 +10176,7 @@ class TheaterDashboard {
     }
 
     setupStatusPopover() {
-        ['weekViewStatus', 'detailViewStatus', 'homeViewStatus'].forEach(id => {
+        ['weekViewStatus', 'detailViewStatus', 'homeViewStatus', 'trekkenlijstenViewStatus'].forEach(id => {
             const el = document.getElementById(id);
             if (el) el.addEventListener('click', (e) => { e.stopPropagation(); this.showStatusPopover(el); });
         });
@@ -10113,7 +10326,6 @@ class TheaterDashboard {
             if (sectionEl.querySelector('#themeSelect') || sectionEl.querySelector('#touchscreenModeCheckbox')) return 'app-config';
             if (sectionEl.querySelector('#networkInternetInterface') || sectionEl.querySelector('#networkOscInterface') || sectionEl.querySelector('#networkLuminexSacnInterface')) return 'io';
             if (sectionEl.querySelector('#shiftServerBaseUrlInput')) return 'io';
-            if (sectionEl.querySelector('#masterModeEnabledCheckbox')) return 'io';
             if (sectionEl.querySelector('#yesplanBaseURL') || sectionEl.querySelector('#yesplanBaseURL2') || sectionEl.querySelector('#activeYesplanOrg')) return 'yesplan';
             if (sectionEl.querySelector('#privaBaseURL')) return 'app-config';
             if (sectionEl.querySelector('#venueOrderList') || sectionEl.querySelector('#venueResourceOptionsList')) return 'yesplan';
@@ -10148,23 +10360,10 @@ class TheaterDashboard {
         }
 
         // Gewenste volgorde binnen App-config tab:
-        // overige app-instellingen, daarna updates, en master-mode als laatste.
+        // overige app-instellingen, daarna updates.
         if (Array.isArray(this.settingsPageSections['app-config'])) {
             this.settingsPageSections['app-config'].sort((a, b) => {
-                const rank = (section) => {
-                    if (section.querySelector('#masterModeEnabledCheckbox')) return 2;
-                    if (section.id === 'desktopUpdateSection') return 1;
-                    return 0;
-                };
-                return rank(a) - rank(b);
-            });
-        }
-
-        // Gewenste volgorde binnen In/Uit-tab:
-        // netwerkinterfaces eerst, master mode helemaal onderaan.
-        if (Array.isArray(this.settingsPageSections.io)) {
-            this.settingsPageSections.io.sort((a, b) => {
-                const rank = (section) => (section.querySelector('#masterModeEnabledCheckbox') ? 1 : 0);
+                const rank = (section) => (section.id === 'desktopUpdateSection' ? 1 : 0);
                 return rank(a) - rank(b);
             });
         }
@@ -10216,11 +10415,7 @@ class TheaterDashboard {
 
         if (this.settingsPageSections) {
             Object.values(this.settingsPageSections).flat().forEach((section) => {
-                let shouldShow = section.dataset.settingsPage === pageKey;
-                // Master mode hoort uitsluitend bij In/Uit-tab.
-                if (section.querySelector('#masterModeEnabledCheckbox')) {
-                    shouldShow = pageKey === 'io';
-                }
+                const shouldShow = section.dataset.settingsPage === pageKey;
                 section.style.display = shouldShow ? (section.dataset.settingsOriginalDisplay || '') : 'none';
             });
         }
@@ -10345,7 +10540,7 @@ class TheaterDashboard {
     }
 
     async refreshNetworkInterfaceOptions() {
-        const ids = ['networkInternetInterface', 'networkLuminexSacnInterface', 'networkOscInterface', 'oscMonitorInterface'];
+        const ids = ['networkInternetInterface', 'networkLuminexSacnInterface', 'networkOscInterface'];
         const selects = ids
             .map((id) => document.getElementById(id))
             .filter(Boolean);
@@ -10376,7 +10571,7 @@ class TheaterDashboard {
     }
 
     populateSettingsForm() {
-        this.enforceUpdateAndMasterSectionOrder();
+            this.enforceUpdateSectionOrder();
         // Actieve Yesplan organisatie - dynamisch vullen met ingevoerde namen
         const activeOrgSelect = document.getElementById('activeYesplanOrg');
         if (activeOrgSelect) {
@@ -10455,10 +10650,6 @@ class TheaterDashboard {
         if (showModeCheckbox) {
             showModeCheckbox.checked = this.config.app?.showMode !== false;
         }
-        const masterModeEnabledCheckbox = document.getElementById('masterModeEnabledCheckbox');
-        if (masterModeEnabledCheckbox) {
-            masterModeEnabledCheckbox.checked = this.config.app?.masterModeEnabled === true;
-        }
         const shiftServerBaseUrlInput = document.getElementById('shiftServerBaseUrlInput');
         if (shiftServerBaseUrlInput) {
             shiftServerBaseUrlInput.value = String(
@@ -10483,20 +10674,6 @@ class TheaterDashboard {
         }
         void this.refreshShiftAuthStatusLine();
         if (this.getShiftAuthToken()) this.startShiftPresenceHeartbeat();
-        const masterModeNameInput = document.getElementById('masterModeNameInput');
-        if (masterModeNameInput) {
-            masterModeNameInput.value = String(this.config.app?.masterModeName || '');
-        }
-        const masterModePortInput = document.getElementById('masterModePortInput');
-        if (masterModePortInput) {
-            masterModePortInput.value = String(this.config.app?.masterModePort || 3847);
-        }
-        const unlockInput = document.getElementById('masterModeUnlockPassword');
-        if (unlockInput) unlockInput.value = '';
-        this.updateMasterModeInputState();
-        this.refreshMasterModeStatusLine().catch(() => {
-            /* ignore */
-        });
         const routing = this.config.app?.networkRouting || {};
         const networkInternetInterface = document.getElementById('networkInternetInterface');
         if (networkInternetInterface) {
@@ -10524,7 +10701,6 @@ class TheaterDashboard {
                 networkOscInterface.value = 'auto';
             }
         }
-        this.syncOscMonitorInterfaceSelect();
 
         // API-server URL (alleen op iPhone/web)
         const apiServerSection = document.getElementById('apiServerSection');
@@ -10541,6 +10717,10 @@ class TheaterDashboard {
             desktopUpdateSection.style.display = showDesktopUpdates ? 'block' : 'none';
         }
         if (updateCheckResult) updateCheckResult.textContent = '';
+        const allowBetaUpdatesCheckbox = document.getElementById('allowBetaUpdatesCheckbox');
+        if (allowBetaUpdatesCheckbox) {
+            allowBetaUpdatesCheckbox.checked = this.config.app?.allowBetaUpdates === true;
+        }
 
         // Zaalvolgorde
         this.populateVenueOrderSettings();
@@ -10549,57 +10729,16 @@ class TheaterDashboard {
         this.populateVenueResourceOptionsSettings();
     }
 
-    enforceUpdateAndMasterSectionOrder() {
+    enforceUpdateSectionOrder() {
         const settingsForm = document.getElementById('settingsForm');
         const updatesSection = document.getElementById('desktopUpdateSection');
         if (!settingsForm || !updatesSection) return;
         if (updatesSection.parentElement !== settingsForm) return;
-        // Legacy helper: updates-sectie onderaan in formulier houden.
-        // Master-mode positie wordt via tab-indeling en io-sortering bepaald.
         settingsForm.appendChild(updatesSection);
-    }
-
-    async refreshMasterModeStatusLine() {
-        const resultEl = document.getElementById('masterModeDiscoveryResult');
-        if (!resultEl) return;
-        if (!window.electronAPI?.getMasterModeStatus) {
-            resultEl.textContent = '';
-            return;
-        }
-        try {
-            const res = await window.electronAPI.getMasterModeStatus();
-            const status = res?.status;
-            if (!res?.success || !status) {
-                resultEl.textContent = '';
-                return;
-            }
-            if (status.enabled) {
-                const firstIp = Array.isArray(status.addresses) && status.addresses.length > 0 ? status.addresses[0] : '0.0.0.0';
-                resultEl.textContent = `Deze app is master op ${firstIp}:${status.port}`;
-                return;
-            }
-            resultEl.textContent = 'Master mode staat uit op dit apparaat.';
-        } catch (_) {
-            resultEl.textContent = '';
-        }
     }
 
     async refreshTimerSyncStatusLine() {
         // Timer sync volgt Shift-login; geen aparte statusregel meer.
-    }
-
-    updateMasterModeInputState() {
-        const enabled = document.getElementById('masterModeEnabledCheckbox')?.checked === true;
-        const nameInput = document.getElementById('masterModeNameInput');
-        const portInput = document.getElementById('masterModePortInput');
-        const discoverBtn = document.getElementById('discoverMasterBtn');
-        const passwordInput = document.getElementById('masterModeUnlockPassword');
-
-        if (nameInput) nameInput.disabled = !enabled;
-        if (portInput) portInput.disabled = !enabled;
-        if (discoverBtn) discoverBtn.disabled = !enabled;
-        // Wachtwoordveld blijft bewust altijd actief, ook wanneer master mode uit staat.
-        if (passwordInput) passwordInput.disabled = false;
     }
 
     getDefaultVenueOrder() {
@@ -10972,12 +11111,7 @@ class TheaterDashboard {
                     manualClockOffsetSeconds: 0,
                     touchscreenMode: document.getElementById('touchscreenModeCheckbox')?.checked ?? false,
                     showMode: document.getElementById('showModeCheckbox')?.checked !== false,
-                    masterModeEnabled: document.getElementById('masterModeEnabledCheckbox')?.checked === true,
-                    masterModeName: String(document.getElementById('masterModeNameInput')?.value || '').trim(),
-                    masterModePort: (() => {
-                        const n = parseInt(document.getElementById('masterModePortInput')?.value || '3847', 10);
-                        return Number.isFinite(n) && n > 0 && n <= 65535 ? n : 3847;
-                    })(),
+                    allowBetaUpdates: document.getElementById('allowBetaUpdatesCheckbox')?.checked === true,
                     timerSyncEnabled: !!(this.getShiftAuthToken() && (
                         this.getShiftServerBaseUrl()
                         || this.normalizeShiftHappensApiBase(String(document.getElementById('shiftServerBaseUrlInput')?.value || '').trim())
@@ -11052,29 +11186,9 @@ class TheaterDashboard {
             configs.app.manualClockOffsetSeconds = manualOffsetSeconds;
             delete configs._timezoneMode;
             delete configs._manualTimeZone;
-
-            if (configs.app.masterModeEnabled && window.electronAPI?.unlockMasterMode) {
-                let mustUnlock = this.config.app?.masterModeEnabled !== true;
-                if (window.electronAPI?.getMasterModeStatus) {
-                    try {
-                        const st = await window.electronAPI.getMasterModeStatus();
-                        // Als master nog niet draait, dan altijd unlock afdwingen.
-                        mustUnlock = !st?.status?.enabled;
-                    } catch (_) {
-                        // fallback op config-state hierboven
-                    }
-                }
-                if (mustUnlock) {
-                    const pwd = String(document.getElementById('masterModeUnlockPassword')?.value || '').trim();
-                    if (!pwd) {
-                        throw new Error('Vul eerst het ontgrendelwachtwoord in om Master mode in te schakelen.');
-                    }
-                    const unlockRes = await window.electronAPI.unlockMasterMode(pwd);
-                    if (!unlockRes?.success) {
-                        throw new Error('Master mode ontgrendelen mislukt: onjuist wachtwoord.');
-                    }
-                }
-            }
+            delete configs.app.masterModeEnabled;
+            delete configs.app.masterModeName;
+            delete configs.app.masterModePort;
 
             // Sla app-instellingen eerst op zodat UI-vinkjes/thema altijd persistenteren,
             // ook als secure storage voor API keys op dit apparaat niet beschikbaar is.
@@ -11167,13 +11281,12 @@ class TheaterDashboard {
                 this.showSettingsSaveStatus(this.t('settings.saved'), false);
             }
             this.showSuccess(this.t('settings.saved'));
-            const showOnlyViews = ['voorstellingTimer', 'trekkenlijsten', 'oscMonitor'];
+            const showOnlyViews = ['voorstellingTimer'];
             if (!this.isShowModeEnabled() && showOnlyViews.includes(this.currentView)) {
                 await this.showHomeView(false);
             } else {
                 this.refreshVoorstellingTimerChrome();
             }
-            await this.refreshMasterModeStatusLine();
             await this.refreshTimerSyncStatusLine();
             if (this.currentView === 'voorstellingTimer') {
                 this.startVoorstellingTimerSyncPoll();
@@ -11229,7 +11342,7 @@ class TheaterDashboard {
             offline: this.t('status.offline'),
             warning: this.t('status.warning')
         };
-        ['weekViewStatus', 'detailViewStatus', 'homeViewStatus'].forEach(id => {
+        ['weekViewStatus', 'detailViewStatus', 'homeViewStatus', 'trekkenlijstenViewStatus'].forEach(id => {
             const el = document.getElementById(id);
             if (el) {
                 const textEl = el.querySelector('.status-text');
@@ -11252,8 +11365,6 @@ class TheaterDashboard {
         if (luminexNavBtn) luminexNavBtn.title = this.t('nav.luminex');
         const trekkenlijstenNavBtn = document.getElementById('trekkenlijstenNavBtn');
         if (trekkenlijstenNavBtn) trekkenlijstenNavBtn.title = this.t('nav.trekkenlijsten');
-        const oscMonitorNavBtn = document.getElementById('oscMonitorNavBtn');
-        if (oscMonitorNavBtn) oscMonitorNavBtn.title = 'OSC Monitor';
         this.refreshVoorstellingTimerChrome();
         this.refreshLuminexChrome();
         const techOverviewBtn = document.getElementById('techOverviewBtn');
@@ -11270,6 +11381,8 @@ class TheaterDashboard {
         if (homeStatus) homeStatus.title = this.t('status.clickForStatus');
         const detailStatus = document.getElementById('detailViewStatus');
         if (detailStatus) detailStatus.title = this.t('status.clickForStatus');
+        const trekStatus = document.getElementById('trekkenlijstenViewStatus');
+        if (trekStatus) trekStatus.title = this.t('status.clickForStatus');
         this.updateWeekHeaderSummary(this.weekEventCount || 0);
         this.updateDateDisplay();
         this.updateDateTimeDisplay();

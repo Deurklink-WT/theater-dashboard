@@ -12,6 +12,9 @@ const path = require('path');
 const CONFIG_DIR = process.env.SHIFT_HAPPENS_CONFIG_DIR || path.join(process.cwd(), 'data');
 const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
 
+let cached = null;
+let cachedMtimeMs = null;
+
 function ensureDir() {
   if (!fs.existsSync(CONFIG_DIR)) {
     fs.mkdirSync(CONFIG_DIR, { recursive: true });
@@ -21,10 +24,18 @@ function ensureDir() {
 function readAll() {
   ensureDir();
   try {
+    const stat = fs.statSync(CONFIG_FILE);
+    if (cached && cachedMtimeMs === stat.mtimeMs) return cached;
     const raw = fs.readFileSync(CONFIG_FILE, 'utf8');
-    return JSON.parse(raw);
+    cached = JSON.parse(raw);
+    cachedMtimeMs = stat.mtimeMs;
+    return cached;
   } catch (e) {
-    if (e.code === 'ENOENT') return {};
+    if (e.code === 'ENOENT') {
+      cached = {};
+      cachedMtimeMs = null;
+      return cached;
+    }
     throw e;
   }
 }
@@ -32,12 +43,23 @@ function readAll() {
 function writeAll(obj) {
   ensureDir();
   fs.writeFileSync(CONFIG_FILE, JSON.stringify(obj, null, 2), 'utf8');
+  cached = obj;
+  try {
+    cachedMtimeMs = fs.statSync(CONFIG_FILE).mtimeMs;
+  } catch (_) {
+    cachedMtimeMs = null;
+  }
+}
+
+function cloneValue(value) {
+  if (value && typeof value === 'object') return JSON.parse(JSON.stringify(value));
+  return value;
 }
 
 module.exports = {
   get(key, defaultValue = {}) {
     const all = readAll();
-    return key in all ? all[key] : defaultValue;
+    return key in all ? cloneValue(all[key]) : defaultValue;
   },
   set(key, value) {
     const all = readAll();

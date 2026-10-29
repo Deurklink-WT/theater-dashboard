@@ -18,6 +18,7 @@ const { createDiscoveryLoop } = require('../luminex-viewer/server/discovery-loop
 const DEFAULT_CONFIG = {
   httpPort: 8765,
   mode: 'auto',
+  demoDisabled: false,
   universeRange: { start: 1, end: 32 },
   interface: 'auto',
   nodes: [],
@@ -251,6 +252,7 @@ function createRequestHandler() {
           const body = JSON.parse(await readBody(req) || '{}');
           const next = { ...config };
           if (body.mode && ['auto', 'live', 'demo'].includes(body.mode)) next.mode = body.mode;
+          if (typeof body.demoDisabled === 'boolean') next.demoDisabled = body.demoDisabled;
           if (body.universeRange) {
             const start = Math.max(1, Math.min(63999, Number(body.universeRange.start) || 1));
             const end = Math.max(start, Math.min(63999, Number(body.universeRange.end) || start));

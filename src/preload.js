@@ -19,9 +19,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   saveConfig: (system, config) => ipcRenderer.invoke('save-config', system, config),
   getConfig: (system) => ipcRenderer.invoke('get-config', system),
   getNetworkInterfaces: () => ipcRenderer.invoke('get-network-interfaces'),
-  unlockMasterMode: (password) => ipcRenderer.invoke('unlock-master-mode', { password }),
-  discoverMasterMode: () => ipcRenderer.invoke('discover-master-mode'),
-  getMasterModeStatus: () => ipcRenderer.invoke('get-master-mode-status'),
 
   // Event listeners
   onAutoRefresh: (callback) => ipcRenderer.on('auto-refresh', callback),

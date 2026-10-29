@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lichtsignaal Viewer — Luminex</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -36,6 +37,13 @@
           <option value="live">Alleen echt signaal</option>
           <option value="demo">Demovoorbeeld</option>
         </select>
+      </label>
+      <label class="check">Demomodus
+        <span class="check-line">
+          <input id="cfg-demo-disabled" type="checkbox" />
+          <span>Uitschakelen</span>
+        </span>
+        <small class="field-hint">Geen voorbeelddata als er geen echt signaal binnenkomt. Het scherm blijft dan leeg tot er lichtsignaal is.</small>
       </label>
       <label>Welke streams volgen?
         <span class="range-inputs">

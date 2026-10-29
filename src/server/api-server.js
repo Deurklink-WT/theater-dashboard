@@ -13,6 +13,7 @@ const rateLimit = require('express-rate-limit');
 const store = require('./store');
 const timerSync = require('./voorstelling-timer-sync');
 const trekkenlijstSync = require('./trekkenlijst-sync');
+const trekkenlijstFeed = require('./trekkenlijst-feed');
 const auditLog = require('./audit-log');
 const accessAuth = require('./access-auth');
 const presence = require('./connection-tracker');
@@ -53,6 +54,21 @@ function getActiveYesplanOrg() {
 const YESPLAN_CACHE_TTL_MS = Number(process.env.YESPLAN_CACHE_TTL_MS || (6 * 60 * 60 * 1000));
 const YESPLAN_CACHE_MAX = 100;
 const yesplanCache = new Map();
+const yesplanClients = new Map();
+
+function getYesplanClient(config) {
+  const id = `${String(config?.baseURL || '')}\n${String(config?.apiKey || '')}`;
+  let client = yesplanClients.get(id);
+  if (!client) {
+    client = new YesplanAPI(config);
+    yesplanClients.set(id, client);
+  }
+  return client;
+}
+
+function isWeekRange(params) {
+  return !!(params?.startDate && params?.endDate && params.startDate !== params.endDate);
+}
 
 function yesplanCacheKey(params) {
   const { startDate, endDate, venueId, includeEventDetailsForWeekFilters } = params;
@@ -103,9 +119,12 @@ async function getYesplanData(params) {
     if (!config1.baseURL || !config1.apiKey || !config2.baseURL || !config2.apiKey) {
       return { success: false, data: [], timestamp: new Date().toISOString() };
     }
+    const fetchOrg = (config) => (isWeekRange(apiParams)
+      ? getYesplanClient(config).getEventsForWeek(apiParams)
+      : getYesplanClient(config).getEvents(apiParams));
     const [r1, r2] = await Promise.all([
-      new YesplanAPI(config1).getEvents(apiParams),
-      new YesplanAPI(config2).getEvents(apiParams)
+      fetchOrg(config1),
+      fetchOrg(config2)
     ]);
     const data1 = (r1?.success && r1?.data) ? r1.data.map(e => ({ ...e, _organizationId: 1 })) : [];
     const data2 = (r2?.success && r2?.data) ? r2.data.map(e => ({ ...e, _organizationId: 2 })) : [];
@@ -119,8 +138,10 @@ async function getYesplanData(params) {
     return result;
   }
   const orgNum = singleOrg ?? (activeOrg === 2 ? 2 : 1);
-  const yesplan = new YesplanAPI(getYesplanConfig(orgNum));
-  const result = await yesplan.getEvents(apiParams);
+  const yesplan = getYesplanClient(getYesplanConfig(orgNum));
+  const result = isWeekRange(apiParams)
+    ? await yesplan.getEventsForWeek(apiParams)
+    : await yesplan.getEvents(apiParams);
   if (result && result.success) {
     const data = (result.data || []).map(e => ({ ...e, _organizationId: orgNum }));
     const out = { ...result, data };
@@ -139,8 +160,8 @@ async function getYesplanVenues(params = {}) {
       return { success: false, data: [] };
     }
     const [r1, r2] = await Promise.all([
-      new YesplanAPI(config1).getVenues(),
-      new YesplanAPI(config2).getVenues()
+      getYesplanClient(config1).getVenues(),
+      getYesplanClient(config2).getVenues()
     ]);
     const label1 = (config1.name && String(config1.name).trim()) || 'Org 1';
     const label2 = (config2.name && String(config2.name).trim()) || 'Org 2';
@@ -149,14 +170,12 @@ async function getYesplanVenues(params = {}) {
     return { success: true, data: [...v1, ...v2] };
   }
   const orgNum = org === 2 ? 2 : 1;
-  const yesplan = new YesplanAPI(getYesplanConfig(orgNum));
-  return await yesplan.getVenues();
+  return await getYesplanClient(getYesplanConfig(orgNum)).getVenues();
 }
 
 async function getYesplanSchedule(eventId, org) {
   const orgNum = (org === 2 ? 2 : 1);
-  const yesplan = new YesplanAPI(getYesplanConfig(orgNum));
-  return await yesplan.getSchedule(eventId);
+  return await getYesplanClient(getYesplanConfig(orgNum)).getSchedule(eventId);
 }
 
 async function getYesplanReservations(params) {
@@ -176,16 +195,15 @@ async function getYesplanReservations(params) {
       return { success: false, data: [] };
     }
     const [r1, r2] = await Promise.all([
-      new YesplanAPI(config1).getReservations(apiParams),
-      new YesplanAPI(config2).getReservations(apiParams)
+      getYesplanClient(config1).getReservations(apiParams),
+      getYesplanClient(config2).getReservations(apiParams)
     ]);
     const d1 = (r1?.success && r1?.data) ? r1.data : [];
     const d2 = (r2?.success && r2?.data) ? r2.data : [];
     return { success: true, data: [...d1, ...d2] };
   }
   const orgNum = singleOrg ?? (activeOrg === 2 ? 2 : 1);
-  const yesplan = new YesplanAPI(getYesplanConfig(orgNum));
-  return await yesplan.getReservations(apiParams);
+  return await getYesplanClient(getYesplanConfig(orgNum)).getReservations(apiParams);
 }
 
 const app = express();
@@ -257,7 +275,7 @@ app.get('/api/admin/users', accessAuth.requireAuth, accessAuth.requireAdmin, (re
   res.json({ success: true, users: accessAuth.listUsers() });
 });
 
-app.get('/api/admin/connections', accessAuth.requireAuth, (req, res) => {
+app.get('/api/admin/connections', accessAuth.requireAuth, accessAuth.requireAdmin, (req, res) => {
   res.set('Cache-Control', 'no-store');
   const connections = presence.listActive();
   res.json({
@@ -300,8 +318,14 @@ app.delete('/api/admin/users/:id', accessAuth.requireAuth, accessAuth.requireAdm
 });
 
 function protectApi(req, res, next) {
-  if (!accessAuth.isAuthEnabled()) return next();
   return accessAuth.requireAuth(req, res, next);
+}
+
+const CONFIG_SYSTEMS = new Set(['yesplan', 'yesplan2', 'priva', 'itix', 'app', 'voorstellingTimer', 'luminex']);
+const SECRET_CONFIG_SYSTEMS = new Set(['yesplan', 'yesplan2', 'priva']);
+
+function isConfigAdmin(req) {
+  return req.shiftUser?.role === 'admin';
 }
 
 // Health check (+ presence bij ingelogde clients)
@@ -328,10 +352,12 @@ app.get('/api/health', (req, res) => {
 
 app.use('/api/voorstelling-timer', protectApi);
 app.get('/api/voorstelling-timer/snapshots', (req, res) => {
+  res.set('Cache-Control', 'no-store');
   res.json(timerSync.listSnapshots());
 });
 
 app.get('/api/voorstelling-timer/snapshot/:key', (req, res) => {
+  res.set('Cache-Control', 'no-store');
   const key = decodeURIComponent(req.params.key || '');
   const result = timerSync.getSnapshot(key);
   if (!result.success) return res.status(400).json(result);
@@ -339,6 +365,7 @@ app.get('/api/voorstelling-timer/snapshot/:key', (req, res) => {
 });
 
 app.put('/api/voorstelling-timer/snapshot', (req, res) => {
+  res.set('Cache-Control', 'no-store');
   const result = timerSync.putSnapshot(req.body || {});
   if (!result.success) {
     const code = result.conflict ? 409 : 400;
@@ -348,6 +375,21 @@ app.put('/api/voorstelling-timer/snapshot', (req, res) => {
 });
 
 app.use('/api/trekkenlijst', protectApi);
+app.get('/api/trekkenlijst/feed', (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  const venueIds = String(req.query.venues || '').split(',').map((id) => id.trim()).filter(Boolean);
+  const result = trekkenlijstFeed.getFeed(venueIds);
+  if (!result.success) return res.status(400).json(result);
+  res.json(result);
+});
+
+app.put('/api/trekkenlijst/feed', (req, res) => {
+  const body = req.body || {};
+  const result = trekkenlijstFeed.putFeed(body.venueIds, body.items);
+  if (!result.success) return res.status(400).json(result);
+  res.json(result);
+});
+
 app.get('/api/trekkenlijst/items', (req, res) => {
   res.set('Cache-Control', 'no-store');
   res.json(trekkenlijstSync.listItems());
@@ -369,13 +411,13 @@ app.put('/api/trekkenlijst/item', (req, res) => {
   };
   const result = trekkenlijstSync.putItem(body, actor);
   if (!result.success) {
-    const code = result.conflict ? 409 : 400;
+    const code = result.conflict ? 409 : (result.forbidden ? 403 : 400);
     return res.status(code).json(result);
   }
   res.json(result);
 });
 
-app.get('/api/admin/audit-log', accessAuth.requireAuth, (req, res) => {
+app.get('/api/admin/audit-log', accessAuth.requireAuth, accessAuth.requireAdmin, (req, res) => {
   res.set('Cache-Control', 'no-store');
   const { limit, email, action } = req.query || {};
   res.json(auditLog.listEntries({
@@ -388,17 +430,30 @@ app.get('/api/admin/audit-log', accessAuth.requireAuth, (req, res) => {
 app.use('/api/config', protectApi);
 app.get('/api/config/:system', (req, res) => {
   const system = req.params.system;
+  if (!CONFIG_SYSTEMS.has(system)) {
+    return res.status(400).json({ success: false, error: 'Invalid config system' });
+  }
   const raw = store.get(system, {});
-  const out = ['yesplan', 'yesplan2', 'priva'].includes(system)
+  const out = SECRET_CONFIG_SYSTEMS.has(system)
     ? secureConfigFromStorage(raw)
     : raw;
+  if (SECRET_CONFIG_SYSTEMS.has(system) && !isConfigAdmin(req)) {
+    const redacted = { ...(out || {}) };
+    delete redacted.apiKey;
+    return res.json(redacted);
+  }
   res.json(out);
 });
 
 app.post('/api/config', (req, res) => {
-  const { system, config } = req.body;
-  if (!system) return res.status(400).json({ success: false, error: 'system required' });
-  const toStore = ['yesplan', 'yesplan2', 'priva'].includes(system)
+  const { system, config } = req.body || {};
+  if (!CONFIG_SYSTEMS.has(system)) {
+    return res.status(400).json({ success: false, error: 'Invalid config system' });
+  }
+  if (SECRET_CONFIG_SYSTEMS.has(system) && !isConfigAdmin(req)) {
+    return res.status(403).json({ success: false, error: 'FORBIDDEN' });
+  }
+  const toStore = SECRET_CONFIG_SYSTEMS.has(system)
     ? secureConfigForStorage(config)
     : config;
   store.set(system, toStore);
@@ -413,7 +468,7 @@ app.post('/api/yesplan/data', async (req, res) => {
     res.json(result);
   } catch (e) {
     console.error('Yesplan data error:', e);
-    res.status(500).json({ success: false, error: e.message });
+    res.status(500).json({ success: false, error: 'UPSTREAM_FAILED' });
   }
 });
 
@@ -424,7 +479,7 @@ app.post('/api/yesplan/venues', async (req, res) => {
     res.json(result);
   } catch (e) {
     console.error('Yesplan venues error:', e);
-    res.status(500).json({ success: false, error: e.message });
+    res.status(500).json({ success: false, error: 'UPSTREAM_FAILED' });
   }
 });
 
@@ -434,7 +489,7 @@ app.post('/api/yesplan/reservations', async (req, res) => {
     res.json(result);
   } catch (e) {
     console.error('Yesplan reservations error:', e);
-    res.status(500).json({ success: false, error: e.message });
+    res.status(500).json({ success: false, error: 'UPSTREAM_FAILED' });
   }
 });
 
@@ -445,7 +500,7 @@ app.post('/api/yesplan/schedule', async (req, res) => {
     res.json(result);
   } catch (e) {
     console.error('Yesplan schedule error:', e);
-    res.status(500).json({ success: false, error: e.message });
+    res.status(500).json({ success: false, error: 'UPSTREAM_FAILED' });
   }
 });
 
@@ -456,7 +511,7 @@ app.post('/api/priva/data', async (req, res) => {
     res.json(result);
   } catch (e) {
     console.error('Priva error:', e);
-    res.status(500).json({ success: false, error: e.message });
+    res.status(500).json({ success: false, error: 'UPSTREAM_FAILED' });
   }
 });
 
@@ -486,7 +541,15 @@ app.get('/', staticLimiter, (req, res) => {
 
 // Optioneel: serveer de web-ui vanaf dezelfde server (voor eenvoudige deploy)
 const staticDir = path.join(__dirname, '..', 'renderer');
-app.use('/app', staticLimiter, express.static(staticDir));
+app.use('/app', staticLimiter, express.static(staticDir, {
+  etag: false,
+  lastModified: false,
+  setHeaders(res, filePath) {
+    if (filePath.endsWith('.html') || filePath.endsWith('.js') || filePath.endsWith('.css')) {
+      res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+    }
+  }
+}));
 app.get('/app', staticLimiter, (req, res) => {
   res.sendFile(path.join(staticDir, 'index.html'));
 });

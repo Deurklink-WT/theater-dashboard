@@ -42,6 +42,7 @@ class AppState {
   }
 
   effectiveMode() {
+    if (this.config.demoDisabled === true) return 'live';
     const mode = this.config.mode || 'auto';
     if (mode !== 'auto') return mode;
     const anyNodeOnline = this.pollers.some((p) => p.online);
@@ -106,6 +107,7 @@ class AppState {
       return {
         mode: 'demo',
         configuredMode: this.config.mode || 'auto',
+        demoDisabled: false,
         generatedAt: Date.now(),
         channelStream: true,
         listener,
@@ -156,6 +158,7 @@ class AppState {
     return {
       mode: 'live',
       configuredMode: this.config.mode || 'auto',
+      demoDisabled: this.config.demoDisabled === true,
       generatedAt: Date.now(),
       channelStream: true,
       listener: live.listener,

@@ -19,9 +19,6 @@ const SACN_PORT = 5568;
 const E131_ROOT_DATA = 4;
 const E131_FRAME_DATA = 2;
 
-/** @deprecated Alleen voor compat; scan gebruikt nu één socket. */
-const UNIVERSES_PER_SOCKET = 24;
-
 /**
  * Zelfde adreslogica als sacn `multicastGroup`.
  * @param {number} universe
@@ -327,6 +324,5 @@ module.exports = {
     pickMulticastIfaceForRemoteHost,
     DEFAULT_MIN,
     DEFAULT_MAX,
-    DEFAULT_DURATION_MS,
-    UNIVERSES_PER_SOCKET
+    DEFAULT_DURATION_MS
 };

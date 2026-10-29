@@ -175,6 +175,7 @@ class YesplanAPI {
     const cached = this._eventsCache.get(cacheKey);
     const now = Date.now();
     if (cached && (now - cached.ts) < this._eventsCacheTtlMs) {
+      this._lastDateFetchFromCache = true;
       const events = cached.data || [];
       if (!tagRequestedDate) return events;
       return events.map((e) => ({ ...e, _requestedDate: dateIso }));
@@ -184,6 +185,7 @@ class YesplanAPI {
     const inFlight = this._eventsInFlight.get(inFlightKey);
     if (inFlight) {
       const events = await inFlight;
+      this._lastDateFetchFromCache = true;
       if (!tagRequestedDate) return events;
       return events.map((e) => ({ ...e, _requestedDate: dateIso }));
     }
@@ -220,6 +222,7 @@ class YesplanAPI {
         if (oldestKey) this._eventsCache.delete(oldestKey);
       }
       this._eventsCache.set(cacheKey, { ts: Date.now(), data: events });
+      this._lastDateFetchFromCache = false;
 
       if (!tagRequestedDate) return events;
       return events.map((e) => ({ ...e, _requestedDate: dateIso }));
@@ -266,7 +269,7 @@ class YesplanAPI {
             const dateStr = this.sanitizeYesplanDate(requestedDate);
             safeLog('error', `Error fetching events for ${dateStr}:`, error.message);
           }
-          await this.sleep(100);
+          if (!this._lastDateFetchFromCache) await this.sleep(100);
           currentDate.setDate(currentDate.getDate() + 1);
         }
       } else if (startDate) {
@@ -357,16 +360,20 @@ class YesplanAPI {
       const currentDate = new Date(start);
       const weekOpts = { tagRequestedDate: true, maxRetries: 2, baseDelayMs: 350 };
       let allEvents = [];
+      let failedDays = 0;
+      let totalDays = 0;
       while (currentDate <= end) {
         const requestedDate = toLocalDateStr(currentDate);
+        totalDays += 1;
         try {
           const dayEvents = await this.fetchEventsForDate(requestedDate, weekOpts);
           if (dayEvents.length > 0) allEvents = allEvents.concat(dayEvents);
         } catch (error) {
+          failedDays += 1;
           if (error?.response?.status === 401 || error?.response?.status === 403) hadAuthError = true;
           safeLog('error', `Error fetching events for ${requestedDate}:`, error.message);
         }
-        await this.sleep(100);
+        if (!this._lastDateFetchFromCache) await this.sleep(100);
         currentDate.setDate(currentDate.getDate() + 1);
       }
       if (hadAuthError) {
@@ -405,6 +412,8 @@ class YesplanAPI {
           id: e.id,
           title: e.name || 'Geen titel',
           performer: e.group?.name || e.parentgroup?.name || null,
+          groupId: e.group?.id || e.parentgroup?.id || null,
+          groupName: e.group?.name || e.parentgroup?.name || null,
           venue,
           venueIds,
           startDate: startTime,
@@ -506,6 +515,8 @@ class YesplanAPI {
       return {
         success: true,
         data: minimal,
+        failedDays,
+        totalDays,
         timestamp: new Date().toISOString()
       };
     } catch (error) {
@@ -734,7 +745,6 @@ class YesplanAPI {
         const indexFresh = this._searchIndexCache && (Date.now() - this._searchIndexCache.ts) < (15 * 60 * 1000);
         let universe = indexFresh ? (this._searchIndexCache.data || []) : null;
         if (!universe) {
-          const dateQueryString = this.addApiKey();
           const start = new Date();
           start.setHours(0, 0, 0, 0);
           const seen = new Set();
@@ -748,11 +758,9 @@ class YesplanAPI {
             const m = String(d.getMonth() + 1).padStart(2, '0');
             const day = String(d.getDate()).padStart(2, '0');
             const dateISO = `${y}-${m}-${day}`;
-            const yesplanDate = this.sanitizeYesplanDate(dateISO);
             try {
-              const response = await this.yesplanGet(`/api/events/date:${yesplanDate}?${dateQueryString}`);
+              const raw = await this.fetchEventsForDate(dateISO, { tagRequestedDate: false, maxRetries: 1, baseDelayMs: 350 });
               consecutive429 = 0;
-              const raw = response.data?.data || (Array.isArray(response.data) ? response.data : []);
               const arr = Array.isArray(raw) ? raw : [];
               for (const event of arr) {
                 const uid = String(event.id || '');
@@ -770,7 +778,7 @@ class YesplanAPI {
               }
               throw err;
             }
-            await sleep(50);
+            if (!this._lastDateFetchFromCache) await sleep(50);
           }
           this._searchIndexCache = { ts: Date.now(), data: universe };
         }
@@ -1732,7 +1740,9 @@ class YesplanAPI {
       if (nextCtx) {
         if (typeof v === 'string') pushDoc(v, name, name);
         if (v && typeof v === 'object') {
-          pushDoc(v.url || v.link || v.href || v.dataurl || v.document_url, v.name || v.filename || v.originalname || name, name, v.date || v.created || v.updated, v.author || v.username || v.created_by);
+          const candidates = [v.originalname, v.filename, v.name, name].map((c) => String(c || '').trim()).filter(Boolean);
+          const flyName = candidates.find((c) => this.isFlyListText(c));
+          pushDoc(v.url || v.link || v.href || v.dataurl || v.document_url, flyName || v.originalname || v.filename || v.name || name, name, v.date || v.created || v.updated, v.author || v.username || v.created_by);
         }
         pushDoc(obj.url || obj.link || obj.href || obj.dataurl || obj.document_url, name, name, obj.date || null, obj.author || obj.username || null);
       }
@@ -1755,6 +1765,41 @@ class YesplanAPI {
     const t = String(s || '').toLowerCase();
     if (t.includes('technische lijst') || t.includes('technical list')) return false;
     return t.includes('trekkenlijst') || t.includes('trekken lijst') || t.includes('fly cue') || t.includes('productie_trekkenlijst');
+  }
+
+  normalizeFlyListText(s) {
+    return String(s || '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+  }
+
+  /**
+   * Trekkenlijst, kaplijst of changementenlijst.
+   * TL is meestal een technische lijst en telt niet als trekkenlijst.
+   */
+  isFlyListText(s) {
+    const t = this.normalizeFlyListText(s);
+    if (!t) return false;
+    if (t.includes('technische lijst') || t.includes('technical list') || t.includes('technischelijst')) return false;
+    if (t.includes('kaplijst') || t.includes('kap lijst') || t.includes('kap-lijst')) return true;
+    if (t.includes('changement')) return true;
+    return t.includes('trekkenlijst') || t.includes('trekken lijst') || t.includes('treklijst') || t.includes('fly cue') || t.includes('productie_trekkenlijst');
+  }
+
+  isFlyListRelatedDocument(doc) {
+    if (!doc) return false;
+    const category = doc.category || '';
+    const name = doc.name || '';
+    let file = '';
+    if (doc.url) {
+      try {
+        file = decodeURIComponent(String(doc.url).split('/').pop() || '');
+      } catch {
+        file = String(doc.url).split('/').pop() || '';
+      }
+    }
+    return this.isFlyListText(category) || this.isFlyListText(name) || this.isFlyListText(file);
   }
 
   findTrekkenlijstGroup(eventCustomData) {
@@ -1864,6 +1909,37 @@ class YesplanAPI {
     const trekGroup = this.findTrekkenlijstGroup(eventCustomData);
     if (trekGroup) walk(trekGroup, true, 'trekkenlijst');
     walk(root, false, '');
+
+    const pullNamedAttachment = (obj) => {
+      const fieldName = String(obj?.name || obj?.label || obj?.keyword || '').trim();
+      const v = obj?.value;
+      if (!v || typeof v !== 'object') return;
+      const candidates = [v.originalname, v.filename, v.name, fieldName]
+        .map((c) => String(c || '').trim())
+        .filter(Boolean);
+      if (!candidates.some((c) => this.isFlyListText(c))) return;
+      const label = candidates.find((c) => this.isFlyListText(c)) || fieldName;
+      pushDoc(
+        v.url || v.link || v.href || v.dataurl || v.document_url,
+        label,
+        fieldName || label,
+        v.date || v.created || v.updated,
+        v.author || v.username || v.created_by
+      );
+    };
+    const scanAttachments = (obj, depth = 0) => {
+      if (!obj || typeof obj !== 'object' || depth > 8) return;
+      if (Array.isArray(obj)) {
+        obj.forEach((v) => scanAttachments(v, depth + 1));
+        return;
+      }
+      pullNamedAttachment(obj);
+      (obj.children || []).forEach((c) => scanAttachments(c, depth + 1));
+      (obj.groups || []).forEach((g) => scanAttachments(g, depth + 1));
+      (obj.fields || []).forEach((f) => scanAttachments(f, depth + 1));
+      if (obj.customdata) scanAttachments(obj.customdata, depth + 1);
+    };
+    scanAttachments(root);
     return out;
   }
 
@@ -3354,8 +3430,30 @@ class YesplanAPI {
     if (!Array.isArray(events)) return [];
     
     try {
-      // Per event: altijd event customdata ophalen (personeel/urenInfo); bij group ook group data
+      // Per event: altijd event customdata ophalen (personeel/urenInfo); bij group ook group data.
+      // Dezelfde group binnen deze aanroep maar één keer ophalen.
       const queryString = this.addApiKey();
+      const groupOnce = new Map();
+      const loadGroupOnce = (groupId, groupRef) => {
+        const key = String(groupId);
+        if (!groupOnce.has(key)) {
+          groupOnce.set(key, (async () => {
+            let groupData = null;
+            let customData = null;
+            try {
+              const groupUrl = groupRef.url?.includes('?') ? groupRef.url : `${groupRef.url}?${queryString}`;
+              const groupResponse = await this.yesplanGet(groupUrl);
+              groupData = groupResponse.data;
+            } catch (error) {}
+            try {
+              const customDataResponse = await this.yesplanGet(`/api/group/${key}/customdata?${queryString}`);
+              customData = customDataResponse.data;
+            } catch (error) {}
+            return { groupData, customData };
+          })());
+        }
+        return groupOnce.get(key);
+      };
       const groupDataPromises = events.map(async (event) => {
         let eventCustomData = null;
         let groupData = null;
@@ -3403,16 +3501,9 @@ class YesplanAPI {
         const groupRef = event.group || event.parentgroup || null;
         const groupId = groupRef?.id || (groupRef?.url ? groupRef.url.match(/\/group\/([^/?]+)/)?.[1] : null);
         if (groupRef && groupId) {
-          try {
-            const groupUrl = groupRef.url?.includes('?') ? groupRef.url : `${groupRef.url}?${queryString}`;
-            const groupResponse = await this.yesplanGet(groupUrl);
-            groupData = groupResponse.data;
-          } catch (error) {}
-          try {
-            const customDataUrl = `/api/group/${groupId}/customdata?${queryString}`;
-            const customDataResponse = await this.yesplanGet(customDataUrl);
-            customData = customDataResponse.data;
-          } catch (error) {}
+          const loaded = await loadGroupOnce(groupId, groupRef);
+          groupData = loaded.groupData;
+          customData = loaded.customData;
         }
 
         return {

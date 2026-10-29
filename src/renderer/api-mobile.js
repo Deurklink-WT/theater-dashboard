@@ -71,22 +71,6 @@
     try { localStorage.removeItem('SHIFT_HAPPENS_ACCESS_CLIENT_SECRET'); } catch (_) { /* ignore */ }
   };
 
-  function sendPresence() {
-    var token = String(localStorage.getItem('SHIFT_HAPPENS_AUTH_TOKEN') || '').trim();
-    var base = getBase();
-    if (!token || !base) return;
-    fetch(base.replace(/\/$/, '') + '/api/auth/presence', {
-      method: 'POST',
-      headers: Object.assign({ 'Content-Type': 'application/json' }, getAccessHeaders()),
-      body: JSON.stringify({ client: 'iphone', view: 'app' })
-    }).catch(function () {});
-  }
-
-  if (localStorage.getItem('SHIFT_HAPPENS_AUTH_TOKEN')) {
-    sendPresence();
-    setInterval(sendPresence, 30000);
-  }
-
   function apiBaseMissingError() {
     return new Error(
       'Shift Happens API-server niet ingesteld. Open Instellingen → sectie API-server (iPhone) en vul het adres in van jouw server (bijv. http://192.168.1.10:3847), niet de Yesplan- of ticket-URL.'

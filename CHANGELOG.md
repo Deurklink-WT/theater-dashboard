@@ -2,6 +2,25 @@
 
 Alle belangrijke wijzigingen in dit project worden gedocumenteerd in dit bestand.
 
+## [1.6.0-beta.2] - 2026-10-29
+
+### Toegevoegd
+- **Trekkenlijsten** in de gewone app, alleen zichtbaar als je bent ingelogd op de Shift-server.
+- **Updates:** standaard alleen stabiele versies, die worden automatisch gedownload. Bèta alleen als je dat in Instellingen aanzet; die download je zelf.
+- **Lichtsignaal:** demomodus kan uit, zodat er geen voorbeelddata verschijnt zonder echt signaal.
+
+### Gewijzigd
+- Datum en zaal blijven op elk scherm in de balk staan.
+- Trekkenlijsten toont dezelfde Online-status als home en week. “Verwerkt” kan alleen door degene die het aanzette weer uit.
+- Showmodus uitzetten wordt bewaard, met een zichtbaar opslagresultaat.
+- Het configuratiescherm gebruikt hetzelfde lettertype en dezelfde knoppen als het dashboard.
+
+### Beveiliging
+- De API vraagt altijd een login. Configuratie is beperkt tot bekende onderdelen; geheimen en beheer zijn alleen voor admins.
+
+### Opgeruimd
+- Master mode (LAN) is uit de app.
+
 ## [1.5.6] - 2026-03-20
 
 ### Toegevoegd

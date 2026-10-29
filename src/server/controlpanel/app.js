@@ -53,9 +53,9 @@
     const isAdmin = me.user.role === 'admin';
     document.getElementById('userPanel').classList.toggle('hidden', !isAdmin);
     document.getElementById('nonAdminPanel').classList.toggle('hidden', isAdmin);
-    startConnectionsPoll();
-    startAuditLogPoll();
     if (isAdmin) {
+      startConnectionsPoll();
+      startAuditLogPoll();
       await refreshUsers();
     }
   }

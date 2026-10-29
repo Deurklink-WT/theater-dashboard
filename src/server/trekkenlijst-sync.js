@@ -1,6 +1,6 @@
 /**
  * Sync voor trekkenlijst-status per Yesplan-event (opmerking + verwerkt).
- * Sleutel = {orgId}:{eventId}
+ * Sleutel = {orgId}:{venueId}:{genormaliseerde titel}
  */
 
 const store = require('./store');
@@ -106,9 +106,20 @@ function putItem(payload = {}, actor = {}) {
     const prev = !!current?.verwerkt;
     const val = payload.verwerkt;
     if (prev !== val) {
+      const owner = String(current?.verwerktBy || '').trim().toLowerCase();
+      const actor = String(actorEmail || '').trim().toLowerCase();
+      if (prev && !val && owner && owner !== actor) {
+        return {
+          success: false,
+          forbidden: true,
+          error: 'VERWERKT_LOCKED',
+          key: k,
+          item: current
+        };
+      }
       next.verwerkt = val;
-      next.verwerktAt = now;
-      next.verwerktBy = actorEmail;
+      next.verwerktAt = val ? now : null;
+      next.verwerktBy = val ? actorEmail : null;
       auditEntries.push({
         action: val ? 'trekkenlijst.verwerkt' : 'trekkenlijst.onverwerkt',
         detail: { verwerkt: val }

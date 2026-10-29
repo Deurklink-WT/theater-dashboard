@@ -152,11 +152,16 @@ function bootstrapAdmin({ email, password }) {
   return createUser({ email, password, role: 'admin' });
 }
 
+const DUMMY_PASSWORD_HASH = hashPassword('shift-happens-timing-pad');
+
 function login({ email, password }) {
   const norm = normalizeEmail(email);
   const state = readState();
   const user = state.users.find((u) => normalizeEmail(u.email) === norm);
-  if (!user || user.enabled === false) return { success: false, error: 'INVALID_CREDENTIALS' };
+  if (!user || user.enabled === false) {
+    verifyPassword(password, DUMMY_PASSWORD_HASH);
+    return { success: false, error: 'INVALID_CREDENTIALS' };
+  }
   if (!verifyPassword(password, user.passwordHash)) {
     return { success: false, error: 'INVALID_CREDENTIALS' };
   }
@@ -201,7 +206,6 @@ function updateUser(id, { password, enabled, role }, actor) {
 }
 
 function requireAuth(req, res, next) {
-  if (!isAuthEnabled()) return next();
   const token = extractBearer(req);
   const user = verifyToken(token);
   if (!user) return res.status(401).json({ success: false, error: 'UNAUTHORIZED' });

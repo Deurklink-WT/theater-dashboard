@@ -475,8 +475,7 @@ body.ios-app .detail-view-wrapper {
 }
 
 body.ios-app .voorstelling-timer-wrapper,
-body.ios-app .luminex-view-wrapper,
-body.ios-app .osc-monitor-wrapper {
+body.ios-app .luminex-view-wrapper {
     max-width: 100%;
     min-width: 0;
     min-height: 0;
@@ -585,12 +584,6 @@ body.ios-app .form-group input:focus,
 body.ios-app .form-select:focus {
     border: none;
     box-shadow: 0 0 0 2px #0a84ff;
-}
-
-body.ios-app .mobile-settings-hint {
-    color: #8fa1bd;
-    font-size: 0.8rem;
-    margin: 0.4rem 0 0;
 }
 
 body.ios-app .btn-test {

@@ -13,7 +13,6 @@ const path = require('path');
 const Store = require('electron-store');
 const cron = require('node-cron');
 const os = require('os');
-const { MasterModeService } = require('./main/master-mode');
 const VERBOSE_RUNTIME_LOGS = process.argv.includes('--dev') || process.argv.includes('--yesplan-search') || process.argv.includes('--personnel-wtpy');
 function runtimeLog(...args) {
   if (VERBOSE_RUNTIME_LOGS) console.log(...args);
@@ -80,7 +79,7 @@ function secureConfigFromStorage(config) {
 // API services
 const YesplanAPI = require('./api/yesplan');
 const PrivaAPI = require('./api/priva');
-const { setupAutoUpdater, checkForUpdatesNow, downloadUpdateNow, quitAndInstallUpdate } = require('./updater');
+const { setupAutoUpdater, applyUpdateChannel, checkForUpdatesNow, downloadUpdateNow, quitAndInstallUpdate } = require('./updater');
 const { startOscTimerListener } = require('./main/osc-timer-listener');
 const { browseLuminodes } = require('./main/luminode-discovery');
 const { scanSacnUniverses } = require('./main/sacn-scan');
@@ -298,15 +297,6 @@ function venuesCacheStoreGetAny(key) {
 
 let mainWindow;
 let stopOscTimer = null;
-const masterModeService = new MasterModeService({
-  getName: () => {
-    const cfg = store.get('app', {}) || {};
-    const custom = String(cfg.masterModeName || '').trim();
-    if (custom) return custom;
-    const host = String(os.hostname() || '').trim();
-    return host || 'Shift Happens master';
-  }
-});
 
 function getDefaultWindowBounds(isKioskMode) {
   const MIN_WINDOW_WIDTH = 1920;
@@ -861,23 +851,6 @@ ipcMain.handle('get-network-interfaces', async () => {
   }
 });
 
-ipcMain.handle('unlock-master-mode', async (_event, { password } = {}) => {
-  return masterModeService.unlock(password);
-});
-
-ipcMain.handle('discover-master-mode', async () => {
-  try {
-    const masters = await masterModeService.discoverMaster({ timeoutMs: 1400 });
-    return { success: true, masters };
-  } catch (error) {
-    return { success: false, error: error && error.message ? error.message : String(error), masters: [] };
-  }
-});
-
-ipcMain.handle('get-master-mode-status', async () => {
-  return { success: true, status: masterModeService.getStatus() };
-});
-
 ipcMain.handle('save-config', async (event, system, config) => {
   try {
     const allowedSystems = new Set(['yesplan', 'yesplan2', 'priva', 'itix', 'app', 'voorstellingTimer', 'luminex']);
@@ -911,14 +884,7 @@ ipcMain.handle('save-config', async (event, system, config) => {
           win.webContents.send('osc-timer-trigger', { slotId, stepId });
         }
       });
-      const masterResult = await masterModeService.applyConfig(config || {});
-      if (!masterResult?.success) {
-        return {
-          success: false,
-          error: masterResult.error || 'MASTER_MODE_FAILED',
-          message: masterResult.message || 'Master mode kon niet worden gestart.'
-        };
-      }
+      applyUpdateChannel(config?.allowBetaUpdates === true);
     }
     return { success: true };
   } catch (error) {
@@ -1224,9 +1190,8 @@ app.whenReady().then(() => {
   if (PERSONNEL_CLI) return runPersonnelCli();
   if (SEARCH_CLI) return runYesplanSearchCli();
   createWindow();
-  setupAutoUpdater(mainWindow);
-  masterModeService.applyConfig(store.get('app', {}) || {}, { skipUnlock: true }).catch((error) => {
-    console.error('Master mode startfout:', error?.message || error);
+  setupAutoUpdater(mainWindow, {
+    allowBetaUpdates: store.get('app', {})?.allowBetaUpdates === true
   });
   stopOscTimer = startOscTimerListener({
     host: getSelectedInterfaceAddress('oscInterface') || undefined,
@@ -1250,9 +1215,6 @@ app.on('will-quit', () => {
     stopOscTimer = null;
   }
   stopLuminexViewerServer();
-  masterModeService.stop().catch(() => {
-    /* ignore */
-  });
 });
 
 app.on('activate', () => {

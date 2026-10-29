@@ -60,7 +60,17 @@ function isLikelyPrivateRepoError(msg) {
   );
 }
 
-function setupAutoUpdater(mainWindow) {
+/** Stabiel = kanaal latest en automatische download. Bèta alleen als de gebruiker dat kiest; dan zelf downloaden. */
+function applyUpdateChannel(allowBetaUpdates) {
+  if (!app.isPackaged || process.env.SKIP_AUTO_UPDATE === '1') return;
+  const beta = allowBetaUpdates === true;
+  autoUpdater.allowPrerelease = beta;
+  autoUpdater.channel = beta ? 'beta' : 'latest';
+  autoUpdater.autoDownload = !beta;
+  autoUpdater.autoInstallOnAppQuit = true;
+}
+
+function setupAutoUpdater(mainWindow, options = {}) {
   if (!app.isPackaged) return;
   if (process.env.SKIP_AUTO_UPDATE === '1') return;
 
@@ -91,8 +101,7 @@ function setupAutoUpdater(mainWindow) {
     }
   }
 
-  autoUpdater.autoDownload = true;
-  autoUpdater.autoInstallOnAppQuit = true;
+  applyUpdateChannel(options.allowBetaUpdates === true);
 
   autoUpdater.on('checking-for-update', () => {
     if (suppressQuietStartupBanner) return;
@@ -219,4 +228,4 @@ function quitAndInstallUpdate() {
   }
 }
 
-module.exports = { setupAutoUpdater, checkForUpdatesNow, downloadUpdateNow, quitAndInstallUpdate };
+module.exports = { setupAutoUpdater, applyUpdateChannel, checkForUpdatesNow, downloadUpdateNow, quitAndInstallUpdate };

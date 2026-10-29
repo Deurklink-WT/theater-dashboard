@@ -15,8 +15,8 @@ const state = {
 };
 
 const PALETTE = [
-  '#4cc2ff', '#ff8a3d', '#41d98d', '#c084fc', '#ffd166',
-  '#ff5d8f', '#5eead4', '#a3e635', '#f97316', '#818cf8',
+  '#818cf8', '#ff8a3d', '#41d98d', '#c084fc', '#ffd166',
+  '#ff5d8f', '#5eead4', '#a3e635', '#f97316', '#a5b4fc',
 ];
 
 function colorForSource(id) {
@@ -824,7 +824,9 @@ function renderStatus() {
     listenerEl.textContent = `Ontvangst: nog niets · ${ifaceLabel}`;
     listenerEl.className = 'stat warn';
     const msgs = (li.warnings || []).slice();
-    if (snap.mode === 'live' && configuredModeIsLive(snap)) {
+    if (snap.mode === 'live' && snap.demoDisabled) {
+      msgs.unshift('Demomodus staat uit. Er komt nog geen echt signaal binnen.');
+    } else if (snap.mode === 'live' && configuredModeIsLive(snap)) {
       msgs.unshift('Live modus aan, maar er komt nog geen signaal binnen.');
     }
     if (msgs.length) {
@@ -1898,6 +1900,8 @@ $('#btn-settings').addEventListener('click', async () => {
   if (open) {
     const cfg = await fetch('/api/config').then((r) => r.json());
     $('#cfg-mode').value = cfg.mode || 'auto';
+    $('#cfg-demo-disabled').checked = cfg.demoDisabled === true;
+    syncDemoDisabledUi();
     $('#cfg-uni-start').value = cfg.universeRange.start;
     $('#cfg-uni-end').value = cfg.universeRange.end;
     populateInterfaceDropdown(cfg.network, cfg.interface || 'auto');
@@ -1914,6 +1918,16 @@ $('#btn-settings').addEventListener('click', async () => {
     $('#discover-panel').innerHTML = '';
   }
 });
+
+function syncDemoDisabledUi() {
+  const off = $('#cfg-demo-disabled').checked;
+  const sel = $('#cfg-mode');
+  const opt = sel.querySelector('option[value="demo"]');
+  if (opt) opt.disabled = off;
+  if (off && sel.value === 'demo') sel.value = 'live';
+}
+
+$('#cfg-demo-disabled').addEventListener('change', syncDemoDisabledUi);
 
 $('#cfg-iface').addEventListener('change', async () => {
   const cfg = await fetch('/api/config').then((r) => r.json()).catch(() => ({}));
@@ -1958,6 +1972,7 @@ $('#btn-save').addEventListener('click', async () => {
 
   const body = {
     mode: $('#cfg-mode').value,
+    demoDisabled: $('#cfg-demo-disabled').checked,
     universeRange: {
       start: Number($('#cfg-uni-start').value),
       end: Number($('#cfg-uni-end').value),

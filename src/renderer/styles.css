@@ -876,10 +876,229 @@ body.nav-rail-reorder-active .nav-rail-btn[id]::after {
 .week-view-wrapper,
 .voorstelling-timer-wrapper,
 .trekkenlijsten-wrapper,
-.luminex-view-wrapper,
-.osc-monitor-wrapper {
+.luminex-view-wrapper {
     min-width: 0;
     min-height: 0;
+}
+
+.trekkenlijsten-wrapper {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+}
+
+body.trekkenlijsten-active .main-workspace {
+    max-width: none;
+    width: 100%;
+    margin: 0;
+    align-items: stretch;
+    min-height: 0;
+}
+
+body.trekkenlijsten-active .main-workspace-inner {
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+    min-height: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+body.trekkenlijsten-active .trekkenlijsten-wrapper {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    height: 100%;
+}
+
+body.trekkenlijsten-active .trekkenlijsten-card {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    max-height: 100%;
+    overflow: hidden;
+}
+
+.trekkenlijsten-card-header {
+    flex: 0 0 auto;
+}
+
+body.trekkenlijsten-active .trekkenlijsten-card-content {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.trekkenlijsten-meta {
+    color: #a0aec0;
+    font-size: 0.85rem;
+    margin: 0 0 0.85rem 0;
+}
+
+.trekkenlijsten-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+}
+
+.trekkenlijsten-entry,
+.trekkenlijsten-card {
+    width: 100%;
+}
+
+.trekkenlijsten-empty {
+    color: #a0aec0;
+    padding: 0.5rem 0 0.25rem;
+}
+
+.trekkenlijsten-entry.data-item {
+    margin-bottom: 0;
+}
+
+.trekkenlijsten-entry-top h4 {
+    margin-bottom: 0.15rem;
+}
+
+.trekkenlijsten-entry-when {
+    margin: 0 0 0.2rem !important;
+}
+
+.trekkenlijsten-entry-venue {
+    font-weight: 500;
+    color: #a0aec0;
+    font-size: 0.85rem;
+}
+
+.trekkenlijsten-entry-body {
+    display: grid;
+    grid-template-columns: var(--trekken-docs-width, max-content) minmax(16rem, 1fr);
+    gap: 0.65rem 1rem;
+    align-items: start;
+    width: 100%;
+    margin-top: 0.35rem;
+}
+
+.trekkenlijsten-entry-main {
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.35rem;
+}
+
+.trekkenlijsten-entry-docs {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+}
+
+.trekkenlijsten-entry-doc {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: #818cf8;
+    text-decoration: none;
+    max-width: 100%;
+}
+
+.trekkenlijsten-entry-doc:hover .trekkenlijsten-entry-doc-name {
+    text-decoration: underline;
+}
+
+.trekkenlijsten-entry-doc .week-event-chip {
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.trekkenlijsten-entry-doc-name {
+    min-width: 0;
+    max-width: min(34rem, 46vw);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.trekkenlijsten-verwerkt-block {
+    min-width: 0;
+    margin-top: 0.65rem;
+    padding-top: 0.6rem;
+    border-top: 1px solid rgba(226, 232, 240, 0.1);
+}
+
+.trekkenlijsten-verwerkt-label {
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+    color: #e2e8f0;
+}
+
+.trekkenlijsten-verwerkt-label input:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.35);
+}
+
+.trekkenlijsten-verwerkt-label:has(input:disabled) {
+    cursor: not-allowed;
+}
+
+.trekkenlijsten-verwerkt-by {
+    margin: 0.2rem 0 0;
+    padding: 0 0 0 calc(24px + 0.75rem);
+    color: #a0aec0;
+    font-size: 0.78rem;
+    line-height: 1.3;
+}
+
+.trekkenlijsten-comment-input {
+    width: 100%;
+    height: auto;
+    min-height: 4.5rem;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid #4a5568;
+    border-radius: 8px;
+    background: #1a202c;
+    color: #e2e8f0;
+    font: inherit;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    resize: vertical;
+}
+
+.trekkenlijsten-comment-input::placeholder {
+    color: #718096;
+}
+
+.trekkenlijsten-comment-input:focus {
+    outline: none;
+    border-color: #818cf8;
+    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2);
+}
+
+.trekkenlijsten-comment-input:disabled,
+.trekkenlijsten-verwerkt-label input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.trekkenlijsten-entry--done {
+    border-left-color: #48bb78;
+}
+
+.trekkenlijsten-entry--done h4 {
+    color: #a0aec0;
+    text-decoration: line-through;
+}
+
+@media (max-width: 720px) {
+    .trekkenlijsten-entry-body {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Yesplan card volledige breedte wanneer "Alle zalen" is geselecteerd of in home view */
@@ -1044,13 +1263,6 @@ body.show-mode-active .card:hover {
     flex-wrap: wrap;
 }
 
-.status-update {
-    font-size: 0.75rem;
-    color: #718096;
-    font-weight: 400;
-    margin-left: 0.25rem;
-}
-
 .card-status .status-indicator {
     flex-shrink: 0;
 }
@@ -1190,7 +1402,6 @@ body.show-mode-active .card:hover {
 
 .card-content .events-list,
 .card-content .shifts-list,
-.card-content .sales-list,
 .card-content .climate-info {
     margin-top: 1rem;
 }
@@ -1223,7 +1434,7 @@ body.home-view-active .events-list .data-item.drag-over {
     margin: 0 auto;
 }
 
-body.show-mode-active:not(.home-view-active):not(.week-view-active):not(.voorstelling-timer-active):not(.luminex-view-active):not(.osc-monitor-active):not(.trekkenlijsten-active) .detail-view-wrapper {
+body.show-mode-active:not(.home-view-active):not(.week-view-active):not(.voorstelling-timer-active):not(.luminex-view-active):not(.trekkenlijsten-active) .detail-view-wrapper {
     margin-left: auto;
     margin-right: 0;
 }
@@ -1295,89 +1506,6 @@ body.week-view-active #techOverviewBtn {
     display: flex;
     align-items: center;
     gap: 1rem;
-}
-
-.week-selector {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 0.35rem;
-}
-
-.week-nav-btn {
-    padding: 0.25rem 0.4rem;
-    color: #a0aec0;
-    border: 1px solid #4a5568;
-    background: #2d3748;
-    border-radius: 6px;
-}
-
-.week-nav-btn:hover:not(:disabled) {
-    background: #374151;
-    color: #e2e8f0;
-}
-
-.week-nav-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.week-selector-display-wrap {
-    position: relative;
-}
-
-.week-selector-display {
-    padding: 0.3rem 0.6rem;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #e2e8f0;
-    background: #374151;
-    border: 1px solid #4a5568;
-    border-radius: 6px;
-    cursor: pointer;
-    min-width: 7rem;
-    transition: background 0.15s, border-color 0.15s;
-}
-
-.week-selector-display:hover {
-    background: #4b5563;
-    border-color: #6b7280;
-}
-
-.week-selector-options {
-    display: none;
-    position: absolute;
-    left: 0;
-    top: 100%;
-    margin-top: 2px;
-    max-height: 14rem;
-    overflow-y: auto;
-    background: #2d3748;
-    border: 1px solid #4a5568;
-    border-radius: 8px;
-    z-index: 100;
-    min-width: 10rem;
-}
-
-.week-selector-options.open {
-    display: block;
-}
-
-.week-selector-option {
-    padding: 0.4rem 0.75rem;
-    font-size: 0.85rem;
-    color: #e2e8f0;
-    cursor: pointer;
-    white-space: nowrap;
-}
-
-.week-selector-option:hover {
-    background: #374151;
-}
-
-.week-selector-option.selected {
-    background: #818cf8;
-    color: white;
 }
 
 .week-view-summary {
@@ -1840,18 +1968,6 @@ body.show-mode-active.voorstelling-timer-active .voorstelling-timer-wrapper {
     gap: 1rem;
 }
 
-.voorstelling-timer-clocks {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-}
-
-@media (max-width: 640px) {
-    .voorstelling-timer-clocks {
-        grid-template-columns: 1fr;
-    }
-}
-
 .voorstelling-timer-clock-block {
     display: flex;
     flex-direction: column;
@@ -2082,19 +2198,6 @@ body.show-mode-active.voorstelling-timer-active .voorstelling-timer-wrapper {
     font-size: 0.95rem;
 }
 
-.voorstelling-timer-step-btn-meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.35rem 0.5rem;
-}
-
-.voorstelling-timer-step-meta-sep {
-    color: #64748b;
-    font-weight: 500;
-    user-select: none;
-}
-
 .voorstelling-timer-step-btn-time {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-variant-numeric: tabular-nums;
@@ -2102,16 +2205,6 @@ body.show-mode-active.voorstelling-timer-active .voorstelling-timer-wrapper {
     font-size: 1.1rem;
     font-weight: 600;
     color: #a5b4fc;
-    letter-spacing: 0.02em;
-}
-
-.voorstelling-timer-step-btn-elapsed {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    font-variant-numeric: tabular-nums;
-    font-feature-settings: "tnum" 1;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #fde68a;
     letter-spacing: 0.02em;
 }
 
@@ -2295,13 +2388,6 @@ body.show-mode-active.voorstelling-timer-active .voorstelling-timer-wrapper {
 .week-event-tech-body {
     white-space: pre-wrap;
     word-break: break-word;
-}
-
-.week-event-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-    margin-top: 0.25rem;
 }
 
 .week-event-chip {
@@ -2649,6 +2735,18 @@ textarea.voorstelling-timer-replace-input {
 
 .settings-section h3 i {
     color: #818cf8;
+}
+
+.settings-hint {
+    color: #a0aec0;
+    font-size: 0.875rem;
+    margin: 0 0 1rem 0;
+    line-height: 1.5;
+}
+
+.settings-hint--sub {
+    font-size: 0.8rem;
+    margin: 0.35rem 0 0 0;
 }
 
 .form-row {
@@ -3154,10 +3252,6 @@ body.theme-pink .status-indicator.deels {
     background: #ed8936;
 }
 
-body.theme-pink .status-update {
-    color: #a0aec0;
-}
-
 body.theme-pink .data-item {
     background: rgba(61, 42, 61, 0.6);
     border-color: rgba(236, 72, 153, 0.2);
@@ -3647,24 +3741,6 @@ body.theme-purple .data-stat-value { color: #a78bfa; }
     font-size: 0.9rem;
 }
 
-.search-input {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 0.5rem 0.75rem;
-    border: 1px solid #4a5568;
-    border-radius: 6px;
-    background: #2d3748;
-    color: #e2e8f0;
-    font-size: 0.95rem;
-    margin-bottom: 0.5rem;
-}
-
-.search-input:focus {
-    outline: none;
-    border-color: #818cf8;
-}
-
-
 .filter-checkbox {
     display: flex;
     align-items: center;
@@ -3856,8 +3932,7 @@ body.touchscreen-mode .settings-checkbox-label {
 }
 
 /* Klikbare cards (event cards op home): iets grotere tap-zone door extra padding in content */
-body.touchscreen-mode .card.clickable .card-header,
-body.touchscreen-mode .card.clickable .card-body {
+body.touchscreen-mode .card.clickable .card-header {
     padding: 1rem 1.25rem;
 }
 body.touchscreen-mode .card .card-header {
@@ -3997,6 +4072,11 @@ body.luminex-view-active .main-workspace-inner {
     min-height: 0;
     height: 100%;
     padding: 0;
+    background: rgba(45, 55, 72, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
 }
 
 body.luminex-view-active .luminex-view-wrapper {
@@ -4021,409 +4101,9 @@ body.luminex-view-active .luminex-view-wrapper {
     min-height: 0;
     height: 100%;
     border: none;
-    border-radius: 8px;
-    background: #0f1419;
-    display: flex;
-}
-
-/* OSC Monitor: zelfde full-screen paneelstijl als Luminex viewer */
-body.osc-monitor-active .main-content {
-    padding-bottom: 0.25rem;
-    overflow: hidden;
-}
-
-body.osc-monitor-active .main-workspace {
-    flex: 1;
-    min-height: 0;
-    max-width: none;
-    width: 100%;
-    align-items: flex-start;
-}
-
-body.osc-monitor-active .main-workspace-inner {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    overflow: hidden;
-}
-
-.trekkenlijsten-wrapper {
-    width: 100%;
-    max-width: var(--layout-max-width);
-    margin: 0 auto;
-    padding: 0 1rem 1.5rem;
-}
-
-body.show-mode-active.trekkenlijsten-active .trekkenlijsten-wrapper {
-    margin-left: auto;
-    margin-right: 0;
-    padding-right: 0;
-}
-
-.trekkenlijsten-card {
-    width: 100%;
-}
-
-.trekkenlijsten-card-content {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-.trekkenlijsten-meta {
-    color: #cbd5e0;
-    font-size: 0.9rem;
-}
-
-.trekkenlijsten-list {
-    border: 1px solid rgba(148, 163, 184, 0.28);
-    background: rgba(30, 41, 59, 0.45);
-    border-radius: 10px;
-    max-height: min(62vh, 640px);
-    overflow: auto;
-}
-
-.trekkenlijsten-empty {
-    padding: 1.25rem 1rem;
-    color: #94a3b8;
-    text-align: center;
-}
-
-.trekkenlijsten-entry {
-    display: flex;
-    flex-direction: column;
-    gap: 0.55rem;
-    padding: 0.75rem 0.85rem;
-    border-bottom: 1px solid rgba(148, 163, 184, 0.16);
-    font-size: 0.9rem;
-}
-
-.trekkenlijsten-entry--done {
-    background: rgba(34, 197, 94, 0.06);
-}
-
-.trekkenlijsten-entry-main {
-    display: grid;
-    grid-template-columns: 7.5rem 5.5rem minmax(0, 1fr) auto;
-    gap: 0.55rem;
-    align-items: baseline;
-}
-
-.trekkenlijsten-entry-actions {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    gap: 0.65rem;
-    align-items: start;
-    padding-left: 13rem;
-}
-
-.trekkenlijsten-verwerkt-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    color: #cbd5e1;
-    font-size: 0.85rem;
-    white-space: nowrap;
-    cursor: pointer;
-    user-select: none;
-}
-
-.trekkenlijsten-verwerkt-label input {
-    width: 1rem;
-    height: 1rem;
-    accent-color: #818cf8;
-    cursor: pointer;
-}
-
-.trekkenlijsten-comment-input {
-    width: 100%;
-    min-height: 2.4rem;
-    resize: vertical;
-    border-radius: 8px;
-    border: 1px solid rgba(148, 163, 184, 0.35);
-    background: rgba(15, 23, 42, 0.55);
-    color: #e2e8f0;
-    padding: 0.45rem 0.55rem;
-    font: inherit;
-    line-height: 1.35;
-}
-
-.trekkenlijsten-comment-input:disabled,
-.trekkenlijsten-verwerkt-label input:disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-}
-
-@media (max-width: 900px) {
-    .trekkenlijsten-entry-main {
-        grid-template-columns: 1fr 1fr;
-    }
-    .trekkenlijsten-entry-actions {
-        padding-left: 0;
-        grid-template-columns: 1fr;
-    }
-}
-
-.trekkenlijsten-entry:last-child {
-    border-bottom: 0;
-}
-
-.trekkenlijsten-entry-date {
-    color: #a5b4fc;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-}
-
-.trekkenlijsten-entry-time {
-    color: #93c5fd;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-}
-
-.trekkenlijsten-entry-title {
-    color: #e2e8f0;
-    overflow-wrap: anywhere;
-}
-
-.trekkenlijsten-entry-venue {
-    display: inline-block;
-    margin-left: 0.4rem;
-    padding: 0.05rem 0.4rem;
-    border-radius: 999px;
-    background: rgba(148, 163, 184, 0.18);
-    color: #94a3b8;
-    font-size: 0.75rem;
-    font-weight: 500;
-    vertical-align: middle;
-}
-
-.trekkenlijsten-entry-doc-wrap {
-    justify-self: end;
-    white-space: nowrap;
-}
-
-.trekkenlijsten-entry-doc {
-    color: #818cf8;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-size: 0.85rem;
-}
-
-.trekkenlijsten-entry-doc:hover {
-    text-decoration: underline;
-}
-
-.osc-monitor-wrapper {
-    --osc-bg: #0b0f14;
-    --osc-bg-2: #10161e;
-    --osc-card: #161e29;
-    --osc-card-2: #1c2634;
-    --osc-border: #263243;
-    --osc-text: #dce7f2;
-    --osc-muted: #8298ad;
-    --osc-accent: #4cc2ff;
-    --osc-good: #41d98d;
-    max-width: none;
-    margin: 0;
-    width: 100%;
-    flex: 1 1 auto;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    padding: 0;
-    background: var(--osc-bg);
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-body.osc-monitor-active .osc-monitor-wrapper {
-    height: auto;
-}
-
-.osc-monitor-topbar {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 10px 16px;
-    background: var(--osc-bg-2);
-    border-bottom: 1px solid var(--osc-border);
-    flex: 0 0 auto;
-}
-
-.osc-monitor-brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    min-width: 0;
-}
-
-.osc-monitor-logo {
-    color: var(--osc-accent);
-    font-size: 22px;
-}
-
-.osc-monitor-title {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 600;
-    letter-spacing: 0.4px;
-    color: var(--osc-text);
-}
-
-.osc-monitor-pill {
-    padding: 2px 10px;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--osc-good);
-    background: var(--osc-card-2);
-    border: 1px solid var(--osc-good);
-}
-
-.osc-monitor-meta {
-    margin: 0;
-    margin-left: auto;
-    color: var(--osc-muted);
-    font-size: 12px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    min-width: 0;
-}
-
-.osc-monitor-iface-wrap {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex: 0 1 auto;
-    min-width: 0;
-}
-
-.osc-monitor-iface-label {
-    font-size: 12px;
-    color: var(--osc-muted);
-    white-space: nowrap;
-}
-
-.osc-monitor-iface-select {
-    min-width: 11rem;
-    max-width: 18rem;
-    background: var(--osc-card);
-    border: 1px solid var(--osc-border);
-    color: var(--osc-text);
-    border-radius: 6px;
-    padding: 6px 8px;
-    font-size: 13px;
-    font-family: inherit;
-}
-
-.osc-monitor-iface-select:focus {
-    outline: none;
-    border-color: var(--osc-accent);
-}
-
-.osc-monitor-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex: 0 0 auto;
-}
-
-.osc-monitor-action-btn {
-    background: var(--osc-card-2);
-    color: var(--osc-text);
-    border: 1px solid var(--osc-border);
-    border-radius: 6px;
-    padding: 6px 12px;
-    cursor: pointer;
-    font-size: 13px;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-}
-
-.osc-monitor-action-btn:hover {
-    border-color: var(--osc-accent);
-}
-
-.osc-monitor-body {
-    flex: 1 1 auto;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    background: #0f1419;
-}
-
-.osc-monitor-table-head,
-.osc-monitor-entry {
-    display: grid;
-    grid-template-columns: 10rem 7rem 1fr;
-    gap: 0.75rem;
-    padding: 0.55rem 16px;
-    align-items: center;
-}
-
-.osc-monitor-table-head {
-    flex: 0 0 auto;
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--osc-muted);
-    background: rgba(0, 0, 0, 0.18);
-    border-bottom: 1px solid var(--osc-border);
-}
-
-.osc-monitor-list {
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow: auto;
-    border: none;
     border-radius: 0;
-    background: transparent;
-    max-height: none;
-}
-
-.osc-monitor-entry {
-    border-bottom: 1px solid rgba(38, 50, 67, 0.85);
-    font-size: 13px;
-}
-
-.osc-monitor-entry:last-child {
-    border-bottom: 0;
-}
-
-.osc-monitor-entry:hover {
-    background: rgba(28, 38, 52, 0.55);
-}
-
-.osc-monitor-entry-time {
-    color: var(--osc-accent);
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    font-variant-numeric: tabular-nums;
-}
-
-.osc-monitor-entry-slot {
-    color: #93c5fd;
-    font-weight: 600;
-}
-
-.osc-monitor-entry-step {
-    color: var(--osc-text);
-    overflow-wrap: anywhere;
-}
-
-.osc-monitor-empty {
-    padding: 2.5rem 16px;
-    text-align: center;
-    color: var(--osc-muted);
-    font-size: 13px;
+    background: #2d3748;
+    display: flex;
 }
 
 .luminex-card {

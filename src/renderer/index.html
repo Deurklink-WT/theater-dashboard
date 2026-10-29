@@ -77,6 +77,9 @@
                     <button id="weekBtn" class="btn btn-secondary btn-icon-only" title="Weekoverzicht">
                         <i class="fas fa-calendar-week"></i>
                     </button>
+                    <button type="button" id="trekkenlijstenNavBtn" class="btn btn-secondary btn-icon-only" title="Trekkenlijsten" style="display: none;">
+                        <i class="fas fa-list-ol"></i>
+                    </button>
                     <div id="headerTimerSlot">
                         <button id="voorstellingTimerBtn" type="button" class="btn btn-secondary btn-icon-only" style="display: none;" title="">
                             <i class="fas fa-stopwatch"></i>
@@ -283,56 +286,32 @@
                     <div class="card-header trekkenlijsten-card-header">
                         <h3><i class="fas fa-list-ol"></i> <span data-i18n="trekkenlijsten.title">Trekkenlijsten</span></h3>
                         <div class="card-header-actions">
+                            <button id="trekkenlijstenPrevBtn" type="button" class="btn btn-secondary btn-sm" title="Vorige" disabled>
+                                <i class="fas fa-chevron-left"></i> <span data-i18n="trekkenlijsten.pagerPrev">Vorige</span>
+                            </button>
+                            <button id="trekkenlijstenNextBtn" type="button" class="btn btn-secondary btn-sm" title="Volgende">
+                                <span data-i18n="trekkenlijsten.pagerNext">Volgende</span> <i class="fas fa-chevron-right"></i>
+                            </button>
                             <button id="trekkenlijstenRefreshBtn" type="button" class="btn btn-secondary btn-sm" title="Vernieuwen">
                                 <i class="fas fa-sync-alt"></i> <span data-i18n="nav.refresh">Vernieuwen</span>
                             </button>
+                            <div class="card-status card-status--clickable" id="trekkenlijstenViewStatus" title="Klik voor systeemstatus">
+                                <span class="status-indicator offline"></span>
+                                <span class="status-text">Offline</span>
+                            </div>
                         </div>
                     </div>
                     <div class="card-content trekkenlijsten-card-content">
-                        <div id="trekkenlijstenMeta" class="trekkenlijsten-meta" aria-live="polite">Laden…</div>
+                        <div id="trekkenlijstenMeta" class="trekkenlijsten-meta" aria-live="polite"></div>
                         <div id="trekkenlijstenList" class="trekkenlijsten-list" role="list"></div>
                     </div>
-                </div>
-            </div>
-            <!-- OSC Monitor: live inkomende OSC timer-triggers -->
-            <div id="oscMonitorWrapper" class="osc-monitor-wrapper" style="display: none;">
-                <header class="osc-monitor-topbar">
-                    <div class="osc-monitor-brand">
-                        <i class="fas fa-wave-square osc-monitor-logo" aria-hidden="true"></i>
-                        <h1 class="osc-monitor-title">OSC Monitor</h1>
-                        <span class="osc-monitor-pill">Live</span>
-                    </div>
-                    <div class="osc-monitor-iface-wrap">
-                        <label class="osc-monitor-iface-label" for="oscMonitorInterface">Adapter</label>
-                        <select id="oscMonitorInterface" class="osc-monitor-iface-select" title="Netwerkadapter voor OSC listener"></select>
-                    </div>
-                    <p class="osc-monitor-meta" id="oscMonitorMeta">Wachten op OSC berichten…</p>
-                    <div class="osc-monitor-actions">
-                        <button id="oscMonitorClearBtn" type="button" class="osc-monitor-action-btn">
-                            <i class="fas fa-trash"></i> <span>Leegmaken</span>
-                        </button>
-                    </div>
-                </header>
-                <div class="osc-monitor-body">
-                    <div class="osc-monitor-table-head" aria-hidden="true">
-                        <span>Tijd</span>
-                        <span>Slot</span>
-                        <span>Stap</span>
-                    </div>
-                    <div id="oscMonitorList" class="osc-monitor-list" role="log" aria-live="polite"></div>
                 </div>
             </div>
                 </div>
                 <aside class="nav-rail nav-rail--end" id="navRail" aria-label="Showmode navigatie">
                     <div id="navRailTimerSlot" class="nav-rail-timer-slot" aria-hidden="true"></div>
-                    <button type="button" id="trekkenlijstenNavBtn" class="nav-rail-btn" title="Trekkenlijsten">
-                        <i class="fas fa-list-ol"></i>
-                    </button>
                     <button type="button" id="luminexNavBtn" class="nav-rail-btn" title="Lichtsignaal">
                         <i class="fas fa-project-diagram"></i>
-                    </button>
-                    <button type="button" id="oscMonitorNavBtn" class="nav-rail-btn" title="OSC Monitor">
-                        <i class="fas fa-wave-square"></i>
                     </button>
                 </aside>
             </div>
@@ -387,7 +366,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h2><i class="fas fa-cog"></i> <span data-i18n="settings.title">Instellingen</span></h2>
-                    <div class="modal-header-version">v1.6.0-beta.1</div>
+                    <div class="modal-header-version">v1.6.0-beta.2</div>
                     <button class="modal-close" id="closeSettings">
                         <i class="fas fa-times"></i>
                     </button>
@@ -397,7 +376,7 @@
                         <!-- API-server (alleen zichtbaar op iPhone/web, niet in Electron) -->
                         <div class="settings-section settings-section--mobile-only" id="apiServerSection" style="display: none;">
                             <h3><i class="fas fa-server"></i> API-server (iPhone)</h3>
-                            <p style="color: #a0aec0; font-size: 0.875rem; margin-bottom: 1rem;">
+                            <p class="settings-hint">
                                 Vul hier het adres in van de <strong>Shift Happens</strong> API-server (meestal poort <code>3847</code>), bijvoorbeeld <code>http://192.168.1.10:3847</code> — niet de Yesplan- of ticket-URL; die staan onder Yesplan/Itix. Leeg laten bij opslaan behoudt de huidige server-URL. Alleen nodig voor de iPhone-app.
                             </p>
                             <div class="form-group">
@@ -452,7 +431,7 @@
                                         <input type="checkbox" id="touchscreenModeCheckbox">
                                         <span data-i18n="settings.touchscreenMode">Touchscreen-modus</span>
                                     </label>
-                                    <p style="color: #a0aec0; font-size: 0.8rem; margin-top: 0.35rem;" data-i18n="settings.touchscreenModeHint">Grotere scrollbalk en grotere tikgebieden voor gebruik op aanraakschermen (bijv. Raspberry Pi-kiosk).</p>
+                                    <p class="settings-hint settings-hint--sub" data-i18n="settings.touchscreenModeHint">Grotere scrollbalk en grotere tikgebieden voor gebruik op aanraakschermen (bijv. Raspberry Pi-kiosk).</p>
                                 </div>
                             </div>
                             <div class="form-row" style="margin-top: 1rem;">
@@ -461,14 +440,14 @@
                                         <input type="checkbox" id="showModeCheckbox">
                                         <span data-i18n="settings.showMode">Showmodus</span>
                                     </label>
-                                    <p style="color: #a0aec0; font-size: 0.8rem; margin-top: 0.35rem;" data-i18n="settings.showModeHint">Geeft toegang tot de voorstellingtimer en later meer toneelfuncties. Zet uit als je alleen de planning bekijkt.</p>
+                                    <p class="settings-hint settings-hint--sub" data-i18n="settings.showModeHint">Geeft toegang tot de voorstellingtimer en later meer toneelfuncties. Zet uit als je alleen de planning bekijkt.</p>
                                 </div>
                             </div>
                         </div>
 
                         <div class="settings-section">
                             <h3><i class="fas fa-network-wired"></i> <span data-i18n="settings.ioTitle">In/Uit</span></h3>
-                            <p style="color: #a0aec0; font-size: 0.875rem; margin-bottom: 1rem;" data-i18n="settings.ioHint">
+                            <p class="settings-hint" data-i18n="settings.ioHint">
                                 Kies per protocol welke netwerkinterface gebruikt wordt. Dezelfde interface mag meerdere keren gekozen worden.
                             </p>
                             <div class="form-row">
@@ -494,7 +473,7 @@
                         <!-- Zaalvolgorde Settings -->
                         <div class="settings-section">
                             <h3><i class="fas fa-sort"></i> <span data-i18n="settings.venueOrder">Zaalvolgorde</span></h3>
-                            <p style="color: #a0aec0; font-size: 0.875rem; margin-bottom: 1rem;" data-i18n="settings.venueOrderHint">
+                            <p class="settings-hint" data-i18n="settings.venueOrderHint">
                                 Sleep de zalen om de volgorde aan te passen. Klik op het oog om een zaal te verbergen in de zaal-dropdown.
                             </p>
                             <div id="venueOrderList" class="venue-order-list">
@@ -508,8 +487,8 @@
                         <!-- Technische opties per zaal -->
                         <div class="settings-section">
                             <h3><i class="fas fa-filter"></i> <span data-i18n="settings.techOptions">Technische opties per zaal</span></h3>
-                            <p style="color: #a0aec0; font-size: 0.875rem; margin-bottom: 1rem;" data-i18n="settings.techOptionsHint">
-                                Kies per zaal welke opties getoond worden. Zaalplattegrond alleen als Itix-URL is ingesteld. Trekkenlijsten: vink alle zalen aan die in showmode meedoen.
+                            <p class="settings-hint" data-i18n="settings.techOptionsHint">
+                                Kies per zaal welke opties getoond worden. Zaalplattegrond alleen als Itix-URL is ingesteld. Trekkenlijsten: vink de zalen aan die in de trekkenwandlijst meedoen.
                             </p>
                             <div id="venueResourceOptionsList" class="venue-resource-options-list">
                                 <!-- Wordt dynamisch gevuld -->
@@ -597,7 +576,7 @@
                         <!-- Itix: basis-URL voor zaalplattegrond (tickets/beheer) -->
                         <div class="settings-section">
                             <h3><i class="fas fa-ticket-alt"></i> <span data-i18n="settings.itix">Itix</span></h3>
-                            <p style="color: #a0aec0; font-size: 0.875rem; margin-bottom: 1rem;" data-i18n="settings.itixBaseURLHint">
+                            <p class="settings-hint" data-i18n="settings.itixBaseURLHint">
                                 Voer het voorvoegsel van de beheer-URL voor de zaalplattegrond in, eindigend vóór het uitvoerings-id (Yesplan-event-id). Voorbeeld: https://tickets.jouworganisatie.nl/beheer/zaalplattegrond/uitvoeringinfo
                             </p>
                             <div class="form-group">
@@ -633,9 +612,17 @@
                         <!-- Updates (alleen Electron-desktop; verborgen op web/iPhone) -->
                         <div class="settings-section" id="desktopUpdateSection" style="display: none;">
                             <h3><i class="fas fa-cloud-download-alt"></i> <span data-i18n="updates.sectionTitle">Updates (desktop)</span></h3>
-                            <p style="color: #a0aec0; font-size: 0.875rem; margin-bottom: 1rem;" data-i18n="updates.hint">
-                                Alleen actief in de geïnstalleerde app. Met npm start (ontwikkeling) is er geen automatische update.
+                            <p class="settings-hint" data-i18n="updates.hint">
+                                Standaard alleen stabiele versies; die worden automatisch gedownload. Bèta alleen als je dat hier kiest, en die download je zelf.
                             </p>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="settings-checkbox-label">
+                                        <input type="checkbox" id="allowBetaUpdatesCheckbox">
+                                        <span data-i18n="updates.betaOptIn">Bèta-updates ontvangen</span>
+                                    </label>
+                                </div>
+                            </div>
                             <button type="button" class="btn btn-secondary" id="checkUpdatesBtn">
                                 <i class="fas fa-sync-alt"></i> <span data-i18n="updates.checkNow">Nu controleren op updates</span>
                             </button>
@@ -645,7 +632,7 @@
                         <!-- Centrale Shift-server (login + URL) -->
                         <div class="settings-section" id="shiftServerSection">
                             <h3><i class="fas fa-cloud"></i> Shift-server</h3>
-                            <p style="color: #a0aec0; font-size: 0.875rem; margin-bottom: 1rem;">
+                            <p class="settings-hint">
                                 Verbind met de centrale server voor sync en gedeelde functies. Timer sync tussen apparaten gaat automatisch mee zodra je bent ingelogd.
                             </p>
                             <div class="form-row">
@@ -675,53 +662,13 @@
                             <p id="shiftAuthStatusLine" style="color: #94a3b8; font-size: 0.8rem; margin-top: 0.25rem; min-height: 1.1rem;" aria-live="polite"></p>
                         </div>
 
-                        <!-- Master mode (LAN) -->
-                        <div class="settings-section">
-                            <h3><i class="fas fa-server"></i> Master mode (LAN)</h3>
-                            <p style="color: #a0aec0; font-size: 0.875rem; margin-bottom: 1rem;">
-                                Zet 1 apparaat aan als master. Andere clients kunnen deze via auto-discovery vinden.
-                            </p>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label class="settings-checkbox-label">
-                                        <input type="checkbox" id="masterModeEnabledCheckbox">
-                                        <span>Master mode inschakelen</span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group form-group--half">
-                                    <label for="masterModeNameInput">Naam in netwerk</label>
-                                    <input type="text" id="masterModeNameInput" class="form-input" placeholder="bijv. FOH-Master">
-                                </div>
-                                <div class="form-group form-group--half">
-                                    <label for="masterModePortInput">Poort</label>
-                                    <input type="number" id="masterModePortInput" class="form-input" min="1" max="65535" step="1" placeholder="3847">
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="masterModeUnlockPassword">Ontgrendelwachtwoord (alleen bij inschakelen)</label>
-                                    <input type="password" id="masterModeUnlockPassword" class="form-input" autocomplete="off" placeholder="Vraag dit aan beheer">
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <button type="button" class="btn btn-secondary" id="discoverMasterBtn">
-                                        <i class="fas fa-search"></i> Zoek actieve master
-                                    </button>
-                                    <small id="masterModeDiscoveryResult" style="color: #94a3b8; font-size: 0.8rem; margin-top: 0.5rem; display: block;"></small>
-                                </div>
-                            </div>
-                        </div>
-
                         <!-- About Section -->
                         <div class="settings-section">
                             <h3><i class="fas fa-info-circle"></i> Over deze app</h3>
                             <div style="color: #a0aec0; font-size: 0.9rem; line-height: 1.6;">
                                 <p style="margin-bottom: 0.75rem;">
                                     <strong style="color: #cbd5e0;">Shift Happens</strong><br>
-                                    <span style="color: #a0aec0;">Theater Dashboard v1.6.0-beta.1</span>
+                                    <span style="color: #a0aec0;">Theater Dashboard v1.6.0-beta.2</span>
                                 </p>
                                 <p style="margin-bottom: 0.75rem;">
                                     <strong style="color: #cbd5e0;">Copyright:</strong> © 2026. Alle rechten voorbehouden.
@@ -741,6 +688,36 @@
                                     </h4>
                                     
 
+                                    <!-- Version 1.6.0-beta.2 -->
+                                    <div style="margin-bottom: 1rem;">
+                                        <h5 style="color: #cbd5e0; font-size: 0.95rem; margin-bottom: 0.5rem; font-weight: 600;">
+                                            v1.6.0-beta.2 (29-10-2026)
+                                        </h5>
+                                        <ul style="margin-left: 1.25rem; margin-bottom: 0; padding-left: 0.5rem;">
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Trekkenlijsten in de gewone app, alleen zichtbaar als je bent ingelogd op de Shift-server.
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Updates volgen standaard alleen stabiele versies en downloaden die automatisch. Bèta alleen als je dat in Instellingen aanzet; die download je zelf.
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Lichtsignaal kan demomodus uitschakelen, zodat er geen voorbeelddata verschijnt zonder echt signaal.
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Verbeterd:</strong> Datum en zaal blijven op elk scherm in de balk. Trekkenlijsten toont dezelfde Online-status als home en week. “Verwerkt” kan alleen door degene die het aanzette weer uit.
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Verbeterd:</strong> Showmodus uitzetten wordt bewaard. Het configuratiescherm sluit aan op het lettertype en de knoppen van het dashboard.
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Beveiliging:</strong> De API vraagt altijd een login. Configuratie is beperkt tot bekende onderdelen; geheimen en beheer zijn alleen voor admins.
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Opgeruimd:</strong> Master mode (LAN) is uit de app.
+                                            </li>
+                                        </ul>
+                                    </div>
+
                                     <!-- Version 1.6.0-beta.1 -->
                                     <div style="margin-bottom: 1rem;">
                                         <h5 style="color: #cbd5e0; font-size: 0.95rem; margin-bottom: 0.5rem; font-weight: 600;">
@@ -749,9 +726,6 @@
                                         <ul style="margin-left: 1.25rem; margin-bottom: 0; padding-left: 0.5rem;">
                                             <li style="margin-bottom: 0.25rem;">
                                                 <strong style="color: #cbd5e0;">Nieuw:</strong> Lichtsignaal — embedded Luminex Viewer in showmodus (vervangt de oude patch-matrix).
-                                            </li>
-                                            <li style="margin-bottom: 0.25rem;">
-                                                <strong style="color: #cbd5e0;">Nieuw:</strong> OSC Monitor — full-screen live triggerlog in dezelfde stijl als Lichtsignaal, met netwerkadapter-keuze in de topbar.
                                             </li>
                                             <li style="margin-bottom: 0.25rem;">
                                                 <strong style="color: #cbd5e0;">Nieuw:</strong> API-server met Docker-stack, whitelist-login (access auth) en control panel voor beheer.
@@ -766,7 +740,7 @@
                                                 <strong style="color: #cbd5e0;">Pi:</strong> Kiosk-script voor AppImage, autostart en dagelijkse update-check; betrouwbaardere GitHub-release-fetch.
                                             </li>
                                             <li style="margin-bottom: 0.25rem;">
-                                                <strong style="color: #cbd5e0;">Verbeterd:</strong> Showmodus-navigatie — timer, Lichtsignaal en OSC als knoppen zonder aparte rail-card, bovenaan uitgelijnd met de grote card.
+                                                <strong style="color: #cbd5e0;">Verbeterd:</strong> Showmodus-navigatie — timer en Lichtsignaal als knoppen zonder aparte rail-card, bovenaan uitgelijnd met de grote card.
                                             </li>
                                             <li style="margin-bottom: 0.25rem;">
                                                 <strong style="color: #cbd5e0;">Verbeterd:</strong> Zaalkiezer compacter buiten touchscreen-modus; grote knoppen blijven beschikbaar mét touchscreen-modus.
@@ -1159,7 +1133,7 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
-            <span>v1.6.0-beta.1 © 2026 Team</span>
+            <span>v1.6.0-beta.2 © 2026 Team</span>
         </div>
     </footer>
 
