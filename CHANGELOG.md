@@ -2,6 +2,23 @@
 
 Alle belangrijke wijzigingen in dit project worden gedocumenteerd in dit bestand.
 
+## [1.6.0-beta.2.1] - 2026-10-30
+
+### Toegevoegd
+- **Trekkenlijsten:** alle bijlagen onder Technische info, ook riders en FQ (flight cues), niet alleen de trekkenlijst.
+- **Configuratiescherm:** wachtwoord genereren voor een nieuwe gebruiker, en een nieuw wachtwoord zetten voor een bestaande gebruiker.
+
+### Gewijzigd
+- Als Yesplan de scan onderbreekt, gaat Volgende in dezelfde periode verder in plaats van dagen over te slaan.
+- Vernieuwen op trekkenlijsten gaat via de gewone vernieuwknop. “Verwerkt door” staat op dezelfde regel als Verwerkt.
+
+### Beveiliging
+- Bijlagen uit Yesplan worden alleen bewaard als de link op de geconfigureerde Yesplan-server staat.
+- De API start niet zonder inloglimiet (`express-rate-limit`).
+
+### Opgeruimd
+- De aparte vernieuwknop op trekkenlijsten is weg.
+
 ## [1.6.0-beta.2] - 2026-10-29
 
 ### Toegevoegd

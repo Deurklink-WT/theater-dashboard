@@ -339,6 +339,145 @@ class YesplanAPI {
   }
 
   /**
+   * Alle bestanden onder Technische info / Technische lijst.
+   * De naamfilter blijft daarbuiten, zodat een rider of extra bijlage ook zichtbaar is.
+   */
+  extractTechnischeInfoDocuments(rawCustomData) {
+    const root = rawCustomData?.data ?? rawCustomData?.customdata ?? rawCustomData;
+    if (!root || typeof root !== 'object') return [];
+
+    const isSection = (node) => {
+      const name = this.normalizeFlyListText(`${node?.name || ''} ${node?.label || ''} ${node?.keyword || ''}`);
+      if (!name) return false;
+      return name.includes('productie_technischelijst')
+        || name.includes('technische info')
+        || name.includes('technical info')
+        || name.includes('technische lijst')
+        || name.includes('technical list');
+    };
+
+    const sections = [];
+    const find = (obj, depth) => {
+      if (!obj || typeof obj !== 'object' || depth > 6) return;
+      if (Array.isArray(obj)) {
+        obj.forEach((v) => find(v, depth + 1));
+        return;
+      }
+      if (isSection(obj)) {
+        sections.push(obj);
+        return;
+      }
+      (obj.groups || []).forEach((g) => find(g, depth + 1));
+      (obj.children || []).forEach((c) => find(c, depth + 1));
+      if (obj.customdata) find(obj.customdata, depth + 1);
+    };
+    find(root, 0);
+
+    const out = [];
+    const seen = new Set();
+    let yesplanOrigin = '';
+    try {
+      yesplanOrigin = this.baseURL ? new URL(this.baseURL).origin : '';
+    } catch {
+      yesplanOrigin = '';
+    }
+    const push = (url, name, category) => {
+      let normalized = String(url || '').trim();
+      if (!normalized || !yesplanOrigin) return;
+      const base = String(this.baseURL).replace(/\/$/, '');
+      if (normalized.startsWith('/') && !normalized.startsWith('//')) normalized = base + normalized;
+      if (normalized.startsWith('documents/')) normalized = `${base}/${normalized}`;
+      let parsed;
+      try {
+        parsed = new URL(normalized);
+      } catch {
+        return;
+      }
+      if (parsed.origin !== yesplanOrigin) return;
+      if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') return;
+      const pathAndQuery = `${parsed.pathname}${parsed.search}`;
+      if (!pathAndQuery.includes('/documents/') && !/\.pdf($|\?)/i.test(pathAndQuery)) return;
+      const href = parsed.href;
+      if (seen.has(href)) return;
+      seen.add(href);
+      out.push({
+        name: name || category || 'Bijlage',
+        url: href,
+        type: 'application/pdf',
+        category: category || name || 'Bijlage'
+      });
+    };
+
+    const walk = (obj, depth, fieldName) => {
+      if (!obj || typeof obj !== 'object' || depth > 8) return;
+      if (Array.isArray(obj)) {
+        obj.forEach((v) => walk(v, depth + 1, fieldName));
+        return;
+      }
+      const label = String(obj.name || obj.label || fieldName || '').trim();
+      const value = obj.value;
+      if (value && typeof value === 'object' && !Array.isArray(value)) {
+        push(value.dataurl || value.url || value.link || value.href || value.document_url, value.originalname || value.filename || value.name || label, label);
+      } else if (typeof value === 'string') {
+        push(value, label, label);
+      }
+      push(obj.dataurl || obj.url || obj.document_url, obj.originalname || obj.filename || label, label);
+      (obj.children || []).forEach((c) => walk(c, depth + 1, label));
+      (obj.groups || []).forEach((g) => walk(g, depth + 1, label));
+      (obj.fields || []).forEach((f) => walk(f, depth + 1, label));
+      if (obj.customdata) walk(obj.customdata, depth + 1, label);
+    };
+
+    for (const section of sections) walk(section, 0, section.name || '');
+    return out;
+  }
+
+  /**
+   * Leest bijlagen voor trekkenlijsten over het hele venster.
+   * Stopt bij de eerste mislukte customdata-call, zodat Volgende
+   * daar verder gaat in plaats van 120 dagen vooruit te springen.
+   */
+  async scanTrekkenlijstDocuments(allEvents, minimal) {
+    let streak = 0;
+    for (let i = 0; i < allEvents.length; i++) {
+      const raw = allEvents[i];
+      const minimalEvent = minimal[i];
+      if (!raw?.id || !minimalEvent) continue;
+      let data = await this.getEventCustomDataRaw(raw.id, { retries: 2 });
+      if (this._lastCustomDataFailed) {
+        streak += 1;
+        await this.sleep(Math.min(12000, 1000 * (2 ** Math.min(streak, 3))));
+        data = await this.getEventCustomDataRaw(raw.id, { retries: 2 });
+      }
+      if (this._lastCustomDataFailed) {
+        const resumeFromDate = raw._requestedDate || minimalEvent._requestedDate || null;
+        safeLog('warn', `Trekkenlijsten-scan onderbroken op ${resumeFromDate || '?'} (${i + 1}/${allEvents.length})`);
+        return { scanTruncated: true, resumeFromDate };
+      }
+      streak = 0;
+      try {
+        const infoDocs = this.extractTechnischeInfoDocuments(data);
+        const flyDocs = this.extractTrekkenlijstDocuments(data);
+        const seenUrls = new Set(infoDocs.map((doc) => doc.url).filter(Boolean));
+        for (const doc of flyDocs) {
+          if (!doc?.url || seenUrls.has(doc.url)) continue;
+          seenUrls.add(doc.url);
+          infoDocs.push(doc);
+        }
+        minimalEvent.technischeInfoDocuments = infoDocs;
+        minimalEvent.trekkenlijstDocuments = flyDocs;
+        minimalEvent.hasTrekkenlijst = infoDocs.length > 0;
+      } catch (error) {
+        safeLog('error', 'Error extracting trekkenlijst documents:', error);
+        minimalEvent.trekkenlijstDocuments = [];
+        minimalEvent.hasTrekkenlijst = false;
+      }
+      if ((i + 1) % 6 === 0) await this.sleep(160);
+    }
+    return { scanTruncated: false, resumeFromDate: null };
+  }
+
+  /**
    * Weekweergave: haalt alleen dag-voor-dag op en maakt minimale opmaak ZONDER formatEvents.
    * Geen extra API-calls per event → veel minder 429 en week laadt wel.
    */
@@ -362,6 +501,7 @@ class YesplanAPI {
       let allEvents = [];
       let failedDays = 0;
       let totalDays = 0;
+      let firstFailedDate = null;
       while (currentDate <= end) {
         const requestedDate = toLocalDateStr(currentDate);
         totalDays += 1;
@@ -370,6 +510,7 @@ class YesplanAPI {
           if (dayEvents.length > 0) allEvents = allEvents.concat(dayEvents);
         } catch (error) {
           failedDays += 1;
+          if (!firstFailedDate) firstFailedDate = requestedDate;
           if (error?.response?.status === 401 || error?.response?.status === 403) hadAuthError = true;
           safeLog('error', `Error fetching events for ${requestedDate}:`, error.message);
         }
@@ -447,6 +588,28 @@ class YesplanAPI {
           orkestbakValue: this.extractResources(e, null, null, null).some((r) => String(r || '').toLowerCase().includes('orkestbak')) ? 'ja' : null
         };
       });
+
+      // Trekkenlijsten moeten elke voorstelling in het venster kunnen zien.
+      // De weekweergave stopt bewust na 120 customdata-calls; die grens
+      // liet hier alleen de eerste evenementen een bijlage krijgen.
+      if (params.forTrekkenlijsten) {
+        const scan = await this.scanTrekkenlijstDocuments(allEvents, minimal);
+        let scanTruncated = scan.scanTruncated;
+        let resumeFromDate = scan.resumeFromDate;
+        if (firstFailedDate && (!resumeFromDate || firstFailedDate < resumeFromDate)) {
+          scanTruncated = true;
+          resumeFromDate = firstFailedDate;
+        }
+        return {
+          success: true,
+          data: minimal,
+          failedDays,
+          totalDays,
+          scanTruncated,
+          resumeFromDate,
+          timestamp: new Date().toISOString()
+        };
+      }
 
       // Voor weekfilters en resource-correctheid in weekoverzicht halen we (gelimiteerd)
       // event-customdata op. Zonder deze verrijking ontbreken balletvloer/vleugel/orkestbak
@@ -1775,7 +1938,7 @@ class YesplanAPI {
   }
 
   /**
-   * Trekkenlijst, kaplijst of changementenlijst.
+   * Trekkenlijst, kaplijst, changementenlijst of merken-FQ (flight cues).
    * TL is meestal een technische lijst en telt niet als trekkenlijst.
    */
   isFlyListText(s) {
@@ -1784,6 +1947,7 @@ class YesplanAPI {
     if (t.includes('technische lijst') || t.includes('technical list') || t.includes('technischelijst')) return false;
     if (t.includes('kaplijst') || t.includes('kap lijst') || t.includes('kap-lijst')) return true;
     if (t.includes('changement')) return true;
+    if (/(^|[^a-z0-9])fq([^a-z0-9]|$)/.test(t) || t.includes('flight q') || t.includes('flight cue')) return true;
     return t.includes('trekkenlijst') || t.includes('trekken lijst') || t.includes('treklijst') || t.includes('fly cue') || t.includes('productie_trekkenlijst');
   }
 
@@ -2866,13 +3030,14 @@ class YesplanAPI {
   }
 
   /** Ruwe customdata voor één event (voor debug). */
-  async getEventCustomDataRaw(eventId) {
+  async getEventCustomDataRaw(eventId, options = {}) {
     if (!eventId) return null;
 
     const id = this.sanitizeYesplanId(eventId);
     const cached = this._eventCustomDataCache.get(id);
     const now = Date.now();
     if (cached && (now - cached.ts) < this._eventCustomDataCacheTtlMs) {
+      this._lastCustomDataFailed = false;
       return cached.data || null;
     }
 
@@ -2881,28 +3046,49 @@ class YesplanAPI {
       return await inFlight;
     }
 
+    const maxRetries = Math.max(0, Number(options.retries) || 0);
     const fetchPromise = (async () => {
-      try {
-        const queryString = this.addApiKey();
-        const url = `/api/event/${id}/customdata?${queryString}`;
-        const res = await this.yesplanGet(url);
-        const data = res?.data ?? null;
+      const queryString = this.addApiKey();
+      const url = `/api/event/${id}/customdata?${queryString}`;
+      for (let attempt = 0; attempt <= maxRetries; attempt++) {
+        try {
+          const res = await this.yesplanGet(url);
+          const data = res?.data ?? null;
 
-        if (this._eventCustomDataCache.size >= this._eventCustomDataCacheMax) {
-          const oldestKey = this._eventCustomDataCache.keys().next().value;
-          if (oldestKey) this._eventCustomDataCache.delete(oldestKey);
+          if (this._eventCustomDataCache.size >= this._eventCustomDataCacheMax) {
+            const oldestKey = this._eventCustomDataCache.keys().next().value;
+            if (oldestKey) this._eventCustomDataCache.delete(oldestKey);
+          }
+          this._eventCustomDataCache.set(id, { ts: Date.now(), data });
+          this._lastCustomDataFailed = false;
+          return data;
+        } catch (err) {
+          const status = err?.response?.status;
+          if (status === 404) {
+            this._lastCustomDataFailed = false;
+            return null;
+          }
+          const code = String(err?.code || '').toUpperCase();
+          const retryable = status === 429 || (status >= 500 && status < 600)
+            || code === 'ECONNABORTED' || code === 'ETIMEDOUT' || code === 'ECONNRESET';
+          if (retryable && attempt < maxRetries) {
+            await this.sleep(Math.min(8000, 700 * (2 ** attempt)));
+            continue;
+          }
+          this._lastCustomDataFailed = true;
+          return null;
         }
-        this._eventCustomDataCache.set(id, { ts: Date.now(), data });
-        return data;
-      } catch (err) {
-        return null;
-      } finally {
-        this._eventCustomDataInFlight.delete(id);
       }
+      this._lastCustomDataFailed = true;
+      return null;
     })();
 
     this._eventCustomDataInFlight.set(id, fetchPromise);
-    return await fetchPromise;
+    try {
+      return await fetchPromise;
+    } finally {
+      this._eventCustomDataInFlight.delete(id);
+    }
   }
 
   /** Haalt alleen personeelsplanning op voor één event (direct customdata-call). */

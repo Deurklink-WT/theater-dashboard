@@ -169,6 +169,11 @@
         en.onclick = function () { void toggleUser(u.id, true); };
         actions.appendChild(en);
       }
+      const reset = document.createElement('button');
+      reset.textContent = 'Nieuw wachtwoord';
+      reset.className = 'btn-secondary';
+      reset.onclick = function () { void resetUserPassword(u); };
+      actions.appendChild(reset);
       const del = document.createElement('button');
       del.textContent = 'Verwijder';
       del.className = 'btn-secondary';
@@ -195,6 +200,23 @@
   async function deleteUser(id) {
     await api('/api/admin/users/' + encodeURIComponent(id), { method: 'DELETE' });
     await refreshUsers();
+  }
+
+  async function resetUserPassword(user) {
+    const err = document.getElementById('addUserError');
+    err.textContent = '';
+    if (!confirm('Nieuw wachtwoord maken voor ' + user.email + '? Het oude wachtwoord werkt daarna niet meer.')) return;
+    const password = generatePassword();
+    try {
+      await api('/api/admin/users/' + encodeURIComponent(user.id), {
+        method: 'PATCH',
+        body: JSON.stringify({ password: password })
+      });
+      showCreatedPassword(user.email, password);
+      document.getElementById('createdPassword').scrollIntoView({ block: 'nearest' });
+    } catch (e) {
+      err.textContent = mapError(e.message);
+    }
   }
 
   document.getElementById('bootstrapForm').addEventListener('submit', async function (ev) {
@@ -235,21 +257,63 @@
     }
   });
 
+  function generatePassword() {
+    const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789';
+    const bytes = new Uint8Array(16);
+    crypto.getRandomValues(bytes);
+    let out = '';
+    for (let i = 0; i < bytes.length; i++) out += alphabet[bytes[i] % alphabet.length];
+    return out;
+  }
+
+  function showCreatedPassword(email, password) {
+    const box = document.getElementById('createdPassword');
+    box.classList.remove('hidden');
+    box.innerHTML = '';
+    const text = document.createElement('span');
+    text.textContent = 'Wachtwoord voor ' + email + ': ';
+    const code = document.createElement('code');
+    code.textContent = password;
+    const copy = document.createElement('button');
+    copy.type = 'button';
+    copy.className = 'btn-secondary';
+    copy.textContent = 'Kopieer';
+    copy.onclick = function () {
+      if (!navigator.clipboard || !navigator.clipboard.writeText) return;
+      navigator.clipboard.writeText(password).then(function () {
+        copy.textContent = 'Gekopieerd';
+      }).catch(function () {});
+    };
+    box.appendChild(text);
+    box.appendChild(code);
+    box.appendChild(copy);
+  }
+
+  document.getElementById('generatePasswordBtn').addEventListener('click', function () {
+    const input = document.getElementById('newPassword');
+    input.value = generatePassword();
+    input.focus();
+    input.select();
+  });
+
   document.getElementById('addUserForm').addEventListener('submit', async function (ev) {
     ev.preventDefault();
     const err = document.getElementById('addUserError');
     err.textContent = '';
+    const email = document.getElementById('newEmail').value.trim();
+    const password = document.getElementById('newPassword').value;
     try {
       await api('/api/admin/users', {
         method: 'POST',
         body: JSON.stringify({
-          email: document.getElementById('newEmail').value,
-          password: document.getElementById('newPassword').value,
+          email: email,
+          password: password,
           role: document.getElementById('newRole').value
         })
       });
       document.getElementById('newEmail').value = '';
       document.getElementById('newPassword').value = '';
+      showCreatedPassword(email, password);
       await refreshUsers();
     } catch (e) {
       err.textContent = mapError(e.message);

@@ -10,3 +10,4 @@ services:
       SHIFT_HAPPENS_CONFIG_DIR: /data
     volumes:
       - ./data:/data
+      - ./src:/app/src

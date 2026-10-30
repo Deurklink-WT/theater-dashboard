@@ -61,7 +61,7 @@ jobs:
           npm run inject-update-token
 
       - name: Build Pi / Linux arm64 AppImage
-        run: npm run build:pi
+        run: npm run build:pi -- --publish never
 
       - name: List dist (debug)
         run: ls -la dist/ || true
@@ -73,7 +73,7 @@ jobs:
           if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
             echo "Release $TAG bestaat al"
           else
-            gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --title "$TAG" --notes "Automatisch aangemaakt voor Linux Pi AppImage."
+            gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --prerelease --title "Shift Happens $TAG" --notes "Pre-release."
           fi
 
       - name: Upload Pi AppImage + updater metadata
@@ -82,22 +82,36 @@ jobs:
           set -euo pipefail
           TAG="${{ steps.tag.outputs.tag }}"
           VER="${TAG#v}"
-          upload() {
-            local path="$1"
-            local label="$2"
-            if [ ! -f "$path" ]; then
-              echo "Skip (ontbreekt): $path"
+          node scripts/fix-updater-yml-names.js dist/latest-linux-arm64.yml dist/latest-linux.yml || true
+          if [ -f dist/latest-linux-arm64.yml ]; then
+            cp dist/latest-linux-arm64.yml dist/beta-linux-arm64.yml
+          fi
+          if [ -f dist/latest-linux.yml ]; then
+            cp dist/latest-linux.yml dist/beta-linux.yml
+          fi
+          stage=dist/gh-upload
+          rm -rf "$stage"
+          mkdir -p "$stage"
+          take() {
+            local src="$1"
+            local name="$2"
+            if [ ! -f "$src" ]; then
+              echo "Skip (ontbreekt): $src"
               return 0
             fi
-            echo "Upload: $path -> $label"
-            gh release upload "$TAG" "${path}#${label}" --repo "$GITHUB_REPOSITORY" --clobber
+            cp "$src" "$stage/$name"
+            echo "Klaar: $name"
           }
-          upload "dist/Shift Happens-${VER}-arm64.AppImage" "Shift.Happens-${VER}-arm64.AppImage"
-          upload "dist/Shift Happens-${VER}-arm64.AppImage.blockmap" "Shift.Happens-${VER}-arm64.AppImage.blockmap"
-          # YML-urls moeten matchen met de GitHub assetlabels (Shift.Happens-...).
-          node scripts/fix-updater-yml-names.js dist/latest-linux-arm64.yml dist/latest-linux.yml || true
-          for meta in dist/latest-linux-arm64.yml dist/latest-linux.yml; do
-            if [ -f "$meta" ]; then
-              upload "$meta" "$(basename "$meta")"
-            fi
-          done
+          take "dist/Shift Happens-${VER}-arm64.AppImage" "Shift.Happens-${VER}-arm64.AppImage"
+          take "dist/Shift Happens-${VER}-arm64.AppImage.blockmap" "Shift.Happens-${VER}-arm64.AppImage.blockmap"
+          take "dist/latest-linux-arm64.yml" "latest-linux-arm64.yml"
+          take "dist/beta-linux-arm64.yml" "beta-linux-arm64.yml"
+          take "dist/latest-linux.yml" "latest-linux.yml"
+          take "dist/beta-linux.yml" "beta-linux.yml"
+          shopt -s nullglob
+          files=("$stage"/*)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "Geen Pi-bestanden om te uploaden"
+            exit 1
+          fi
+          gh release upload "$TAG" "${files[@]}" --repo "$GITHUB_REPOSITORY" --clobber

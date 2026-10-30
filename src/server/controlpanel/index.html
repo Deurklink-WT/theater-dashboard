@@ -77,13 +77,17 @@
 
         <form id="addUserForm" class="add-form">
           <input type="email" id="newEmail" placeholder="naam@organisatie.nl" required>
-          <input type="password" id="newPassword" placeholder="wachtwoord (min. 8)" required minlength="8">
+          <div class="password-create">
+            <input type="text" id="newPassword" placeholder="wachtwoord (min. 8)" required minlength="8" autocomplete="off" spellcheck="false">
+            <button type="button" id="generatePasswordBtn" class="btn-secondary">Genereer</button>
+          </div>
           <select id="newRole">
             <option value="user">Gebruiker</option>
             <option value="admin">Admin</option>
           </select>
           <button type="submit">Toevoegen</button>
         </form>
+        <p id="createdPassword" class="created-password hidden" aria-live="polite"></p>
         <p id="addUserError" class="error" aria-live="polite"></p>
 
         <table id="usersTable">
@@ -100,6 +104,6 @@
       </div>
     </section>
   </div>
-  <script src="app.js?v=20260824-8"></script>
+  <script src="app.js?v=20261030-2"></script>
 </body>
 </html>

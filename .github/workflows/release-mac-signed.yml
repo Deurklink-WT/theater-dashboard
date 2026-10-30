@@ -82,7 +82,7 @@ jobs:
           if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
             echo "Release $TAG bestaat al"
           else
-            gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --title "$TAG" --notes "Automatisch aangemaakt voor macOS signed artifacts."
+            gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --prerelease --title "Shift Happens $TAG" --notes "Pre-release."
           fi
 
       - name: Upload mac updater metadata + assets
@@ -91,29 +91,51 @@ jobs:
           set -euo pipefail
           TAG="${{ steps.tag.outputs.tag }}"
           VER="${TAG#v}"
-          # YML-urls moeten matchen met de GitHub assetlabels (Shift.Happens-...).
+          # YML-urls moeten matchen met de GitHub-bestandsnamen (geen spaties).
           node scripts/fix-updater-yml-names.js dist/latest-mac.yml || true
-          upload() {
-            local path="$1"
-            local label="$2"
-            if [ ! -f "$path" ]; then
-              echo "Skip (ontbreekt): $path"
+          if [ -f dist/latest-mac.yml ]; then
+            python3 - "$VER" <<'PY'
+          import pathlib, sys
+          ver = sys.argv[1]
+          path = pathlib.Path("dist/latest-mac.yml")
+          text = path.read_text()
+          text = text.replace(f"Shift.Happens-{ver}-mac.zip", f"Shift.Happens-{ver}-x64-mac.zip")
+          text = text.replace(f"Shift.Happens-{ver}.dmg", f"Shift.Happens-{ver}-x64.dmg")
+          path.write_text(text)
+          PY
+            cp dist/latest-mac.yml dist/beta-mac.yml
+          fi
+          stage=dist/gh-upload
+          rm -rf "$stage"
+          mkdir -p "$stage"
+          take() {
+            local src="$1"
+            local name="$2"
+            if [ ! -f "$src" ]; then
+              echo "Skip (ontbreekt): $src"
               return 0
             fi
-            echo "Upload: $path -> $label"
-            gh release upload "$TAG" "${path}#${label}" --repo "$GITHUB_REPOSITORY" --clobber
+            cp "$src" "$stage/$name"
+            echo "Klaar: $name"
           }
-          upload "dist/latest-mac.yml" "latest-mac.yml"
-          upload "dist/Shift Happens-${VER}-arm64-mac.zip" "Shift.Happens-${VER}-arm64-mac.zip"
-          upload "dist/Shift Happens-${VER}-arm64-mac.zip.blockmap" "Shift.Happens-${VER}-arm64-mac.zip.blockmap"
-          upload "dist/Shift Happens-${VER}-arm64.dmg" "Shift.Happens-${VER}-arm64.dmg"
-          upload "dist/Shift Happens-${VER}-arm64.dmg.blockmap" "Shift.Happens-${VER}-arm64.dmg.blockmap"
-          # x64: electron-builder gebruikt soms *-x64-* en soms *-mac.zip / *.dmg (bij combined --x64 --arm64)
-          upload "dist/Shift Happens-${VER}-x64-mac.zip" "Shift.Happens-${VER}-x64-mac.zip"
-          upload "dist/Shift Happens-${VER}-x64-mac.zip.blockmap" "Shift.Happens-${VER}-x64-mac.zip.blockmap"
-          upload "dist/Shift Happens-${VER}-mac.zip" "Shift.Happens-${VER}-x64-mac.zip"
-          upload "dist/Shift Happens-${VER}-mac.zip.blockmap" "Shift.Happens-${VER}-x64-mac.zip.blockmap"
-          upload "dist/Shift Happens-${VER}-x64.dmg" "Shift.Happens-${VER}-x64.dmg"
-          upload "dist/Shift Happens-${VER}-x64.dmg.blockmap" "Shift.Happens-${VER}-x64.dmg.blockmap"
-          upload "dist/Shift Happens-${VER}.dmg" "Shift.Happens-${VER}-x64.dmg"
-          upload "dist/Shift Happens-${VER}.dmg.blockmap" "Shift.Happens-${VER}-x64.dmg.blockmap"
+          take "dist/latest-mac.yml" "latest-mac.yml"
+          take "dist/beta-mac.yml" "beta-mac.yml"
+          take "dist/Shift Happens-${VER}-arm64-mac.zip" "Shift.Happens-${VER}-arm64-mac.zip"
+          take "dist/Shift Happens-${VER}-arm64-mac.zip.blockmap" "Shift.Happens-${VER}-arm64-mac.zip.blockmap"
+          take "dist/Shift Happens-${VER}-arm64.dmg" "Shift.Happens-${VER}-arm64.dmg"
+          take "dist/Shift Happens-${VER}-arm64.dmg.blockmap" "Shift.Happens-${VER}-arm64.dmg.blockmap"
+          take "dist/Shift Happens-${VER}-x64-mac.zip" "Shift.Happens-${VER}-x64-mac.zip"
+          take "dist/Shift Happens-${VER}-x64-mac.zip.blockmap" "Shift.Happens-${VER}-x64-mac.zip.blockmap"
+          take "dist/Shift Happens-${VER}-mac.zip" "Shift.Happens-${VER}-x64-mac.zip"
+          take "dist/Shift Happens-${VER}-mac.zip.blockmap" "Shift.Happens-${VER}-x64-mac.zip.blockmap"
+          take "dist/Shift Happens-${VER}-x64.dmg" "Shift.Happens-${VER}-x64.dmg"
+          take "dist/Shift Happens-${VER}-x64.dmg.blockmap" "Shift.Happens-${VER}-x64.dmg.blockmap"
+          take "dist/Shift Happens-${VER}.dmg" "Shift.Happens-${VER}-x64.dmg"
+          take "dist/Shift Happens-${VER}.dmg.blockmap" "Shift.Happens-${VER}-x64.dmg.blockmap"
+          shopt -s nullglob
+          files=("$stage"/*)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "Geen mac-bestanden om te uploaden"
+            exit 1
+          fi
+          gh release upload "$TAG" "${files[@]}" --repo "$GITHUB_REPOSITORY" --clobber

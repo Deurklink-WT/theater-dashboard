@@ -292,9 +292,6 @@
                             <button id="trekkenlijstenNextBtn" type="button" class="btn btn-secondary btn-sm" title="Volgende">
                                 <span data-i18n="trekkenlijsten.pagerNext">Volgende</span> <i class="fas fa-chevron-right"></i>
                             </button>
-                            <button id="trekkenlijstenRefreshBtn" type="button" class="btn btn-secondary btn-sm" title="Vernieuwen">
-                                <i class="fas fa-sync-alt"></i> <span data-i18n="nav.refresh">Vernieuwen</span>
-                            </button>
                             <div class="card-status card-status--clickable" id="trekkenlijstenViewStatus" title="Klik voor systeemstatus">
                                 <span class="status-indicator offline"></span>
                                 <span class="status-text">Offline</span>
@@ -366,7 +363,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h2><i class="fas fa-cog"></i> <span data-i18n="settings.title">Instellingen</span></h2>
-                    <div class="modal-header-version">v1.6.0-beta.2</div>
+                    <div class="modal-header-version">v1.6.0-beta.2.1</div>
                     <button class="modal-close" id="closeSettings">
                         <i class="fas fa-times"></i>
                     </button>
@@ -668,7 +665,7 @@
                             <div style="color: #a0aec0; font-size: 0.9rem; line-height: 1.6;">
                                 <p style="margin-bottom: 0.75rem;">
                                     <strong style="color: #cbd5e0;">Shift Happens</strong><br>
-                                    <span style="color: #a0aec0;">Theater Dashboard v1.6.0-beta.2</span>
+                                    <span style="color: #a0aec0;">Theater Dashboard v1.6.0-beta.2.1</span>
                                 </p>
                                 <p style="margin-bottom: 0.75rem;">
                                     <strong style="color: #cbd5e0;">Copyright:</strong> © 2026. Alle rechten voorbehouden.
@@ -687,6 +684,27 @@
                                         <i class="fas fa-list-alt"></i> Release Notes
                                     </h4>
                                     
+
+                                    <!-- Version 1.6.0-beta.2.1 -->
+                                    <div style="margin-bottom: 1rem;">
+                                        <h5 style="color: #cbd5e0; font-size: 0.95rem; margin-bottom: 0.5rem; font-weight: 600;">
+                                            v1.6.0-beta.2.1 (30-10-2026)
+                                        </h5>
+                                        <ul style="margin-left: 1.25rem; margin-bottom: 0; padding-left: 0.5rem;">
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> Trekkenlijsten toont alle bijlagen onder Technische info, ook riders en FQ, niet alleen de trekkenlijst.
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Nieuw:</strong> In het configuratiescherm kun je een wachtwoord genereren, en voor een bestaande gebruiker een nieuw wachtwoord zetten.
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Verbeterd:</strong> Als Yesplan de scan onderbreekt, gaat Volgende in dezelfde periode verder. Vernieuwen loopt via de gewone knop.
+                                            </li>
+                                            <li style="margin-bottom: 0.25rem;">
+                                                <strong style="color: #cbd5e0;">Beveiliging:</strong> Bijlagen openen alleen als de link op de Yesplan-server zelf staat. De inloglimiet blijft aan.
+                                            </li>
+                                        </ul>
+                                    </div>
 
                                     <!-- Version 1.6.0-beta.2 -->
                                     <div style="margin-bottom: 1rem;">
@@ -1133,7 +1151,7 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
-            <span>v1.6.0-beta.2 © 2026 Team</span>
+            <span>v1.6.0-beta.2.1 © 2026 Team</span>
         </div>
     </footer>
 

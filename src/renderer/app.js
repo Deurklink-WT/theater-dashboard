@@ -27,6 +27,7 @@ const TRANSLATIONS = {
             pagerNext: 'Volgende',
             loadingMore: 'Volgende reeks laden…',
             noMore: 'Geen verdere trekkenlijsten in deze periode. Volgende zoekt verder.',
+            scanPartial: 'Yesplan heeft het lezen hier onderbroken. Volgende gaat in deze periode verder.',
             verwerkt: 'Verwerkt',
             verwerktBy: 'door {name}',
             verwerktLocked: 'Alleen {name} kan dit uitzetten',
@@ -263,6 +264,7 @@ const TRANSLATIONS = {
             pagerNext: 'Next',
             loadingMore: 'Loading the next set…',
             noMore: 'No further fly cue lists in this period. Next searches further ahead.',
+            scanPartial: 'Yesplan interrupted the read. Next continues in this period.',
             verwerkt: 'Processed',
             verwerktBy: 'by {name}',
             verwerktLocked: 'Only {name} can turn this off',
@@ -561,6 +563,9 @@ class TheaterDashboard {
         this._trekkenlijstenPageSize = 10;
         this._trekkenlijstenNoMore = false;
         this._trekkenlijstRangeEnd = null;
+        this._trekkenlijstHorizon = null;
+        this._trekkenlijstResumeFrom = null;
+        this._trekkenlijstenScanPartial = false;
         this._trekkenlijstenLoading = false;
         this._trekkenlijstSyncState = {};
         this._trekkenlijstSyncPollInterval = null;
@@ -697,9 +702,6 @@ class TheaterDashboard {
         document.getElementById('trekkenlijstenNavBtn')?.addEventListener('click', () => {
             if (this._navRailReorderMode) return;
             void this.showTrekkenlijstenView();
-        });
-        document.getElementById('trekkenlijstenRefreshBtn')?.addEventListener('click', () => {
-            void this.loadTrekkenlijsten({ forceRefresh: true });
         });
         document.getElementById('trekkenlijstenPrevBtn')?.addEventListener('click', () => {
             this.showTrekkenlijstenPage(this._trekkenlijstenPage - 1);
@@ -2227,6 +2229,12 @@ class TheaterDashboard {
         }
         if (this.currentView === 'week') {
             await this.loadWeekData(forceRefresh);
+            return;
+        }
+        if (this.currentView === 'trekkenlijsten') {
+            await this.loadTrekkenlijsten({ forceRefresh: true });
+            this.updateMasterStatus();
+            void this.refreshApiServerStatus();
             return;
         }
         
@@ -5593,6 +5601,7 @@ class TheaterDashboard {
         if (t.includes('technische lijst') || t.includes('technical list') || t.includes('technischelijst')) return false;
         if (t.includes('kaplijst') || t.includes('kap lijst') || t.includes('kap-lijst')) return true;
         if (t.includes('changement')) return true;
+        if (/(^|[^a-z0-9])fq([^a-z0-9]|$)/.test(t) || t.includes('flight q') || t.includes('flight cue')) return true;
         return t.includes('trekkenlijst') || t.includes('trekken lijst') || t.includes('treklijst') || t.includes('fly cue');
     }
 
@@ -5672,23 +5681,37 @@ class TheaterDashboard {
 
     flyListKindLabel(text) {
         const t = this.normalizeFlyListText(text);
+        if (!t) return '';
         if (t.includes('kaplijst') || t.includes('kap lijst') || t.includes('kap-lijst')) return 'Kaplijst';
         if (t.includes('changement')) return 'Changement';
-        return 'Trekkenlijst';
+        if (/(^|[^a-z0-9])fq([^a-z0-9]|$)/.test(t) || t.includes('flight q') || t.includes('flight cue')) return 'FQ';
+        if (t.includes('trekkenlijst') || t.includes('trekken lijst') || t.includes('treklijst') || t.includes('fly cue')) return 'Trekkenlijst';
+        return '';
+    }
+
+    trekkenlijstDocKind(doc, label) {
+        const recognized = this.flyListKindLabel(`${doc?.kind || ''} ${label || ''}`);
+        if (recognized) return recognized;
+        const field = String(doc?.kind || '').replace(/\s*-\s*bijlage\s*$/i, '').trim();
+        return field || 'Bijlage';
     }
 
     collectTrekkenlijstDocs(event) {
         const out = [];
         const seen = new Set();
-        const push = (doc) => {
-            if (!this.isFlyListRelatedDocument(doc)) return;
+        const push = (doc, flyOnly) => {
+            if (flyOnly && !this.isFlyListRelatedDocument(doc)) return;
             const url = String(doc?.url || '').trim();
             if (!url || seen.has(url)) return;
             seen.add(url);
             out.push(doc);
         };
-        for (const doc of event?.trekkenlijstDocuments || []) push(doc);
-        for (const doc of event?.technicalListDocuments || []) push(doc);
+        if (Array.isArray(event?.technischeInfoDocuments)) {
+            for (const doc of event.technischeInfoDocuments) push(doc, false);
+            return out;
+        }
+        for (const doc of event?.trekkenlijstDocuments || []) push(doc, true);
+        for (const doc of event?.technicalListDocuments || []) push(doc, true);
         return out;
     }
 
@@ -5791,7 +5814,7 @@ class TheaterDashboard {
             this.syncTrekkenlijstenVisibleItems();
             this.renderTrekkenlijstenList();
             document.querySelector('.trekkenlijsten-card-content')?.scrollTo({ top: 0 });
-        } else {
+        } else if (!this._trekkenlijstenScanPartial) {
             this._trekkenlijstenAheadEmpty = true;
             this.renderTrekkenlijstenList();
         }
@@ -5831,7 +5854,9 @@ class TheaterDashboard {
         const from = this._trekkenlijstenPage * size + 1;
         const to = Math.min(allCount, from + items.length - 1);
         const countLabel = this.t('trekkenlijsten.metaCount', { from, to, total: allCount });
-        const aheadNote = this._trekkenlijstenAheadEmpty ? ` · ${this.t('trekkenlijsten.noMore')}` : '';
+        const aheadNote = this._trekkenlijstenScanPartial
+            ? ` · ${this.t('trekkenlijsten.scanPartial')}`
+            : (this._trekkenlijstenAheadEmpty ? ` · ${this.t('trekkenlijsten.noMore')}` : '');
         meta.textContent = syncOn
             ? `${countLabel}${aheadNote}`
             : `${countLabel}${aheadNote} · ${this.t('trekkenlijsten.syncLoginHint')}`;
@@ -5840,7 +5865,7 @@ class TheaterDashboard {
             const docs = Array.isArray(item.docs) ? item.docs : [];
             const docHtml = docs.map((doc) => {
                 const label = doc.label || 'PDF';
-                const kind = this.flyListKindLabel(`${doc.kind || ''} ${label}`);
+                const kind = this.trekkenlijstDocKind(doc, label);
                 return `<a href="#" class="rider-link trekkenlijsten-entry-doc" data-rider-url="${this.escapeHtml(String(doc.url))}" title="${this.escapeHtml(label)}">` +
                   `<span class="week-event-chip">${this.escapeHtml(kind)}</span>` +
                   `<i class="fas fa-file-pdf" aria-hidden="true"></i>` +
@@ -5854,7 +5879,7 @@ class TheaterDashboard {
             const actorName = this.trekkenlijstActorLabel(item.verwerktBy);
             const actorTitle = this.escapeHtml(String(item.verwerktBy || ''));
             const byHtml = item.verwerkt && actorName
-                ? `<p class="trekkenlijsten-verwerkt-by" title="${actorTitle}">${this.escapeHtml(this.t('trekkenlijsten.verwerktBy', { name: actorName }))}</p>`
+                ? `<span class="trekkenlijsten-verwerkt-by" title="${actorTitle}">${this.escapeHtml(this.t('trekkenlijsten.verwerktBy', { name: actorName }))}</span>`
                 : '';
             const lockTitle = verwerktLocked
                 ? ` title="${this.escapeHtml(this.t('trekkenlijsten.verwerktLocked', { name: actorName || item.verwerktBy || '' }))}"`
@@ -5875,9 +5900,8 @@ class TheaterDashboard {
                 `<div class="trekkenlijsten-verwerkt-block"${lockTitle}>` +
                 `<label class="settings-checkbox-label trekkenlijsten-verwerkt-label">` +
                 `<input type="checkbox" class="trekkenlijsten-verwerkt-cb" data-sync-key="${this.escapeHtml(String(item.syncKey || ''))}"${item.verwerkt ? ' checked' : ''}${verwerktDisabled}>` +
-                `<span>${this.escapeHtml(this.t('trekkenlijsten.verwerkt'))}</span>` +
+                `<span class="trekkenlijsten-verwerkt-text"><span>${this.escapeHtml(this.t('trekkenlijsten.verwerkt'))}</span>${byHtml}</span>` +
                 `</label>` +
-                byHtml +
                 `</div>` +
                 `</div>` +
                 `<textarea class="trekkenlijsten-comment-input" rows="3" data-sync-key="${this.escapeHtml(String(item.syncKey || ''))}" placeholder="${this.escapeHtml(this.t('trekkenlijsten.commentPlaceholder'))}"${disabledAttr}>${commentVal}</textarea>` +
@@ -5981,6 +6005,66 @@ class TheaterDashboard {
         }
     }
 
+    readTrekkenlijstLocalCache() {
+        try {
+            const raw = localStorage.getItem('trekkenlijsten-local-cache-v2');
+            const parsed = raw ? JSON.parse(raw) : null;
+            return Array.isArray(parsed?.items) ? parsed.items : [];
+        } catch {
+            return [];
+        }
+    }
+
+    writeTrekkenlijstLocalCache(items) {
+        try {
+            const slim = (Array.isArray(items) ? items : []).slice(0, 200).map((item) => ({
+                id: item.id,
+                orgId: item.orgId,
+                syncKey: item.syncKey,
+                venueId: item.venueId,
+                venueLabel: item.venueLabel,
+                title: item.title,
+                groupId: item.groupId || null,
+                dateLabel: item.dateLabel,
+                timeLabel: item.timeLabel,
+                startRaw: item.startRaw || null,
+                eventDateRaw: item.eventDateRaw || null,
+                docUrl: item.docUrl || null,
+                docLabel: item.docLabel || '',
+                docs: item.docs || [],
+                sortTs: item.sortTs
+            }));
+            localStorage.setItem('trekkenlijsten-local-cache-v2', JSON.stringify({ items: slim }));
+        } catch {
+            /* volle opslag mag de lijst niet breken */
+        }
+    }
+
+    mergeTrekkenlijstScan(fresh, bounds) {
+        const startYmd = bounds.startYmd;
+        const endYmd = bounds.endYmd;
+        const resumeFrom = bounds.resumeFrom || null;
+        const scanTruncated = !!bounds.scanTruncated;
+        const freshKeys = new Set((fresh || []).map((item) => item.syncKey).filter(Boolean));
+        const dayOf = (item) => String(item?.eventDateRaw || item?.startRaw || '').slice(0, 10);
+        const seen = new Set();
+        const kept = [];
+        const prior = [...this.readTrekkenlijstLocalCache(), ...(this._trekkenlijstenAll || [])];
+        for (const item of prior) {
+            if (!item?.syncKey || freshKeys.has(item.syncKey) || seen.has(item.syncKey)) continue;
+            seen.add(item.syncKey);
+            const day = dayOf(item);
+            if (scanTruncated) {
+                if (day && resumeFrom && day >= startYmd && day < resumeFrom) continue;
+                kept.push(item);
+                continue;
+            }
+            if (day && day >= startYmd && day <= endYmd) continue;
+            kept.push(item);
+        }
+        return [...(fresh || []), ...kept].sort((a, b) => (a.sortTs || 0) - (b.sortTs || 0));
+    }
+
     async loadTrekkenlijsten(opts = {}) {
         const forceRefresh = !!opts.forceRefresh;
         const append = !!opts.append;
@@ -5990,8 +6074,20 @@ class TheaterDashboard {
             return;
         }
         this._trekkenlijstenLoading = true;
+        if (!append) this._trekkenlijstScanToken = (this._trekkenlijstScanToken || 0) + 1;
         this.updateTrekkenlijstenPager();
+        if (forceRefresh) {
+            this._trekkenlijstenScanPartial = false;
+            this._trekkenlijstResumeFrom = null;
+            this._trekkenlijstenAheadEmpty = false;
+            const meta = document.getElementById('trekkenlijstenMeta');
+            if (meta) meta.textContent = this.t('trekkenlijsten.loading');
+        }
         if (!(this._trekkenlijstenAll || []).length) this.renderTrekkenlijstenList();
+        else if (append) {
+            const meta = document.getElementById('trekkenlijstenMeta');
+            if (meta) meta.textContent = this.t('trekkenlijsten.loadingMore');
+        }
 
         try {
             const trekVenues = this.findTrekkenlijstVenues();
@@ -6011,13 +6107,24 @@ class TheaterDashboard {
 
             const start = new Date();
             start.setHours(0, 0, 0, 0);
-            if (append && this._trekkenlijstRangeEnd) {
+            let end;
+            if (append && this._trekkenlijstResumeFrom) {
+                const resume = new Date(`${this._trekkenlijstResumeFrom}T12:00:00`);
+                if (!Number.isNaN(resume.getTime())) start.setTime(resume.getTime());
+                end = this._trekkenlijstHorizon ? new Date(this._trekkenlijstHorizon) : new Date(start);
+                if (!this._trekkenlijstHorizon) end.setDate(end.getDate() + 120);
+            } else if (append && this._trekkenlijstRangeEnd) {
                 start.setTime(new Date(this._trekkenlijstRangeEnd).getTime());
                 start.setDate(start.getDate() + 1);
                 start.setHours(0, 0, 0, 0);
+                end = new Date(start);
+                end.setDate(end.getDate() + 120);
+                this._trekkenlijstHorizon = end;
+            } else {
+                end = new Date(start);
+                end.setDate(end.getDate() + 120);
+                this._trekkenlijstHorizon = end;
             }
-            const end = new Date(start);
-            end.setDate(end.getDate() + 120);
             const toYmd = (d) => {
                 const y = d.getFullYear();
                 const m = String(d.getMonth() + 1).padStart(2, '0');
@@ -6048,7 +6155,8 @@ class TheaterDashboard {
             const range = {
                 startDate: toYmd(start),
                 endDate: toYmd(end),
-                skipCache: forceRefresh || append
+                skipCache: forceRefresh || append,
+                forTrekkenlijsten: true
             };
 
             const results = await Promise.all(
@@ -6062,11 +6170,17 @@ class TheaterDashboard {
             const events = [];
             let firstError = null;
             let failedDays = 0;
+            let scanTruncated = false;
+            let resumeFrom = null;
             for (const result of results) {
                 if (result && result.success === false && !firstError) {
                     firstError = result.error || '?';
                 }
                 failedDays += Number(result?.failedDays) || 0;
+                if (result?.scanTruncated) scanTruncated = true;
+                if (result?.resumeFromDate && (!resumeFrom || result.resumeFromDate < resumeFrom)) {
+                    resumeFrom = result.resumeFromDate;
+                }
                 if (Array.isArray(result?.data)) events.push(...result.data);
             }
 
@@ -6079,7 +6193,8 @@ class TheaterDashboard {
                     const startTs = startRaw ? new Date(startRaw).getTime() : NaN;
                     const docs = this.collectTrekkenlijstDocs(e).map((doc) => ({
                         url: doc.url,
-                        label: this.trekkenlijstDocLabel(doc)
+                        label: this.trekkenlijstDocLabel(doc),
+                        kind: doc.category || ''
                     }));
                     const firstDoc = docs[0] || null;
                     const orgId = e._organizationId || 1;
@@ -6133,27 +6248,31 @@ class TheaterDashboard {
             }
 
             const mappedUnique = Array.from(byShow.values());
-            this._trekkenlijstRangeEnd = end;
+            const beforeCount = (this._trekkenlijstenAll || []).length;
+            const combined = this.mergeTrekkenlijstScan(mappedUnique, {
+                startYmd: toYmd(start),
+                endYmd: toYmd(end),
+                scanTruncated,
+                resumeFrom
+            });
+            this._trekkenlijstenScanPartial = scanTruncated;
+            this._trekkenlijstResumeFrom = scanTruncated ? resumeFrom : null;
+            if (!scanTruncated) {
+                this._trekkenlijstRangeEnd = end;
+                this._trekkenlijstenAheadEmpty = false;
+            }
             if (append) {
-                const prev = this._trekkenlijstenAll || [];
-                const merged = new Map(prev.map((item) => [item.syncKey, item]));
-                let added = 0;
-                for (const item of mappedUnique) {
-                    if (merged.has(item.syncKey)) continue;
-                    merged.set(item.syncKey, item);
-                    added += 1;
+                if (combined.length > beforeCount) {
+                    this._trekkenlijstenPage = Math.floor(beforeCount / (this._trekkenlijstenPageSize || 10));
                 }
-                const all = Array.from(merged.values()).sort((a, b) => (a.sortTs || 0) - (b.sortTs || 0));
-                if (added) this._trekkenlijstenPage = Math.floor(prev.length / (this._trekkenlijstenPageSize || 10));
-                this._trekkenlijstenAll = this.collapseTrekkenlijstSetupRows(all);
-                this.syncTrekkenlijstenVisibleItems();
-                if (added && !firstError && failedDays === 0) await this.saveTrekkenlijstFeed(venueIds, this._trekkenlijstenAll);
+                this.setTrekkenlijstenAll(combined, false);
             } else {
                 this._trekkenlijstenNoMore = false;
-                this.setTrekkenlijstenAll(mappedUnique, true);
-                if (!firstError && failedDays === 0) {
-                    await this.saveTrekkenlijstFeed(venueIds, this._trekkenlijstenAll);
-                }
+                this.setTrekkenlijstenAll(combined, true);
+            }
+            this.writeTrekkenlijstLocalCache(this._trekkenlijstenAll);
+            if (!scanTruncated && !firstError && failedDays === 0) {
+                await this.saveTrekkenlijstFeed(venueIds, this._trekkenlijstenAll);
             }
             await this.refreshTrekkenlijstSyncFromServer(true);
             if (firstError && mappedUnique.length === 0 && !(this._trekkenlijstenAll || []).length) {
@@ -6223,9 +6342,32 @@ class TheaterDashboard {
         this.updateVenueSelectorDisplay();
 
         this.updateBackButtonVisibility();
+        this.updateMasterStatus();
+        void this.refreshApiServerStatus();
         await this.loadTrekkenlijsten();
         this.updateMasterStatus();
         this.startTrekkenlijstSyncPoll();
+        void this.continueTrekkenlijstScan();
+    }
+
+    async continueTrekkenlijstScan() {
+        const token = this._trekkenlijstScanToken || 0;
+        for (let round = 0; round < 8; round++) {
+            if (token !== (this._trekkenlijstScanToken || 0)) return;
+            if (this.currentView !== 'trekkenlijsten' || !this._trekkenlijstenScanPartial) return;
+            if (this._trekkenlijstenLoading) {
+                await new Promise((resolve) => setTimeout(resolve, 1000));
+                continue;
+            }
+            const before = this._trekkenlijstResumeFrom;
+            await new Promise((resolve) => setTimeout(resolve, before && round > 0 ? 6000 : 1500));
+            if (token !== (this._trekkenlijstScanToken || 0)) return;
+            if (this.currentView !== 'trekkenlijsten' || !this._trekkenlijstenScanPartial || this._trekkenlijstenLoading) return;
+            await this.loadTrekkenlijsten({ append: true });
+            if (this._trekkenlijstResumeFrom && this._trekkenlijstResumeFrom === before) {
+                await new Promise((resolve) => setTimeout(resolve, 12000));
+            }
+        }
     }
 
     refreshLuminexChrome() {
@@ -10050,23 +10192,16 @@ class TheaterDashboard {
             : onlineCount === 0 ? 'offline'
             : 'deels'; // Tussenstand: een deel werkt
 
-        const masterEl = this.currentView === 'detail'
-            ? document.getElementById('detailViewStatus')
-            : this.currentView === 'week'
-                ? document.getElementById('weekViewStatus')
-                : this.currentView === 'trekkenlijsten'
-                    ? document.getElementById('trekkenlijstenViewStatus')
-                    : this.currentView === 'home'
-                        ? document.getElementById('homeViewStatus')
-                        : null;
-        if (!masterEl) return;
-
         const labels = { online: this.t('status.online'), deels: this.t('status.deels'), offline: this.t('status.offline'), warning: this.t('status.warning') };
-        const indicator = masterEl.querySelector('.status-indicator');
-        const textEl = masterEl.querySelector('.status-text');
-        if (indicator) indicator.className = `status-indicator ${aggregate}`;
-        if (textEl) textEl.textContent = labels[aggregate] || 'Offline';
-        masterEl.className = `card-status card-status--clickable status-${aggregate}`;
+        ['detailViewStatus', 'weekViewStatus', 'homeViewStatus', 'trekkenlijstenViewStatus'].forEach((id) => {
+            const masterEl = document.getElementById(id);
+            if (!masterEl) return;
+            const indicator = masterEl.querySelector('.status-indicator');
+            const textEl = masterEl.querySelector('.status-text');
+            if (indicator) indicator.className = `status-indicator ${aggregate}`;
+            if (textEl) textEl.textContent = labels[aggregate] || 'Offline';
+            masterEl.className = `card-status card-status--clickable status-${aggregate}`;
+        });
     }
 
     showStatusPopover(anchorEl) {

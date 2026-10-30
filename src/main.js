@@ -198,8 +198,10 @@ function getYesplanApi(config = {}) {
 }
 
 function yesplanCacheKey(params, activeOrg, singleOrg) {
-  const { startDate, endDate, venueId, includeEventDetailsForWeekFilters } = params;
-  const detailsKey = includeEventDetailsForWeekFilters ? 'fullWeekFilters' : 'liteWeekFilters';
+  const { startDate, endDate, venueId, includeEventDetailsForWeekFilters, forTrekkenlijsten } = params;
+  const detailsKey = forTrekkenlijsten
+    ? 'flylists'
+    : (includeEventDetailsForWeekFilters ? 'fullWeekFilters' : 'liteWeekFilters');
   const orgs = activeOrg === 'both'
     ? (singleOrg ? [singleOrg] : [1, 2])
     : [activeOrg === 2 ? 2 : 1];
@@ -511,7 +513,7 @@ ipcMain.handle('get-yesplan-data', async (event, params) => {
       singleOrg = orgPart === '2' ? 2 : 1;
       venueId = idPart || undefined;
     }
-    const apiParams = { startDate: params.startDate, endDate: params.endDate, venueId, limit: params.limit, includeEventDetailsForWeekFilters };
+    const apiParams = { startDate: params.startDate, endDate: params.endDate, venueId, limit: params.limit, includeEventDetailsForWeekFilters, forTrekkenlijsten: !!params.forTrekkenlijsten };
     const key = yesplanCacheKey(apiParams, activeOrg, singleOrg);
     const isWeekRequest = params.startDate && params.endDate && params.startDate !== params.endDate;
 
@@ -519,7 +521,17 @@ ipcMain.handle('get-yesplan-data', async (event, params) => {
       const promise = isWeekRequest
         ? api.getEventsForWeek(apiParams)
         : api.getEvents(apiParams);
-      return promise.then((r) => (r?.success && r?.data ? r.data.map((e) => ({ ...e, _organizationId: orgId })) : []));
+      return promise.then((r) => {
+        const data = r?.success && r?.data ? r.data.map((e) => ({ ...e, _organizationId: orgId })) : [];
+        return {
+          success: r?.success !== false,
+          error: r?.error || null,
+          data,
+          failedDays: Number(r?.failedDays) || 0,
+          scanTruncated: !!r?.scanTruncated,
+          resumeFromDate: r?.resumeFromDate || null
+        };
+      });
     };
 
     if (activeOrg === 'both' && singleOrg === null) {
@@ -536,12 +548,20 @@ ipcMain.handle('get-yesplan-data', async (event, params) => {
         fetchWeek(getYesplanApi(config1), 1),
         fetchWeek(getYesplanApi(config2), 2)
       ]);
-      const merged = [...data1, ...data2].sort((a, b) => {
+      const merged = [...(data1.data || []), ...(data2.data || [])].sort((a, b) => {
         const tA = a.startDate ? new Date(a.startDate).getTime() : 0;
         const tB = b.startDate ? new Date(b.startDate).getTime() : 0;
         return tA - tB;
       });
-      const result = { success: true, data: merged, timestamp: new Date().toISOString() };
+      const resumeFromDate = [data1.resumeFromDate, data2.resumeFromDate].filter(Boolean).sort()[0] || null;
+      const result = {
+        success: true,
+        data: merged,
+        failedDays: (data1.failedDays || 0) + (data2.failedDays || 0),
+        scanTruncated: !!(data1.scanTruncated || data2.scanTruncated),
+        resumeFromDate,
+        timestamp: new Date().toISOString()
+      };
       if (merged.length > 0 || params.startDate === params.endDate) yesplanCacheSet(key, result);
       return result;
     }
