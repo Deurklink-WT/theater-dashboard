@@ -93,7 +93,7 @@
       "entitlementsInherit": "build/entitlements.mac.plist"
     },
     "dmg": {
-      "title": "${productName} ${version}",
+      "title": "Shift Happens",
       "contents": [
         {
           "x": 130,
