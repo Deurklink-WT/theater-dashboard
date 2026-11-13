@@ -4,38 +4,36 @@
  * Gebruikt SF Pro (system font), safe areas, iOS-achtige navbar, grouped cards, sheet modal.
  */
 
-/* ---- Basis: safe area, font, max breedte iPhone ---- */
+/* ---- Schermvullende telefoon: kop blijft staan, inhoud scrollt, tabblad onderin ---- */
 body.ios-app {
     font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', sans-serif;
     background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
     -webkit-font-smoothing: antialiased;
-    padding: 0;
-    padding-top: env(safe-area-inset-top);
-    padding-left: env(safe-area-inset-left);
-    padding-right: env(safe-area-inset-right);
-    padding-bottom: env(safe-area-inset-bottom);
-    min-height: 100vh;
-    min-height: 100dvh;
+    height: 100dvh;
     max-width: 100vw;
-    overflow-x: hidden;
+    padding: 0;
+    overflow: hidden;
 }
 
 body.ios-app #app {
-    height: auto;
+    height: 100%;
     min-height: 0;
-    padding-bottom: env(safe-area-inset-bottom);
     max-width: 100%;
-    overflow-x: hidden;
+    padding: 0;
+    overflow: hidden;
 }
 
-/* ---- Header = twee regels op iPhone (past binnen smalle breedte) ---- */
+/* ---- Header: titelrij, daarna datum over de volle breedte, daarna zaal ---- */
 body.ios-app .header {
-    background: rgba(28, 28, 30, 0.72);
+    flex: 0 0 auto;
+    background: rgba(28, 28, 30, 0.92);
     backdrop-filter: saturate(180%) blur(20px);
     -webkit-backdrop-filter: saturate(180%) blur(20px);
     border-bottom: 0.5px solid rgba(255, 255, 255, 0.15);
-    padding: 0.45rem 0.4rem;
-    padding-top: calc(0.45rem + env(safe-area-inset-top));
+    padding: 0.45rem 0.75rem 0.65rem;
+    padding-top: calc(0.4rem + env(safe-area-inset-top));
+    padding-left: calc(0.75rem + env(safe-area-inset-left));
+    padding-right: calc(0.75rem + env(safe-area-inset-right));
     box-shadow: none;
     max-width: 100%;
 }
@@ -51,53 +49,55 @@ body.ios-app.show-mode-active .header-datetime {
 }
 
 body.ios-app .header-show-mode-label {
-    font-size: 1.24rem;
-    padding: 0.45rem 0.85rem;
-    letter-spacing: 0.1em;
-    border-width: 2px;
-    border-radius: 14px;
+    font-size: 0.78rem;
+    padding: 0.28rem 0.7rem;
+    letter-spacing: 0.12em;
+    border-width: 1.5px;
+    border-radius: 999px;
 }
 
 body.ios-app .header-content {
     max-width: 100%;
-    flex-wrap: wrap;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.35rem;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) 44px 44px;
+    align-items: center;
+    gap: 0.45rem 0.35rem;
 }
 
-body.ios-app .header-show-mode-slot {
+body.ios-app:not(.show-mode-active) .header-show-mode-slot {
+    display: none;
+}
+
+body.ios-app.show-mode-active .header-show-mode-slot {
     display: flex;
+    grid-column: 1 / -1;
+    grid-row: 2;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    flex: 1 1 auto;
-    order: 2;
-    min-width: 0;
-}
-
-body.ios-app .header-title {
-    order: 1;
-}
-
-body.ios-app #backBtn {
-    order: 3;
+    width: auto;
+    min-width: 0 !important;
+    flex: none;
+    justify-self: center;
 }
 
 body.ios-app .header-actions {
-    order: 4;
+    display: contents;
 }
 
-/* Regel 1: alleen titel + datum/tijd (compact) */
 body.ios-app .header-title {
-    font-size: 0.98rem;
+    grid-column: 1 / 3;
+    grid-row: 1;
+    font-size: 1.05rem;
     font-weight: 600;
-    flex-shrink: 0;
+    flex-shrink: 1;
     min-width: 0;
     display: flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.45rem;
+}
+
+body.ios-app:has(#backBtn:not(:disabled)) .header-title {
+    grid-column: 2;
 }
 
 body.ios-app .header-title-text {
@@ -147,33 +147,36 @@ body.ios-app .header-logo {
     object-fit: contain;
 }
 
-/* ---- iOS: alleen dagen in één rij, daarna alleen zaal + instellingen ---- */
-body.ios-app .header-actions {
-    gap: 0.3rem;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 40px 40px;
-    grid-template-rows: auto auto;
+/* Datum: vorige | dag | volgende, over de volle breedte. Inline display:flex wint zonder !important. */
+body.ios-app .date-selector {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    display: grid !important;
+    grid-template-columns: 44px minmax(0, 1fr) 44px;
     align-items: center;
-    min-width: 0;
-    width: 100%;
+    gap: 0.35rem;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: 0;
 }
 
-/* Eerste rij: alleen dag-navigatie (prev | datum | next) */
-body.ios-app .header-actions .date-selector {
-    order: 0;
-    grid-column: 1 / -1;
-    grid-row: 1;
-    margin-bottom: 0.2rem;
-    width: calc(100% + 0.8rem) !important;
-    max-width: none !important;
-    margin-left: -0.4rem !important;
-    margin-right: -0.4rem !important;
-    padding: 0 0.4rem !important;
-    justify-self: stretch !important;
-    display: grid;
-    grid-template-columns: 40px minmax(0, 1fr) 40px;
-    align-items: center;
-    gap: 0.2rem;
+body.ios-app.show-mode-active .date-selector {
+    grid-row: 3;
+}
+
+/* display:grid !important wint van de inline display:none. Verberg de dagkiezer als het scherm dat zelf doet. */
+body.ios-app.week-view-active .date-selector,
+body.ios-app.trekkenlijsten-active .date-selector,
+body.ios-app.luminex-view-active .date-selector,
+body.ios-app.osc-monitor-active .date-selector {
+    display: none !important;
+}
+
+body.ios-app:has(#backBtn:not(:disabled)) .header-logo {
+    display: none !important;
 }
 
 /* Desktop forceert .date-selector .custom-select { width: 220px } — op iPhone volle breedte */
@@ -208,22 +211,49 @@ body.ios-app .date-selector .custom-select-value {
     max-width: none;
 }
 
-/* Tweede rij: alleen terug, zaal, instellingen */
 body.ios-app #backBtn span {
     display: none;
 }
 
 body.ios-app #backBtn {
-    display: none !important;
+    display: none;
 }
 
-body.ios-app .header-actions .venue-selector {
+body.ios-app #backBtn:not(:disabled) {
+    display: inline-flex;
+    grid-column: 1;
+    grid-row: 1;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+}
+
+body.ios-app #backBtn:not(:disabled) i {
+    margin: 0;
+}
+
+body.ios-app .venue-selector {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    display: block;
     width: 100%;
     min-width: 0;
-    order: 0;
-    grid-column: 1;
+}
+
+body.ios-app.show-mode-active .venue-selector {
+    grid-row: 4;
+}
+
+body.ios-app.week-view-active .venue-selector {
     grid-row: 2;
-    justify-self: stretch;
+}
+
+body.ios-app.show-mode-active.week-view-active .venue-selector {
+    grid-row: 3;
 }
 
 body.ios-app .header-actions .venue-selector .custom-select-wrapper {
@@ -247,25 +277,46 @@ body.ios-app .header-actions .venue-selector .custom-select-trigger .custom-sele
     white-space: nowrap;
 }
 
-body.ios-app .header-actions #settingsBtn {
-    order: 0;
+body.ios-app #settingsBtn {
+    grid-column: 4;
+    grid-row: 1;
+    width: 44px;
+    height: 44px;
+    justify-self: end;
+}
+
+body.ios-app #searchEventBtn {
     grid-column: 3;
-    grid-row: 2;
+    grid-row: 1;
+    width: 44px;
+    height: 44px;
+    justify-self: end;
 }
 
-body.ios-app .header-actions #searchEventBtn {
-    order: 0;
-    grid-column: 2;
-    grid-row: 2;
-}
-
-/* Verberg op iOS: home, week, filter, refresh (meer past niet) */
-body.ios-app .header-actions #homeBtn,
-body.ios-app .header-actions #weekBtn,
-body.ios-app .header-actions #filterCancelledBtn,
-body.ios-app .header-actions #refreshBtn,
-body.ios-app .header-actions .header-filter-wrap {
+/* Home, week, filter en vernieuwen staan in het tabblad. De knoppen blijven in de DOM. */
+body.ios-app #homeBtn,
+body.ios-app #weekBtn,
+body.ios-app #refreshBtn,
+body.ios-app #filterCancelledBtn,
+body.ios-app #headerTimerSlot,
+body.ios-app #updateBanner {
     display: none !important;
+}
+
+body.ios-app .header-filter-wrap {
+    display: contents;
+}
+
+body.ios-app #filterPopup {
+    position: absolute;
+    top: calc(100% + 0.45rem);
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: auto;
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    z-index: 30;
 }
 
 /* ---- Buttons: iOS-style (capsule, tint) ---- */
@@ -371,15 +422,21 @@ body.ios-app .custom-select-option:hover {
 
 /* ---- Main content: scroll, geen grote lege ruimte op home ---- */
 body.ios-app .main-content {
-    padding: 1rem 0.75rem;
-    padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: 0.75rem;
+    padding-bottom: calc(4.6rem + env(safe-area-inset-bottom));
+    padding-left: calc(0.75rem + env(safe-area-inset-left));
+    padding-right: calc(0.75rem + env(safe-area-inset-right));
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     background: transparent;
     max-width: 100%;
-    flex: 0 1 auto;
-    min-height: 0;
+}
+
+body.ios-app.show-mode-active .main-content {
+    padding-bottom: calc(8.1rem + env(safe-area-inset-bottom));
 }
 
 /* ---- iOS achtergrond volgt gekozen kleurmodus ---- */
@@ -633,9 +690,11 @@ body.ios-app .date-selector .custom-select {
 }
 
 body.ios-app .date-selector button {
-    min-width: 40px;
-    width: 40px;
-    height: 40px;
+    min-width: 0;
+    width: 44px;
+    max-width: 44px;
+    height: 44px;
+    min-height: 44px;
     border-radius: 10px;
     padding: 0;
 }
@@ -694,4 +753,178 @@ body.ios-app .loading-overlay .loading-spinner {
 body.ios-app .info-message {
     color: rgba(255, 255, 255, 0.6);
     font-size: 0.9375rem;
+}
+
+/* ---- Tabblad: de knoppen die in de kop niet passen ---- */
+body.ios-app .ios-tab-bar {
+    display: flex !important;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 900;
+    margin: 0;
+    padding: 0.2rem 0.25rem;
+    padding-bottom: calc(0.2rem + env(safe-area-inset-bottom));
+    padding-left: calc(0.25rem + env(safe-area-inset-left));
+    padding-right: calc(0.25rem + env(safe-area-inset-right));
+    background: rgba(28, 28, 30, 0.96);
+    border-top: 0.5px solid rgba(255, 255, 255, 0.14);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    justify-content: space-around;
+    align-items: stretch;
+    gap: 0.15rem;
+}
+
+body.ios-app .ios-tab {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 48px;
+    margin: 0;
+    padding: 0.3rem 0.15rem 0.2rem;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.55);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.15rem;
+    font: inherit;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    line-height: 1.1;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body.ios-app .ios-tab i {
+    font-size: 1.05rem;
+    line-height: 1;
+}
+
+body.ios-app .ios-tab.active {
+    color: #0a84ff;
+    background: rgba(10, 132, 255, 0.16);
+}
+
+body.ios-app .footer {
+    display: none;
+}
+
+/* Showmodus-rail horizontaal boven het tabblad, zodat de kaarten de volle breedte houden */
+body.ios-app .main-workspace {
+    flex-direction: column;
+    gap: 0;
+    max-width: 100%;
+}
+
+body.ios-app.show-mode-active .nav-rail--end {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: auto;
+    bottom: 3.35rem;
+    bottom: calc(3.35rem + env(safe-area-inset-bottom, 0px));
+    z-index: 890;
+    margin: 0;
+    padding: 0.35rem 0.5rem;
+    padding-left: calc(0.5rem + env(safe-area-inset-left));
+    padding-right: calc(0.5rem + env(safe-area-inset-right));
+    background: rgba(28, 28, 30, 0.96);
+    border-top: 0.5px solid rgba(255, 255, 255, 0.12);
+}
+
+body.ios-app .nav-rail-timer-slot:empty {
+    display: none;
+}
+
+/* Inhoud: één kolom, tekst mag afbreken, keuzelijsten blijven in beeld */
+body.ios-app.home-view-active .events-list,
+body.ios-app .week-overview-grid {
+    grid-template-columns: 1fr;
+}
+
+body.ios-app .card-header--week {
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+body.ios-app .week-view-title,
+body.ios-app .week-view-summary {
+    white-space: normal;
+}
+
+body.ios-app .week-view-header-right {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+body.ios-app .data-item h4,
+body.ios-app .week-event-card h4,
+body.ios-app .card-header h3 {
+    overflow-wrap: anywhere;
+}
+
+body.ios-app .custom-select-trigger i {
+    position: static;
+}
+
+body.ios-app .custom-select-trigger .fa-chevron-down {
+    position: absolute;
+    right: 0.75rem;
+}
+
+body.ios-app .date-selector .custom-select-trigger .fa-calendar-day {
+    margin-right: 0.35rem;
+}
+
+body.ios-app .custom-select-options,
+body.ios-app .custom-select-options--grid,
+body.ios-app .venue-selector .custom-select-options--grid,
+body.ios-app.touchscreen-mode .custom-select-options--grid {
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    grid-template-columns: 1fr !important;
+    max-height: min(46dvh, 320px);
+}
+
+body.ios-app .custom-select-options--grid .custom-select-option {
+    white-space: normal;
+}
+
+body.ios-app .form-row {
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+body.ios-app .trekkenlijsten-entry-main,
+body.ios-app .trekkenlijsten-entry-actions,
+body.ios-app .osc-monitor-table-head,
+body.ios-app .osc-monitor-entry {
+    grid-template-columns: 1fr;
+    padding-left: 0;
+}
+
+body.ios-app .search-backdrop {
+    padding: calc(0.75rem + env(safe-area-inset-top)) 0.75rem 0.75rem;
+    align-items: stretch;
+}
+
+body.ios-app .search-overlay-content {
+    width: 100%;
+    min-height: 0;
+    max-height: calc(100dvh - 1.5rem - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    overflow: auto;
 }

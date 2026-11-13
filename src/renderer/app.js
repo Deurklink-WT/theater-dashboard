@@ -673,6 +673,8 @@ class TheaterDashboard {
             this.showWeekView();
         });
 
+        this.setupIosTabBar();
+
         document.getElementById('luminexNavBtn')?.addEventListener('click', () => {
             if (this._navRailReorderMode) return;
             void this.showLuminexView();
@@ -1893,6 +1895,33 @@ class TheaterDashboard {
             filterBtn.style.background = '';
             filterBtn.style.color = '';
         }
+        this.syncIosTabBar();
+    }
+
+    setupIosTabBar() {
+        const bar = document.getElementById('iosTabBar');
+        if (!bar || bar.dataset.bound === '1') return;
+        bar.dataset.bound = '1';
+        bar.addEventListener('click', (e) => {
+            const tab = e.target.closest('[data-ios-tab]');
+            if (!tab) return;
+            e.preventDefault();
+            e.stopPropagation();
+            const id = tab.dataset.iosTab;
+            if (id === 'home') document.getElementById('homeBtn')?.click();
+            else if (id === 'week') document.getElementById('weekBtn')?.click();
+            else if (id === 'filter') document.getElementById('filterCancelledBtn')?.click();
+            else if (id === 'refresh') document.getElementById('refreshBtn')?.click();
+        });
+    }
+
+    syncIosTabBar() {
+        const bar = document.getElementById('iosTabBar');
+        if (!bar || !document.body.classList.contains('ios-app')) return;
+        bar.querySelector('[data-ios-tab="home"]')?.classList.toggle('active', this.currentView === 'home');
+        bar.querySelector('[data-ios-tab="week"]')?.classList.toggle('active', this.currentView === 'week');
+        const filterOn = document.getElementById('filterCancelledBtn')?.classList.contains('active');
+        bar.querySelector('[data-ios-tab="filter"]')?.classList.toggle('active', !!filterOn);
     }
 
     updatePersonnelFilterToggleState() {
@@ -2673,6 +2702,7 @@ class TheaterDashboard {
         const canGoBack = this.findLastNavigableHistoryEntry() !== null;
         backBtn.disabled = !canGoBack;
         backBtn.classList.toggle('btn-back--disabled', !canGoBack);
+        this.syncIosTabBar();
     }
 
     canNavigateToView(viewName) {
