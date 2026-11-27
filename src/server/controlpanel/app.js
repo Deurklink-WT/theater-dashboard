@@ -30,6 +30,7 @@
   async function init() {
     const status = await fetch('/api/auth/status').then(function (r) { return r.json(); });
     if (status.needsBootstrap) {
+      document.getElementById('bootstrapSetupCodeLabel').classList.toggle('hidden', !status.setupCodeRequired);
       show('bootstrapSection');
       return;
     }
@@ -206,7 +207,8 @@
         method: 'POST',
         body: JSON.stringify({
           email: document.getElementById('bootstrapEmail').value,
-          password: document.getElementById('bootstrapPassword').value
+          password: document.getElementById('bootstrapPassword').value,
+          setupCode: document.getElementById('bootstrapSetupCode').value
         })
       });
       setToken(res.token);
@@ -349,6 +351,9 @@
       INVALID_CREDENTIALS: 'Onjuist e-mailadres of wachtwoord.',
       EMAIL_EXISTS: 'Dit e-mailadres staat al op de whitelist.',
       PASSWORD_TOO_SHORT: 'Wachtwoord moet minimaal 8 tekens zijn.',
+      PASSWORD_TOO_LONG: 'Wachtwoord mag maximaal 256 tekens zijn.',
+      SETUP_CODE_REQUIRED: 'Vul de installatiecode in. Die staat in de serverlog bij het opstarten van de server.',
+      ORIGIN_NOT_ALLOWED: 'Deze pagina mag de server niet aanroepen.',
       LAST_ADMIN: 'Je kunt de laatste admin niet verwijderen of degraderen.',
       SELF_DELETE: 'Je kunt jezelf niet verwijderen.',
       ALREADY_BOOTSTRAPPED: 'Setup is al gedaan.'

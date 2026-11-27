@@ -2,14 +2,15 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
+    <!-- Alleen eigen scripts: ingevoegde HTML (bijv. tekst uit Yesplan) kan geen code uitvoeren. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-a+yh4Zbq1nqvSwEi9Y9QPBwLmFRID83PX2lGe/qnGnU='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https: http:; font-src 'self' data:; connect-src 'self' http: https: ws: wss:; frame-src 'self' http://127.0.0.1:*; object-src 'none'; base-uri 'none'; form-action 'none'">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Shift Happens</title>
     <meta name="theme-color" content="#1c1c1e">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 </head>
 <body>
     <div id="app">
@@ -18,7 +19,7 @@
             <div class="header-content">
                 <h1 class="header-title">
                     <img src="logowm.png" alt="Logo" class="header-logo" id="headerLogo" style="display: none;" />
-                    <i class="fas fa-theater-masks" id="headerIcon"></i>
+                    <span class="header-cue" id="headerIcon" aria-hidden="true"></span>
                     <div class="header-title-text">
                         <div class="header-title-top">
                             <span class="header-app-name">Shift Happens</span>
@@ -275,7 +276,7 @@
             <!-- Luminex: embedded Lichtsignaal Flow Viewer -->
             <div id="luminexViewWrapper" class="luminex-view-wrapper" style="display: none;">
                 <p id="luminexViewerError" class="luminex-viewer-error" hidden></p>
-                <webview id="luminexViewerFrame" class="luminex-viewer-frame" src="about:blank" allowpopups></webview>
+                <webview id="luminexViewerFrame" class="luminex-viewer-frame" src="about:blank"></webview>
             </div>
             <!-- Trekkenlijsten (Payzaal): komende 20 uit Yesplan -->
             <div id="trekkenlijstenWrapper" class="trekkenlijsten-wrapper" style="display: none;">
@@ -413,10 +414,10 @@
                                 <div class="form-group form-group--half">
                                     <label for="themeSelect" data-i18n="settings.colorMode">Kleurmodus</label>
                                     <select id="themeSelect" class="form-select">
-                                        <option value="default">Blauw</option>
+                                        <option value="default">Amber</option>
+                                        <option value="blue">Blauw</option>
                                         <option value="pink">Roze</option>
                                         <option value="green">Groen</option>
-                                        <option value="amber">Amber</option>
                                         <option value="slate">Grijs</option>
                                         <option value="purple">Paars</option>
                                     </select>

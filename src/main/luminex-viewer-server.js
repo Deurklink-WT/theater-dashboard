@@ -162,6 +162,16 @@ function serveStatic(req, res, urlPath) {
 
 function createRequestHandler() {
   return async (req, res) => {
+    // Alleen de eigen viewer (zelfde host en herkomst) mag deze lokale server gebruiken.
+    // Houdt andere websites in een browser op deze computer buiten (CSRF, DNS-rebinding).
+    const ownHosts = [`127.0.0.1:${config.httpPort}`, `localhost:${config.httpPort}`];
+    const origin = req.headers.origin;
+    if (!ownHosts.includes(String(req.headers.host || '')) ||
+        (origin && !ownHosts.some((h) => origin === `http://${h}`))) {
+      res.writeHead(403, { 'Content-Type': 'application/json; charset=utf-8' });
+      res.end(JSON.stringify({ error: 'Forbidden' }));
+      return;
+    }
     const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
 
     if (url.pathname === '/events') {

@@ -2,6 +2,44 @@
 
 Alle belangrijke wijzigingen in dit project worden gedocumenteerd in dit bestand.
 
+## [Onuitgebracht] - branch `redesign/regie`
+
+### Vormgeving
+- **Regie-stijl:** vlakke warme ondergrond, haarlijnen in plaats van schaduwen en glas-effect, IBM Plex Sans/Mono, tijden in mono boven de titel.
+- **Design tokens:** alle kleuren, radii en lettertypes staan als variabelen bovenaan `styles.css`.
+- **Persoonlijke kleuren:** een thema wijzigt alleen nog de accentkleur. Standaard is nu amber; blauw is een aparte keuze.
+- **Status** verschilt ook in vorm (vol / half / open), niet alleen in kleur.
+- **Lettertypes en iconen lokaal** in `src/renderer/vendor/` (geen Google Fonts of cdnjs meer).
+- **iPhone:** zelfde stijl; in showmodus vullen de kaarten weer de volle breedte.
+
+### Beveiliging – server
+- `/api/config` werkt alleen nog voor bekende systemen; interne opslag (gebruikers, token-geheim, auditlog) is niet meer lees- of schrijfbaar via de API.
+- API-sleutels worden nooit meer naar een client gestuurd (masker). Het masker terugsturen laat de sleutel ongewijzigd.
+- Koppelingen (Yesplan, Priva, Itix) wijzigen mag alleen een beheerder; de wijziging komt in het activiteitenlog.
+- Login-tokens worden niet meer in de gedeelde app-config opgeslagen. Thema, taal en Cloudflare Access-gegevens zijn per gebruiker.
+- Eerste beheerder aanmaken vanaf een ander apparaat vereist de **installatiecode** uit de serverlog (of `SHIFT_HAPPENS_SETUP_CODE`).
+- Sessie verwijderen in het controlpanel trekt het token echt in; wachtwoord-, rol- of statuswijziging maakt oude tokens ongeldig.
+- De laatste beheerder kan niet meer uitgeschakeld worden.
+- CORS alleen voor eigen clients (`SHIFT_HAPPENS_CORS_ORIGINS` voor extra herkomsten), beveiligingsheaders, CSP op het controlpanel.
+- Configbestand wordt atomair geschreven en is alleen leesbaar voor de eigenaar (0600).
+- Foutmeldingen bevatten geen interne details meer; kapotte invoer geeft een nette 400.
+- Nieuwe instellingen: `SHIFT_HAPPENS_TRUST_PROXY`, `SHIFT_HAPPENS_HOST`.
+
+### Beveiliging – desktop-app
+- Content-Security-Policy: alleen eigen scripts; ingevoegde HTML kan geen code uitvoeren.
+- Tekst uit Yesplan en Priva (titel, artiest, zaal, status, documentnamen, tijden) wordt overal ge-escaped.
+- Vensters en navigatie zijn afgeschermd (de oude `new-window`-beveiliging werkte niet meer in recente Electron-versies).
+- IPC alleen vanuit het eigen venster; API-sleutels verlaten het hoofdproces niet meer.
+- Webview laadt alleen de lokale Lichtsignaal-viewer; de viewer-server weigert verzoeken van andere herkomsten.
+- Permissies (camera, microfoon, locatie, meldingen) staan uit.
+- `UPDATE_BASE_URL` moet https zijn.
+
+### Afhankelijkheden
+- `package-lock.json` bijgewerkt met `npm audit fix` (o.a. proxy-addr, js-yaml). Voer `npm install` uit.
+
+### Tests
+- `src/server/api-server.test.js`: 17 beveiligingstests voor de server.
+
 ## [1.5.6] - 2026-03-20
 
 ### Toegevoegd

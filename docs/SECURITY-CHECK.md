@@ -37,3 +37,30 @@ Korte controle van de veiligheidsaanpassingen en wat er nog is gedaan.
 ## Samenvatting
 
 Jouw wijzigingen (versleuteling API-keys, allowlist externe links, escape bij weergave) zijn consistent en goed toegepast. Er zijn twee kleine aanvullingen gedaan: allowlist voor `openExternal` op iPhone, en correct escapen van de seating-plan-URL in `onclick`. De rest is documentatie en aanbevelingen (CORS/auth/server-config) voor als je de server breder inzet.
+
+---
+
+# Beveiligingsronde november 2026
+
+Volledige lijst van wijzigingen: zie `CHANGELOG.md` (Onuitgebracht). Hieronder wat je moet weten bij het uitrollen.
+
+## Server bijwerken
+
+1. **Eerste beheerder.** Draait de server nog zonder gebruikers, dan staat bij het opstarten een installatiecode in de log
+   (`docker logs shift-happens-api`). Die code vul je in op `/controlpanel` als je vanaf een ander apparaat de eerste
+   beheerder aanmaakt. Vast instellen kan met `SHIFT_HAPPENS_SETUP_CODE`.
+2. **Koppelingen wijzigen** (Yesplan/Priva/Itix-adres of sleutel) kan alleen nog als beheerder. Zonder beheerder is de
+   bestaande config wel leesbaar (sleutels gemaskeerd) maar niet te wijzigen.
+3. **Achter een proxy of Cloudflare Tunnel:** zet `SHIFT_HAPPENS_TRUST_PROXY=1`, anders ziet de server alle clients als één adres.
+4. **Web-client op een ander domein dan de server:** zet dat domein in `SHIFT_HAPPENS_CORS_ORIGINS` (komma-gescheiden).
+5. **Bestaande logins blijven geldig.** Oudere iPhone-versies blijven werken.
+
+## Bekende restpunten
+
+- **Geen TLS in de server zelf.** Op het netwerk gaan wachtwoorden en tokens onversleuteld over de lijn, tenzij er een
+  proxy met https voor staat (bijv. Cloudflare Tunnel). `capacitor.config.json` staat `cleartext` nog toe.
+- **Docker-container draait als root.** Omzetten naar een gewone gebruiker vraagt aangepaste rechten op de bestaande `data/`-map.
+- **Tokens zijn 30 dagen geldig** en staan op het toestel (iPhone: localStorage; desktop: config-bestand in het gebruikersprofiel).
+- **LumiNode-wachtwoorden** staan onversleuteld in de lokale config van de desktop-app.
+- **Code signing** (Windows/macOS) is nog niet ingericht; zie het aparte traject.
+- De desktop-wijzigingen (vensterbeveiliging, IPC, CSP) zijn op syntax en in een browser getest, niet in een gebouwde Electron-app.

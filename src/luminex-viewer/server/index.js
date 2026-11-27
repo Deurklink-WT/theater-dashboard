@@ -290,7 +290,8 @@ const server = http.createServer(async (req, res) => {
   res.end();
 });
 
-server.listen(config.httpPort, () => {
+// Standaard alleen bereikbaar op deze computer; zet LUMINEX_VIEWER_HOST=0.0.0.0 om het netwerk toe te laten.
+server.listen(config.httpPort, process.env.LUMINEX_VIEWER_HOST || '127.0.0.1', () => {
   const nets = listInterfaces();
   console.log(`sACN Flow Viewer draait op http://localhost:${config.httpPort}`);
   console.log(`Modus: ${config.mode} | Universe-bereik: ${config.universeRange.start}-${config.universeRange.end}`);

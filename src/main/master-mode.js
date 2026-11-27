@@ -52,7 +52,9 @@ class MasterModeService {
   }
 
   unlock(password) {
-    if (!UNLOCK_PASSWORD || String(password || '') !== UNLOCK_PASSWORD) {
+    const given = crypto.createHash('sha256').update(String(password || '')).digest();
+    const expected = crypto.createHash('sha256').update(UNLOCK_PASSWORD).digest();
+    if (!UNLOCK_PASSWORD || !crypto.timingSafeEqual(given, expected)) {
       return { success: false, error: 'INVALID_PASSWORD' };
     }
     this.unlockedUntil = Date.now() + UNLOCK_GRANT_MS;

@@ -1,4 +1,11 @@
 /**
+ * Knoppen in het afdrukvenster (afdrukken/sluiten). Dit is het enige inline script van de app;
+ * de Content-Security-Policy in index.html staat het toe via de sha256-hash van exact deze tekst.
+ * Wijzig je deze regel, werk dan ook de hash in index.html bij.
+ */
+const PRINT_WINDOW_SCRIPT = "document.addEventListener('click',function(e){var b=e.target.closest('[data-action]');if(!b)return;if(b.dataset.action==='print')window.print();if(b.dataset.action==='close')window.close();});";
+
+/**
  * Shift Happens - Theater Dashboard
  * Copyright (c) 2026 Team
  * 
@@ -3162,7 +3169,7 @@ class TheaterDashboard {
                 const bv = event.balletvloerExplicit ? (event.hasBalletvloer ? this.t('resources.ja') : this.t('resources.nee')) : this.t('resources.nietBekend');
                 const vl = event.vleugelExplicit ? (event.hasVleugel ? this.t('resources.ja') : this.t('resources.nee')) : this.t('resources.nietBekend');
                 const ob = event.orkestbakExplicit || event.orkestbakValue
-                    ? (event.orkestbakValue || (event.hasOrkestbak ? this.t('resources.ja') : this.t('resources.nee')))
+                    ? (this.escapeHtml(event.orkestbakValue) || (event.hasOrkestbak ? this.t('resources.ja') : this.t('resources.nee')))
                     : this.t('resources.nietBekend');
                 if (this.shouldShowTechnicalPartForEvent(event, 'balletvloer', showBalletvloer)) parts.push(`Balletvloer: <strong>${bv}</strong>`);
                 if (this.shouldShowTechnicalPartForEvent(event, 'vleugel', showVleugel)) parts.push(`Vleugel: <strong>${vl}</strong>`);
@@ -3257,7 +3264,7 @@ class TheaterDashboard {
                 if (raw.endtime && raw.defaultscheduleend && raw.endtime !== raw.defaultscheduleend) extraParts.push(`Afbouw: ${this.formatTime(raw.endtime)}`);
             }
             if (event.status && event.status !== 'unknown') {
-                const statusStr = event.bookingManager ? `${event.status} – ${escapeText(event.bookingManager)}` : event.status;
+                const statusStr = event.bookingManager ? `${escapeText(event.status)} – ${escapeText(event.bookingManager)}` : escapeText(event.status);
                 extraParts.push(statusStr);
             }
             if (extraParts.length) extra = `<p class="week-event-extra"><i class="fas fa-info-circle"></i> ${extraParts.join(' · ')}</p>`;
@@ -3272,14 +3279,14 @@ class TheaterDashboard {
                 eventDate = d.toISOString().split('T')[0];
             }
             const clickable = venueId && eventDate;
-            const clickAttrs = clickable ? ` data-venue-id="${venueId}" data-event-date="${eventDate}"` : '';
+            const clickAttrs = clickable ? ` data-venue-id="${this.escapeHtml(venueId)}" data-event-date="${this.escapeHtml(eventDate)}"` : '';
             const clickClass = clickable ? ' week-event-clickable' : '';
 
             return `
-                <div class="week-event-card${clickClass}" draggable="false" data-event-id="${event.id || ''}"${clickAttrs}>
+                <div class="week-event-card${clickClass}" draggable="false" data-event-id="${this.escapeHtml(event.id || '')}"${clickAttrs}>
                     <h4 class="week-event-title" draggable="false">${title}</h4>
                     ${performer}
-                    <p><i class="fas fa-clock"></i> <strong>${timeRange}</strong></p>
+                    <p class="event-time"><i class="fas fa-clock"></i> <strong>${this.escapeHtml(timeRange)}</strong></p>
                     ${venue}
                     ${resources}
                     ${tech ? `<div class="week-event-tech-wrap">${tech}</div>` : ''}
@@ -3870,7 +3877,7 @@ class TheaterDashboard {
                 day: 'numeric'
             });
             const message = venueName
-                ? this.t('messages.noEvents', { venue: venueName, date: dateLabel })
+                ? this.t('messages.noEvents', { venue: this.escapeHtml(venueName), date: dateLabel })
                 : this.t('messages.noEventsDate', { date: dateLabel });
             container.innerHTML = `<div class="info-message">${message}</div>`;
         };
@@ -4032,12 +4039,12 @@ class TheaterDashboard {
         container.innerHTML = `
             <div class="events-list">
                 ${events.map(event => {
-                    // Titel zonder artiest
-                    const title = event.title;
+                    // Titel zonder artiest (tekst uit Yesplan altijd escapen vóór weergave)
+                    const title = this.escapeHtml(event.title);
                     
                     // Artiest op aparte regel (ook als Yesplan titel en artiest dezelfde tekst heeft)
                     const performerInfo = event.performer
-                        ? `<p style="margin-top: 0.25rem; color: #a0aec0; font-size: 0.9rem;"><i class="fas fa-user"></i> ${event.performer}</p>`
+                        ? `<p style="margin-top: 0.25rem; color: #a0aec0; font-size: 0.9rem;"><i class="fas fa-user"></i> ${this.escapeHtml(event.performer)}</p>`
                         : '';
                     const showOrgInfo = this.isBothOrgsActive();
                     const orgNumRaw = String(event._organizationId || '').trim();
@@ -4075,7 +4082,7 @@ class TheaterDashboard {
                         }
                         if (this.shouldShowTechnicalPartForEvent(event, 'orkestbak', showOrkestbak)) {
                             const orkestbakStatus = (event.orkestbakExplicit || event.orkestbakValue)
-                                ? (event.orkestbakValue || (event.hasOrkestbak ? this.t('resources.ja') : this.t('resources.nee')))
+                                ? (this.escapeHtml(event.orkestbakValue) || (event.hasOrkestbak ? this.t('resources.ja') : this.t('resources.nee')))
                                 : this.t('resources.nietBekend');
                             topLineParts.push(`Orkestbak: <strong>${orkestbakStatus}</strong>`);
                         }
@@ -4149,11 +4156,11 @@ class TheaterDashboard {
                             const urlParts = doc.url.split('/');
                             const fileName = urlParts[urlParts.length - 1] || doc.name || 'Document';
                             const decodedFileName = decodeURIComponent(fileName).replace(/%20/g, ' ');
-                            const docName = decodedFileName.endsWith('.pdf') ? decodedFileName.replace('.pdf', '') : decodedFileName;
+                            const docName = this.escapeHtml(decodedFileName.endsWith('.pdf') ? decodedFileName.replace('.pdf', '') : decodedFileName);
                             const docDate = doc.date ? new Date(doc.date).toLocaleDateString('nl-NL', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '';
-                            const docAuthor = doc.author || '';
+                            const docAuthor = this.escapeHtml(doc.author || '');
                             const escapedUrl = this.escapeHtml(String(doc.url || ''));
-                            const category = doc.category || 'Document';
+                            const category = this.escapeHtml(doc.category || 'Document');
                             
                             return `
                                 <div style="margin-top: 0.5rem;">
@@ -4191,9 +4198,9 @@ class TheaterDashboard {
                         const urlParts = event.riderAttachment.url.split('/');
                         const fileName = urlParts[urlParts.length - 1] || 'Technische lijst';
                         const decodedFileName = decodeURIComponent(fileName).replace(/%20/g, ' ');
-                        const riderName = decodedFileName.endsWith('.pdf') ? decodedFileName.replace('.pdf', '') : decodedFileName;
+                        const riderName = this.escapeHtml(decodedFileName.endsWith('.pdf') ? decodedFileName.replace('.pdf', '') : decodedFileName);
                         const riderDate = event.riderAttachment.date ? new Date(event.riderAttachment.date).toLocaleDateString('nl-NL', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '';
-                        const riderAuthor = event.riderAttachment.author || '';
+                        const riderAuthor = this.escapeHtml(event.riderAttachment.author || '');
                         const escapedUrl = this.escapeHtml(String(event.riderAttachment.url || ''));
                         technicalListInfo = `<div style="${infoBoxStyle}">
                             <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
@@ -4236,8 +4243,8 @@ class TheaterDashboard {
                     if (!isDetailSingleEvent) {
                         const statusPart = (event.status && event.status !== 'unknown') 
                             ? (event.bookingManager 
-                                ? `${event.status} – ${escapeText(event.bookingManager)}` 
-                                : event.status)
+                                ? `${escapeText(event.status)} – ${escapeText(event.bookingManager)}` 
+                                : escapeText(event.status))
                             : null;
                         if (hideVenueInCardFooter) {
                             venueStatusInfo = statusPart
@@ -4246,11 +4253,11 @@ class TheaterDashboard {
                         } else {
                             venueStatusInfo = (event.venue && event.venue !== 'Onbekend' && statusPart) 
                                 ? `<p style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
-                                    <span><i class="fas fa-map-marker-alt"></i> ${event.venue}</span>
+                                    <span><i class="fas fa-map-marker-alt"></i> ${escapeText(event.venue)}</span>
                                     <span><i class="fas fa-info-circle"></i> ${statusPart}</span>
                                 </p>`
                                 : (event.venue && event.venue !== 'Onbekend' 
-                                    ? `<p><i class="fas fa-map-marker-alt"></i> ${event.venue}</p>`
+                                    ? `<p><i class="fas fa-map-marker-alt"></i> ${escapeText(event.venue)}</p>`
                                     : '') + (statusPart 
                                         ? `<p><i class="fas fa-info-circle"></i> ${statusPart}</p>`
                                         : '');
@@ -4290,7 +4297,7 @@ class TheaterDashboard {
                     
                     // Maak draagbaar in home view - alleen de titel is draggable
                     const draggableAttr = isHomeView ? 'draggable="true"' : '';
-                    const eventIdAttr = event.id ? `data-event-id="${event.id}"` : '';
+                    const eventIdAttr = event.id ? `data-event-id="${this.escapeHtml(event.id)}"` : '';
                     const titleBlock = isDetailSingleEvent ? '' : `
                         <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem;">
                             <h4 ${draggableAttr} class="${isHomeView ? 'drag-handle' : ''}" style="margin: 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${title}</h4>
@@ -4306,7 +4313,7 @@ class TheaterDashboard {
                     return `
                     <div class="data-item ${clickableClass}" ${clickableAttrs} ${eventIdAttr} ${venueNameAttr} style="display:flex;flex-direction:column;height:100%;">
                         ${titleBlock}
-                        <p><i class="fas fa-clock"></i> <strong>${timeRange}</strong></p>
+                        <p class="event-time"><i class="fas fa-clock"></i> <strong>${this.escapeHtml(timeRange)}</strong></p>
                         ${extraTimeInfo}
                         ${resourcesInfo}
                         ${technicalListInfo}
@@ -5266,13 +5273,13 @@ class TheaterDashboard {
                     <div class="sub">${escape(dateLabel)}</div>
                 </div>
                 <div class="actions">
-                    <button type="button" class="print" onclick="window.print();">${escape(printBtnLabel)}</button>
-                    <button type="button" class="close" onclick="window.close();">${escape(closeBtnLabel)}</button>
+                    <button type="button" class="print" data-action="print">${escape(printBtnLabel)}</button>
+                    <button type="button" class="close" data-action="close">${escape(closeBtnLabel)}</button>
                 </div>
                 ${sectionsHtml}
                 <div class="footer">${escape(this.t('voorstellingTimer.exportPrintedAt', { time: printedAt }))}</div>
             </div>
-        </body></html>`;
+        <script>${PRINT_WINDOW_SCRIPT}</script></body></html>`;
         const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
         const blobUrl = URL.createObjectURL(blob);
         const printWin = window.open(blobUrl, '_blank', 'noopener,noreferrer');
@@ -9147,11 +9154,11 @@ class TheaterDashboard {
                 <div class="subtitle">${escape(this.t('techPrint.subtitle', { date: dateLabel }))}</div>
             </div>
             <div class="print-actions">
-                <button type="button" class="btn-print" onclick="window.print();">${escape(printBtnLabel)}</button>
-                <button type="button" class="btn-close" onclick="window.close();">${this.locale === 'en' ? 'Close' : 'Sluiten'}</button>
+                <button type="button" class="btn-print" data-action="print">${escape(printBtnLabel)}</button>
+                <button type="button" class="btn-close" data-action="close">${this.locale === 'en' ? 'Close' : 'Sluiten'}</button>
             </div>
             ${bodyParts.join('')}
-        </body></html>`;
+        <script>${PRINT_WINDOW_SCRIPT}</script></body></html>`;
 
         const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
         const blobUrl = URL.createObjectURL(blob);
@@ -9672,7 +9679,7 @@ class TheaterDashboard {
                         return `
                             <div class="data-item">
                                 ${!isDetailSingleEvent ? `<h4>${escapeInline(title)}</h4>
-                                <p><i class="fas fa-clock"></i> <strong>${timeRange}</strong></p>` : ''}
+                                <p class="event-time"><i class="fas fa-clock"></i> <strong>${this.escapeHtml(timeRange)}</strong></p>` : ''}
 
                                 <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: ${!isDetailSingleEvent ? '0.25rem' : '0.5rem'};">
                                     <div style="display: flex; gap: 1rem; flex-wrap: nowrap;">
@@ -9728,29 +9735,29 @@ class TheaterDashboard {
         container.innerHTML = `
             <div class="data-grid">
                 <div class="data-stat">
-                    <div class="data-stat-value">${climate.temperature || '--'}°C</div>
+                    <div class="data-stat-value">${this.escapeHtml(climate.temperature || '--')}°C</div>
                     <div class="data-stat-label">${this.t('dataStats.temp')}</div>
                 </div>
                 <div class="data-stat">
-                    <div class="data-stat-value">${climate.humidity || '--'}%</div>
+                    <div class="data-stat-value">${this.escapeHtml(climate.humidity || '--')}%</div>
                     <div class="data-stat-label">${this.t('dataStats.luchtvochtigheid')}</div>
                 </div>
                 <div class="data-stat">
-                    <div class="data-stat-value">${climate.airQuality || '--'}</div>
+                    <div class="data-stat-value">${this.escapeHtml(climate.airQuality || '--')}</div>
                     <div class="data-stat-label">${this.t('dataStats.luchtkwaliteit')}</div>
                 </div>
                 <div class="data-stat">
-                    <div class="data-stat-value">${climate.co2 || '--'} ppm</div>
+                    <div class="data-stat-value">${this.escapeHtml(climate.co2 || '--')} ppm</div>
                     <div class="data-stat-label">${this.t('dataStats.co2')}</div>
                 </div>
             </div>
             <div class="climate-info">
                 <div class="data-item">
                     <h4>Huidige Status</h4>
-                    <p><i class="fas fa-thermometer-half"></i> Temperatuur: ${climate.temperature || 'Onbekend'}°C</p>
-                    <p><i class="fas fa-tint"></i> Luchtvochtigheid: ${climate.humidity || 'Onbekend'}%</p>
-                    <p><i class="fas fa-wind"></i> Ventilatie: ${climate.ventilation || 'Onbekend'}</p>
-                    <p><i class="fas fa-clock"></i> Laatste update: ${climate.lastUpdate || 'Onbekend'}</p>
+                    <p><i class="fas fa-thermometer-half"></i> Temperatuur: ${this.escapeHtml(climate.temperature || 'Onbekend')}°C</p>
+                    <p><i class="fas fa-tint"></i> Luchtvochtigheid: ${this.escapeHtml(climate.humidity || 'Onbekend')}%</p>
+                    <p><i class="fas fa-wind"></i> Ventilatie: ${this.escapeHtml(climate.ventilation || 'Onbekend')}</p>
+                    <p><i class="fas fa-clock"></i> Laatste update: ${this.escapeHtml(climate.lastUpdate || 'Onbekend')}</p>
                 </div>
             </div>
         `;
@@ -10109,7 +10116,7 @@ class TheaterDashboard {
         // Tabs-nav (zonder DOM verplaatsing van settingsblokken)
         const nav = document.createElement('div');
         nav.className = 'settings-subnav';
-        nav.style.cssText = 'display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;min-height:56px;margin-bottom:.85rem;position:sticky;top:0;z-index:20;background:#2d3748;padding:.45rem .4rem;border:1px solid #334155;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,.18);';
+        nav.style.cssText = 'display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;min-height:56px;margin-bottom:.85rem;position:sticky;top:0;z-index:20;background:var(--surface);padding:.45rem 0;border:0;border-bottom:1px solid var(--line);border-radius:0;box-shadow:none;';
 
         contentRoot.prepend(nav);
 
@@ -10218,17 +10225,17 @@ class TheaterDashboard {
             btn.className = 'settings-subnav-btn';
             btn.dataset.page = p.key;
             btn.textContent = p.title;
-            btn.style.cssText = 'padding:.45rem .85rem;font-size:.86rem;line-height:1.2;border:1px solid #475569;border-radius:10px;background:rgba(51,65,85,.55);color:#e2e8f0;box-shadow:none;transition:all .15s ease;cursor:pointer;';
+            btn.style.cssText = 'padding:.45rem .85rem;font-size:.86rem;line-height:1.2;border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--text);box-shadow:none;transition:all .15s ease;cursor:pointer;';
             btn.addEventListener('mouseenter', () => {
                 if (btn.dataset.page !== this.settingsPageKey) {
-                    btn.style.background = 'rgba(71,85,105,.6)';
-                    btn.style.borderColor = '#64748b';
+                    btn.style.background = 'var(--surface-2)';
+                    btn.style.borderColor = 'var(--line-strong)';
                 }
             });
             btn.addEventListener('mouseleave', () => {
                 if (btn.dataset.page !== this.settingsPageKey) {
-                    btn.style.background = 'rgba(51,65,85,.55)';
-                    btn.style.borderColor = '#475569';
+                    btn.style.background = 'transparent';
+                    btn.style.borderColor = 'var(--line)';
                 }
             });
             btn.addEventListener('click', () => this.activateSettingsPage(p.key));
@@ -10257,11 +10264,11 @@ class TheaterDashboard {
         modal.querySelectorAll('.settings-subnav-btn').forEach((btn) => {
             const active = btn.dataset.page === pageKey;
             btn.classList.toggle('active', active);
-            btn.style.background = active ? 'linear-gradient(180deg, #7c8ef3 0%, #667eea 100%)' : 'rgba(51,65,85,.55)';
-            btn.style.color = active ? '#fff' : '#e2e8f0';
-            btn.style.borderColor = active ? '#8190f8' : '#475569';
-            btn.style.boxShadow = active ? '0 0 0 1px rgba(129,144,248,.35), 0 4px 12px rgba(102,126,234,.25)' : 'none';
-            btn.style.transform = active ? 'translateY(-1px)' : 'translateY(0)';
+            btn.style.background = active ? 'var(--accent)' : 'transparent';
+            btn.style.color = active ? 'var(--on-accent)' : 'var(--text)';
+            btn.style.borderColor = active ? 'var(--accent)' : 'var(--line)';
+            btn.style.boxShadow = 'none';
+            btn.style.transform = 'none';
         });
 
         // Voorkom "verspringen": bij tabwissel altijd starten vanaf bovengrens van instellingen.
@@ -10450,7 +10457,9 @@ class TheaterDashboard {
         // Thema
         const themeSelect = document.getElementById('themeSelect');
         if (themeSelect) {
-            themeSelect.value = this.config.app?.theme || 'default';
+            // 'amber' is sinds het Regie-ontwerp de standaardkleur.
+            const savedTheme = this.config.app?.theme || 'default';
+            themeSelect.value = savedTheme === 'amber' ? 'default' : savedTheme;
         }
         // Taal
         const languageSelect = document.getElementById('languageSelect');
@@ -10728,8 +10737,8 @@ class TheaterDashboard {
             const eyeTitle = isHidden ? this.t('settings.showVenue') : this.t('settings.hideVenue');
             item.innerHTML = `
                 <i class="fas fa-grip-vertical venue-order-drag" aria-hidden="true"></i>
-                <span class="venue-order-name">${this.getVenueDisplayName(venue)}</span>
-                <button type="button" class="venue-order-eye" data-venue-id="${venue.id}" title="${eyeTitle}" aria-label="${eyeTitle}">
+                <span class="venue-order-name">${this.escapeHtml(this.getVenueDisplayName(venue))}</span>
+                <button type="button" class="venue-order-eye" data-venue-id="${this.escapeHtml(venue.id)}" title="${eyeTitle}" aria-label="${eyeTitle}">
                     <i class="fas ${eyeIcon}"></i>
                 </button>
             `;
@@ -11194,7 +11203,7 @@ class TheaterDashboard {
 
     applyTheme(theme) {
         const body = document.body;
-        const themes = ['theme-default', 'theme-pink', 'theme-green', 'theme-amber', 'theme-slate', 'theme-purple'];
+        const themes = ['theme-default', 'theme-blue', 'theme-pink', 'theme-green', 'theme-amber', 'theme-slate', 'theme-purple'];
         themes.forEach(t => body.classList.remove(t));
         body.classList.add(theme === 'default' ? 'theme-default' : `theme-${theme}`);
     }

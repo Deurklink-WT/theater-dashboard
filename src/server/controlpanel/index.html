@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shift Happens — Toegang beheer</title>
-  <link rel="stylesheet" href="style.css?v=20260824-8">
+  <link rel="stylesheet" href="style.css?v=20261115-1">
 </head>
 <body>
   <div class="wrap">
@@ -18,7 +18,8 @@
       <p>Nog geen gebruikers. Maak het eerste beheeraccount aan.</p>
       <form id="bootstrapForm">
         <label>E-mail<input type="email" id="bootstrapEmail" required autocomplete="username"></label>
-        <label>Wachtwoord (min. 8 tekens)<input type="password" id="bootstrapPassword" required minlength="8" autocomplete="new-password"></label>
+        <label>Wachtwoord (min. 8 tekens)<input type="password" id="bootstrapPassword" required minlength="8" maxlength="256" autocomplete="new-password"></label>
+        <label id="bootstrapSetupCodeLabel" class="hidden">Installatiecode (staat in de serverlog bij het opstarten)<input type="text" id="bootstrapSetupCode" autocomplete="off" autocapitalize="characters" spellcheck="false"></label>
         <button type="submit">Admin aanmaken</button>
       </form>
       <p id="bootstrapError" class="error" aria-live="polite"></p>
@@ -99,6 +100,6 @@
       </div>
     </section>
   </div>
-  <script src="app.js?v=20260824-8"></script>
+  <script src="app.js?v=20261115-1"></script>
 </body>
 </html>

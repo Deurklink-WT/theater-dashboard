@@ -69,6 +69,11 @@ function setupAutoUpdater(mainWindow) {
     process.env.GH_TOKEN || process.env.GITHUB_TOKEN || ''
   ).trim();
 
+  if (base && !/^https:\/\//i.test(base)) {
+    // Updates over onversleuteld http kunnen onderweg vervangen worden; dan liever geen updates.
+    console.warn('[Update] UPDATE_BASE_URL moet met https:// beginnen; updates staan uit.');
+    return;
+  }
   if (base) {
     try {
       autoUpdater.setFeedURL({ provider: 'generic', url: base });

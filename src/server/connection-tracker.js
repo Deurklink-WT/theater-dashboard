@@ -10,6 +10,19 @@ const store = require('./store');
 
 /** Na zoveel ms zonder signaal → online = false */
 const STALE_MS = Number(process.env.SHIFT_PRESENCE_STALE_MS || 25000);
+/** Sessies die langer dan dit niets lieten horen verdwijnen uit de lijst (gelijk aan de levensduur van een token). */
+const MAX_IDLE_MS = 30 * 86400000;
+const MAX_SESSIONS = 500;
+
+function prune() {
+  const cutoff = Date.now() - MAX_IDLE_MS;
+  for (const [k, s] of sessions) {
+    if ((s.lastSeenAt || 0) < cutoff) sessions.delete(k);
+  }
+  if (sessions.size <= MAX_SESSIONS) return;
+  const oldestFirst = [...sessions.values()].sort((a, b) => (a.lastSeenAt || 0) - (b.lastSeenAt || 0));
+  for (const s of oldestFirst.slice(0, sessions.size - MAX_SESSIONS)) sessions.delete(s.id);
+}
 
 const sessions = new Map();
 const PRESENCE_FILE = path.join(store.dir, 'presence.json');
@@ -19,9 +32,9 @@ function tokenKey(token) {
 }
 
 function clientIp(req) {
-  const fwd = req.headers['x-forwarded-for'];
-  if (fwd) return String(fwd).split(',')[0].trim();
-  return req.socket?.remoteAddress || req.ip || '';
+  // req.ip volgt de 'trust proxy'-instelling van Express. De X-Forwarded-For-header zelf
+  // vertrouwen we niet: die kan elke client naar believen meesturen.
+  return String(req.ip || req.socket?.remoteAddress || '').slice(0, 64);
 }
 
 function clientLabel(req, override) {
@@ -55,7 +68,7 @@ function scheduleSave() {
         savedAt: Date.now(),
         sessions: [...sessions.values()]
       };
-      fs.writeFileSync(PRESENCE_FILE, JSON.stringify(payload, null, 2), 'utf8');
+      fs.writeFileSync(PRESENCE_FILE, JSON.stringify(payload, null, 2), { encoding: 'utf8', mode: 0o600 });
     } catch {
       /* ignore */
     }
@@ -80,6 +93,7 @@ function upsert(token, user, req, meta = {}) {
     lastSeenAt: now
   };
   sessions.set(key, session);
+  if (!prev) prune();
   scheduleSave();
   return session;
 }
@@ -128,9 +142,11 @@ function size() {
 }
 
 loadFromDisk();
+prune();
 
 module.exports = {
   listActive,
+  tokenKey,
   touch,
   upsert,
   remove,

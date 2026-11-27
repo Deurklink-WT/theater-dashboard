@@ -14,10 +14,12 @@ function buildAuthHeaders(password) {
 }
 
 function normalizeHost(host) {
-    return String(host || '')
+    const h = String(host || '')
         .trim()
         .replace(/^https?:\/\//i, '')
         .split('/')[0];
+    // Alleen hostnaam of IP met optionele poort; geen user@host, spaties of andere URL-onderdelen.
+    return /^[a-z0-9.-]{1,253}(:\d{1,5})?$/i.test(h) ? h : '';
 }
 
 /**

@@ -10,6 +10,7 @@
 
 const { app, BrowserWindow, ipcMain, Menu, shell, screen, safeStorage } = require('electron');
 const path = require('path');
+const { pathToFileURL } = require('url');
 const Store = require('electron-store');
 const cron = require('node-cron');
 const os = require('os');
@@ -377,7 +378,9 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      enableRemoteModule: false,
+      sandbox: true,
+      webSecurity: true,
+      allowRunningInsecureContent: false,
       webviewTag: true,
       preload: path.join(__dirname, 'preload.js')
     },
@@ -506,6 +509,33 @@ function createMenu() {
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
 }
+
+// --- Beveiliging: alleen het eigen app-venster mag IPC-handlers aanroepen ---
+const APP_INDEX_URL = pathToFileURL(path.join(__dirname, 'renderer', 'index.html')).href;
+function isAppDocumentUrl(url) {
+  return String(url || '').split('#')[0].split('?')[0] === APP_INDEX_URL;
+}
+function isTrustedIpcSender(event) {
+  if (!mainWindow || mainWindow.isDestroyed()) return false;
+  if (event.sender !== mainWindow.webContents) return false;
+  const frame = event.senderFrame;
+  // Alleen het hoofdframe met de eigen index.html; geen ingesloten of weggenavigeerde pagina's.
+  if (frame && frame.parent) return false;
+  return isAppDocumentUrl(frame ? frame.url : event.sender.getURL());
+}
+const registerIpcHandler = ipcMain.handle.bind(ipcMain);
+ipcMain.handle = (channel, handler) => registerIpcHandler(channel, (event, ...args) => {
+  if (!isTrustedIpcSender(event)) {
+    console.warn('IPC geweigerd (onbekende afzender):', channel);
+    throw new Error('IPC not allowed');
+  }
+  return handler(event, ...args);
+});
+
+// API-sleutels verlaten het hoofdproces niet: het venster krijgt een masker te zien.
+// Stuurt het venster het masker terug bij opslaan, dan blijft de opgeslagen sleutel staan.
+const SECRET_MASK = '\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022';
+const API_KEY_SYSTEMS = ['yesplan', 'yesplan2', 'priva'];
 
 ipcMain.handle('get-yesplan-data', async (event, params) => {
   try {
@@ -884,7 +914,14 @@ ipcMain.handle('save-config', async (event, system, config) => {
     if (!allowedSystems.has(system)) {
       return { success: false, error: 'Invalid config system' };
     }
-    const sensitiveSystem = ['yesplan', 'yesplan2', 'priva'].includes(system);
+    if (!config || typeof config !== 'object' || Array.isArray(config)) {
+      return { success: false, error: 'Invalid config' };
+    }
+    const sensitiveSystem = API_KEY_SYSTEMS.includes(system);
+    if (sensitiveSystem && config.apiKey === SECRET_MASK) {
+      const current = secureConfigFromStorage(store.get(system, {}));
+      config = { ...config, apiKey: current?.apiKey || '' };
+    }
     const apiKey = String(config?.apiKey || '').trim();
     if (sensitiveSystem && apiKey && !safeStorage.isEncryptionAvailable()) {
       return {
@@ -941,7 +978,7 @@ ipcMain.handle('get-config', async (event, system) => {
       // Niet blokkeren op migratiefout; config blijft bruikbaar in runtime.
     }
   }
-  return config;
+  return { ...config, apiKey: config?.apiKey ? SECRET_MASK : '' };
 });
 
 // Toegestane domeinen voor externe links (voorkomt open-redirect)
@@ -1261,10 +1298,70 @@ app.on('activate', () => {
   }
 });
 
-// Security: Prevent new window creation
-app.on('web-contents-created', (event, contents) => {
-  contents.on('new-window', (event, navigationUrl) => {
-    event.preventDefault();
+// --- Beveiliging: vensters, navigatie, webviews en permissies ---
+function isLocalViewerUrl(url) {
+  try {
+    const u = new URL(String(url || ''));
+    return u.protocol === 'http:' && u.hostname === '127.0.0.1';
+  } catch (_) {
+    return false;
+  }
+}
+
+app.on('web-contents-created', (_event, contents) => {
+  const isWebview = contents.getType() === 'webview';
+
+  // Nieuwe vensters: alleen het eigen afdrukvoorbeeld (blob van de app); externe links gaan
+  // via de allowlist naar de standaardbrowser. Al het andere wordt geweigerd.
+  contents.setWindowOpenHandler(({ url }) => {
+    if (!isWebview && String(url).startsWith('blob:file://')) {
+      return {
+        action: 'allow',
+        overrideBrowserWindowOptions: {
+          autoHideMenuBar: true,
+          webPreferences: {
+            preload: undefined,
+            nodeIntegration: false,
+            contextIsolation: true,
+            sandbox: true,
+            webviewTag: false
+          }
+        }
+      };
+    }
+    if (isUrlAllowed(url)) {
+      shell.openExternal(url).catch(() => {});
+    }
+    return { action: 'deny' };
+  });
+
+  // Navigatie: het app-venster blijft op de eigen index.html, de webview op de lokale viewer.
+  const guardNavigation = (event, url) => {
+    const allowed = isWebview
+      ? (url === 'about:blank' || isLocalViewerUrl(url))
+      : (isAppDocumentUrl(url) || String(url).startsWith('blob:file://'));
+    if (!allowed) {
+      event.preventDefault();
+      console.warn('Navigatie geblokkeerd:', String(url).slice(0, 80));
+    }
+  };
+  contents.on('will-navigate', guardNavigation);
+  contents.on('will-redirect', guardNavigation);
+
+  // Webviews krijgen nooit de preload of Node, en laden alleen de lokale viewer.
+  contents.on('will-attach-webview', (event, webPreferences, params) => {
+    delete webPreferences.preload;
+    webPreferences.nodeIntegration = false;
+    webPreferences.contextIsolation = true;
+    webPreferences.sandbox = true;
+    const src = String(params.src || 'about:blank');
+    if (src !== 'about:blank' && !isLocalViewerUrl(src)) event.preventDefault();
+  });
+
+  // Geen camera, microfoon, locatie, meldingen e.d.; alleen kopiëren naar het klembord vanuit de app zelf.
+  contents.session.setPermissionRequestHandler((wc, permission, callback) => {
+    const fromApp = !!mainWindow && !mainWindow.isDestroyed() && wc === mainWindow.webContents;
+    callback(fromApp && permission === 'clipboard-sanitized-write');
   });
 });
 
