@@ -120,6 +120,10 @@ body.ios-app .header-title-top {
 
 body.ios-app .header-title-top .header-app-name {
     flex-shrink: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: normal;
+    text-transform: none;
 }
 
 body.ios-app .header-datetime {

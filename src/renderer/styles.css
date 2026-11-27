@@ -5457,8 +5457,22 @@ body.osc-monitor-active .osc-monitor-wrapper {
 .header { background: var(--bg); box-shadow: none; border-bottom: 1px solid var(--line); }
 .header-cue { width: 12px; height: 12px; border-radius: 50%; background: var(--accent); flex: 0 0 auto; display: inline-block; }
 body.show-mode-active .header-cue { background: #ffffff; }
-.header-app-name { font-family: var(--font-mono); font-weight: 500; font-size: 1rem; letter-spacing: 0.14em; text-transform: uppercase; }
-.header-datetime { font-variant-numeric: tabular-nums; font-size: 0.8rem; }
+/* Titel zoals vóór de regie-stijl: gewone naam, groter, datum eronder. */
+.header-app-name {
+    font-family: var(--font-ui);
+    font-weight: 600;
+    font-size: 1.5rem;
+    letter-spacing: normal;
+    text-transform: none;
+    line-height: 1.15;
+}
+.header-datetime {
+    font-family: var(--font-ui);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.9rem;
+    font-weight: 400;
+    letter-spacing: normal;
+}
 
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); box-shadow: none; transition: border-color 0.15s ease; }
 .card:hover { transform: none; box-shadow: none; border-color: var(--line-strong); }
