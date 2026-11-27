@@ -1,13 +1,13 @@
 /**
- * Shift Happens – iOS / Xcode look
+ * Shift Happens – iPhone-opmaak (Regie-stijl; kleuren uit de tokens in styles.css)
  * Alleen actief als body.ios-app wordt gezet (iPhone/Capacitor).
  * Gebruikt SF Pro (system font), safe areas, iOS-achtige navbar, grouped cards, sheet modal.
  */
 
 /* ---- Schermvullende telefoon: kop blijft staan, inhoud scrollt, tabblad onderin ---- */
 body.ios-app {
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', sans-serif;
-    background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+    font-family: var(--font-ui);
+    background: var(--bg);
     -webkit-font-smoothing: antialiased;
     height: 100dvh;
     max-width: 100vw;
@@ -26,9 +26,7 @@ body.ios-app #app {
 /* ---- Header: titelrij, daarna datum over de volle breedte, daarna zaal ---- */
 body.ios-app .header {
     flex: 0 0 auto;
-    background: rgba(28, 28, 30, 0.92);
-    backdrop-filter: saturate(180%) blur(20px);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    background: var(--bg);
     border-bottom: 0.5px solid rgba(255, 255, 255, 0.15);
     padding: 0.45rem 0.75rem 0.65rem;
     padding-top: calc(0.4rem + env(safe-area-inset-top));
@@ -328,19 +326,19 @@ body.ios-app .btn {
 }
 
 body.ios-app .btn-primary {
-    background: #0a84ff;
-    color: #fff;
+    background: var(--accent);
+    color: var(--on-accent);
 }
 
 body.ios-app .btn-primary:hover,
 body.ios-app .btn-primary:active {
-    background: #409cff;
+    background: var(--accent-strong);
     transform: none;
 }
 
 body.ios-app .btn-secondary {
     background: rgba(255, 255, 255, 0.12);
-    color: #0a84ff;
+    color: var(--accent);
 }
 
 body.ios-app .btn-secondary:hover,
@@ -360,7 +358,7 @@ body.ios-app .btn-back {
     font-size: 0.9375rem;
     background: rgba(255, 255, 255, 0.1);
     border: none;
-    color: #0a84ff;
+    color: var(--accent);
 }
 
 body.ios-app .btn-back:hover:not(:disabled) {
@@ -388,7 +386,7 @@ body.ios-app .custom-select.open .custom-select-trigger {
 }
 
 body.ios-app .custom-select-options {
-    background: rgba(44, 44, 46, 0.98);
+    background: rgba(var(--surface-rgb), 0.98);
     border: none;
     border-radius: 14px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
@@ -407,13 +405,13 @@ body.ios-app .custom-select-options--grid .custom-select-option {
 }
 
 body.ios-app .custom-select-options--grid .custom-select-option.selected {
-    background: rgba(10, 132, 255, 0.35);
+    background: rgba(var(--accent-rgb), 0.35);
     color: #fff;
 }
 
 body.ios-app .custom-select-option.selected {
-    background: rgba(10, 132, 255, 0.2);
-    color: #0a84ff;
+    background: rgba(var(--accent-rgb), 0.2);
+    color: var(--accent);
 }
 
 body.ios-app .custom-select-option:hover {
@@ -439,30 +437,9 @@ body.ios-app.show-mode-active .main-content {
     padding-bottom: calc(8.1rem + env(safe-area-inset-bottom));
 }
 
-/* ---- iOS achtergrond volgt gekozen kleurmodus ---- */
-body.ios-app.theme-pink {
-    background: linear-gradient(135deg, #2d1a2c 0%, #3d2a3d 100%);
-}
-
-body.ios-app.theme-green {
-    background: linear-gradient(135deg, #0f1f1a 0%, #1a2e24 100%);
-}
-
-body.ios-app.theme-amber {
-    background: linear-gradient(135deg, #1c1917 0%, #292524 100%);
-}
-
-body.ios-app.theme-slate {
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-}
-
-body.ios-app.theme-purple {
-    background: linear-gradient(135deg, #1e1b4b 0%, #2e1065 100%);
-}
-
 /* ---- Cards = iOS grouped list style (max breedte) ---- */
 body.ios-app .card {
-    background: rgba(44, 44, 46, 0.95);
+    background: rgba(var(--surface-rgb), 0.95);
     border-radius: 14px;
     border: none;
     box-shadow: none;
@@ -489,7 +466,7 @@ body.ios-app .card-header h3 {
 }
 
 body.ios-app .card-header h3 i {
-    color: #0a84ff;
+    color: var(--accent);
 }
 
 body.ios-app .card-content {
@@ -555,7 +532,7 @@ body.ios-app .modal-content {
     border-radius: 14px 14px 0 0;
     border: none;
     border-top: 0.5px solid rgba(255, 255, 255, 0.1);
-    background: rgba(28, 28, 30, 0.98);
+    background: rgba(var(--bg-rgb), 0.98);
     margin-bottom: env(safe-area-inset-bottom);
     display: flex;
     flex-direction: column;
@@ -579,13 +556,13 @@ body.ios-app .modal-close {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #0a84ff;
+    color: var(--accent);
     border-radius: 10px;
 }
 
 body.ios-app .modal-close:hover {
     background: rgba(255, 255, 255, 0.1);
-    color: #0a84ff;
+    color: var(--accent);
 }
 
 body.ios-app .modal-body {
@@ -610,7 +587,7 @@ body.ios-app .modal-footer {
 
 /* ---- Form: iOS list style ---- */
 body.ios-app .settings-section {
-    background: rgba(44, 44, 46, 0.6);
+    background: rgba(var(--surface-rgb), 0.6);
     border-radius: 14px;
     border: none;
     padding: 0.9rem 1rem;
@@ -624,7 +601,7 @@ body.ios-app .settings-section h3 {
 }
 
 body.ios-app .settings-section h3 i {
-    color: #0a84ff;
+    color: var(--accent);
 }
 
 body.ios-app .form-group input,
@@ -641,7 +618,7 @@ body.ios-app .form-select {
 body.ios-app .form-group input:focus,
 body.ios-app .form-select:focus {
     border: none;
-    box-shadow: 0 0 0 2px #0a84ff;
+    box-shadow: 0 0 0 2px var(--accent);
 }
 
 body.ios-app .mobile-settings-hint {
@@ -651,14 +628,14 @@ body.ios-app .mobile-settings-hint {
 }
 
 body.ios-app .btn-test {
-    background: rgba(10, 132, 255, 0.2);
-    color: #0a84ff;
+    background: rgba(var(--accent-rgb), 0.2);
+    color: var(--accent);
     border: none;
     border-radius: 10px;
 }
 
 body.ios-app .btn-test:hover {
-    background: rgba(10, 132, 255, 0.3);
+    background: rgba(var(--accent-rgb), 0.3);
 }
 
 /* ---- Footer ---- */
@@ -673,7 +650,7 @@ body.ios-app .footer {
 body.ios-app .filter-popup {
     border-radius: 14px;
     border: none;
-    background: rgba(44, 44, 46, 0.98);
+    background: rgba(var(--surface-rgb), 0.98);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     max-width: min(320px, calc(100vw - 2rem));
 }
@@ -681,7 +658,7 @@ body.ios-app .filter-popup {
 body.ios-app .status-popover {
     border-radius: 14px;
     border: none;
-    background: rgba(44, 44, 46, 0.98);
+    background: rgba(var(--surface-rgb), 0.98);
 }
 
 /* ---- Date selector compact ---- */
@@ -707,8 +684,8 @@ body.ios-app .detail-view-card {
 
 body.ios-app .week-view-sort-btn.active,
 body.ios-app .week-view-sort-btn:active {
-    background: rgba(10, 132, 255, 0.3);
-    color: #0a84ff;
+    background: rgba(var(--accent-rgb), 0.3);
+    color: var(--accent);
 }
 
 /* Touch targets minimaal 44px */
@@ -745,7 +722,7 @@ body.ios-app .loading-overlay {
 }
 
 body.ios-app .loading-overlay .loading-spinner {
-    background: rgba(44, 44, 46, 0.95);
+    background: rgba(var(--surface-rgb), 0.95);
     border-radius: 14px;
     padding: 1.5rem;
 }
@@ -768,10 +745,8 @@ body.ios-app .ios-tab-bar {
     padding-bottom: calc(0.2rem + env(safe-area-inset-bottom));
     padding-left: calc(0.25rem + env(safe-area-inset-left));
     padding-right: calc(0.25rem + env(safe-area-inset-right));
-    background: rgba(28, 28, 30, 0.96);
+    background: var(--bg);
     border-top: 0.5px solid rgba(255, 255, 255, 0.14);
-    backdrop-filter: saturate(180%) blur(20px);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
     justify-content: space-around;
     align-items: stretch;
     gap: 0.15rem;
@@ -806,8 +781,8 @@ body.ios-app .ios-tab i {
 }
 
 body.ios-app .ios-tab.active {
-    color: #0a84ff;
-    background: rgba(10, 132, 255, 0.16);
+    color: var(--accent);
+    background: rgba(var(--accent-rgb), 0.16);
 }
 
 body.ios-app .footer {
@@ -819,6 +794,11 @@ body.ios-app .main-workspace {
     flex-direction: column;
     gap: 0;
     max-width: 100%;
+}
+
+/* In showmodus zet de desktopregel align-items op flex-start; in een kolom krimpt de inhoud dan naar de breedte van de tekst. */
+body.ios-app.show-mode-active .main-workspace {
+    align-items: stretch;
 }
 
 body.ios-app.show-mode-active .nav-rail--end {
@@ -837,7 +817,7 @@ body.ios-app.show-mode-active .nav-rail--end {
     padding: 0.35rem 0.5rem;
     padding-left: calc(0.5rem + env(safe-area-inset-left));
     padding-right: calc(0.5rem + env(safe-area-inset-right));
-    background: rgba(28, 28, 30, 0.96);
+    background: var(--bg);
     border-top: 0.5px solid rgba(255, 255, 255, 0.12);
 }
 
