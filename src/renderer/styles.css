@@ -1,5 +1,5 @@
 /* ===== Design tokens (Regie-stijl) =====
-   Eén plek voor kleur, type en vorm. Thema's (body.theme-*) wijzigen alleen het accent. */
+   Eén plek voor kleur, type en vorm. Thema's (body.theme-*) zetten accent + getinte ondergrond. */
 @font-face { font-family: 'IBM Plex Sans'; font-weight: 400; font-style: normal; font-display: swap; src: url('vendor/fonts/ibm-plex-sans-latin-400-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 @font-face { font-family: 'IBM Plex Sans'; font-weight: 500; font-style: normal; font-display: swap; src: url('vendor/fonts/ibm-plex-sans-latin-500-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 @font-face { font-family: 'IBM Plex Sans'; font-weight: 600; font-style: normal; font-display: swap; src: url('vendor/fonts/ibm-plex-sans-latin-600-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
@@ -8,6 +8,11 @@
 @font-face { font-family: 'IBM Plex Sans'; font-weight: 600; font-style: normal; font-display: swap; src: url('vendor/fonts/ibm-plex-sans-latin-ext-600-normal.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
 @font-face { font-family: 'IBM Plex Mono'; font-weight: 400; font-style: normal; font-display: swap; src: url('vendor/fonts/ibm-plex-mono-latin-400-normal.woff2') format('woff2'); }
 @font-face { font-family: 'IBM Plex Mono'; font-weight: 500; font-style: normal; font-display: swap; src: url('vendor/fonts/ibm-plex-mono-latin-500-normal.woff2') format('woff2'); }
+/* Oude app-titel: Inter (lokaal, CSP font-src self) */
+@font-face { font-family: 'Inter'; font-weight: 400; font-style: normal; font-display: swap; src: url('vendor/fonts/inter-latin-400-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Inter'; font-weight: 600; font-style: normal; font-display: swap; src: url('vendor/fonts/inter-latin-600-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Inter'; font-weight: 400; font-style: normal; font-display: swap; src: url('vendor/fonts/inter-latin-ext-400-normal.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: 'Inter'; font-weight: 600; font-style: normal; font-display: swap; src: url('vendor/fonts/inter-latin-ext-600-normal.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
 
 :root {
     --bg: #121211;            --bg-rgb: 18, 18, 17;
@@ -3096,14 +3101,63 @@ body.touchscreen-mode .venue-order-item .venue-order-eye {
     }
 }
 
-/* Persoonlijke accentkleuren.
-   Een thema wijzigt alleen het accent; ondergrond, tekst en statuskleuren blijven gelijk.
-   'default' en 'amber' gebruiken de waarden uit :root. */
-body.theme-blue   { --accent: #7AB0FF; --accent-rgb: 122, 176, 255; --accent-strong: #5A96F0; --accent-soft: #B5D2FF; }
-body.theme-pink   { --accent: #F27DB0; --accent-rgb: 242, 125, 176; --accent-strong: #E0609A; --accent-soft: #F8B4D2; }
-body.theme-green  { --accent: #6FCF97; --accent-rgb: 111, 207, 151; --accent-strong: #4FB87D; --accent-soft: #A9E3C1; }
-body.theme-slate  { --accent: #B8B5AD; --accent-rgb: 184, 181, 173; --accent-strong: #9C9991; --accent-soft: #D6D3CB; }
-body.theme-purple { --accent: #B49CFF; --accent-rgb: 180, 156, 255; --accent-strong: #987DF0; --accent-soft: #D3C5FF; }
+/* Persoonlijke themakleuren — accent én getinte ondergrond (zoals vóór regie).
+   'default' / 'amber' = :root-waarden. */
+body.theme-default,
+body.theme-amber {
+    --bg: #121211; --bg-rgb: 18, 18, 17;
+    --surface: #1A1A18; --surface-rgb: 26, 26, 24;
+    --surface-2: #23221F; --surface-2-rgb: 35, 34, 31;
+    --line: #2E2D2A; --line-strong: #3A3935;
+    --accent: #F2A33A; --accent-rgb: 242, 163, 58;
+    --accent-strong: #D98A1F; --accent-soft: #F7C583;
+    background: linear-gradient(135deg, #1c1917 0%, #292524 100%);
+}
+body.theme-blue {
+    --bg: #0f172a; --bg-rgb: 15, 23, 42;
+    --surface: #1e293b; --surface-rgb: 30, 41, 59;
+    --surface-2: #273549; --surface-2-rgb: 39, 53, 73;
+    --line: #334155; --line-strong: #475569;
+    --accent: #7AB0FF; --accent-rgb: 122, 176, 255;
+    --accent-strong: #5A96F0; --accent-soft: #B5D2FF;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+body.theme-pink {
+    --bg: #2d1a2c; --bg-rgb: 45, 26, 44;
+    --surface: #3d2a3d; --surface-rgb: 61, 42, 61;
+    --surface-2: #4b344b; --surface-2-rgb: 75, 52, 75;
+    --line: #5c3d5c; --line-strong: #7a527a;
+    --accent: #F27DB0; --accent-rgb: 242, 125, 176;
+    --accent-strong: #E0609A; --accent-soft: #F8B4D2;
+    background: linear-gradient(135deg, #2d1a2c 0%, #3d2a3d 100%);
+}
+body.theme-green {
+    --bg: #0f1f1a; --bg-rgb: 15, 31, 26;
+    --surface: #1a2e24; --surface-rgb: 26, 46, 36;
+    --surface-2: #24382e; --surface-2-rgb: 36, 56, 46;
+    --line: #2d4a3c; --line-strong: #3d6b54;
+    --accent: #6FCF97; --accent-rgb: 111, 207, 151;
+    --accent-strong: #4FB87D; --accent-soft: #A9E3C1;
+    background: linear-gradient(135deg, #0f1f1a 0%, #1a2e24 100%);
+}
+body.theme-slate {
+    --bg: #0f172a; --bg-rgb: 15, 23, 42;
+    --surface: #1e293b; --surface-rgb: 30, 41, 59;
+    --surface-2: #273549; --surface-2-rgb: 39, 53, 73;
+    --line: #334155; --line-strong: #475569;
+    --accent: #B8B5AD; --accent-rgb: 184, 181, 173;
+    --accent-strong: #9C9991; --accent-soft: #D6D3CB;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+body.theme-purple {
+    --bg: #1a1428; --bg-rgb: 26, 20, 40;
+    --surface: #2a2040; --surface-rgb: 42, 32, 64;
+    --surface-2: #352850; --surface-2-rgb: 53, 40, 80;
+    --line: #443560; --line-strong: #5a4678;
+    --accent: #B49CFF; --accent-rgb: 180, 156, 255;
+    --accent-strong: #987DF0; --accent-soft: #D3C5FF;
+    background: linear-gradient(135deg, #1a1428 0%, #2a2040 100%);
+}
 
 /* Filter Popup */
 .filter-popup {
@@ -5457,8 +5511,22 @@ body.osc-monitor-active .osc-monitor-wrapper {
 .header { background: var(--bg); box-shadow: none; border-bottom: 1px solid var(--line); }
 .header-cue { width: 12px; height: 12px; border-radius: 50%; background: var(--accent); flex: 0 0 auto; display: inline-block; }
 body.show-mode-active .header-cue { background: #ffffff; }
-.header-app-name { font-family: var(--font-mono); font-weight: 500; font-size: 1rem; letter-spacing: 0.14em; text-transform: uppercase; }
-.header-datetime { font-variant-numeric: tabular-nums; font-size: 0.8rem; }
+/* Titel zoals vóór de regie-stijl: Inter, gewone naam, groter, datum eronder. */
+.header-app-name {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 600;
+    font-size: 1.5rem;
+    letter-spacing: normal;
+    text-transform: none;
+    line-height: 1.15;
+}
+.header-datetime {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-variant-numeric: tabular-nums;
+    font-size: 0.9rem;
+    font-weight: 400;
+    letter-spacing: normal;
+}
 
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); box-shadow: none; transition: border-color 0.15s ease; }
 .card:hover { transform: none; box-shadow: none; border-color: var(--line-strong); }

@@ -120,9 +120,15 @@ body.ios-app .header-title-top {
 
 body.ios-app .header-title-top .header-app-name {
     flex-shrink: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: normal;
+    text-transform: none;
 }
 
 body.ios-app .header-datetime {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 0.72rem;
     font-weight: 400;
     color: rgba(255, 255, 255, 0.65);

@@ -671,6 +671,11 @@ class TheaterDashboard {
             this.saveSettings();
         });
 
+        document.getElementById('themeSelect')?.addEventListener('change', (e) => {
+            const theme = String(e.target?.value || 'default');
+            this.applyTheme(theme === 'amber' ? 'default' : theme);
+        });
+
         // Home button
         document.getElementById('homeBtn').addEventListener('click', () => {
             this.showHomeView(true);
